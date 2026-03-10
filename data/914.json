@@ -1,0 +1,599 @@
+{
+  "adult": false,
+  "backdrop_path": "/c8Pi8F1FzpNebtgXcSjC9nWCdSW.jpg",
+  "belongs_to_collection": null,
+  "budget": 2000000,
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "homepage": "",
+  "id": 914,
+  "imdb_id": "tt0032553",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Great Dictator",
+  "overview": "Dictator Adenoid Hynkel tries to expand his empire while a poor Jewish barber tries to avoid persecution from Hynkel's regime.",
+  "popularity": 5.1645,
+  "poster_path": "/1QpO9wo7JWecZ4NiBuu625FiY1j.jpg",
+  "production_companies": [
+    {
+      "id": 1315,
+      "logo_path": null,
+      "name": "Charles Chaplin Productions",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1940-10-15",
+  "revenue": 11000000,
+  "runtime": 125,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "Esperanto",
+      "iso_639_1": "eo",
+      "name": "Esperanto"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Once again - the whole world laughs!",
+  "title": "The Great Dictator",
+  "video": false,
+  "vote_average": 8.283,
+  "vote_count": 3630,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 1453,
+        "name": "amnesia"
+      },
+      {
+        "id": 2652,
+        "name": "nazi"
+      },
+      {
+        "id": 928,
+        "name": "hairdresser"
+      },
+      {
+        "id": 2903,
+        "name": "propaganda"
+      },
+      {
+        "id": 2504,
+        "name": "world war i"
+      },
+      {
+        "id": 407,
+        "name": "dictator"
+      },
+      {
+        "id": 2444,
+        "name": "jewish ghetto"
+      },
+      {
+        "id": 1755,
+        "name": "fascism"
+      },
+      {
+        "id": 1956,
+        "name": "world war ii"
+      },
+      {
+        "id": 3061,
+        "name": "national socialism"
+      },
+      {
+        "id": 3068,
+        "name": "national socialist party"
+      },
+      {
+        "id": 8201,
+        "name": "satire"
+      },
+      {
+        "id": 6001,
+        "name": "speech"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 158192,
+        "name": "barbershop"
+      },
+      {
+        "id": 165431,
+        "name": "anti war"
+      },
+      {
+        "id": 191027,
+        "name": "fictitious country"
+      },
+      {
+        "id": 203493,
+        "name": "domineering"
+      },
+      {
+        "id": 232076,
+        "name": "desperate"
+      },
+      {
+        "id": 281585,
+        "name": "inspirational"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "cast_id": 13,
+        "character": "Adenoid Hynkel, Dictator of Tomania / A Jewish Barber",
+        "credit_id": "52fe428cc3a36847f802746f",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 14027,
+        "known_for_department": "Acting",
+        "name": "Paulette Goddard",
+        "original_name": "Paulette Goddard",
+        "popularity": 0.6382,
+        "profile_path": "/7fMtXuVbJMbsFB4U3CsgDdivizP.jpg",
+        "cast_id": 15,
+        "character": "Hannah",
+        "credit_id": "52fe428cc3a36847f8027473",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14028,
+        "known_for_department": "Acting",
+        "name": "Jack Oakie",
+        "original_name": "Jack Oakie",
+        "popularity": 0.3929,
+        "profile_path": "/9oWdEicbTjfpfiCtvvYuxi0UseU.jpg",
+        "cast_id": 16,
+        "character": "Benzino Napaloni, Dictator of Bacteria",
+        "credit_id": "52fe428cc3a36847f8027477",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14029,
+        "known_for_department": "Acting",
+        "name": "Reginald Gardiner",
+        "original_name": "Reginald Gardiner",
+        "popularity": 0.4592,
+        "profile_path": "/yufdzor5RheT4FYx1Ywm4mo2TlG.jpg",
+        "cast_id": 17,
+        "character": "Commander Schultz",
+        "credit_id": "52fe428cc3a36847f802747b",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 10924,
+        "known_for_department": "Acting",
+        "name": "Henry Daniell",
+        "original_name": "Henry Daniell",
+        "popularity": 1.2174,
+        "profile_path": "/5g4V2fKBAI5TGjqfItfsnPjqZN9.jpg",
+        "cast_id": 18,
+        "character": "Garbitsch",
+        "credit_id": "52fe428cc3a36847f802747f",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5464,
+        "known_for_department": "Acting",
+        "name": "Billy Gilbert",
+        "original_name": "Billy Gilbert",
+        "popularity": 0.2849,
+        "profile_path": "/xEqQLDrbtY2TlANNbXwXPG3ZDyK.jpg",
+        "cast_id": 19,
+        "character": "Field Marshal Herring",
+        "credit_id": "52fe428cc3a36847f8027483",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 14030,
+        "known_for_department": "Acting",
+        "name": "Grace Hayle",
+        "original_name": "Grace Hayle",
+        "popularity": 0.5358,
+        "profile_path": "/8wijnbZLJ8t4TBeP0rog0RbQGtY.jpg",
+        "cast_id": 20,
+        "character": "Madame Napaloni",
+        "credit_id": "52fe428cc3a36847f8027487",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14019,
+        "known_for_department": "Acting",
+        "name": "Carter DeHaven",
+        "original_name": "Carter DeHaven",
+        "popularity": 0.3961,
+        "profile_path": "/vDJT0nCHrseSXFF9VuDh10fE0BI.jpg",
+        "cast_id": 26,
+        "character": "Spook",
+        "credit_id": "52fe428cc3a36847f802749b",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14032,
+        "known_for_department": "Acting",
+        "name": "Maurice Moscovitch",
+        "original_name": "Maurice Moscovitch",
+        "popularity": 0.2092,
+        "profile_path": "/dMeJFcgwzbDzPKtPPeqisABVbV5.jpg",
+        "cast_id": 22,
+        "character": "Mr. Jaeckel",
+        "credit_id": "52fe428cc3a36847f802748b",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 14033,
+        "known_for_department": "Acting",
+        "name": "Emma Dunn",
+        "original_name": "Emma Dunn",
+        "popularity": 0.97,
+        "profile_path": "/gg8SC7cBPYWzGqjYSJ3qWcpy0vI.jpg",
+        "cast_id": 23,
+        "character": "Mrs. Jaeckel",
+        "credit_id": "52fe428cc3a36847f802748f",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14034,
+        "known_for_department": "Acting",
+        "name": "Bernard Gorcey",
+        "original_name": "Bernard Gorcey",
+        "popularity": 0.3108,
+        "profile_path": "/9fZnp4rWvCJS4ZPcDz6QzhtqtxC.jpg",
+        "cast_id": 24,
+        "character": "Mr. Mann",
+        "credit_id": "52fe428cc3a36847f8027493",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14035,
+        "known_for_department": "Acting",
+        "name": "Paul Weigel",
+        "original_name": "Paul Weigel",
+        "popularity": 0.4996,
+        "profile_path": "/9NTRs4Hkg1HbEXd2zHINobcfwH8.jpg",
+        "cast_id": 25,
+        "character": "Mr. Agar",
+        "credit_id": "52fe428cc3a36847f8027497",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30195,
+        "known_for_department": "Acting",
+        "name": "Chester Conklin",
+        "original_name": "Chester Conklin",
+        "popularity": 0.4013,
+        "profile_path": "/qaEgtSQU4eTX2fMng7Grc7G2xzq.jpg",
+        "cast_id": 37,
+        "character": "Barber's Customer",
+        "credit_id": "560097c2c3a368562c00012f",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 139176,
+        "known_for_department": "Acting",
+        "name": "Esther Michelson",
+        "original_name": "Esther Michelson",
+        "popularity": 0.2867,
+        "profile_path": null,
+        "cast_id": 38,
+        "character": "Jewish Woman",
+        "credit_id": "560097f59251412296000114",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13856,
+        "known_for_department": "Acting",
+        "name": "Hank Mann",
+        "original_name": "Hank Mann",
+        "popularity": 0.8395,
+        "profile_path": "/5EGNEc8hjNmyNA6bh39czJ0BcGS.jpg",
+        "cast_id": 39,
+        "character": "Storm Trooper Stealing Fruit",
+        "credit_id": "5600984bc3a3685625000198",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1421303,
+        "known_for_department": "Acting",
+        "name": "Florence Wright",
+        "original_name": "Florence Wright",
+        "popularity": 0.1618,
+        "profile_path": "/b4rDiRR327jZsuq8NEPNn7letqy.jpg",
+        "cast_id": 40,
+        "character": "Blonde Secretary",
+        "credit_id": "56009885925141228500012c",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 141586,
+        "known_for_department": "Acting",
+        "name": "Eddie Gribbon",
+        "original_name": "Eddie Gribbon",
+        "popularity": 0.3,
+        "profile_path": "/acwju04aXg3SrDDinblKB5TBlok.jpg",
+        "cast_id": 27,
+        "character": "Tomanian Storm Trooper",
+        "credit_id": "52fe428cc3a36847f802749f",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 131045,
+        "known_for_department": "Acting",
+        "name": "Rudolph Anders",
+        "original_name": "Rudolph Anders",
+        "popularity": 0.4694,
+        "profile_path": "/i9gNhtuGtRNuGfLxphaOqUvTGuq.jpg",
+        "cast_id": 28,
+        "character": "Tomanian Commandant at Osterlich / Robert O. Davis",
+        "credit_id": "52fe428cc3a36847f80274a3",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 133342,
+        "known_for_department": "Acting",
+        "name": "Eddie Dunn",
+        "original_name": "Eddie Dunn",
+        "popularity": 0.8455,
+        "profile_path": "/lxKCH5fUBwf73igBfHnIjbm11Di.jpg",
+        "cast_id": 41,
+        "character": "Whitewashed Storm Trooper",
+        "credit_id": "560098dac3a3685610000541",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 141587,
+        "known_for_department": "Acting",
+        "name": "Nita Pike",
+        "original_name": "Nita Pike",
+        "popularity": 0.3162,
+        "profile_path": null,
+        "cast_id": 29,
+        "character": "Secretary",
+        "credit_id": "52fe428cc3a36847f80274a7",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 31263,
+        "known_for_department": "Acting",
+        "name": "George Lynn",
+        "original_name": "George Lynn",
+        "popularity": 0.9381,
+        "profile_path": "/oitnXD4qTRvrTJZ1Lo8vMlH2aT5.jpg",
+        "cast_id": 30,
+        "character": "Commander of Storm Troopers",
+        "credit_id": "52fe428cc3a36847f80274ab",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1041524,
+        "known_for_department": "Acting",
+        "name": "Wheeler Dryden",
+        "original_name": "Wheeler Dryden",
+        "popularity": 0.4325,
+        "profile_path": "/3vY6LCkOECbRgbVLxHMahjXbwaN.jpg",
+        "cast_id": 42,
+        "character": "Heinrich Schtick / Translator (voice)",
+        "credit_id": "5600995a9251412287000133",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 947709,
+        "known_for_department": "Acting",
+        "name": "Fred Aldrich",
+        "original_name": "Fred Aldrich",
+        "popularity": 1.125,
+        "profile_path": "/s3s32bjmkC6gsa4S59Nrk4qgn3G.jpg",
+        "cast_id": 43,
+        "character": "Soldier (uncredited)",
+        "credit_id": "56009994c3a3685629000162",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30197,
+        "known_for_department": "Acting",
+        "name": "Richard Alexander",
+        "original_name": "Richard Alexander",
+        "popularity": 0.7484,
+        "profile_path": "/slzm6BNole2pXxjrfnoeZKmFEUY.jpg",
+        "cast_id": 44,
+        "character": "Tomainian Prison Guard in 1918 (uncredited)",
+        "credit_id": "560099c2925141229300015d",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 48064,
+        "known_for_department": "Acting",
+        "name": "Sig Arno",
+        "original_name": "Sig Arno",
+        "popularity": 0.7894,
+        "profile_path": "/tVPZ1OaiplPoc9ODahkIuFp9mcO.jpg",
+        "cast_id": 45,
+        "character": "Compact Parachute Inventor (uncredited)",
+        "credit_id": "560099e0925141229600012b",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1273898,
+        "known_for_department": "Acting",
+        "name": "William Arnold",
+        "original_name": "William Arnold",
+        "popularity": 0.5656,
+        "profile_path": null,
+        "cast_id": 46,
+        "character": "Tomanian Officer (uncredited)",
+        "credit_id": "56009a04925141228a0001fc",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1086622,
+        "known_for_department": "Acting",
+        "name": "Joe Bordeaux",
+        "original_name": "Joe Bordeaux",
+        "popularity": 0.202,
+        "profile_path": null,
+        "cast_id": 47,
+        "character": "Ghetto Extra (uncredited)",
+        "credit_id": "56009a79c3a36856230001db",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 67369,
+        "known_for_department": "Acting",
+        "name": "Don Brodie",
+        "original_name": "Don Brodie",
+        "popularity": 0.4483,
+        "profile_path": "/iETVHhDaS4rFvWSnQbQoR5oSSr8.jpg",
+        "cast_id": 48,
+        "character": "Reporter from International Press (uncredited)",
+        "credit_id": "56009a979251412293000195",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 9096,
+        "known_for_department": "Acting",
+        "name": "Gino Corrado",
+        "original_name": "Gino Corrado",
+        "popularity": 0.524,
+        "profile_path": "/f4FxGEcWMoRcBbArEvYCxy7QSk7.jpg",
+        "cast_id": 49,
+        "character": "Sculptor (uncredited)",
+        "credit_id": "56009aadc3a3685614000229",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 120738,
+        "known_for_department": "Acting",
+        "name": "John Davidson",
+        "original_name": "John Davidson",
+        "popularity": 0.4587,
+        "profile_path": "/bfM1Hzm6nPoTY8cm4mafA8ycpkf.jpg",
+        "cast_id": 50,
+        "character": "Hospital Superintendent (uncredited)",
+        "credit_id": "56009af29251412287000168",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "credit_id": "52fe428cc3a36847f8027435",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "credit_id": "52fe428cc3a36847f8027429",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: The Great Dictator (1940)\n\nProducer: Charlie Chaplin\n\nDirector: Charlie Chaplin\n\nGenres: Comedy, War\n\nThemes and Keywords: amnesia, nazi, hairdresser, propaganda, world war i, dictator, jewish ghetto, fascism, world war ii, national socialism, national socialist party, satire, speech, black and white, barbershop, anti war, fictitious country, domineering, desperate, inspirational\n\nTop Cast: Charlie Chaplin, Paulette Goddard, Jack Oakie, Reginald Gardiner, Henry Daniell, Billy Gilbert, Grace Hayle, Carter DeHaven, Maurice Moscovitch, Emma Dunn, Bernard Gorcey, Paul Weigel, Chester Conklin, Esther Michelson, Hank Mann, Florence Wright, Eddie Gribbon, Rudolph Anders, Eddie Dunn, Nita Pike, George Lynn, Wheeler Dryden, Fred Aldrich, Richard Alexander, Sig Arno, William Arnold, Joe Bordeaux, Don Brodie, Gino Corrado, John Davidson\n\nPlot: Dictator Adenoid Hynkel tries to expand his empire while a poor Jewish barber tries to avoid persecution from Hynkel's regime.\n\n"
+}

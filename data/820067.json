@@ -1,0 +1,404 @@
+{
+  "adult": false,
+  "backdrop_path": "/gcgKSyE2iqwfKWMDZ8TJPxeIu0P.jpg",
+  "belongs_to_collection": {
+    "id": 1287339,
+    "name": "The Quintessential Quintuplets Collection",
+    "poster_path": "/oLGApDkJ5rucU5qxMM2DDwIFBkQ.jpg",
+    "backdrop_path": "/cRaIJ8ndLhz9d4HBV5dnTp2XOcO.jpg"
+  },
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "homepage": "https://www.thequintessentialquintuplets-movie.com",
+  "id": 820067,
+  "imdb_id": "tt15721650",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u6620\u753b \u4e94\u7b49\u5206\u306e\u82b1\u5ac1",
+  "overview": "When five lovely young girls who hate studying hire part-time tutor Futaro, he guides not only their education but also their hearts. Time spent has brought them all closer, with feelings growing within the girls and Futaro. As they finish their third year of high school and their last school festival approaches, they set their sights on what\u2019s next. Is there a future with one of them and Futaro?",
+  "popularity": 3.1067,
+  "poster_path": "/sg7klpt1xwK1IJirBI9EHaqQwJ5.jpg",
+  "production_companies": [
+    {
+      "id": 9148,
+      "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+      "name": "Pony Canyon",
+      "origin_country": "JP"
+    },
+    {
+      "id": 157471,
+      "logo_path": "/sWoNzrlMtRH8p3zKayLfOaTNmiG.png",
+      "name": "Nichion",
+      "origin_country": "JP"
+    },
+    {
+      "id": 118286,
+      "logo_path": "/uANGoTEOifjrGSQd4IxoV89PJjl.png",
+      "name": "Bibury Animation Studios",
+      "origin_country": "JP"
+    },
+    {
+      "id": 118502,
+      "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+      "name": "BS11",
+      "origin_country": "JP"
+    },
+    {
+      "id": 41861,
+      "logo_path": "/iQ9Av0fDGKDUInp4I5czxhz5fVj.png",
+      "name": "GYAO",
+      "origin_country": "JP"
+    },
+    {
+      "id": 59118,
+      "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+      "name": "Kodansha",
+      "origin_country": "JP"
+    },
+    {
+      "id": 187769,
+      "logo_path": "/hBhVw60TAa5qAT1pNELq1HjpZQ9.png",
+      "name": "Good Smile Film",
+      "origin_country": "JP"
+    },
+    {
+      "id": 42196,
+      "logo_path": "/nQNmHvcmaT0zk1Rf0TYtLYO5MpI.png",
+      "name": "Bushiroad",
+      "origin_country": "JP"
+    },
+    {
+      "id": 187770,
+      "logo_path": "/wrBqL7qMHPOBheZRTlA0Jpz0POF.png",
+      "name": "MAGNET",
+      "origin_country": "JP"
+    },
+    {
+      "id": 1393,
+      "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+      "name": "TBS",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2022-05-20",
+  "revenue": 17288993,
+  "runtime": 136,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "",
+  "title": "The Quintessential Quintuplets Movie",
+  "video": false,
+  "vote_average": 8.3,
+  "vote_count": 431,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 704,
+        "name": "adolescence"
+      },
+      {
+        "id": 1608,
+        "name": "twin sister"
+      },
+      {
+        "id": 9194,
+        "name": "harem"
+      },
+      {
+        "id": 5923,
+        "name": "sister"
+      },
+      {
+        "id": 9840,
+        "name": "romance"
+      },
+      {
+        "id": 9914,
+        "name": "slice of life"
+      },
+      {
+        "id": 10873,
+        "name": "school"
+      },
+      {
+        "id": 13141,
+        "name": "based on manga"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 235790,
+        "name": "japanese high school"
+      },
+      {
+        "id": 325782,
+        "name": "cheerful"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 233590,
+        "known_for_department": "Acting",
+        "name": "Yoshitsugu Matsuoka",
+        "original_name": "\u677e\u5ca1\u798e\u4e1e",
+        "popularity": 3.113,
+        "profile_path": "/ugDwdWEXnmv43jcbnfAi4XwiQ8C.jpg",
+        "cast_id": 1,
+        "character": "Fuutarou Uesugi (voice)",
+        "credit_id": "607c27439f37b00057a849fc",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 119143,
+        "known_for_department": "Acting",
+        "name": "Kana Hanazawa",
+        "original_name": "\u82b1\u6fa4\u9999\u83dc",
+        "popularity": 4.8807,
+        "profile_path": "/5bK9ttcRydQBWmyZp7gXDmJYOPF.jpg",
+        "cast_id": 2,
+        "character": "Ichika Nakano (voice)",
+        "credit_id": "607c2767f263ba002a391736",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1072776,
+        "known_for_department": "Acting",
+        "name": "Ayana Taketatsu",
+        "original_name": "\u7af9\u9054\u5f69\u5948",
+        "popularity": 1.9278,
+        "profile_path": "/5JyZSnHwP18DIcVSqlGUwccA2WE.jpg",
+        "cast_id": 3,
+        "character": "Nino Nakano (voice)",
+        "credit_id": "607c278e2b8a43003fc60cf3",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1530921,
+        "known_for_department": "Acting",
+        "name": "Miku Ito",
+        "original_name": "\u4f0a\u85e4\u7f8e\u6765",
+        "popularity": 3.1249,
+        "profile_path": "/kP7JBvveQO9ucYpmOvUNcW5RLAp.jpg",
+        "cast_id": 4,
+        "character": "Miku Nakano (voice)",
+        "credit_id": "607c27b4713ed40058d80bb1",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 992869,
+        "known_for_department": "Acting",
+        "name": "Ayane Sakura",
+        "original_name": "\u4f50\u5009\u7dbe\u97f3",
+        "popularity": 3.3805,
+        "profile_path": "/yPbTmntASE9psPIMhNGU5oo6vIH.jpg",
+        "cast_id": 5,
+        "character": "Yotsuba Nakano (voice)",
+        "credit_id": "607c27d366f2d2006d32a6a0",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1325949,
+        "known_for_department": "Acting",
+        "name": "Inori Minase",
+        "original_name": "\u6c34\u702c\u3044\u306e\u308a",
+        "popularity": 2.0086,
+        "profile_path": "/cqOrQDUbbQLKpujzcK47YqjFdNp.jpg",
+        "cast_id": 6,
+        "character": "Itsuki Nakano (voice)",
+        "credit_id": "607c27f4713ed40058d80bf8",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1255699,
+        "known_for_department": "Acting",
+        "name": "Natsumi Takamori",
+        "original_name": "\u9ad8\u68ee\u5948\u6d25\u7f8e",
+        "popularity": 1.5019,
+        "profile_path": "/lmoEgs5x8NchMlsXqmU4ZYsC8ey.jpg",
+        "cast_id": 7,
+        "character": "Raiha Uesugi (voice)",
+        "credit_id": "607c281a9408ec002a5189be",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 224413,
+        "known_for_department": "Acting",
+        "name": "Satoshi Hino",
+        "original_name": "\u65e5\u91ce\u8061",
+        "popularity": 1.2287,
+        "profile_path": "/8ZJIiwIVF2zDyyFr7oXewj0eEuu.jpg",
+        "cast_id": 8,
+        "character": "Isanari Uesugi (voice)",
+        "credit_id": "607c283a713ed4007d0afd89",
+        "order": 7
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1495399,
+        "known_for_department": "Directing",
+        "name": "Masato Jimbo",
+        "original_name": "\u795e\u4fdd\u660c\u767b",
+        "popularity": 0.6854,
+        "profile_path": "/azZeT4v6OREIiW3zvNzlKaVGwjT.jpg",
+        "credit_id": "622369a8e9da69006ee1c935",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3460038,
+        "known_for_department": "Production",
+        "name": "Kento Yoshida",
+        "original_name": "\u5409\u7530\u5065\u4eba",
+        "popularity": 0.4677,
+        "profile_path": null,
+        "credit_id": "638e7fb8cf1afd00a6dbda43",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2362601,
+        "known_for_department": "Production",
+        "name": "Yuichi Izumi",
+        "original_name": "\u548c\u6cc9\u52c7\u4e00",
+        "popularity": 0.7748,
+        "profile_path": null,
+        "credit_id": "638e7fbd66a0d3008c2a700f",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3811951,
+        "known_for_department": "Production",
+        "name": "Tomoki Ueda",
+        "original_name": "\u4e0a\u7530\u667a\u8f1d",
+        "popularity": 0.3051,
+        "profile_path": null,
+        "credit_id": "638e7fab5800c4008bb49712",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1700172,
+        "known_for_department": "Production",
+        "name": "Junichiro Tanaka",
+        "original_name": "\u7530\u4e2d\u6f64\u4e00\u6717",
+        "popularity": 0.1885,
+        "profile_path": null,
+        "credit_id": "638e7fa704733f007dc1315e",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3127079,
+        "known_for_department": "Production",
+        "name": "Gota Aijima",
+        "original_name": "\u76f8\u5cf6\u8c6a\u592a",
+        "popularity": 0.2719,
+        "profile_path": null,
+        "credit_id": "638e7fb5cf1afd0084034ee4",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1512708,
+        "known_for_department": "Production",
+        "name": "Mitsutoshi Ogura",
+        "original_name": "\u5c0f\u5009\u5145\u4fca",
+        "popularity": 0.2135,
+        "profile_path": null,
+        "credit_id": "638e7fb9196757028e604473",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2393577,
+        "known_for_department": "Production",
+        "name": "Shin Furukawa",
+        "original_name": "\u53e4\u5ddd\u614e",
+        "popularity": 0.9117,
+        "profile_path": null,
+        "credit_id": "638e7fae196757024ebcf4fd",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1735189,
+        "known_for_department": "Production",
+        "name": "Tomoyuki Ohwada",
+        "original_name": "\u5927\u548c\u7530\u667a\u4e4b",
+        "popularity": 0.3998,
+        "profile_path": "/sif9JEUD8RLZCXx8A2azaIq57Fg.jpg",
+        "credit_id": "638e861404733f00a0b9e9eb",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: The Quintessential Quintuplets Movie (2022)\n\nDirector: Masato Jimbo\n\nProducer: Kento Yoshida\n\nProducer: Yuichi Izumi\n\nProducer: Tomoki Ueda\n\nProducer: Junichiro Tanaka\n\nProducer: Gota Aijima\n\nProducer: Mitsutoshi Ogura\n\nProducer: Shin Furukawa\n\nProducer: Tomoyuki Ohwada\n\nGenres: Animation, Comedy, Romance\n\nThemes and Keywords: adolescence, twin sister, harem, sister, romance, slice of life, school, based on manga, anime, japanese high school, cheerful\n\nTop Cast: Yoshitsugu Matsuoka, Kana Hanazawa, Ayana Taketatsu, Miku Ito, Ayane Sakura, Inori Minase, Natsumi Takamori, Satoshi Hino\n\nPlot: When five lovely young girls who hate studying hire part-time tutor Futaro, he guides not only their education but also their hearts. Time spent has brought them all closer, with feelings growing within the girls and Futaro. As they finish their third year of high school and their last school festival approaches, they set their sights on what\u2019s next. Is there a future with one of them and Futaro?\n\n"
+}

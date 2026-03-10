@@ -1,0 +1,720 @@
+{
+  "adult": false,
+  "backdrop_path": "/8x9iKH8kWA0zdkgNdpAew7OstYe.jpg",
+  "belongs_to_collection": null,
+  "budget": 7500000,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "https://www.funimationfilms.com/movie/yourname/",
+  "id": 372058,
+  "imdb_id": "tt5311514",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u541b\u306e\u540d\u306f\u3002",
+  "overview": "High schoolers Mitsuha and Taki are complete strangers living separate lives. But one night, they suddenly switch places. Mitsuha wakes up in Taki\u2019s body, and he in hers. This bizarre occurrence continues to happen randomly, and the two must adjust their lives around each other.",
+  "popularity": 19.0912,
+  "poster_path": "/q719jXXEzOoYaps6babgKnONONX.jpg",
+  "production_companies": [
+    {
+      "id": 3756,
+      "logo_path": "/t38uPdbKmyBB8brKKeTFWIwojRz.png",
+      "name": "CoMix Wave Films",
+      "origin_country": "JP"
+    },
+    {
+      "id": 882,
+      "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+      "name": "TOHO",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2073,
+      "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+      "name": "KADOKAWA",
+      "origin_country": "JP"
+    },
+    {
+      "id": 8157,
+      "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+      "name": "jeki",
+      "origin_country": "JP"
+    },
+    {
+      "id": 14602,
+      "logo_path": "/t9eqx5QCHtu8LxxgYzivqrJAosp.png",
+      "name": "AMUSE",
+      "origin_country": "JP"
+    },
+    {
+      "id": 128617,
+      "logo_path": null,
+      "name": "voque ting",
+      "origin_country": "JP"
+    },
+    {
+      "id": 104184,
+      "logo_path": "/reEBh8dBl2y1DbXe2EdgxtMtaim.png",
+      "name": "Lawson Entertainment",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2016-08-26",
+  "revenue": 405320132,
+  "runtime": 106,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Separated by distance, connected by fate.",
+  "title": "Your Name.",
+  "video": false,
+  "vote_average": 8.479,
+  "vote_count": 12321,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 6270,
+        "name": "high school"
+      },
+      {
+        "id": 4776,
+        "name": "race against time"
+      },
+      {
+        "id": 1566,
+        "name": "dreams"
+      },
+      {
+        "id": 6155,
+        "name": "afterlife"
+      },
+      {
+        "id": 5096,
+        "name": "natural disaster"
+      },
+      {
+        "id": 6152,
+        "name": "supernatural"
+      },
+      {
+        "id": 4379,
+        "name": "time travel"
+      },
+      {
+        "id": 4803,
+        "name": "comet"
+      },
+      {
+        "id": 9840,
+        "name": "romance"
+      },
+      {
+        "id": 10614,
+        "name": "tragedy"
+      },
+      {
+        "id": 10873,
+        "name": "school"
+      },
+      {
+        "id": 33721,
+        "name": "body-swap"
+      },
+      {
+        "id": 33910,
+        "name": "high school student"
+      },
+      {
+        "id": 157171,
+        "name": "nonlinear timeline"
+      },
+      {
+        "id": 157813,
+        "name": "naked"
+      },
+      {
+        "id": 165086,
+        "name": "star crossed lovers"
+      },
+      {
+        "id": 196017,
+        "name": "power of love"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 235790,
+        "name": "japanese high school"
+      },
+      {
+        "id": 254167,
+        "name": "loving"
+      },
+      {
+        "id": 298549,
+        "name": "urban fantasy"
+      },
+      {
+        "id": 324429,
+        "name": "romantic"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 225730,
+        "known_for_department": "Acting",
+        "name": "Ryunosuke Kamiki",
+        "original_name": "\u795e\u6728\u9686\u4e4b\u4ecb",
+        "popularity": 1.6524,
+        "profile_path": "/ut7ewXjdgUmgkhJ1EtbOo9tbc7s.jpg",
+        "cast_id": 28,
+        "character": "Taki Tachibana (voice)",
+        "credit_id": "58a0634e9251412603006efc",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1369100,
+        "known_for_department": "Acting",
+        "name": "Mone Kamishiraishi",
+        "original_name": "\u4e0a\u767d\u77f3\u840c\u97f3",
+        "popularity": 1.4332,
+        "profile_path": "/cPydoy2sSqFDsbXeBPmzQGPmq0R.jpg",
+        "cast_id": 12,
+        "character": "Mitsuha Miyamizu (voice)",
+        "credit_id": "57b915b0c3a3685c15002500",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1668610,
+        "known_for_department": "Acting",
+        "name": "Ryo Narita",
+        "original_name": "\u6210\u7530\u51cc",
+        "popularity": 1.2804,
+        "profile_path": "/f42OXn4J7cM62wtykL196YW7x85.jpg",
+        "cast_id": 19,
+        "character": "Katsuhiko Teshigawara (voice)",
+        "credit_id": "57b915c89251413f5700273c",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 936275,
+        "known_for_department": "Acting",
+        "name": "Aoi Yuuki",
+        "original_name": "\u60a0\u6728\u78a7",
+        "popularity": 3.3799,
+        "profile_path": "/a5Mkd66GV1l3c9bZZtnvjUf33T2.jpg",
+        "cast_id": 16,
+        "character": "Sayaka Natori (voice)",
+        "credit_id": "57b915be92514141ae002413",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1210634,
+        "known_for_department": "Acting",
+        "name": "Nobunaga Shimazaki",
+        "original_name": "\u5cf6\ufa11\u4fe1\u9577",
+        "popularity": 1.5763,
+        "profile_path": "/qke5rZusHsjSlvB0NKlJ5dQF5D.jpg",
+        "cast_id": 13,
+        "character": "Tsukasa Fujii (voice)",
+        "credit_id": "57b915b492514141e3002673",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1324666,
+        "known_for_department": "Acting",
+        "name": "Kaito Ishikawa",
+        "original_name": "\u77f3\u5ddd\u754c\u4eba",
+        "popularity": 2.0629,
+        "profile_path": "/fzjIkotjUHHs3wgftM9tqdsG8ph.jpg",
+        "cast_id": 18,
+        "character": "Shinta Takagi (voice)",
+        "credit_id": "57b915c5925141423e00277d",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1344919,
+        "known_for_department": "Acting",
+        "name": "Kanon Tani",
+        "original_name": "\u8c37\u82b1\u97f3",
+        "popularity": 0.5794,
+        "profile_path": "/udR4Cax2EecH3ZkATE4h6ejiGD9.jpg",
+        "cast_id": 15,
+        "character": "Yotsuha Miyamizu (voice)",
+        "credit_id": "57b915bb9251413f57002738",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 219659,
+        "known_for_department": "Acting",
+        "name": "Masaki Terasoma",
+        "original_name": "\u3066\u3089\u305d\u307e\u307e\u3055\u304d",
+        "popularity": 1.3429,
+        "profile_path": "/eol7Ul4buAam9SmJDuFIWln0Cd3.jpg",
+        "cast_id": 36,
+        "character": "Toshiki Miyamizu (voice)",
+        "credit_id": "59cbeaf19251412be10144f7",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 148447,
+        "known_for_department": "Acting",
+        "name": "Sayaka Ohara",
+        "original_name": "\u5927\u539f\u3055\u3084\u304b",
+        "popularity": 1.7444,
+        "profile_path": "/4WQXLzj0gjYqkYFcTTxAkIwedvr.jpg",
+        "cast_id": 37,
+        "character": "Futaha Miyamizu (voice)",
+        "credit_id": "59cbeb039251412bcd01523b",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 89968,
+        "known_for_department": "Acting",
+        "name": "Kazuhiko Inoue",
+        "original_name": "\u4e95\u4e0a\u548c\u5f66",
+        "popularity": 1.8624,
+        "profile_path": "/3BpYtYRiLAmTNbCm2LXlXnkMRit.jpg",
+        "cast_id": 30,
+        "character": "Taki's Father (voice)",
+        "credit_id": "58cd9dd39251415a610119b0",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 87583,
+        "known_for_department": "Acting",
+        "name": "Chafurin",
+        "original_name": "\u8336\u98a8\u6797",
+        "popularity": 1.1068,
+        "profile_path": "/kiPG7EtYWxkj78US35gnTIMq5Dn.jpg",
+        "cast_id": 333,
+        "character": "Teshigawara's Father (voice)",
+        "credit_id": "5fc2ef3e62fcd3003dbd9329",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3351486,
+        "known_for_department": "Acting",
+        "name": "Yuka Kato",
+        "original_name": "\u304b\u3068\u3046\u6709\u82b1",
+        "popularity": 0.1554,
+        "profile_path": "/xrjrGsb0yQYg0mf7KWQ8zWgeGYs.jpg",
+        "cast_id": 370,
+        "character": "Teshigawara's Mother (voice)",
+        "credit_id": "61be315f6a300b0064995ed9",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 119143,
+        "known_for_department": "Acting",
+        "name": "Kana Hanazawa",
+        "original_name": "\u82b1\u6fa4\u9999\u83dc",
+        "popularity": 4.8807,
+        "profile_path": "/5bK9ttcRydQBWmyZp7gXDmJYOPF.jpg",
+        "cast_id": 38,
+        "character": "Teacher Yuki-chan (voice)",
+        "credit_id": "59cbeb129251412bcd015245",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 87637,
+        "known_for_department": "Acting",
+        "name": "Masami Nagasawa",
+        "original_name": "\u9577\u6fa4\u307e\u3055\u307f",
+        "popularity": 2.4863,
+        "profile_path": "/g5m4nwA95afODsscBkUEzX8Qq0Y.jpg",
+        "cast_id": 35,
+        "character": "Miki Okudera (voice)",
+        "credit_id": "592e379192514130d2003e1f",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 91288,
+        "known_for_department": "Acting",
+        "name": "Etsuko Ichihara",
+        "original_name": "\u5e02\u539f\u60a6\u5b50",
+        "popularity": 0.2478,
+        "profile_path": "/qDMwdYtLjj58ronpF7W0TNcwnSZ.jpg",
+        "cast_id": 14,
+        "character": "Hitoha Miyamizu (voice)",
+        "credit_id": "57b915b7925141423e002777",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1247771,
+        "known_for_department": "Acting",
+        "name": "Yuka Terasaki",
+        "original_name": "\u5bfa\u5d0e\u88d5\u9999",
+        "popularity": 0.7842,
+        "profile_path": "/hMorHtbCmbDkznBr6P71qHk2rSL.jpg",
+        "cast_id": 336,
+        "character": "(voice)",
+        "credit_id": "603dffa00e4fc8005a589738",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 83935,
+        "known_for_department": "Acting",
+        "name": "Takashi Onozuka",
+        "original_name": "\u5c0f\u91ce\u585a\u8cb4\u5fd7",
+        "popularity": 0.364,
+        "profile_path": "/9WVRLtiUrfYnPIqEeDtLDYCKYa9.jpg",
+        "cast_id": 337,
+        "character": "(voice)",
+        "credit_id": "603dffa1bb070d00462bb59b",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2013665,
+        "known_for_department": "Acting",
+        "name": "Yohei Namekawa",
+        "original_name": "\u6ed1\u5ddd\u6d0b\u5e73",
+        "popularity": 0.3377,
+        "profile_path": "/ArvaLD8Ocz7y721gTfIYprR2myb.jpg",
+        "cast_id": 377,
+        "character": "(voice)",
+        "credit_id": "625e75103dd126142ea711f2",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1435904,
+        "known_for_department": "Acting",
+        "name": "Miyuu Tsuji",
+        "original_name": "\u8fbb\u7f8e\u512a",
+        "popularity": 0.1696,
+        "profile_path": "/gW8o8fVajOQtc5b7QAbnG7bR2bF.jpg",
+        "cast_id": 396,
+        "character": "(voice)",
+        "credit_id": "65f2ddfe5a78840186d82357",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1257137,
+        "known_for_department": "Acting",
+        "name": "Shinya Hamazoe",
+        "original_name": "\u6d5c\u6dfb\u4f38\u4e5f",
+        "popularity": 0.9373,
+        "profile_path": "/cO0iNO9YfiO91rzabUmu05AaJGf.jpg",
+        "cast_id": 334,
+        "character": "(voice)",
+        "credit_id": "5fc2ef96b84f9400410a47d4",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1357106,
+        "known_for_department": "Acting",
+        "name": "Kanami Satou",
+        "original_name": "\u4f50\u85e4\u594f\u7f8e",
+        "popularity": 0.3783,
+        "profile_path": "/x4YEuNRfQ3LUMJklNblU99PuoJx.jpg",
+        "cast_id": 338,
+        "character": "(voice)",
+        "credit_id": "603dffa1af4324002af5b110",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2995659,
+        "known_for_department": "Acting",
+        "name": "Shinjirou Gouda",
+        "original_name": "\u5408\u7530\u614e\u4e8c\u90ce",
+        "popularity": 0.2108,
+        "profile_path": "/nB7P927JF3Jx9o6xfsniEyKX3HH.jpg",
+        "cast_id": 339,
+        "character": "(voice)",
+        "credit_id": "603dffa1bb070d00462bb5a4",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2603964,
+        "known_for_department": "Acting",
+        "name": "Yasuhiro Kikuchi",
+        "original_name": "\u83ca\u6c60\u5eb7\u5f18",
+        "popularity": 0.3174,
+        "profile_path": "/izNQyTUzNaKOwOOvXkBSbvZyP0O.jpg",
+        "cast_id": 340,
+        "character": "(voice)",
+        "credit_id": "603dffa2af4324002af5b113",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2995660,
+        "known_for_department": "Acting",
+        "name": "Tamari Hinata",
+        "original_name": "\u3072\u306a\u305f\u305f\u307e\u308a",
+        "popularity": 0.0513,
+        "profile_path": "/t4L8iEaQjevQEbvDblrxi44sX9D.jpg",
+        "cast_id": 341,
+        "character": "(voice)",
+        "credit_id": "603dffa2a579f90043057586",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1972879,
+        "known_for_department": "Acting",
+        "name": "Nozomi Yamane",
+        "original_name": "\u5c71\u6839\u5e0c\u7f8e",
+        "popularity": 0.4829,
+        "profile_path": "/4hOkfHGiPV9h65w3OHwFeAud56b.jpg",
+        "cast_id": 342,
+        "character": "(voice)",
+        "credit_id": "603dffa22634620058cdf6fa",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2603957,
+        "known_for_department": "Acting",
+        "name": "Yuuki Shin",
+        "original_name": "\u65b0\u7950\u6a39",
+        "popularity": 0.6211,
+        "profile_path": "/pyOAlLSA9ZabbVy5HD8j9QuUdV8.jpg",
+        "cast_id": 343,
+        "character": "(voice)",
+        "credit_id": "603dffa3263462002f4ca56f",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2877279,
+        "known_for_department": "Acting",
+        "name": "Tatsuya Murakami",
+        "original_name": "\u6751\u4e0a\u9054\u54c9",
+        "popularity": 0.1756,
+        "profile_path": "/cftHVjpjvi0Kd3mh81R7avhyCgz.jpg",
+        "cast_id": 344,
+        "character": "(voice)",
+        "credit_id": "603dffa3f5cb210045f7c7d9",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2862466,
+        "known_for_department": "Acting",
+        "name": "Nodoka Hasegawa",
+        "original_name": "\u9577\u8c37\u5ddd\u6696",
+        "popularity": 0.6671,
+        "profile_path": "/gZn9jnapSyTZwhtR29LqXrzvXR9.jpg",
+        "cast_id": 345,
+        "character": "(voice)",
+        "credit_id": "603dffa3ea84c70078ef31a8",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1845278,
+        "known_for_department": "Acting",
+        "name": "Baron Yamazaki",
+        "original_name": "\u30d0\u30ed\u30f3\u5c71\u5d0e",
+        "popularity": 0.2767,
+        "profile_path": "/brjVSfFp4KXrmEL1XBSonyd8JXE.jpg",
+        "cast_id": 346,
+        "character": "(voice)",
+        "credit_id": "603dffa30e4fc80045a4b810",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4591796,
+        "known_for_department": "Acting",
+        "name": "Mimi Tamaki",
+        "original_name": "\u73e0\u5e0c\u7f8e\u78a7",
+        "popularity": 0.0853,
+        "profile_path": null,
+        "cast_id": 397,
+        "character": "(voice)",
+        "credit_id": "65f2de9699259c00ca5c6acf",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 74091,
+        "known_for_department": "Directing",
+        "name": "Makoto Shinkai",
+        "original_name": "\u65b0\u6d77\u8aa0",
+        "popularity": 2.6639,
+        "profile_path": "/mSCk6PmAR99bCsKJYlMx94vq5qe.jpg",
+        "credit_id": "566aee32925141664f004d56",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 237364,
+        "known_for_department": "Directing",
+        "name": "Genki Kawamura",
+        "original_name": "\u5ddd\u6751\u5143\u6c17",
+        "popularity": 0.7876,
+        "profile_path": "/lYiWJdjiib6b6uhiPfX9eU0bOGX.jpg",
+        "credit_id": "57f2dda49251410c340030e2",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1735187,
+        "known_for_department": "Production",
+        "name": "Katsuhiro Takei",
+        "original_name": "\u6b66\u4e95\u514b\u5f18",
+        "popularity": 0.3017,
+        "profile_path": "/8x2aVss0atoUlH0ID3Oboro6Mhd.jpg",
+        "credit_id": "59cbf02dc3a368773d017a9b",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1749022,
+        "known_for_department": "Production",
+        "name": "Yoshihiro Furusawa",
+        "original_name": "\u53e4\u6fa4\u4f73\u5bdb",
+        "popularity": 0.9463,
+        "profile_path": "/8cVWxK1hw3YEqzjpE8cxI1gR8W4.jpg",
+        "credit_id": "59cbf0249251412bb30157d5",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1895797,
+        "known_for_department": "Production",
+        "name": "Koichiro Ito",
+        "original_name": "\u4f0a\u85e4\u8015\u4e00\u90ce",
+        "popularity": 0.2141,
+        "profile_path": null,
+        "credit_id": "59cbf0749251412b8f016633",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2044642,
+        "known_for_department": "Production",
+        "name": "Keiji Ota",
+        "original_name": "\u5927\u7530\u572d\u4e8c",
+        "popularity": 0.4005,
+        "profile_path": "/15NZaRqZHSguv6wF2SvuFoYlkiO.jpg",
+        "credit_id": "5afda6e60e0a266f1a005cb3",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1029281,
+        "known_for_department": "Production",
+        "name": "Minami Ichikawa",
+        "original_name": "\u5e02\u5ddd\u5357",
+        "popularity": 0.8273,
+        "profile_path": "/hbLwY27J83U0FFTPqYvfFXpBRco.jpg",
+        "credit_id": "5bd1f1b2c3a3682f79010496",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1116326,
+        "known_for_department": "Production",
+        "name": "Noritaka Kawaguchi",
+        "original_name": "\u5ddd\u53e3\u5178\u5b5d",
+        "popularity": 0.156,
+        "profile_path": "/c05kckuUvGjv6xx6pI7bPpjydvk.jpg",
+        "credit_id": "5bd1f1e70e0a266188011472",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Your Name. (2016)\n\nDirector: Makoto Shinkai\n\nProducer: Genki Kawamura\n\nProducer: Katsuhiro Takei\n\nExecutive Producer: Yoshihiro Furusawa\n\nProducer: Koichiro Ito\n\nExecutive Producer: Keiji Ota\n\nExecutive Producer: Minami Ichikawa\n\nExecutive Producer: Noritaka Kawaguchi\n\nGenres: Animation, Romance, Drama\n\nThemes and Keywords: high school, race against time, dreams, afterlife, natural disaster, supernatural, time travel, comet, romance, tragedy, school, body-swap, high school student, nonlinear timeline, naked, star crossed lovers, power of love, anime, japanese high school, loving, urban fantasy, romantic\n\nTop Cast: Ryunosuke Kamiki, Mone Kamishiraishi, Ryo Narita, Aoi Yuuki, Nobunaga Shimazaki, Kaito Ishikawa, Kanon Tani, Masaki Terasoma, Sayaka Ohara, Kazuhiko Inoue, Chafurin, Yuka Kato, Kana Hanazawa, Masami Nagasawa, Etsuko Ichihara, Yuka Terasaki, Takashi Onozuka, Yohei Namekawa, Miyuu Tsuji, Shinya Hamazoe, Kanami Satou, Shinjirou Gouda, Yasuhiro Kikuchi, Tamari Hinata, Nozomi Yamane, Yuuki Shin, Tatsuya Murakami, Nodoka Hasegawa, Baron Yamazaki, Mimi Tamaki\n\nPlot: High schoolers Mitsuha and Taki are complete strangers living separate lives. But one night, they suddenly switch places. Mitsuha wakes up in Taki\u2019s body, and he in hers. This bizarre occurrence continues to happen randomly, and the two must adjust their lives around each other.\n\n"
+}

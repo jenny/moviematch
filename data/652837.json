@@ -1,0 +1,742 @@
+{
+  "adult": false,
+  "backdrop_path": "/521koHpCyK6ZeNpEAvPAuC75cJ5.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "homepage": "",
+  "id": 652837,
+  "imdb_id": "tt12879624",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u30b8\u30e7\u30bc\u3068\u864e\u3068\u9b5a\u305f\u3061",
+  "overview": "With dreams of diving abroad, Tsuneo gets a job assisting Josee, an artist whose imagination takes her far beyond her wheelchair. But when the tide turns against them, they push each other to places they never thought possible, and inspire a love fit for a storybook.",
+  "popularity": 4.3554,
+  "poster_path": "/z1D8xi9x4uEhyFruo7uEHXUMD4K.jpg",
+  "production_companies": [
+    {
+      "id": 2849,
+      "logo_path": "/cN3JNIKawjOMtfk0GBVIbsx69bg.png",
+      "name": "BONES",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2073,
+      "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+      "name": "KADOKAWA",
+      "origin_country": "JP"
+    },
+    {
+      "id": 192,
+      "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+      "name": "Shochiku",
+      "origin_country": "JP"
+    },
+    {
+      "id": 8157,
+      "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+      "name": "jeki",
+      "origin_country": "JP"
+    },
+    {
+      "id": 139842,
+      "logo_path": "/uBixtDwl2hxsugqSOTzEP90kxa0.png",
+      "name": "TOY'S FACTORY",
+      "origin_country": "JP"
+    },
+    {
+      "id": 11848,
+      "logo_path": "/A3abKfh7dXwPdXJc3A551q8XnOC.png",
+      "name": "KDDI",
+      "origin_country": "JP"
+    },
+    {
+      "id": 170125,
+      "logo_path": "/aQ07cYAVuJCmfuCeiaDnmmhdibk.png",
+      "name": "Movie Walker",
+      "origin_country": "JP"
+    },
+    {
+      "id": 91253,
+      "logo_path": "/aD91ywW7l93wk9N0fNX8URMgQSC.png",
+      "name": "TBS Radio",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2020-12-25",
+  "revenue": 0,
+  "runtime": 98,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Together they can fly.",
+  "title": "Josee, the Tiger and the Fish",
+  "video": false,
+  "vote_average": 8.272,
+  "vote_count": 571,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 818,
+        "name": "based on novel or book"
+      },
+      {
+        "id": 856,
+        "name": "paraplegic"
+      },
+      {
+        "id": 9673,
+        "name": "love"
+      },
+      {
+        "id": 9914,
+        "name": "slice of life"
+      },
+      {
+        "id": 14534,
+        "name": "relationship"
+      },
+      {
+        "id": 156866,
+        "name": "based on short story"
+      },
+      {
+        "id": 162735,
+        "name": "disability"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 324429,
+        "name": "romantic"
+      },
+      {
+        "id": 325784,
+        "name": "comforting"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1255318,
+        "known_for_department": "Acting",
+        "name": "Taishi Nakagawa",
+        "original_name": "\u4e2d\u5ddd\u5927\u5fd7",
+        "popularity": 0.871,
+        "profile_path": "/gvUJ1Ge1ERLnYwqb4cJVCXQQIYA.jpg",
+        "cast_id": 7,
+        "character": "Tsuneo Suzukawa (voice)",
+        "credit_id": "5f34464922af3e00375fad97",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1671407,
+        "known_for_department": "Acting",
+        "name": "Kaya Kiyohara",
+        "original_name": "\u6e05\u539f\u679c\u8036",
+        "popularity": 2.1442,
+        "profile_path": "/a0tDsusfKXPSbVGO9zBSSAoCcAP.jpg",
+        "cast_id": 8,
+        "character": "Kumiko 'Josee' Yamamura (voice)",
+        "credit_id": "5f344686d8e15a003599e3fa",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1772522,
+        "known_for_department": "Acting",
+        "name": "Yume Miyamoto",
+        "original_name": "\u5bae\u672c\u4f91\u82bd",
+        "popularity": 1.1375,
+        "profile_path": "/8PzHX7owawEZKq7Eg9WwcmWYx9s.jpg",
+        "cast_id": 9,
+        "character": "Mai Ninomiya (voice)",
+        "credit_id": "5f3446f7ef9d7200358e4084",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1254260,
+        "known_for_department": "Acting",
+        "name": "Kazuyuki Okitsu",
+        "original_name": "\u8208\u6d25\u548c\u5e78",
+        "popularity": 1.3138,
+        "profile_path": "/vgyaK5dAxhvzAi6LJM3ZyaJd4mJ.jpg",
+        "cast_id": 10,
+        "character": "Hayato Matsuura (voice)",
+        "credit_id": "5f34472c22af3e00355f08a7",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1691384,
+        "known_for_department": "Acting",
+        "name": "Lynn",
+        "original_name": "Lynn",
+        "popularity": 1.0437,
+        "profile_path": "/eJ2NqgzpnzNbT6Nt9EpDfzqNeZM.jpg",
+        "cast_id": 11,
+        "character": "Kana Kishimoto (voice)",
+        "credit_id": "5f344757d8e15a003299e567",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2740138,
+        "known_for_department": "Acting",
+        "name": "Chiemi Matsutera",
+        "original_name": "\u677e\u5bfa\u5343\u6075\u7f8e",
+        "popularity": 0.4019,
+        "profile_path": "/3zzJcGTCX8BFgvHSVqu1C4wk8vv.jpg",
+        "cast_id": 12,
+        "character": "Chizu Yamamura (voice)",
+        "credit_id": "5f3455d52a09bc003c010559",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1484548,
+        "known_for_department": "Acting",
+        "name": "Kanji Obana",
+        "original_name": "\u5c3e\u82b1\u304b\u3093\u3058",
+        "popularity": 0.2322,
+        "profile_path": "/x0uiwdRKQjUsGQRow5rehv3O2oa.jpg",
+        "cast_id": 150,
+        "character": "Professor Kondo (voice)",
+        "credit_id": "648ef25526346200eb7697fa",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2813402,
+        "known_for_department": "Acting",
+        "name": "Shintarou Moriyama",
+        "original_name": "\u76db\u5c71\u664b\u592a\u90ce",
+        "popularity": 0.2452,
+        "profile_path": "/et8AkSHZrKm1xIS2VzS9kBJa0kf.jpg",
+        "cast_id": 14,
+        "character": "Nishida (voice)",
+        "credit_id": "5f84f3dde93e95003713c519",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1252998,
+        "known_for_department": "Acting",
+        "name": "Yuuya Uchida",
+        "original_name": "\u5185\u7530\u5915\u591c",
+        "popularity": 0.8787,
+        "profile_path": "/4xLLQGEDWtmLWUapo0UnfvCdsXp.jpg",
+        "cast_id": 151,
+        "character": "Mizushima (voice)",
+        "credit_id": "648ef357c3c891010ca55bd3",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1253730,
+        "known_for_department": "Acting",
+        "name": "Jin Urayama",
+        "original_name": "\u6d66\u5c71\u8fc5",
+        "popularity": 0.5822,
+        "profile_path": "/5D6QFwS5aOk6agnOjLEwpbJoW9Z.jpg",
+        "cast_id": 152,
+        "character": "Fujita (voice)",
+        "credit_id": "648ef376263462014e5868c7",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2813409,
+        "known_for_department": "Acting",
+        "name": "Lily",
+        "original_name": "\u30ea\u30ea\u30fc",
+        "popularity": 0.2131,
+        "profile_path": "/iZKz6hDjAWRaO8n1mP4I83uCfZN.jpg",
+        "cast_id": 15,
+        "character": "Train Station Attendant (voice)",
+        "credit_id": "5f84f5b6e93e95003613891a",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 219659,
+        "known_for_department": "Acting",
+        "name": "Masaki Terasoma",
+        "original_name": "\u3066\u3089\u305d\u307e\u307e\u3055\u304d",
+        "popularity": 1.3429,
+        "profile_path": "/eol7Ul4buAam9SmJDuFIWln0Cd3.jpg",
+        "cast_id": 153,
+        "character": "Doctor (voice)",
+        "credit_id": "648ef3e5263462012d4aa1c1",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1324472,
+        "known_for_department": "Acting",
+        "name": "Kengo Kawanishi",
+        "original_name": "\u6cb3\u897f\u5065\u543e",
+        "popularity": 1.2165,
+        "profile_path": "/s0CxrO6LixJBgqiHEUjKelAh8ei.jpg",
+        "cast_id": 154,
+        "character": "Yukichi (voice)",
+        "credit_id": "648ef42bc3c891010ca55c44",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2660617,
+        "known_for_department": "Acting",
+        "name": "Masaaki Ihara",
+        "original_name": "\u4f0a\u539f\u6b63\u660e",
+        "popularity": 0.4144,
+        "profile_path": "/IvPXEVCuH9JNagimzY012DmNf2.jpg",
+        "cast_id": 155,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef43fc2ff3d00ffbbea97",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4021086,
+        "known_for_department": "Acting",
+        "name": "Madoka Kido",
+        "original_name": "\u57ce\u6238\u307e\u3069\u304b",
+        "popularity": 0.2948,
+        "profile_path": "/cYE0BjHV9WNkDwxoMelK4xXnhKE.jpg",
+        "cast_id": 156,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef447c2ff3d00ffbbea9c",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2438495,
+        "known_for_department": "Acting",
+        "name": "Arisa Kori",
+        "original_name": "\u9999\u91cc\u6709\u4f50",
+        "popularity": 0.4182,
+        "profile_path": "/9Jnt9px2jDpI79lPUm3n8aEhP14.jpg",
+        "cast_id": 157,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4622f8d090100aaab72",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1251544,
+        "known_for_department": "Acting",
+        "name": "Shuhei Sakaguchi",
+        "original_name": "\u962a\u53e3\u5468\u5e73",
+        "popularity": 0.718,
+        "profile_path": "/nMhYPT9sRr8TFHWkEggzXrzqgPe.jpg",
+        "cast_id": 158,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef471c2ff3d00ffbbeab5",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3107517,
+        "known_for_department": "Acting",
+        "name": "Ayu Shoji",
+        "original_name": "\u6771\u6d77\u6797\u4e9c\u7950",
+        "popularity": 0.5686,
+        "profile_path": "/aLBSdfVjxGHnx5rHOljUg0Iwdcp.jpg",
+        "cast_id": 159,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4a7559d22011c4cc3ef",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1243481,
+        "known_for_department": "Acting",
+        "name": "Masaya Takatsuka",
+        "original_name": "\u9ad8\u585a\u6b63\u4e5f",
+        "popularity": 0.3248,
+        "profile_path": "/nmCGqEZsdwYzno0xWAZ3AVF9VUE.jpg",
+        "cast_id": 160,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4adc3c89100eb3322e1",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2042725,
+        "known_for_department": "Acting",
+        "name": "Ayako Takeuchi",
+        "original_name": "\u7af9\u5185\u7d62\u5b50",
+        "popularity": 0.5458,
+        "profile_path": "/90vLA1gStZtjOmAp3L8fJ1EVSe5.jpg",
+        "cast_id": 161,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4b7c3c89100eb3322f1",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2844828,
+        "known_for_department": "Acting",
+        "name": "Keiko Tsukamoto",
+        "original_name": "\u3064\u304b\u3082\u3068\u666f\u5b50",
+        "popularity": 0.3604,
+        "profile_path": "/50AMEWXz2HUt3RFKoEuJk3Xl84k.jpg",
+        "cast_id": 162,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4da2f8d0900e385ef0d",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3040830,
+        "known_for_department": "Acting",
+        "name": "Arisa Tsuruno",
+        "original_name": "\u9db4\u91ce\u6709\u7d17",
+        "popularity": 0.5905,
+        "profile_path": "/mAWtDpWsgD49S7IG18T0xz76gVl.jpg",
+        "cast_id": 163,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4e342bf01013bbd805b",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1875419,
+        "known_for_department": "Acting",
+        "name": "Yui Nakajima",
+        "original_name": "\u4e2d\u5cf6\u552f",
+        "popularity": 0.3633,
+        "profile_path": "/22UDPfiqtgo8yMhr9IEiBCIohkh.jpg",
+        "cast_id": 164,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4ebc2ff3d00e2e0c16d",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2733894,
+        "known_for_department": "Acting",
+        "name": "Sanae Nakata",
+        "original_name": "\u4e2d\u7530\u6c99\u5948\u679d",
+        "popularity": 0.1769,
+        "profile_path": "/oCaLzwte8FAkE0w4uYBl6q6iiSF.jpg",
+        "cast_id": 165,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef4f7559d2200ad82a9da",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3149397,
+        "known_for_department": "Acting",
+        "name": "Nico",
+        "original_name": "\u4ec1\u80e1",
+        "popularity": 0.1586,
+        "profile_path": "/1F7LzGkbBhD9rfKTp4x8BE8fyjk.jpg",
+        "cast_id": 166,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef502263462014e586995",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2747376,
+        "known_for_department": "Acting",
+        "name": "Ayano Hamaguchi",
+        "original_name": "\u6ff1\u53e3\u7dbe\u4e43",
+        "popularity": 0.1677,
+        "profile_path": "/I2Dte205k3e0EJHsbfI4zLEyvo.jpg",
+        "cast_id": 167,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef51ec3c891010ca55cb1",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1247847,
+        "known_for_department": "Acting",
+        "name": "Kenji Hamada",
+        "original_name": "\u6d5c\u7530\u8ce2\u4e8c",
+        "popularity": 1.2534,
+        "profile_path": "/27bujo3KlawFgrFOO2nnlDgxXsE.jpg",
+        "cast_id": 168,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef525c2ff3d00ad027234",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1242972,
+        "known_for_department": "Acting",
+        "name": "Yukari Hikida",
+        "original_name": "\u758b\u7530\u7531\u9999\u91cc",
+        "popularity": 0.6067,
+        "profile_path": "/nuUNzaQR2faG1pNpwCtrjyGtLh6.jpg",
+        "cast_id": 169,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef52bc3c891014ebe2e85",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2724031,
+        "known_for_department": "Acting",
+        "name": "Takumu Miyazono",
+        "original_name": "\u5bae\u5712\u62d3\u5922",
+        "popularity": 0.359,
+        "profile_path": "/hmknRTL1d9lGYXYBsGRGGDpHF5B.jpg",
+        "cast_id": 170,
+        "character": "Additional Voices (voice)",
+        "credit_id": "648ef534559d220139be34fb",
+        "order": 28
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3431937,
+        "known_for_department": "Production",
+        "name": "Junji Igarashi",
+        "original_name": "\u4e94\u5341\u5d50\u6df3\u4e4b",
+        "popularity": 0.347,
+        "profile_path": null,
+        "credit_id": "620f8d624c2592006ab0b1db",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3431958,
+        "known_for_department": "Production",
+        "name": "Kota Kuroda",
+        "original_name": "\u9ed2\u7530\u5eb7\u592a",
+        "popularity": 0.1704,
+        "profile_path": null,
+        "credit_id": "620f8e0e9824c8001be01f55",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3393281,
+        "known_for_department": "Production",
+        "name": "Koichi Inaba",
+        "original_name": "\u7a32\u8449\u8ca2\u4e00",
+        "popularity": 0.1431,
+        "profile_path": null,
+        "credit_id": "620f8d58ca0e17001b40b1b9",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3432034,
+        "known_for_department": "Production",
+        "name": "Shoji Kadota",
+        "original_name": "\u9580\u7530\u5e84\u53f8",
+        "popularity": 0.2252,
+        "profile_path": null,
+        "credit_id": "620f8dccf48e0d006712a5c4",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1748307,
+        "known_for_department": "Production",
+        "name": "Toshihiro Takahashi",
+        "original_name": "\u9ad8\u6a4b\u654f\u5f18",
+        "popularity": 0.2726,
+        "profile_path": "/ibCfPV606ibzCrQpLza5XMkPdxm.jpg",
+        "credit_id": "620f8df2f90b190044e75ba3",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 68921,
+        "known_for_department": "Production",
+        "name": "Masahiko Minami",
+        "original_name": "\u5357\u96c5\u5f66",
+        "popularity": 0.2262,
+        "profile_path": "/36iayCTbXRFD5O5yO3Xbj4rrMWJ.jpg",
+        "credit_id": "620f8d524c2592001bbf1a06",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1895798,
+        "known_for_department": "Production",
+        "name": "Masanori Yumiya",
+        "original_name": "\u5f13\u77e2\u653f\u6cd5",
+        "popularity": 0.3056,
+        "profile_path": null,
+        "credit_id": "620f8d55151c5c00435cf7e5",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3147148,
+        "known_for_department": "Production",
+        "name": "Takeshi Kikuchi",
+        "original_name": "\u83ca\u6c60\u525b",
+        "popularity": 0.3263,
+        "profile_path": "/yi7yWAP8StBsW7D94AZd6wdvUAV.jpg",
+        "credit_id": "620f8e0af48e0d00428f386c",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1161664,
+        "known_for_department": "Production",
+        "name": "Shinichirou Inoue",
+        "original_name": "\u4e95\u4e0a\u4f38\u4e00\u90ce",
+        "popularity": 0.2664,
+        "profile_path": "/qxdvBbkO8QBIdPETF8SJ87R5u4H.jpg",
+        "credit_id": "620f8d4ce0ca7f00436dcbd4",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3430669,
+        "known_for_department": "Production",
+        "name": "Kei Morita",
+        "original_name": "\u68ee\u7530\u572d",
+        "popularity": 0.1043,
+        "profile_path": null,
+        "credit_id": "620f8d5c4c2592006ab0b1bf",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3027414,
+        "known_for_department": "Production",
+        "name": "Mari Suzuki",
+        "original_name": "\u9234\u6728\u9ebb\u91cc",
+        "popularity": 0.0878,
+        "profile_path": null,
+        "credit_id": "60a6bb761689350029c3bc17",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3097346,
+        "known_for_department": "Production",
+        "name": "Shuzo Kasahara",
+        "original_name": "\u7b20\u539f\u5468\u9020",
+        "popularity": 0.6581,
+        "profile_path": null,
+        "credit_id": "60a6bad4b87aec0079ee4682",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3097347,
+        "known_for_department": "Production",
+        "name": "Koichiro Mukai",
+        "original_name": "\u5411\u4e95\u7d18\u4e00\u90ce",
+        "popularity": 0.0854,
+        "profile_path": null,
+        "credit_id": "60a6bb5568b1ea00293b239e",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1582093,
+        "known_for_department": "Directing",
+        "name": "Kotaro Tamura",
+        "original_name": "\u30bf\u30e0\u30e9\u30b3\u30fc\u30bf\u30ed\u30fc",
+        "popularity": 0.3488,
+        "profile_path": null,
+        "credit_id": "5de521673faba000190fec28",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: Josee, the Tiger and the Fish (2020)\n\nExecutive Producer: Junji Igarashi\n\nExecutive Producer: Kota Kuroda\n\nExecutive Producer: Koichi Inaba\n\nExecutive Producer: Shoji Kadota\n\nExecutive Producer: Toshihiro Takahashi\n\nExecutive Producer: Masahiko Minami\n\nExecutive Producer: Masanori Yumiya\n\nExecutive Producer: Takeshi Kikuchi\n\nExecutive Producer: Shinichirou Inoue\n\nExecutive Producer: Kei Morita\n\nProducer: Mari Suzuki\n\nProducer: Shuzo Kasahara\n\nProducer: Koichiro Mukai\n\nDirector: Kotaro Tamura\n\nGenres: Animation, Drama, Romance\n\nThemes and Keywords: based on novel or book, paraplegic, love, slice of life, relationship, based on short story, disability, anime, romantic, comforting\n\nTop Cast: Taishi Nakagawa, Kaya Kiyohara, Yume Miyamoto, Kazuyuki Okitsu, Lynn, Chiemi Matsutera, Kanji Obana, Shintarou Moriyama, Yuuya Uchida, Jin Urayama, Lily, Masaki Terasoma, Kengo Kawanishi, Masaaki Ihara, Madoka Kido, Arisa Kori, Shuhei Sakaguchi, Ayu Shoji, Masaya Takatsuka, Ayako Takeuchi, Keiko Tsukamoto, Arisa Tsuruno, Yui Nakajima, Sanae Nakata, Nico, Ayano Hamaguchi, Kenji Hamada, Yukari Hikida, Takumu Miyazono\n\nPlot: With dreams of diving abroad, Tsuneo gets a job assisting Josee, an artist whose imagination takes her far beyond her wheelchair. But when the tide turns against them, they push each other to places they never thought possible, and inspire a love fit for a storybook.\n\n"
+}

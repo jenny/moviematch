@@ -1,0 +1,546 @@
+{
+  "adult": false,
+  "backdrop_path": "/eTZkq5tI58Ec76AwPf1HOUoKtky.jpg",
+  "belongs_to_collection": null,
+  "budget": 935000,
+  "genres": [
+    {
+      "id": 10752,
+      "name": "War"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 975,
+  "imdb_id": "tt0050825",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Paths of Glory",
+  "overview": "A commanding officer defends three scapegoats on trial for a failed offensive that occurred within the French Army in 1916.",
+  "popularity": 4.2733,
+  "poster_path": "/tJXwtzOSNUC8dxJfrdvkNtGrrgW.jpg",
+  "production_companies": [
+    {
+      "id": 611,
+      "logo_path": null,
+      "name": "Bryna Productions",
+      "origin_country": "US"
+    },
+    {
+      "id": 60,
+      "logo_path": "/4YldLvCWQL9VIAHQ2Fu3Ffkh9Si.png",
+      "name": "United Artists",
+      "origin_country": "US"
+    },
+    {
+      "id": 52795,
+      "logo_path": null,
+      "name": "Harris-Kubrick Productions",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1957-10-25",
+  "revenue": 1200000,
+  "runtime": 88,
+  "spoken_languages": [
+    {
+      "english_name": "German",
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "english_name": "Latin",
+      "iso_639_1": "la",
+      "name": "Latin"
+    },
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "It explodes in the no-man's land no picture ever dared cross before!",
+  "title": "Paths of Glory",
+  "video": false,
+  "vote_average": 8.3,
+  "vote_count": 3210,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 6092,
+        "name": "army"
+      },
+      {
+        "id": 254,
+        "name": "france"
+      },
+      {
+        "id": 818,
+        "name": "based on novel or book"
+      },
+      {
+        "id": 1402,
+        "name": "general"
+      },
+      {
+        "id": 74,
+        "name": "germany"
+      },
+      {
+        "id": 2504,
+        "name": "world war i"
+      },
+      {
+        "id": 1627,
+        "name": "patriotism"
+      },
+      {
+        "id": 7956,
+        "name": "cowardice"
+      },
+      {
+        "id": 6987,
+        "name": "idealism"
+      },
+      {
+        "id": 9031,
+        "name": "idealist"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 13065,
+        "name": "soldier"
+      },
+      {
+        "id": 165431,
+        "name": "anti war"
+      },
+      {
+        "id": 210184,
+        "name": "1910s"
+      },
+      {
+        "id": 273967,
+        "name": "war"
+      },
+      {
+        "id": 288302,
+        "name": "fighting the system"
+      },
+      {
+        "id": 309029,
+        "name": "psychological drama"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2090,
+        "known_for_department": "Acting",
+        "name": "Kirk Douglas",
+        "original_name": "Kirk Douglas",
+        "popularity": 1.6989,
+        "profile_path": "/t94It9bPI6uBvNuuQlQipyYyURC.jpg",
+        "cast_id": 18,
+        "character": "Col. Dax",
+        "credit_id": "52fe4295c3a36847f8029f15",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14562,
+        "known_for_department": "Acting",
+        "name": "Ralph Meeker",
+        "original_name": "Ralph Meeker",
+        "popularity": 0.906,
+        "profile_path": "/3gxXZRouc813WFmA6zVUl3ciq0P.jpg",
+        "cast_id": 19,
+        "character": "Cpl. Philippe Paris",
+        "credit_id": "52fe4295c3a36847f8029f19",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14563,
+        "known_for_department": "Acting",
+        "name": "Adolphe Menjou",
+        "original_name": "Adolphe Menjou",
+        "popularity": 0.5584,
+        "profile_path": "/88FfjxT3cFDIbCIK0UmwyjEF6tU.jpg",
+        "cast_id": 20,
+        "character": "Gen. George Broulard",
+        "credit_id": "52fe4295c3a36847f8029f1d",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14564,
+        "known_for_department": "Acting",
+        "name": "George Macready",
+        "original_name": "George Macready",
+        "popularity": 0.969,
+        "profile_path": "/gGtegV82TMbcd5psHx6w7by5FgO.jpg",
+        "cast_id": 21,
+        "character": "Gen. Paul Mireau",
+        "credit_id": "52fe4295c3a36847f8029f21",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14565,
+        "known_for_department": "Acting",
+        "name": "Wayne Morris",
+        "original_name": "Wayne Morris",
+        "popularity": 0.6662,
+        "profile_path": "/2HFQHQrPdlr8eRca5x9BAfeQnjc.jpg",
+        "cast_id": 22,
+        "character": "Lt. Roget/Singing man",
+        "credit_id": "52fe4295c3a36847f8029f25",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 12312,
+        "known_for_department": "Acting",
+        "name": "Richard Anderson",
+        "original_name": "Richard Anderson",
+        "popularity": 1.0516,
+        "profile_path": "/eNVusMxsfee5t79jXbYBP8JnVvm.jpg",
+        "cast_id": 23,
+        "character": "Maj. Saint-Auban",
+        "credit_id": "52fe4295c3a36847f8029f29",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 592,
+        "known_for_department": "Acting",
+        "name": "Joe Turkel",
+        "original_name": "Joe Turkel",
+        "popularity": 0.4149,
+        "profile_path": "/rqpNzjLFCoMrvGSf6SIL5JnWwMT.jpg",
+        "cast_id": 24,
+        "character": "Pvt. Pierre Arnaud",
+        "credit_id": "52fe4295c3a36847f8029f2d",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1019259,
+        "known_for_department": "Acting",
+        "name": "Christiane Kubrick",
+        "original_name": "Christiane Kubrick",
+        "popularity": 3.6138,
+        "profile_path": "/vAMX00LJH0B38o5mCNCKn6DDdEI.jpg",
+        "cast_id": 26,
+        "character": "German Singer",
+        "credit_id": "52fe4295c3a36847f8029f35",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 117671,
+        "known_for_department": "Acting",
+        "name": "Jerry Hausner",
+        "original_name": "Jerry Hausner",
+        "popularity": 0.5245,
+        "profile_path": "/dHgJKJHJ7BTg698YlGRVFZSoa7G.jpg",
+        "cast_id": 27,
+        "character": "Proprietor of Cafe",
+        "credit_id": "52fe4295c3a36847f8029f39",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3476,
+        "known_for_department": "Acting",
+        "name": "Peter Capell",
+        "original_name": "Peter Capell",
+        "popularity": 0.8964,
+        "profile_path": "/jChyXZyqeCzOUXAjMo8QhbCBzUY.jpg",
+        "cast_id": 28,
+        "character": "Narrator of Opening Sequence",
+        "credit_id": "52fe4295c3a36847f8029f3d",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14579,
+        "known_for_department": "Acting",
+        "name": "Emile Meyer",
+        "original_name": "Emile Meyer",
+        "popularity": 0.4742,
+        "profile_path": "/uwEr8gjLRsclk7HbqiOrgkGgRcv.jpg",
+        "cast_id": 29,
+        "character": "Father Dupree",
+        "credit_id": "52fe4295c3a36847f8029f41",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 31503,
+        "known_for_department": "Acting",
+        "name": "Bert Freed",
+        "original_name": "Bert Freed",
+        "popularity": 0.6861,
+        "profile_path": "/2TLuIMSx3NaCgfhoQBsicbdEIBE.jpg",
+        "cast_id": 30,
+        "character": "Sgt. Boulanger",
+        "credit_id": "52fe4295c3a36847f8029f45",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 94031,
+        "known_for_department": "Acting",
+        "name": "Kem Dibbs",
+        "original_name": "Kem Dibbs",
+        "popularity": 1.0859,
+        "profile_path": null,
+        "cast_id": 31,
+        "character": "Pvt. Lejeune",
+        "credit_id": "52fe4295c3a36847f8029f49",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2758,
+        "known_for_department": "Acting",
+        "name": "Timothy Carey",
+        "original_name": "Timothy Carey",
+        "popularity": 0.8254,
+        "profile_path": "/6ml0D7Etl20EB7bHmEsSuyamzec.jpg",
+        "cast_id": 25,
+        "character": "Pvt. Maurice Ferol",
+        "credit_id": "52fe4295c3a36847f8029f31",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1077968,
+        "known_for_department": "Acting",
+        "name": "Fred Bell",
+        "original_name": "Fred Bell",
+        "popularity": 0.0987,
+        "profile_path": null,
+        "cast_id": 32,
+        "character": "Shell-Shocked Soldier",
+        "credit_id": "52fe4295c3a36847f8029f4d",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1077970,
+        "known_for_department": "Acting",
+        "name": "John Stein",
+        "original_name": "John Stein",
+        "popularity": 0.2558,
+        "profile_path": null,
+        "cast_id": 33,
+        "character": "Capt. Rousseau",
+        "credit_id": "52fe4295c3a36847f8029f51",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1077971,
+        "known_for_department": "Acting",
+        "name": "Harold Benedict",
+        "original_name": "Harold Benedict",
+        "popularity": 0.3021,
+        "profile_path": null,
+        "cast_id": 34,
+        "character": "Capt. Nichols",
+        "credit_id": "52fe4295c3a36847f8029f55",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 49435,
+        "known_for_department": "Acting",
+        "name": "Paul B\u00f6s",
+        "original_name": "Paul B\u00f6s",
+        "popularity": 0.2544,
+        "profile_path": null,
+        "cast_id": 35,
+        "character": "Maj. Gouderc (uncredited)",
+        "credit_id": "55eb2127c3a3682c5d00c02a",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3349,
+        "known_for_department": "Production",
+        "name": "James B. Harris",
+        "original_name": "James B. Harris",
+        "popularity": 0.5998,
+        "profile_path": "/l5HbEfXAhkccClLaJ8P5XpUjEu.jpg",
+        "cast_id": 36,
+        "character": "Private in the Attack (uncredited)",
+        "credit_id": "55eb218c9251413e4100ad85",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3945657,
+        "known_for_department": "Acting",
+        "name": "Marshall Rainer",
+        "original_name": "Marshall Rainer",
+        "popularity": 0.0993,
+        "profile_path": null,
+        "cast_id": 54,
+        "character": "Pvt. Duval (uncredited)",
+        "credit_id": "64009b50699fb7008774fc16",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3945663,
+        "known_for_department": "Acting",
+        "name": "Ira Moore",
+        "original_name": "Ira Moore",
+        "popularity": 0.1202,
+        "profile_path": null,
+        "cast_id": 55,
+        "character": "Capt. Renouart (uncredited)",
+        "credit_id": "64009b877a4ee700aaad8271",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4995448,
+        "known_for_department": "Acting",
+        "name": "Wally Friedrichs",
+        "original_name": "Wally Friedrichs",
+        "popularity": 0.0803,
+        "profile_path": null,
+        "cast_id": 60,
+        "character": "Col. De Guerville (uncredited)",
+        "credit_id": "670a2a9af58a9206aa404eb8",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3945668,
+        "known_for_department": "Acting",
+        "name": "Halder Hanson",
+        "original_name": "Halder Hanson",
+        "popularity": 0.1175,
+        "profile_path": null,
+        "cast_id": 57,
+        "character": "Doctor (uncredited)",
+        "credit_id": "64009be19f1be7007ca71de2",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3945671,
+        "known_for_department": "Acting",
+        "name": "Roger Vagnoid",
+        "original_name": "Roger Vagnoid",
+        "popularity": 0.1312,
+        "profile_path": null,
+        "cast_id": 58,
+        "character": "Cafe Owner (uncredited)",
+        "credit_id": "64009bf69f1be700aaecd87a",
+        "order": 23
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 240,
+        "known_for_department": "Directing",
+        "name": "Stanley Kubrick",
+        "original_name": "Stanley Kubrick",
+        "popularity": 2.8436,
+        "profile_path": "/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg",
+        "credit_id": "52fe4295c3a36847f8029eb7",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2090,
+        "known_for_department": "Acting",
+        "name": "Kirk Douglas",
+        "original_name": "Kirk Douglas",
+        "popularity": 1.6989,
+        "profile_path": "/t94It9bPI6uBvNuuQlQipyYyURC.jpg",
+        "credit_id": "52fe4295c3a36847f8029edb",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3349,
+        "known_for_department": "Production",
+        "name": "James B. Harris",
+        "original_name": "James B. Harris",
+        "popularity": 0.5998,
+        "profile_path": "/l5HbEfXAhkccClLaJ8P5XpUjEu.jpg",
+        "credit_id": "52fe4295c3a36847f8029ee1",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 240,
+        "known_for_department": "Directing",
+        "name": "Stanley Kubrick",
+        "original_name": "Stanley Kubrick",
+        "popularity": 2.8436,
+        "profile_path": "/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg",
+        "credit_id": "6524ad1d74507d00ff9bde41",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Paths of Glory (1957)\n\nDirector: Stanley Kubrick\n\nProducer: Kirk Douglas\n\nProducer: James B. Harris\n\nExecutive Producer: Stanley Kubrick\n\nGenres: War, Drama\n\nThemes and Keywords: army, france, based on novel or book, general, germany, world war i, patriotism, cowardice, idealism, idealist, black and white, soldier, anti war, 1910s, war, fighting the system, psychological drama\n\nTop Cast: Kirk Douglas, Ralph Meeker, Adolphe Menjou, George Macready, Wayne Morris, Richard Anderson, Joe Turkel, Christiane Kubrick, Jerry Hausner, Peter Capell, Emile Meyer, Bert Freed, Kem Dibbs, Timothy Carey, Fred Bell, John Stein, Harold Benedict, Paul B\u00f6s, James B. Harris, Marshall Rainer, Ira Moore, Wally Friedrichs, Halder Hanson, Roger Vagnoid\n\nPlot: A commanding officer defends three scapegoats on trial for a failed offensive that occurred within the French Army in 1916.\n\n"
+}

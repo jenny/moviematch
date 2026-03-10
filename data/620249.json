@@ -1,0 +1,288 @@
+{
+  "adult": false,
+  "backdrop_path": "/aVFx1VtlOxR3v0ADEatalXOvwbu.jpg",
+  "belongs_to_collection": {
+    "id": 1444577,
+    "name": "The Legend of Hei Collection",
+    "poster_path": "/3R3AvYITzvcBTOhAbNNDSTwiQ5i.jpg",
+    "backdrop_path": "/pzdtFcMqLw5wd9Rs7lHk2gflFFl.jpg"
+  },
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 28,
+      "name": "Action"
+    }
+  ],
+  "homepage": "https://luoxiaohei-movie.com/",
+  "id": 620249,
+  "imdb_id": "tt10734928",
+  "origin_country": [
+    "CN"
+  ],
+  "original_language": "zh",
+  "original_title": "\u7f57\u5c0f\u9ed1\u6218\u8bb0",
+  "overview": "When cat spirit Luo Xiaohei's home is deforested by humans, he must find a new one. He runs into a group of other spirit creatures who take him under their wing with dreams of reconquering the land they say is rightfully theirs. However, they run into a human known as Wuxian who separates Luo Xiaohei from the other spirits and the two go on a journey, with the cat spirit learning to control his abilities as well as forming his own thoughts on whether or not he should ally with the spirits or the humans.",
+  "popularity": 4.103,
+  "poster_path": "/4jfbKKLpqts3i2h2obkrONcjTg1.jpg",
+  "production_companies": [
+    {
+      "id": 130588,
+      "logo_path": "/xg3PzKFsYxTsbqWlYVR70HNZNI9.png",
+      "name": "MTJJ",
+      "origin_country": ""
+    },
+    {
+      "id": 130591,
+      "logo_path": null,
+      "name": "Beijing Guangying Gongchang Wenhua Chuanbo",
+      "origin_country": ""
+    },
+    {
+      "id": 130592,
+      "logo_path": null,
+      "name": "Dream Castle",
+      "origin_country": "CN"
+    },
+    {
+      "id": 130593,
+      "logo_path": "/jsVdRBZ0UfRDWCiIOI3yjKFhRmF.png",
+      "name": "Heyi Capital",
+      "origin_country": ""
+    },
+    {
+      "id": 152035,
+      "logo_path": "/uh2Q6PLOOy9HZPIM5Hn92IPn2XY.png",
+      "name": "HMCH",
+      "origin_country": "CN"
+    },
+    {
+      "id": 130589,
+      "logo_path": null,
+      "name": "Beijing Jiyin Yinghua",
+      "origin_country": ""
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "CN",
+      "name": "China"
+    }
+  ],
+  "release_date": "2019-08-27",
+  "revenue": 48045728,
+  "runtime": 102,
+  "spoken_languages": [
+    {
+      "english_name": "Mandarin",
+      "iso_639_1": "zh",
+      "name": "\u666e\u901a\u8bdd"
+    }
+  ],
+  "status": "Released",
+  "tagline": "One Small Spirit Will Determine the Fate of the World.",
+  "title": "The Legend of Hei",
+  "video": false,
+  "vote_average": 8.3,
+  "vote_count": 444,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 1299,
+        "name": "monster"
+      },
+      {
+        "id": 2343,
+        "name": "magic"
+      },
+      {
+        "id": 977,
+        "name": "cat"
+      },
+      {
+        "id": 1370,
+        "name": "shapeshifting"
+      },
+      {
+        "id": 10459,
+        "name": "dilemma"
+      },
+      {
+        "id": 10085,
+        "name": "betrayal"
+      },
+      {
+        "id": 18165,
+        "name": "animals"
+      },
+      {
+        "id": 33480,
+        "name": "environmental"
+      },
+      {
+        "id": 189092,
+        "name": "journey"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 243143,
+        "name": "wandering"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1907244,
+        "known_for_department": "Acting",
+        "name": "Shan Xin",
+        "original_name": "\u738b\u5ba5\u9701",
+        "popularity": 1.8686,
+        "profile_path": "/fm3Hpzr4Fb8g43Oo8TvDfv7O3O1.jpg",
+        "cast_id": 8,
+        "character": "Luo Xiaohei / Nezha (voice)",
+        "credit_id": "5d7e1f0c12197e0011492908",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2156556,
+        "known_for_department": "Acting",
+        "name": "Liu Mingyue",
+        "original_name": "\u5289\u6719\u6708",
+        "popularity": 0.6792,
+        "profile_path": "/kqh1vBsQ35b617dvd9jtvQ2ii7l.jpg",
+        "cast_id": 32,
+        "character": "Wuxian (voice)",
+        "credit_id": "629ac23a09ed8f4aa4a3d845",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2207399,
+        "known_for_department": "Acting",
+        "name": "Hao Xianghai",
+        "original_name": "\u90dd\u7965\u6d77",
+        "popularity": 1.6228,
+        "profile_path": "/mDGtY44WlZbk8pMmuzPToIommx4.jpg",
+        "cast_id": 10,
+        "character": "Fengxi (voice)",
+        "credit_id": "5d7e1f4f12197e000f4929e2",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2196313,
+        "known_for_department": "Acting",
+        "name": "Ding Dang",
+        "original_name": "\u53ee\u5f53",
+        "popularity": 0.3599,
+        "profile_path": "/vXMuscwMmOjVgv5tZMILhjguLWd.jpg",
+        "cast_id": 46,
+        "character": "Luozhu (voice)",
+        "credit_id": "62de0f5458361b0054694207",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2339317,
+        "known_for_department": "Acting",
+        "name": "Yuntu Cao",
+        "original_name": "Yuntu Cao",
+        "popularity": 1.2631,
+        "profile_path": "/9qSDFftuxOJh2vKw255g0RsAV3h.jpg",
+        "cast_id": 47,
+        "character": "Xuhuai (voice)",
+        "credit_id": "62de0ffb27d9cc0060bae9e7",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1853547,
+        "known_for_department": "Acting",
+        "name": "Sheng Feng",
+        "original_name": "\u51af\u76db",
+        "popularity": 1.4597,
+        "profile_path": "/1IB7v7KhJWfTTylZHhFXHw5SVFR.jpg",
+        "cast_id": 48,
+        "character": "Tianhu (voice)",
+        "credit_id": "62de10854ccc500068b161f4",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3824793,
+        "known_for_department": "Acting",
+        "name": "Chen Siyu",
+        "original_name": "\u9648\u601d\u5b87",
+        "popularity": 0.7646,
+        "profile_path": "/mCUJU1qQb79BeI5Ke76PbOj34HV.jpg",
+        "cast_id": 63,
+        "character": "Jiulao (voice)",
+        "credit_id": "6394cbcaa1a9ba00a0feac8f",
+        "order": 6
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2377386,
+        "known_for_department": "Directing",
+        "name": "MTJJ",
+        "original_name": "MTJJ",
+        "popularity": 0.7757,
+        "profile_path": "/efpX3wZCpQ24uzUpKrWHxQXhc2m.jpg",
+        "credit_id": "5d44bb380fb398001496e83d",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2732760,
+        "known_for_department": "Production",
+        "name": "Ma Whenzhuo",
+        "original_name": "Ma Whenzhuo",
+        "popularity": 0.1007,
+        "profile_path": null,
+        "credit_id": "5f2b5b8d4b6d9d00378634c5",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2732757,
+        "known_for_department": "Production",
+        "name": "Cong Fangbing",
+        "original_name": "Cong Fangbing",
+        "popularity": 0.0576,
+        "profile_path": "/pLQTAZkLh3uZNK64vSNUciRayNW.jpg",
+        "credit_id": "5f2b5b772d8ef30035df1fb6",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: The Legend of Hei (2019)\n\nDirector: MTJJ\n\nProducer: Ma Whenzhuo\n\nProducer: Cong Fangbing\n\nGenres: Animation, Fantasy, Action\n\nThemes and Keywords: monster, magic, cat, shapeshifting, dilemma, betrayal, animals, environmental, journey, anime, wandering\n\nTop Cast: Shan Xin, Liu Mingyue, Hao Xianghai, Ding Dang, Yuntu Cao, Sheng Feng, Chen Siyu\n\nPlot: When cat spirit Luo Xiaohei's home is deforested by humans, he must find a new one. He runs into a group of other spirit creatures who take him under their wing with dreams of reconquering the land they say is rightfully theirs. However, they run into a human known as Wuxian who separates Luo Xiaohei from the other spirits and the two go on a journey, with the cat spirit learning to control his abilities as well as forming his own thoughts on whether or not he should ally with the spirits or the humans.\n\n"
+}

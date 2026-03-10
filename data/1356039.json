@@ -1,0 +1,496 @@
+{
+  "adult": false,
+  "backdrop_path": "/deUWVEgNh2IGjShyymZhaYP40ye.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "homepage": "https://www.netflix.com/title/81936018",
+  "id": 1356039,
+  "imdb_id": "tt23648788",
+  "origin_country": [
+    "MX"
+  ],
+  "original_language": "es",
+  "original_title": "Contraataque",
+  "overview": "When a hostage rescue mission creates a new enemy, Capt. Guerrero and his elite soldiers must face an ambush by a criminal group.",
+  "popularity": 10.7733,
+  "poster_path": "/38I76hGcFY6xB47pjm7pZwkfuAF.jpg",
+  "production_companies": [
+    {
+      "id": 84651,
+      "logo_path": "/o7gUREdtNzQ3Alrck13tlvcNKvv.png",
+      "name": "Draco Films",
+      "origin_country": "MX"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "MX",
+      "name": "Mexico"
+    }
+  ],
+  "release_date": "2025-02-27",
+  "revenue": 0,
+  "runtime": 85,
+  "spoken_languages": [
+    {
+      "english_name": "Spanish",
+      "iso_639_1": "es",
+      "name": "Espa\u00f1ol"
+    }
+  ],
+  "status": "Released",
+  "tagline": "",
+  "title": "Counterattack",
+  "video": false,
+  "vote_average": 8.265,
+  "vote_count": 791,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 534,
+        "name": "mexico"
+      },
+      {
+        "id": 5616,
+        "name": "usa\u2013mexico border"
+      },
+      {
+        "id": 15218,
+        "name": "special forces"
+      },
+      {
+        "id": 162365,
+        "name": "military"
+      },
+      {
+        "id": 267329,
+        "name": "narcos"
+      },
+      {
+        "id": 347706,
+        "name": "murcielagos"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1309460,
+        "known_for_department": "Acting",
+        "name": "Luis Alberti",
+        "original_name": "Luis Alberti",
+        "popularity": 1.4097,
+        "profile_path": "/1uf6WXebWuL0oEMM2z8ulcnRro.jpg",
+        "cast_id": 5,
+        "character": "Capit\u00e1n Guerrero",
+        "credit_id": "66e3c4abc81b24b3fe23e431",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 89445,
+        "known_for_department": "Acting",
+        "name": "No\u00e9 Hern\u00e1ndez",
+        "original_name": "No\u00e9 Hern\u00e1ndez",
+        "popularity": 1.0716,
+        "profile_path": "/l3NXUy1x5buKHawSw4xye5JW8pl.jpg",
+        "cast_id": 4,
+        "character": "Josefo \"El Aguij\u00f3n\" Ur\u00edas",
+        "credit_id": "66e3c49f9013fe872223dd91",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1311441,
+        "known_for_department": "Acting",
+        "name": "Leonardo Alonso",
+        "original_name": "Leonardo Alonso",
+        "popularity": 0.1737,
+        "profile_path": "/3SJUI4IeqjZfG7yNh76CbkQfzfg.jpg",
+        "cast_id": 6,
+        "character": "Tanque",
+        "credit_id": "66e3c4b69013fe872223dd97",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2139802,
+        "known_for_department": "Acting",
+        "name": "Luis Curiel",
+        "original_name": "Luis Curiel",
+        "popularity": 0.8512,
+        "profile_path": "/5FMxoburwNLvKlYIFPEoSLDDogu.jpg",
+        "cast_id": 11,
+        "character": "Pollo",
+        "credit_id": "67c0e728c029139b0e35c0df",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3524227,
+        "known_for_department": "Acting",
+        "name": "Guillermo Nava",
+        "original_name": "Guillermo Nava",
+        "popularity": 1.2878,
+        "profile_path": "/yKMqnDsv4rfKYOg1t4EHkIDPywQ.jpg",
+        "cast_id": 9,
+        "character": "Toro",
+        "credit_id": "66e3c4dbc81b24b3fe23e447",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1521266,
+        "known_for_department": "Acting",
+        "name": "David Calder\u00f3n Le\u00f3n",
+        "original_name": "David Calder\u00f3n Le\u00f3n",
+        "popularity": 0.9661,
+        "profile_path": "/mwAilgEQ8LZjsLau2X7nmL3PmvB.jpg",
+        "cast_id": 8,
+        "character": "Combo",
+        "credit_id": "66e3c4c99013fe872223dda0",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2385744,
+        "known_for_department": "Acting",
+        "name": "Mayra Batalla",
+        "original_name": "Mayra Batalla",
+        "popularity": 0.5816,
+        "profile_path": "/2tHR2fCTNfs3bxu53BQZUM3ybFq.jpg",
+        "cast_id": 3,
+        "character": "Luc\u00eda",
+        "credit_id": "66e3c49a0000000000b97ea7",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1031255,
+        "known_for_department": "Acting",
+        "name": "Israel Islas",
+        "original_name": "Israel Islas",
+        "popularity": 0.2275,
+        "profile_path": "/2LEQGnhXBrmtscQfNtf9igVeN2E.jpg",
+        "cast_id": 12,
+        "character": "Rom\u00e1n \"El Sacrist\u00e1n\" Ur\u00edas",
+        "credit_id": "67c0e78bb6c7e3425ca25e4b",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2503171,
+        "known_for_department": "Acting",
+        "name": "Ishbel Bautista",
+        "original_name": "Ishbel Bautista",
+        "popularity": 1.2086,
+        "profile_path": "/u9VVamUF0EB2tEAe6DncNjeA1j4.jpg",
+        "cast_id": 13,
+        "character": "La Cobra",
+        "credit_id": "67c0e79914a4396cafc8f233",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5273843,
+        "known_for_department": "Acting",
+        "name": "Frida Jiser",
+        "original_name": "Frida Jiser",
+        "popularity": 0.1415,
+        "profile_path": null,
+        "cast_id": 16,
+        "character": "Karla",
+        "credit_id": "67c0eba6ab2d8b81ccc8e440",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3759491,
+        "known_for_department": "Acting",
+        "name": "Mario Alberto Monroy",
+        "original_name": "Mario Alberto Monroy",
+        "popularity": 0.612,
+        "profile_path": "/5epUo9ReGNUE1ySDZbowoyRpO5M.jpg",
+        "cast_id": 17,
+        "character": "Tuco",
+        "credit_id": "67c0ebccc93271491f35b4b2",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4511906,
+        "known_for_department": "Acting",
+        "name": "Alberto Ornelas",
+        "original_name": "Alberto Ornelas",
+        "popularity": 0.6633,
+        "profile_path": null,
+        "cast_id": 38,
+        "character": "Maik",
+        "credit_id": "67c1bc939adcd2562535bf71",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1734664,
+        "known_for_department": "Acting",
+        "name": "Pedro Joaqu\u00edn",
+        "original_name": "Pedro Joaqu\u00edn",
+        "popularity": 0.2224,
+        "profile_path": "/zQ1xnJ7appZ8S2298W9vVfgJ6BF.jpg",
+        "cast_id": 7,
+        "character": "Chucho",
+        "credit_id": "66e3c4c0c81b24b3fe23e43e",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 964098,
+        "known_for_department": "Acting",
+        "name": "Edgar Novoa",
+        "original_name": "Edgar Novoa",
+        "popularity": 0.4583,
+        "profile_path": null,
+        "cast_id": 39,
+        "character": "Agente M\u00e1rquez",
+        "credit_id": "67c1bcbb10e79c3424a27302",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1044087,
+        "known_for_department": "Acting",
+        "name": "Guillermo Quintanilla",
+        "original_name": "Guillermo Quintanilla",
+        "popularity": 0.3789,
+        "profile_path": "/V06zmGwn5lUzhgW7YreDMnFCt2.jpg",
+        "cast_id": 15,
+        "character": "Coronel Marcelo D\u00edaz",
+        "credit_id": "67c0e7e4bc6935a001a2610e",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5273806,
+        "known_for_department": "Acting",
+        "name": "Sergio Jurado Molina",
+        "original_name": "Sergio Jurado Molina",
+        "popularity": 0.344,
+        "profile_path": null,
+        "cast_id": 14,
+        "character": "Secretario Arvizu",
+        "credit_id": "67c0e7cb14a4396cafc8f26b",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3438244,
+        "known_for_department": "Acting",
+        "name": "Luz Ramos",
+        "original_name": "Luz Ramos",
+        "popularity": 0.1488,
+        "profile_path": "/3EsLAZSnze3Ryg10CGAsLbzLNu5.jpg",
+        "cast_id": 18,
+        "character": "Teniente Stum",
+        "credit_id": "67c0ebddab2d8b81ccc8e46d",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3339638,
+        "known_for_department": "Acting",
+        "name": "Roberta Burns",
+        "original_name": "Roberta Burns",
+        "popularity": 0.1377,
+        "profile_path": null,
+        "cast_id": 19,
+        "character": "Sargento Atenea",
+        "credit_id": "67c0ebf2591b238d2635909c",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2191327,
+        "known_for_department": "Acting",
+        "name": "Alejandra Herrera",
+        "original_name": "Alejandra Herrera",
+        "popularity": 0.5747,
+        "profile_path": "/hI7nPYC5kq22dXsSVpY0MIu6Qle.jpg",
+        "cast_id": 20,
+        "character": "Sargento Letal",
+        "credit_id": "67c0ec04c93271491f35b4fd",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5275211,
+        "known_for_department": "Acting",
+        "name": "Jos\u00e9 Luis Enriquez Serna",
+        "original_name": "Jos\u00e9 Luis Enriquez Serna",
+        "popularity": 0.1787,
+        "profile_path": null,
+        "cast_id": 40,
+        "character": "Joaqu\u00edn",
+        "credit_id": "67c1bd3ac153ece2e2a271f0",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1309799,
+        "known_for_department": "Acting",
+        "name": "Mario Escalante",
+        "original_name": "Mario Escalante",
+        "popularity": 0.5865,
+        "profile_path": null,
+        "cast_id": 21,
+        "character": "Lalo 'El Marrano'",
+        "credit_id": "67c0ec28ab2d8b81ccc8e4b1",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3103284,
+        "known_for_department": "Acting",
+        "name": "Manuel Villegas",
+        "original_name": "Manuel Villegas",
+        "popularity": 0.7877,
+        "profile_path": "/fBTOBPOZqWJR0rlZZJvkR6BxOWD.jpg",
+        "cast_id": 41,
+        "character": "Adalberto",
+        "credit_id": "67c1bd769adcd2562535c001",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2827054,
+        "known_for_department": "Acting",
+        "name": "Cesar Antulio",
+        "original_name": "Cesar Antulio",
+        "popularity": 0.2481,
+        "profile_path": null,
+        "cast_id": 42,
+        "character": "Agente F\u00edscal",
+        "credit_id": "67c1bda00d255c44c1c90132",
+        "order": 22
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 964826,
+        "known_for_department": "Directing",
+        "name": "Chava Cartas",
+        "original_name": "Chava Cartas",
+        "popularity": 0.7556,
+        "profile_path": "/2KgMJhywrNcNvlxKschlNyYQpsL.jpg",
+        "credit_id": "66e3c487c81b24b3fe23e42b",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1114888,
+        "known_for_department": "Production",
+        "name": "Francisco Gonz\u00e1lez Compe\u00e1n",
+        "original_name": "Francisco Gonz\u00e1lez Compe\u00e1n",
+        "popularity": 0.2147,
+        "profile_path": null,
+        "credit_id": "67c0ec67ab2d8b81ccc8e4e3",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4292939,
+        "known_for_department": "Production",
+        "name": "Sebastian Jurado",
+        "original_name": "Sebastian Jurado",
+        "popularity": 0.2632,
+        "profile_path": null,
+        "credit_id": "67c0ec72c93271491f35b548",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4292940,
+        "known_for_department": "Production",
+        "name": "Ximena Basaguren",
+        "original_name": "Ximena Basaguren",
+        "popularity": 0.3576,
+        "profile_path": null,
+        "credit_id": "67c0ec8bc93271491f35b561",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 4244400,
+        "known_for_department": "Production",
+        "name": "Rodrigo de Pedro",
+        "original_name": "Rodrigo de Pedro",
+        "popularity": 0.1893,
+        "profile_path": null,
+        "credit_id": "67c0ecae0d255c44c1c8ea44",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5273859,
+        "known_for_department": "Production",
+        "name": "Sof\u00eda Legarreta Monroy",
+        "original_name": "Sof\u00eda Legarreta Monroy",
+        "popularity": 0.3351,
+        "profile_path": null,
+        "credit_id": "67c0ecebab2d8b81ccc8e53a",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Counterattack (2025)\n\nDirector: Chava Cartas\n\nProducer: Francisco Gonz\u00e1lez Compe\u00e1n\n\nProducer: Sebastian Jurado\n\nExecutive Producer: Ximena Basaguren\n\nExecutive Producer: Rodrigo de Pedro\n\nExecutive Producer: Sof\u00eda Legarreta Monroy\n\nGenres: Action, Adventure, Thriller\n\nThemes and Keywords: mexico, usa\u2013mexico border, special forces, military, narcos, murcielagos\n\nTop Cast: Luis Alberti, No\u00e9 Hern\u00e1ndez, Leonardo Alonso, Luis Curiel, Guillermo Nava, David Calder\u00f3n Le\u00f3n, Mayra Batalla, Israel Islas, Ishbel Bautista, Frida Jiser, Mario Alberto Monroy, Alberto Ornelas, Pedro Joaqu\u00edn, Edgar Novoa, Guillermo Quintanilla, Sergio Jurado Molina, Luz Ramos, Roberta Burns, Alejandra Herrera, Jos\u00e9 Luis Enriquez Serna, Mario Escalante, Manuel Villegas, Cesar Antulio\n\nPlot: When a hostage rescue mission creates a new enemy, Capt. Guerrero and his elite soldiers must face an ambush by a criminal group.\n\n"
+}

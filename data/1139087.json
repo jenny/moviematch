@@ -1,0 +1,583 @@
+{
+  "adult": false,
+  "backdrop_path": "/hUeSuUxNyQivx2wrRvGoyZiZDUu.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    }
+  ],
+  "homepage": "https://goojara.day/",
+  "id": 1139087,
+  "imdb_id": "tt28035641",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Once Upon a Studio",
+  "overview": "Created for Disney's 100th anniversary, the short features Mickey Mouse corralling a gallery of legendary Disney characters for a group photo.",
+  "popularity": 3.3016,
+  "poster_path": "/aiy3G1cYWV3LgKZHY6a3jL8bjYL.jpg",
+  "production_companies": [
+    {
+      "id": 6125,
+      "logo_path": "/tzsMJBJZINu7GHzrpYzpReWhh66.png",
+      "name": "Walt Disney Animation Studios",
+      "origin_country": "US"
+    },
+    {
+      "id": 2,
+      "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
+      "name": "Walt Disney Pictures",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "2023-09-24",
+  "revenue": 0,
+  "runtime": 9,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "100 years of Disney magic comes together.",
+  "title": "Once Upon a Studio",
+  "video": false,
+  "vote_average": 8.274,
+  "vote_count": 418,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 209220,
+        "name": "live action and animation"
+      },
+      {
+        "id": 240461,
+        "name": "dedication"
+      },
+      {
+        "id": 263548,
+        "name": "short film"
+      },
+      {
+        "id": 275266,
+        "name": "cgi-live action hybrid"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1217648,
+        "known_for_department": "Acting",
+        "name": "Chris Diamantopoulos",
+        "original_name": "Chris Diamantopoulos",
+        "popularity": 2.6312,
+        "profile_path": "/oenBtpk0RTId4wacQKYU4cPcq8Z.jpg",
+        "cast_id": 126,
+        "character": "Mickey Mouse (voice)",
+        "credit_id": "652cbc4e1f3e60011c4b64e6",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1382187,
+        "known_for_department": "Acting",
+        "name": "Kaitlyn Robrock",
+        "original_name": "Kaitlyn Robrock",
+        "popularity": 0.6265,
+        "profile_path": "/1joOQrgyU9ap9W1cvimh01XmKcO.jpg",
+        "cast_id": 13,
+        "character": "Minnie Mouse (voice)",
+        "credit_id": "650c82ac93db9200c4f68030",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 34478,
+        "known_for_department": "Acting",
+        "name": "Tony Anselmo",
+        "original_name": "Tony Anselmo",
+        "popularity": 0.8171,
+        "profile_path": "/8ocCq9OxVg7A0g7hf7EqeT0QenX.jpg",
+        "cast_id": 71,
+        "character": "Donald Duck (voice)",
+        "credit_id": "65205b5507216600ff3921b1",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 84213,
+        "known_for_department": "Acting",
+        "name": "Bill Farmer",
+        "original_name": "Bill Farmer",
+        "popularity": 1.1301,
+        "profile_path": "/lhezx68R12s5Bsv7d77BrQb7tWA.jpg",
+        "cast_id": 56,
+        "character": "Goofy / Pluto (voice)",
+        "credit_id": "650d5dcf44ea5400ad7a0155",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 12077,
+        "known_for_department": "Acting",
+        "name": "Jim Cummings",
+        "original_name": "Jim Cummings",
+        "popularity": 1.9246,
+        "profile_path": "/c0sQPRCM5Ri3F4gVyxPr4AcPmIq.jpg",
+        "cast_id": 79,
+        "character": "Baloo / Winnie-the-Pooh (voice)",
+        "credit_id": "65205c39967cc73427f4a86a",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1564846,
+        "known_for_department": "Acting",
+        "name": "Auli\u02bbi Cravalho",
+        "original_name": "Auli\u02bbi Cravalho",
+        "popularity": 1.0453,
+        "profile_path": "/vEroqcnM2g6yY7qXDAie7hx2Cyp.jpg",
+        "cast_id": 20,
+        "character": "Moana (voice)",
+        "credit_id": "650c833fb5bc2100c9ea9386",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 40462,
+        "known_for_department": "Acting",
+        "name": "Kristen Bell",
+        "original_name": "Kristen Bell",
+        "popularity": 5.1376,
+        "profile_path": "/rP74dJXl7EjinGM0shQtUOlH5s2.jpg",
+        "cast_id": 16,
+        "character": "Anna (voice)",
+        "credit_id": "650c82f22c6b7b00ac6f2be6",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 15563,
+        "known_for_department": "Acting",
+        "name": "Anika Noni Rose",
+        "original_name": "Anika Noni Rose",
+        "popularity": 1.2944,
+        "profile_path": "/d7aLtuNXBqVtqNnZl8wXsFV4ML5.jpg",
+        "cast_id": 51,
+        "character": "Tiana (voice)",
+        "credit_id": "650d5c063d745400ac9d07a9",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1223658,
+        "known_for_department": "Acting",
+        "name": "Raymond S. Persi",
+        "original_name": "Raymond S. Persi",
+        "popularity": 0.424,
+        "profile_path": "/37HnYfTAHhtAmWdl4NlVAOR7vCW.jpg",
+        "cast_id": 96,
+        "character": "Flash (voice)",
+        "credit_id": "65205e5a967cc734246a13a5",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30697,
+        "known_for_department": "Acting",
+        "name": "Jim Meskimen",
+        "original_name": "Jim Meskimen",
+        "popularity": 2.4414,
+        "profile_path": "/18eXUo8DfTwannhq8FOwgVdFs9Y.jpg",
+        "cast_id": 92,
+        "character": "Eeyore / Merlin (voice)",
+        "credit_id": "65205df95b124000c6061544",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 54415,
+        "known_for_department": "Acting",
+        "name": "Josh Gad",
+        "original_name": "Josh Gad",
+        "popularity": 2.0071,
+        "profile_path": "/p9hWNRwrVEBpl8We2bxLMHkk5Mj.jpg",
+        "cast_id": 5,
+        "character": "Olaf (voice)",
+        "credit_id": "648708dee375c000c528ef69",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 66580,
+        "known_for_department": "Acting",
+        "name": "Scott Adsit",
+        "original_name": "Scott Adsit",
+        "popularity": 1.7386,
+        "profile_path": "/vbbuugUWrZhxA7ASWYiGqdZ6Dtf.jpg",
+        "cast_id": 68,
+        "character": "Baymax (voice)",
+        "credit_id": "65205af474507d011c11043f",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 63978,
+        "known_for_department": "Acting",
+        "name": "Jodi Benson",
+        "original_name": "Jodi Benson",
+        "popularity": 1.0935,
+        "profile_path": "/4mxtuq3mXLZwPKbI7t0KFxf0PRW.jpg",
+        "cast_id": 14,
+        "character": "Ariel (voice)",
+        "credit_id": "650c82c751a64e011efce929",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 15048,
+        "known_for_department": "Acting",
+        "name": "Robby Benson",
+        "original_name": "Robby Benson",
+        "popularity": 21.5427,
+        "profile_path": "/rYcDiM9LrStdlcb80N3WAR2CsHX.jpg",
+        "cast_id": 75,
+        "character": "Beast (voice)",
+        "credit_id": "65205bcb74507d00ac48c186",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 23532,
+        "known_for_department": "Acting",
+        "name": "Jason Bateman",
+        "original_name": "Jason Bateman",
+        "popularity": 4.2709,
+        "profile_path": "/8e6mt0vGjPo6eW52gqRuXy5YnfN.jpg",
+        "cast_id": 67,
+        "character": "Nick Wilde (voice)",
+        "credit_id": "65201fd607216600acb7a275",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1625558,
+        "known_for_department": "Acting",
+        "name": "Awkwafina",
+        "original_name": "Awkwafina",
+        "popularity": 2.6738,
+        "profile_path": "/l5AKkg3H1QhMuXmTTmq1EyjyiRb.jpg",
+        "cast_id": 72,
+        "character": "Sisu (voice)",
+        "credit_id": "65205b7474507d011c110468",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1969888,
+        "known_for_department": "Acting",
+        "name": "Ravi Cabot-Conyers",
+        "original_name": "Ravi Cabot-Conyers",
+        "popularity": 1.048,
+        "profile_path": "/uM5F2LcmFLJeMrguucByChufpbT.jpg",
+        "cast_id": 76,
+        "character": "Antonio (voice)",
+        "credit_id": "65205be83d355700e23eba97",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2226955,
+        "known_for_department": "Acting",
+        "name": "Griffen Campbell",
+        "original_name": "Griffen Campbell",
+        "popularity": 0.2439,
+        "profile_path": null,
+        "cast_id": 77,
+        "character": "Pinocchio (voice)",
+        "credit_id": "65205c0407216600e2d95efb",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1437491,
+        "known_for_department": "Acting",
+        "name": "Ariana DeBose",
+        "original_name": "Ariana DeBose",
+        "popularity": 1.0741,
+        "profile_path": "/nfUaNCqCRe5KWF0XPmdn3eP1kPD.jpg",
+        "cast_id": 33,
+        "character": "Asha (voice)",
+        "credit_id": "650d596044ea54013b7f9430",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 26993,
+        "known_for_department": "Acting",
+        "name": "Richard Epcar",
+        "original_name": "Richard Epcar",
+        "popularity": 0.9464,
+        "profile_path": "/m24OJXHsHNz3577uBrNURbyn7Fa.jpg",
+        "cast_id": 80,
+        "character": "Little John (voice)",
+        "credit_id": "65205c5474507d00ff9946a3",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 143346,
+        "known_for_department": "Acting",
+        "name": "Keith Ferguson",
+        "original_name": "Keith Ferguson",
+        "popularity": 0.7072,
+        "profile_path": "/8EvTlmOhP34EZFEGsznqjbr4o4q.jpg",
+        "cast_id": 81,
+        "character": "Prince Charming (voice)",
+        "credit_id": "65205c985b124000c60614e2",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1188241,
+        "known_for_department": "Acting",
+        "name": "Santino Fontana",
+        "original_name": "Santino Fontana",
+        "popularity": 0.8649,
+        "profile_path": "/3EtNGPVBN5bBamV817n43kFd4MB.jpg",
+        "cast_id": 21,
+        "character": "Hans (voice)",
+        "credit_id": "650c834e4da3d4014d55fd46",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 417,
+        "known_for_department": "Acting",
+        "name": "Ginnifer Goodwin",
+        "original_name": "Ginnifer Goodwin",
+        "popularity": 2.5779,
+        "profile_path": "/xOCA2WN5MRfXmJmlzEbFEhIbfIQ.jpg",
+        "cast_id": 50,
+        "character": "Judy Hopps (voice)",
+        "credit_id": "650d5be844ea5400e322afe3",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 221611,
+        "known_for_department": "Acting",
+        "name": "Jonathan Groff",
+        "original_name": "Jonathan Groff",
+        "popularity": 1.7048,
+        "profile_path": "/3kmnYKAzSc3Lp7iK5pcj97Hx9Cm.jpg",
+        "cast_id": 54,
+        "character": "Kristoff (voice)",
+        "credit_id": "650d5cee2c6b7b01394abeca",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 81667,
+        "known_for_department": "Acting",
+        "name": "Jennifer Hale",
+        "original_name": "Jennifer Hale",
+        "popularity": 1.4638,
+        "profile_path": "/oNQCrdiSm0mABCcE5YaHwuZQK8X.jpg",
+        "cast_id": 83,
+        "character": "Cinderella (voice)",
+        "credit_id": "65205cfb74507d00c57b27ba",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 84495,
+        "known_for_department": "Acting",
+        "name": "Jess Harnell",
+        "original_name": "Jess Harnell",
+        "popularity": 0.6614,
+        "profile_path": "/zQ2zg7PL3ut4JhfXMKSRV4FMnxR.jpg",
+        "cast_id": 84,
+        "character": "Scuttle (voice)",
+        "credit_id": "65205d143d3557011c011f5b",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3999,
+        "known_for_department": "Acting",
+        "name": "Tom Hulce",
+        "original_name": "Tom Hulce",
+        "popularity": 1.4867,
+        "profile_path": "/sQslzbyYZr4Qjv55VseLbbjpuMY.jpg",
+        "cast_id": 85,
+        "character": "Quasimodo (voice)",
+        "credit_id": "65205d3507216600acb7b6eb",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16940,
+        "known_for_department": "Acting",
+        "name": "Jeremy Irons",
+        "original_name": "Jeremy Irons",
+        "popularity": 3.6355,
+        "profile_path": "/w8Ct1q02Ht3sWdOSqfp3B85TzT.jpg",
+        "cast_id": 49,
+        "character": "Scar (voice)",
+        "credit_id": "650d5bae2c6b7b00c4fe799a",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 18918,
+        "known_for_department": "Acting",
+        "name": "Dwayne Johnson",
+        "original_name": "Dwayne Johnson",
+        "popularity": 5.8578,
+        "profile_path": "/5QApZVV8FUFlVxQpIK3Ew6cqotq.jpg",
+        "cast_id": 66,
+        "character": "Maui (voice)",
+        "credit_id": "65201fb60721660139c89da6",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 179702,
+        "known_for_department": "Acting",
+        "name": "Bob Joles",
+        "original_name": "Bob Joles",
+        "popularity": 0.6958,
+        "profile_path": "/ohczCcTm5u8Grlf5KGxjDZiQkI.jpg",
+        "cast_id": 87,
+        "character": "Cogsworth (voice)",
+        "credit_id": "65205d82ea84c700ca0b2410",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 96997,
+        "known_for_department": "Production",
+        "name": "Bradford Simonsen",
+        "original_name": "Bradford Simonsen",
+        "popularity": 1.1044,
+        "profile_path": null,
+        "credit_id": "650c826b44ea54013b7f298c",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1999218,
+        "known_for_department": "Production",
+        "name": "Yvett Merino",
+        "original_name": "Yvett Merino",
+        "popularity": 0.7978,
+        "profile_path": "/lWDGq9RsYDayXIqdyXz1yHzo2tU.jpg",
+        "credit_id": "650c825cb5bc21010bd28a7f",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1120694,
+        "known_for_department": "Writing",
+        "name": "Jennifer Lee",
+        "original_name": "Jennifer Lee",
+        "popularity": 1.648,
+        "profile_path": "/cRxBIe0sa2JcBtczzysV4aFUaEy.jpg",
+        "credit_id": "650e69a96f53e100e33ad5fd",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1994928,
+        "known_for_department": "Directing",
+        "name": "Trent Correy",
+        "original_name": "Trent Correy",
+        "popularity": 0.4095,
+        "profile_path": "/kzaOz9jtkFg9YcyvGO5CUOdf1fF.jpg",
+        "credit_id": "64862c4cd2b209014e09b0e2",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1381895,
+        "known_for_department": "Directing",
+        "name": "Dan Abraham",
+        "original_name": "Dan Abraham",
+        "popularity": 0.4209,
+        "profile_path": null,
+        "credit_id": "64862c5cc0348b013c1d1a52",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: Once Upon a Studio (2023)\n\nProducer: Bradford Simonsen\n\nProducer: Yvett Merino\n\nExecutive Producer: Jennifer Lee\n\nDirector: Trent Correy\n\nDirector: Dan Abraham\n\nGenres: Animation, Family, Fantasy, Comedy\n\nThemes and Keywords: live action and animation, dedication, short film, cgi-live action hybrid\n\nTop Cast: Chris Diamantopoulos, Kaitlyn Robrock, Tony Anselmo, Bill Farmer, Jim Cummings, Auli\u02bbi Cravalho, Kristen Bell, Anika Noni Rose, Raymond S. Persi, Jim Meskimen, Josh Gad, Scott Adsit, Jodi Benson, Robby Benson, Jason Bateman, Awkwafina, Ravi Cabot-Conyers, Griffen Campbell, Ariana DeBose, Richard Epcar, Keith Ferguson, Santino Fontana, Ginnifer Goodwin, Jonathan Groff, Jennifer Hale, Jess Harnell, Tom Hulce, Jeremy Irons, Dwayne Johnson, Bob Joles\n\nPlot: Created for Disney's 100th anniversary, the short features Mickey Mouse corralling a gallery of legendary Disney characters for a group photo.\n\n"
+}

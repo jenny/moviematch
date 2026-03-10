@@ -1,0 +1,443 @@
+{
+  "adult": false,
+  "backdrop_path": "/w4bTBXcqXc2TUyS5Fc4h67uWbPn.jpg",
+  "belongs_to_collection": null,
+  "budget": 397751,
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 389,
+  "imdb_id": "tt0050083",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "12 Angry Men",
+  "overview": "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
+  "popularity": 15.6436,
+  "poster_path": "/ow3wq89wM8qd5X7hWKxiRfsFf9C.jpg",
+  "production_companies": [
+    {
+      "id": 10212,
+      "logo_path": null,
+      "name": "Orion-Nova Productions",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1957-04-10",
+  "revenue": 4360000,
+  "runtime": 97,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "It explodes like 12 sticks of dynamite!",
+  "title": "12 Angry Men",
+  "video": false,
+  "vote_average": 8.556,
+  "vote_count": 9784,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 2122,
+        "name": "death penalty"
+      },
+      {
+        "id": 2142,
+        "name": "anonymity"
+      },
+      {
+        "id": 3012,
+        "name": "court case"
+      },
+      {
+        "id": 934,
+        "name": "judge"
+      },
+      {
+        "id": 1417,
+        "name": "jurors"
+      },
+      {
+        "id": 6139,
+        "name": "innocence"
+      },
+      {
+        "id": 3581,
+        "name": "witness"
+      },
+      {
+        "id": 4728,
+        "name": "knife"
+      },
+      {
+        "id": 5144,
+        "name": "matter of life and death"
+      },
+      {
+        "id": 10181,
+        "name": "based on play or musical"
+      },
+      {
+        "id": 11038,
+        "name": "trial"
+      },
+      {
+        "id": 9826,
+        "name": "murder"
+      },
+      {
+        "id": 11141,
+        "name": "debate"
+      },
+      {
+        "id": 11523,
+        "name": "capital punishment"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 33519,
+        "name": "courtroom"
+      },
+      {
+        "id": 200918,
+        "name": "angry"
+      },
+      {
+        "id": 214780,
+        "name": "courtroom drama"
+      },
+      {
+        "id": 290670,
+        "name": "huis clos"
+      },
+      {
+        "id": 325776,
+        "name": "baffled"
+      },
+      {
+        "id": 325793,
+        "name": "derisive"
+      },
+      {
+        "id": 325817,
+        "name": "foreboding"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1936,
+        "known_for_department": "Acting",
+        "name": "Martin Balsam",
+        "original_name": "Martin Balsam",
+        "popularity": 1.8884,
+        "profile_path": "/2q7xs6j6vGll3pc9Mm6TUEvvwBf.jpg",
+        "cast_id": 57,
+        "character": "Juror 1",
+        "credit_id": "5e93b065cedac40016ebbd44",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5247,
+        "known_for_department": "Acting",
+        "name": "John Fiedler",
+        "original_name": "John Fiedler",
+        "popularity": 1.2511,
+        "profile_path": "/27sXisLWQJQ49PD40j89miNhL73.jpg",
+        "cast_id": 58,
+        "character": "Juror 2",
+        "credit_id": "5e93b09a8e87020013cd34eb",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5248,
+        "known_for_department": "Acting",
+        "name": "Lee J. Cobb",
+        "original_name": "Lee J. Cobb",
+        "popularity": 1.4444,
+        "profile_path": "/yxMxBvM0PZwu7YXQamG0kFwt9DZ.jpg",
+        "cast_id": 59,
+        "character": "Juror 3",
+        "credit_id": "5e93b0a584448e0014910883",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5249,
+        "known_for_department": "Acting",
+        "name": "E.G. Marshall",
+        "original_name": "E.G. Marshall",
+        "popularity": 0.8914,
+        "profile_path": "/psimeVoRk64DV7UNm4cLQylRFy2.jpg",
+        "cast_id": 60,
+        "character": "Juror 4",
+        "credit_id": "5e93b0ae7a97ab00120dd261",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5250,
+        "known_for_department": "Acting",
+        "name": "Jack Klugman",
+        "original_name": "Jack Klugman",
+        "popularity": 1.0927,
+        "profile_path": "/oJxveOxlunD8C9OczqKeryU0k6D.jpg",
+        "cast_id": 61,
+        "character": "Juror 5",
+        "credit_id": "5e93b0bd84448e001291147f",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2651,
+        "known_for_department": "Acting",
+        "name": "Edward Binns",
+        "original_name": "Edward Binns",
+        "popularity": 1.0561,
+        "profile_path": "/s3fk0d0fwuj6bDVP9AcPUXFsGmK.jpg",
+        "cast_id": 62,
+        "character": "Juror 6",
+        "credit_id": "5e93b0c8ccb15f00136fd2a4",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5251,
+        "known_for_department": "Acting",
+        "name": "Jack Warden",
+        "original_name": "Jack Warden",
+        "popularity": 0.9875,
+        "profile_path": "/hSShXiYMfRpMByaB5euZ59qCKN.jpg",
+        "cast_id": 63,
+        "character": "Juror 7",
+        "credit_id": "5e93b0d3875d1a001444ade1",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4958,
+        "known_for_department": "Acting",
+        "name": "Henry Fonda",
+        "original_name": "Henry Fonda",
+        "popularity": 1.9988,
+        "profile_path": "/6wXWsqSXF3wCsGcwVqiszy6RX9X.jpg",
+        "cast_id": 64,
+        "character": "Juror 8",
+        "credit_id": "5e93b0e254508d001a177bde",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5252,
+        "known_for_department": "Acting",
+        "name": "Joseph Sweeney",
+        "original_name": "Joseph Sweeney",
+        "popularity": 0.6415,
+        "profile_path": "/yUDYdj0yk9dvDAR4dKHvK9zRpDv.jpg",
+        "cast_id": 65,
+        "character": "Juror 9",
+        "credit_id": "5e93b0ec54508d0015176f37",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 39816,
+        "known_for_department": "Acting",
+        "name": "Ed Begley",
+        "original_name": "Ed Begley",
+        "popularity": 0.688,
+        "profile_path": "/AuPwjGgPphtfQOShb8pTtp5W7Ft.jpg",
+        "cast_id": 66,
+        "character": "Juror 10",
+        "credit_id": "5e93b0f7ca4f6700148145ab",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5254,
+        "known_for_department": "Acting",
+        "name": "George Voskovec",
+        "original_name": "Ji\u0159\u00ed Voskovec",
+        "popularity": 0.6151,
+        "profile_path": "/nxW7pLtG8xLo4J3QHXzLxt8fd8P.jpg",
+        "cast_id": 67,
+        "character": "Juror 11",
+        "credit_id": "5e93b10684448e0012911546",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5255,
+        "known_for_department": "Acting",
+        "name": "Robert Webber",
+        "original_name": "Robert Webber",
+        "popularity": 0.8048,
+        "profile_path": "/1RlhCcfCkaSz0cWRSowsj5FiKXg.jpg",
+        "cast_id": 68,
+        "character": "Juror 12",
+        "credit_id": "5e93b11184448e001a90eb37",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3143,
+        "known_for_department": "Acting",
+        "name": "Rudy Bond",
+        "original_name": "Rudy Bond",
+        "popularity": 1.1968,
+        "profile_path": "/bd3YONpGsvQrpz6MkhsqsiPSaOD.jpg",
+        "cast_id": 70,
+        "character": "Judge (uncredited)",
+        "credit_id": "5e93b13bccb15f00136fd3b1",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2498394,
+        "known_for_department": "Acting",
+        "name": "Tom Gorman",
+        "original_name": "Tom Gorman",
+        "popularity": 0.481,
+        "profile_path": null,
+        "cast_id": 71,
+        "character": "Stenographer (uncredited)",
+        "credit_id": "5e93b147cedac40014ebb229",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1437464,
+        "known_for_department": "Acting",
+        "name": "James Kelly",
+        "original_name": "James Kelly",
+        "popularity": 0.1099,
+        "profile_path": null,
+        "cast_id": 72,
+        "character": "Guard (uncredited)",
+        "credit_id": "5e93b16584448e001291160b",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5257,
+        "known_for_department": "Acting",
+        "name": "Billy Nelson",
+        "original_name": "Billy Nelson",
+        "popularity": 0.4223,
+        "profile_path": null,
+        "cast_id": 73,
+        "character": "Court Clerk (uncredited)",
+        "credit_id": "5e93b181875d1a001944ed80",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 153394,
+        "known_for_department": "Acting",
+        "name": "Walter Stocker",
+        "original_name": "Walter Stocker",
+        "popularity": 0.4221,
+        "profile_path": null,
+        "cast_id": 69,
+        "character": "Man Waiting for Elevator (uncredited)",
+        "credit_id": "5e93b122d55e4d001a19f805",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5892050,
+        "known_for_department": "Acting",
+        "name": "John Savoca",
+        "original_name": "John Savoca",
+        "popularity": 0.0448,
+        "profile_path": null,
+        "cast_id": 78,
+        "character": "Defendant (uncredited)",
+        "credit_id": "6948dd2924937a5336155682",
+        "order": 17
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4958,
+        "known_for_department": "Acting",
+        "name": "Henry Fonda",
+        "original_name": "Henry Fonda",
+        "popularity": 1.9988,
+        "profile_path": "/6wXWsqSXF3wCsGcwVqiszy6RX9X.jpg",
+        "credit_id": "52fe423dc3a36847f800ec55",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5246,
+        "known_for_department": "Writing",
+        "name": "Reginald Rose",
+        "original_name": "Reginald Rose",
+        "popularity": 1.4437,
+        "profile_path": "/qscQc09Nh6fTfenlwl2pNvnD2MQ.jpg",
+        "credit_id": "52fe423dc3a36847f800ec61",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 39996,
+        "known_for_department": "Directing",
+        "name": "Sidney Lumet",
+        "original_name": "Sidney Lumet",
+        "popularity": 1.0956,
+        "profile_path": "/hjj3V2DkPJ46zo5uz9bsZQzAk6R.jpg",
+        "credit_id": "5e8e3c2f62e86f00159ba2f3",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: 12 Angry Men (1957)\n\nProducer: Henry Fonda\n\nProducer: Reginald Rose\n\nDirector: Sidney Lumet\n\nGenres: Drama\n\nThemes and Keywords: death penalty, anonymity, court case, judge, jurors, innocence, witness, knife, matter of life and death, based on play or musical, trial, murder, debate, capital punishment, black and white, courtroom, angry, courtroom drama, huis clos, baffled, derisive, foreboding\n\nTop Cast: Martin Balsam, John Fiedler, Lee J. Cobb, E.G. Marshall, Jack Klugman, Edward Binns, Jack Warden, Henry Fonda, Joseph Sweeney, Ed Begley, George Voskovec, Robert Webber, Rudy Bond, Tom Gorman, James Kelly, Billy Nelson, Walter Stocker, John Savoca\n\nPlot: The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.\n\n"
+}

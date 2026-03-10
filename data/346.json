@@ -1,0 +1,622 @@
+{
+  "adult": false,
+  "backdrop_path": "/qvZ91FwMq6O47VViAr8vZNQz3WI.jpg",
+  "belongs_to_collection": null,
+  "budget": 2000000,
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 346,
+  "imdb_id": "tt0047478",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u4e03\u4eba\u306e\u4f8d",
+  "overview": "A samurai answers a village's request for protection after he falls on hard times. The town needs protection from bandits, so the samurai gathers six others to help him teach the people how to defend themselves, and the villagers provide the soldiers with food.",
+  "popularity": 8.8474,
+  "poster_path": "/lOMGc8bnSwQhS4XyE1S99uH8NXf.jpg",
+  "production_companies": [
+    {
+      "id": 882,
+      "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+      "name": "TOHO",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "1954-04-26",
+  "revenue": 105000000,
+  "runtime": 207,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Unmatched for suspense and spectacle!",
+  "title": "Seven Samurai",
+  "video": false,
+  "vote_average": 8.451,
+  "vote_count": 4127,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 779,
+        "name": "martial arts"
+      },
+      {
+        "id": 233,
+        "name": "japan"
+      },
+      {
+        "id": 1462,
+        "name": "samurai"
+      },
+      {
+        "id": 1938,
+        "name": "sword"
+      },
+      {
+        "id": 4402,
+        "name": "peasant"
+      },
+      {
+        "id": 5331,
+        "name": "village"
+      },
+      {
+        "id": 4631,
+        "name": "looting"
+      },
+      {
+        "id": 5329,
+        "name": "rice"
+      },
+      {
+        "id": 5330,
+        "name": "fencing"
+      },
+      {
+        "id": 11426,
+        "name": "moral ambiguity"
+      },
+      {
+        "id": 3691,
+        "name": "forbidden love"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 14643,
+        "name": "battle"
+      },
+      {
+        "id": 33344,
+        "name": "bandit"
+      },
+      {
+        "id": 33558,
+        "name": "practice"
+      },
+      {
+        "id": 154846,
+        "name": "farmer"
+      },
+      {
+        "id": 186753,
+        "name": "jidaigeki"
+      },
+      {
+        "id": 208244,
+        "name": "16th century"
+      },
+      {
+        "id": 210754,
+        "name": "class relations"
+      },
+      {
+        "id": 229151,
+        "name": "collectivism"
+      },
+      {
+        "id": 233409,
+        "name": "plunder"
+      },
+      {
+        "id": 254655,
+        "name": "downtrodden farmers"
+      },
+      {
+        "id": 290395,
+        "name": "casual"
+      },
+      {
+        "id": 312122,
+        "name": "bushi"
+      },
+      {
+        "id": 312285,
+        "name": "tactical warfare"
+      },
+      {
+        "id": 312898,
+        "name": "violence"
+      },
+      {
+        "id": 342828,
+        "name": "violent"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7450,
+        "known_for_department": "Acting",
+        "name": "Toshir\u014d Mifune",
+        "original_name": "\u4e09\u8239\u654f\u90ce",
+        "popularity": 0.9929,
+        "profile_path": "/3A9PqrtiXHLp8B2JL7m3YvVXrmL.jpg",
+        "cast_id": 147,
+        "character": "Kikuchiyo",
+        "credit_id": "5e93b84654508d001517809e",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7453,
+        "known_for_department": "Acting",
+        "name": "Takashi Shimura",
+        "original_name": "\u5fd7\u6751\u55ac",
+        "popularity": 1.5206,
+        "profile_path": "/ydyAm2vyBbEPZRICIMqqjDm0NM9.jpg",
+        "cast_id": 148,
+        "character": "Kambei Shimada",
+        "credit_id": "5e93b8737a97ab00140dea37",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20828,
+        "known_for_department": "Acting",
+        "name": "Yoshio Inaba",
+        "original_name": "\u7a32\u8449\u7fa9\u7537",
+        "popularity": 0.9537,
+        "profile_path": "/5qIAqM5PegWTNq67qNofz78fb6U.jpg",
+        "cast_id": 149,
+        "character": "Gorobei Katayama",
+        "credit_id": "5e93b8ae54508d00131770de",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20829,
+        "known_for_department": "Acting",
+        "name": "Seiji Miyaguchi",
+        "original_name": "\u5bae\u53e3\u7cbe\u4e8c",
+        "popularity": 0.909,
+        "profile_path": "/mAGkZlsowKzgpvvi40mRLU4vA53.jpg",
+        "cast_id": 150,
+        "character": "Kyuzo",
+        "credit_id": "5e93b92c8e87020016ccf565",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7454,
+        "known_for_department": "Acting",
+        "name": "Minoru Chiaki",
+        "original_name": "\u5343\u79cb\u5b9f",
+        "popularity": 1.0717,
+        "profile_path": "/9E3efYEg8pxANdfVLqYGiX8zJE8.jpg",
+        "cast_id": 151,
+        "character": "Heihachi Hayashida",
+        "credit_id": "5e93b96d54508d001517876a",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7457,
+        "known_for_department": "Acting",
+        "name": "Daisuke Kat\u014d",
+        "original_name": "\u52a0\u6771\u5927\u4ecb",
+        "popularity": 1.0372,
+        "profile_path": "/dTcLO2XWLwp6RiJTpwDjxzbnuSp.jpg",
+        "cast_id": 152,
+        "character": "Shichiroji",
+        "credit_id": "5e93b9a72cde980014c4bcb9",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20830,
+        "known_for_department": "Acting",
+        "name": "Isao Kimura",
+        "original_name": "\u6728\u6751\u529f",
+        "popularity": 1.1375,
+        "profile_path": "/afLPuf3x7UYXryAbqAGqmRcVNNW.jpg",
+        "cast_id": 153,
+        "character": "Katsushiro Okamoto",
+        "credit_id": "5e93b9d1ca4f6772c3806f40",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 20831,
+        "known_for_department": "Acting",
+        "name": "Keiko Tsushima",
+        "original_name": "\u6d25\u5cf6\u6075\u5b50",
+        "popularity": 0.5129,
+        "profile_path": "/c4h0z00YkEUav0lGHoqVpeUzbul.jpg",
+        "cast_id": 154,
+        "character": "Shino",
+        "credit_id": "5e93ba18d55e4d00151a2e60",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 554250,
+        "known_for_department": "Acting",
+        "name": "Yukiko Shimazaki",
+        "original_name": "\u5cf6\u5d0e\u96ea\u5b50",
+        "popularity": 0.7452,
+        "profile_path": "/wX1QqvkIdBQbNexTCxbmXyu6dUf.jpg",
+        "cast_id": 155,
+        "character": "Rikichi's Wife",
+        "credit_id": "5e93ba717a97ab00140deb89",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 96552,
+        "known_for_department": "Acting",
+        "name": "Kamatari Fujiwara",
+        "original_name": "\u85e4\u539f\u91dc\u8db3",
+        "popularity": 0.6638,
+        "profile_path": "/jf1aok2Ln5XG805BDzBJc2PjZQg.jpg",
+        "cast_id": 156,
+        "character": "Manz\u00f4 - Father of Shino",
+        "credit_id": "5e93ba9dca4f67001a814637",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 134272,
+        "known_for_department": "Acting",
+        "name": "Yoshio Kosugi",
+        "original_name": "\u5c0f\u6749\u7fa9\u7537",
+        "popularity": 0.9502,
+        "profile_path": "/gIlrjQoolcTbkvjm1uNTANdiDE9.jpg",
+        "cast_id": 16,
+        "character": "Mosuke",
+        "credit_id": "52fe423bc3a36847f800e021",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 34377,
+        "known_for_department": "Acting",
+        "name": "Bokuzen Hidari",
+        "original_name": "\u5de6\u535c\u5168",
+        "popularity": 0.8554,
+        "profile_path": "/kvISvHgKAAWVPOnDjgVHWOgSOaO.jpg",
+        "cast_id": 157,
+        "character": "Yohei",
+        "credit_id": "5e93bb108e87020013cd4e73",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 17540,
+        "known_for_department": "Acting",
+        "name": "Yoshio Tsuchiya",
+        "original_name": "\u571f\u5c4b\u5609\u7537",
+        "popularity": 0.6882,
+        "profile_path": "/kJS04UByTERRVYF7TwozrXwh5cs.jpg",
+        "cast_id": 18,
+        "character": "Rikichi",
+        "credit_id": "52fe423bc3a36847f800e029",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 108028,
+        "known_for_department": "Acting",
+        "name": "Kokuten K\u014dd\u014d",
+        "original_name": "\u9ad8\u5802\u56fd\u5178",
+        "popularity": 0.299,
+        "profile_path": "/yYtoQtEf3QntzWC7XRQeJQeGp52.jpg",
+        "cast_id": 19,
+        "character": "Gisaku, the Old Man",
+        "credit_id": "52fe423bc3a36847f800e02d",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 106165,
+        "known_for_department": "Acting",
+        "name": "Eijir\u014d T\u014dno",
+        "original_name": "\u6771\u91ce\u82f1\u6cbb\u90ce",
+        "popularity": 0.8867,
+        "profile_path": "/dJqhcdHUqwa4S7bFjFXMza8jBth.jpg",
+        "cast_id": 20,
+        "character": "Kidnapper",
+        "credit_id": "52fe423bc3a36847f800e031",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 228547,
+        "known_for_department": "Acting",
+        "name": "Jun Tatara",
+        "original_name": "\u591a\u3005\u826f\u7d14",
+        "popularity": 0.4223,
+        "profile_path": "/uufp8VZVTESqKzulAlx6K8htWGI.jpg",
+        "cast_id": 22,
+        "character": "Coolie A",
+        "credit_id": "52fe423bc3a36847f800e039",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 134294,
+        "known_for_department": "Acting",
+        "name": "Atsushi Watanabe",
+        "original_name": "\u6e21\u8fba\u7be4",
+        "popularity": 0.6198,
+        "profile_path": "/s45tFh01BT7mCCwF7oz6IiEGqgC.jpg",
+        "cast_id": 23,
+        "character": "Bun Seller",
+        "credit_id": "52fe423bc3a36847f800e03d",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 134406,
+        "known_for_department": "Acting",
+        "name": "Toranosuke Ogawa",
+        "original_name": "\u5c0f\u5ddd\u864e\u4e4b\u52a9",
+        "popularity": 0.3252,
+        "profile_path": "/oJg5m33zY7kphpcCAd9L1fWf8CS.jpg",
+        "cast_id": 24,
+        "character": "Grandfather of Kidnapped Girl",
+        "credit_id": "52fe423bc3a36847f800e041",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 134020,
+        "known_for_department": "Acting",
+        "name": "Isao Yamagata",
+        "original_name": "\u5c71\u5f62\u52f2",
+        "popularity": 0.3673,
+        "profile_path": "/x1MgVQC8gT7LwuuJ3NGUOi5QdtB.jpg",
+        "cast_id": 25,
+        "character": "Samurai",
+        "credit_id": "52fe423bc3a36847f800e045",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7455,
+        "known_for_department": "Acting",
+        "name": "Kichijir\u014d Ueda",
+        "original_name": "\u4e0a\u7530\u5409\u4e8c\u90ce",
+        "popularity": 0.8144,
+        "profile_path": "/qjBYqwAobeFnOhpkxNnv36IvCQy.jpg",
+        "cast_id": 26,
+        "character": "Bandit Scout",
+        "credit_id": "53028093925141218f3d1e9e",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1173025,
+        "known_for_department": "Acting",
+        "name": "S\u00f4jin Kamiyama",
+        "original_name": "S\u00f4jin Kamiyama",
+        "popularity": 0.7978,
+        "profile_path": "/ipKqPzL5eQcv7lPiEUbvjZl49ZL.jpg",
+        "cast_id": 27,
+        "character": "Blind Player",
+        "credit_id": "558b219892514141d50003dd",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 552187,
+        "known_for_department": "Acting",
+        "name": "Gen Shimizu",
+        "original_name": "\u6e05\u6c34\u5143",
+        "popularity": 0.4102,
+        "profile_path": "/j8cTqUE8RbrqwO5VUE2oZvDHgWn.jpg",
+        "cast_id": 28,
+        "character": "Samurai Who Kicks Farmers",
+        "credit_id": "558b21bfc3a3687e6b000352",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1478367,
+        "known_for_department": "Acting",
+        "name": "Keiji Sakakida",
+        "original_name": "\u698a\u7530\u656c\u4e8c",
+        "popularity": 0.2508,
+        "profile_path": "/mxtunUGffh5qcEAUnrE6deIGmw8.jpg",
+        "cast_id": 29,
+        "character": "Gosaku",
+        "credit_id": "558b21edc3a3687e65000304",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 121190,
+        "known_for_department": "Acting",
+        "name": "Shinpei Takagi",
+        "original_name": "\u9ad8\u6728\u65b0\u5e73",
+        "popularity": 0.9163,
+        "profile_path": "/qXuhGryqHToin3yHSvrfefRkyzF.jpg",
+        "cast_id": 30,
+        "character": "Bandit Chieftain",
+        "credit_id": "558b221192514141d5000407",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 552174,
+        "known_for_department": "Acting",
+        "name": "Shin \u014ctomo",
+        "original_name": "\u5927\u53cb\u4f38",
+        "popularity": 0.1737,
+        "profile_path": "/efd6F1rj3qu18nuF7ANaYumdfDa.jpg",
+        "cast_id": 31,
+        "character": "Bandit Second-in-Command",
+        "credit_id": "558b2235c3a3687e5c000385",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1093065,
+        "known_for_department": "Acting",
+        "name": "Toshio Takahara",
+        "original_name": "\u9ad8\u539f\u99ff\u96c4",
+        "popularity": 0.4246,
+        "profile_path": "/9SPnfC1jk1hyB8jGEfoTzdcVmS2.jpg",
+        "cast_id": 32,
+        "character": "Samurai with Gun",
+        "credit_id": "558b225d92514141d5000424",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1083308,
+        "known_for_department": "Acting",
+        "name": "Kan Sugi",
+        "original_name": "\u6749\u5bdb",
+        "popularity": 0.5337,
+        "profile_path": null,
+        "cast_id": 33,
+        "character": "Tea Shop Owner",
+        "credit_id": "558b227cc3a3687e68000331",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 125016,
+        "known_for_department": "Acting",
+        "name": "Hiroshi Hayashi",
+        "original_name": "\u6797\u5bdb",
+        "popularity": 0.2903,
+        "profile_path": "/tOUig5r48lQfBjmLbaojtx1FYrV.jpg",
+        "cast_id": 34,
+        "character": "Weak Ronin",
+        "credit_id": "558b228cc3a3687e68000338",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 108026,
+        "known_for_department": "Acting",
+        "name": "Sachio Sakai",
+        "original_name": "\u583a\u5de6\u5343\u592b",
+        "popularity": 1.0137,
+        "profile_path": "/5b6g3ZHfSXxfNgInvwz44lUv43I.jpg",
+        "cast_id": 35,
+        "character": "Coolie #2",
+        "credit_id": "558b22bf9251416091000060",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1481118,
+        "known_for_department": "Acting",
+        "name": "S\u00f4kichi Maki",
+        "original_name": "S\u00f4kichi Maki",
+        "popularity": 0.3508,
+        "profile_path": null,
+        "cast_id": 36,
+        "character": "Strong-Looking Samurai",
+        "credit_id": "558b22d7c3a3687e5c0003c2",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5026,
+        "known_for_department": "Directing",
+        "name": "Akira Kurosawa",
+        "original_name": "\u9ed2\u6fa4\u660e",
+        "popularity": 3.1534,
+        "profile_path": "/ca8fRqLDfTJTCamLKHp70up23ET.jpg",
+        "credit_id": "52fe423bc3a36847f800dfdd",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20832,
+        "known_for_department": "Production",
+        "name": "S\u014djir\u014d Motoki",
+        "original_name": "\u672c\u6728\u8358\u4e8c\u90ce",
+        "popularity": 0.5239,
+        "profile_path": "/3elxuzpG4zmKcXmJxAkRnUDjCn7.jpg",
+        "credit_id": "52fe423bc3a36847f800e011",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Seven Samurai (1954)\n\nDirector: Akira Kurosawa\n\nProducer: S\u014djir\u014d Motoki\n\nGenres: Action, Drama\n\nThemes and Keywords: martial arts, japan, samurai, sword, peasant, village, looting, rice, fencing, moral ambiguity, forbidden love, black and white, battle, bandit, practice, farmer, jidaigeki, 16th century, class relations, collectivism, plunder, downtrodden farmers, casual, bushi, tactical warfare, violence, violent\n\nTop Cast: Toshir\u014d Mifune, Takashi Shimura, Yoshio Inaba, Seiji Miyaguchi, Minoru Chiaki, Daisuke Kat\u014d, Isao Kimura, Keiko Tsushima, Yukiko Shimazaki, Kamatari Fujiwara, Yoshio Kosugi, Bokuzen Hidari, Yoshio Tsuchiya, Kokuten K\u014dd\u014d, Eijir\u014d T\u014dno, Jun Tatara, Atsushi Watanabe, Toranosuke Ogawa, Isao Yamagata, Kichijir\u014d Ueda, S\u00f4jin Kamiyama, Gen Shimizu, Keiji Sakakida, Shinpei Takagi, Shin \u014ctomo, Toshio Takahara, Kan Sugi, Hiroshi Hayashi, Sachio Sakai, S\u00f4kichi Maki\n\nPlot: A samurai answers a village's request for protection after he falls on hard times. The town needs protection from bandits, so the samurai gathers six others to help him teach the people how to defend themselves, and the villagers provide the soldiers with food.\n\n"
+}

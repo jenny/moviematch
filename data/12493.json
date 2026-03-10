@@ -1,0 +1,609 @@
+{
+  "adult": false,
+  "backdrop_path": "/A62quSOB8otoZvGiLvMVZ9G4BiO.jpg",
+  "belongs_to_collection": null,
+  "budget": 250000,
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "homepage": "",
+  "id": 12493,
+  "imdb_id": "tt0057565",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u5929\u56fd\u3068\u5730\u7344",
+  "overview": "A Yokohama shoe executive faces a wrenching choice when kidnappers mistakenly seize his chauffeur\u2019s son but demand the ransom anyway.",
+  "popularity": 4.5235,
+  "poster_path": "/tgNjemQPG96uIezpiUiXFcer5ga.jpg",
+  "production_companies": [
+    {
+      "id": 882,
+      "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+      "name": "TOHO",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2680,
+      "logo_path": null,
+      "name": "Kurosawa Production",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "1963-03-01",
+  "revenue": 0,
+  "runtime": 142,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Stark, intense drama almost beyond belief!",
+  "title": "High and Low",
+  "video": false,
+  "vote_average": 8.3,
+  "vote_count": 1088,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 2072,
+        "name": "chauffeur"
+      },
+      {
+        "id": 6149,
+        "name": "police"
+      },
+      {
+        "id": 1336,
+        "name": "ransom"
+      },
+      {
+        "id": 554,
+        "name": "manager"
+      },
+      {
+        "id": 1930,
+        "name": "kidnapping"
+      },
+      {
+        "id": 1936,
+        "name": "blackmail"
+      },
+      {
+        "id": 2671,
+        "name": "heroin"
+      },
+      {
+        "id": 9807,
+        "name": "film noir"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 54612,
+        "name": "shoe"
+      },
+      {
+        "id": 157241,
+        "name": "criminal investigation"
+      },
+      {
+        "id": 180533,
+        "name": "japanese noir"
+      },
+      {
+        "id": 251667,
+        "name": "anxious"
+      },
+      {
+        "id": 256432,
+        "name": "yokohama"
+      },
+      {
+        "id": 296479,
+        "name": "sh\u014dwa era (1926-89)"
+      },
+      {
+        "id": 321464,
+        "name": "intense"
+      },
+      {
+        "id": 325773,
+        "name": "audacious"
+      },
+      {
+        "id": 325790,
+        "name": "cruel"
+      },
+      {
+        "id": 327574,
+        "name": "japanese society"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7450,
+        "known_for_department": "Acting",
+        "name": "Toshir\u014d Mifune",
+        "original_name": "\u4e09\u8239\u654f\u90ce",
+        "popularity": 0.9929,
+        "profile_path": "/3A9PqrtiXHLp8B2JL7m3YvVXrmL.jpg",
+        "cast_id": 2,
+        "character": "Kingo Gondo",
+        "credit_id": "52fe44ec9251416c75045a43",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 70131,
+        "known_for_department": "Acting",
+        "name": "Tatsuya Nakadai",
+        "original_name": "\u4ef2\u4ee3\u9054\u77e2",
+        "popularity": 1.5824,
+        "profile_path": "/4LygOe0vFQplLIft5IUWI5OewPX.jpg",
+        "cast_id": 3,
+        "character": "Chief Detective Tokura",
+        "credit_id": "52fe44ec9251416c75045a47",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 34374,
+        "known_for_department": "Acting",
+        "name": "Ky\u014dko Kagawa",
+        "original_name": "\u9999\u5ddd\u4eac\u5b50",
+        "popularity": 0.5386,
+        "profile_path": "/q47wPwySJvhj6HQoYb7ON1TjbcV.jpg",
+        "cast_id": 4,
+        "character": "Reiko Gondo",
+        "credit_id": "52fe44ec9251416c75045a4b",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13251,
+        "known_for_department": "Acting",
+        "name": "Tatsuya Mihashi",
+        "original_name": "\u4e09\u6a4b\u9054\u4e5f",
+        "popularity": 0.9983,
+        "profile_path": "/s33XOrwOEEVoWeScWMK2Afs7Njl.jpg",
+        "cast_id": 5,
+        "character": "Kawanishi, Gondo's secretary",
+        "credit_id": "52fe44ec9251416c75045a4f",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20830,
+        "known_for_department": "Acting",
+        "name": "Isao Kimura",
+        "original_name": "\u6728\u6751\u529f",
+        "popularity": 1.1375,
+        "profile_path": "/afLPuf3x7UYXryAbqAGqmRcVNNW.jpg",
+        "cast_id": 6,
+        "character": "Detective Arai",
+        "credit_id": "52fe44ec9251416c75045a53",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 72539,
+        "known_for_department": "Acting",
+        "name": "Kenjir\u014d Ishiyama",
+        "original_name": "\u77f3\u5c71\u5065\u4e8c\u90ce",
+        "popularity": 0.4291,
+        "profile_path": "/phmOwgd6kS4dWI6GGv4ltQI9bMi.jpg",
+        "cast_id": 7,
+        "character": "Chief Detective 'Bos'n' Taguchi",
+        "credit_id": "52fe44ec9251416c75045a57",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 72540,
+        "known_for_department": "Acting",
+        "name": "Takeshi Kat\u014d",
+        "original_name": "\u52a0\u85e4\u6b66",
+        "popularity": 0.6079,
+        "profile_path": "/Ajb5kXEFSbsbSgRoICgsKuVcQJ2.jpg",
+        "cast_id": 8,
+        "character": "Detective Nakao",
+        "credit_id": "52fe44ec9251416c75045a5b",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7453,
+        "known_for_department": "Acting",
+        "name": "Takashi Shimura",
+        "original_name": "\u5fd7\u6751\u55ac",
+        "popularity": 1.5206,
+        "profile_path": "/ydyAm2vyBbEPZRICIMqqjDm0NM9.jpg",
+        "cast_id": 23,
+        "character": "Chief of Investigation Section",
+        "credit_id": "52fe44ec9251416c75045ab3",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30470,
+        "known_for_department": "Acting",
+        "name": "Jun Tazaki",
+        "original_name": "\u7530\u5d0e\u6f64",
+        "popularity": 0.506,
+        "profile_path": "/xCaRyiMo8sleDYjLKGl8xUXsIHQ.jpg",
+        "cast_id": 24,
+        "character": "Kamiya, National Shoes Publicity Director",
+        "credit_id": "52fe44ec9251416c75045ab7",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30772,
+        "known_for_department": "Acting",
+        "name": "Nobuo Nakamura",
+        "original_name": "\u4e2d\u6751\u4f38\u90ce",
+        "popularity": 0.9711,
+        "profile_path": "/24r35Pf7V3CXaWbIo6LhWIKMISO.jpg",
+        "cast_id": 25,
+        "character": "Ishimaru, National Shoes Design Department Director",
+        "credit_id": "52fe44ec9251416c75045abb",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 128023,
+        "known_for_department": "Acting",
+        "name": "Y\u016bnosuke It\u014d",
+        "original_name": "\u4f0a\u85e4\u96c4\u4e4b\u52a9",
+        "popularity": 0.9138,
+        "profile_path": "/bGD0uSAMZQSgWBo1sRmdjn36CYp.jpg",
+        "cast_id": 26,
+        "character": "Baba - National Shoes Executive",
+        "credit_id": "52fe44ec9251416c75045abf",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 70626,
+        "known_for_department": "Acting",
+        "name": "Tsutomu Yamazaki",
+        "original_name": "\u5c71\u5d0e\u52aa",
+        "popularity": 1.2086,
+        "profile_path": "/A4M3eER4ChkV5VebYSpLUEUyrez.jpg",
+        "cast_id": 27,
+        "character": "Ginjir\u00f4 Takeuchi - Medical Intern",
+        "credit_id": "52fe44ec9251416c75045ac3",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 7454,
+        "known_for_department": "Acting",
+        "name": "Minoru Chiaki",
+        "original_name": "\u5343\u79cb\u5b9f",
+        "popularity": 1.0717,
+        "profile_path": "/9E3efYEg8pxANdfVLqYGiX8zJE8.jpg",
+        "cast_id": 28,
+        "character": "First Reporter",
+        "credit_id": "52fe44ec9251416c75045ac7",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 106165,
+        "known_for_department": "Acting",
+        "name": "Eijir\u014d T\u014dno",
+        "original_name": "\u6771\u91ce\u82f1\u6cbb\u90ce",
+        "popularity": 0.8867,
+        "profile_path": "/dJqhcdHUqwa4S7bFjFXMza8jBth.jpg",
+        "cast_id": 29,
+        "character": "Factory Worker",
+        "credit_id": "52fe44ec9251416c75045acb",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 131194,
+        "known_for_department": "Acting",
+        "name": "Masao Shimizu",
+        "original_name": "\u6e05\u6c34\u5c06\u592b",
+        "popularity": 0.658,
+        "profile_path": "/77QHN0Ac5Oq31R1PKQSIVX3nFzX.jpg",
+        "cast_id": 30,
+        "character": "Prison Warden",
+        "credit_id": "52fe44ec9251416c75045acf",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 134320,
+        "known_for_department": "Acting",
+        "name": "Yutaka Sada",
+        "original_name": "\u4f50\u7530\u8c4a",
+        "popularity": 0.3043,
+        "profile_path": "/wNQ0ewamRqCpy9HkSEBcCr2U4Fq.jpg",
+        "cast_id": 31,
+        "character": "Aoki - the Chauffeur",
+        "credit_id": "52fe44ec9251416c75045ad3",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 135135,
+        "known_for_department": "Acting",
+        "name": "Masahiko Shimazu",
+        "original_name": "\u5cf6\u6d25\u96c5\u5f66",
+        "popularity": 0.347,
+        "profile_path": "/z2y7arvOR47vMDnxyAYYu26iFoT.jpg",
+        "cast_id": 32,
+        "character": "Shinichi Aoki",
+        "credit_id": "52fe44ec9251416c75045ad7",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 552186,
+        "known_for_department": "Acting",
+        "name": "Toshio Egi",
+        "original_name": "\u6c5f\u6728\u4fca\u592b",
+        "popularity": 0.1491,
+        "profile_path": null,
+        "cast_id": 33,
+        "character": "Jun Gondo",
+        "credit_id": "52fe44ec9251416c75045adb",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 96804,
+        "known_for_department": "Acting",
+        "name": "K\u014dji Mitsui",
+        "original_name": "\u4e09\u4e95\u5f18\u6b21",
+        "popularity": 0.5121,
+        "profile_path": "/nahTXDNpFHNfKMraAHNDYiLXBM.jpg",
+        "cast_id": 34,
+        "character": "Second Reporter",
+        "credit_id": "52fe44ec9251416c75045adf",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 213469,
+        "known_for_department": "Acting",
+        "name": "Ky\u016b Sazanka",
+        "original_name": "\u5c71\u8336\u82b1\u7a76",
+        "popularity": 0.7987,
+        "profile_path": "/cd3ZT9lYG8JqodN9WF93V3e2IUM.jpg",
+        "cast_id": 35,
+        "character": "First Creditor",
+        "credit_id": "52fe44ec9251416c75045ae3",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30907,
+        "known_for_department": "Acting",
+        "name": "Susumu Fujita",
+        "original_name": "\u85e4\u7530\u9032",
+        "popularity": 0.6402,
+        "profile_path": "/sSnAxPTb4YEI3Mw15Y2isBbC22K.jpg",
+        "cast_id": 36,
+        "character": "Chief of First Investigating Section",
+        "credit_id": "52fe44ec9251416c75045ae7",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 96552,
+        "known_for_department": "Acting",
+        "name": "Kamatari Fujiwara",
+        "original_name": "\u85e4\u539f\u91dc\u8db3",
+        "popularity": 0.6638,
+        "profile_path": "/jf1aok2Ln5XG805BDzBJc2PjZQg.jpg",
+        "cast_id": 37,
+        "character": "Junkyard Cook",
+        "credit_id": "52fe44ec9251416c75045aeb",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 17540,
+        "known_for_department": "Acting",
+        "name": "Yoshio Tsuchiya",
+        "original_name": "\u571f\u5c4b\u5609\u7537",
+        "popularity": 0.6882,
+        "profile_path": "/kJS04UByTERRVYF7TwozrXwh5cs.jpg",
+        "cast_id": 38,
+        "character": "Detective Murata",
+        "credit_id": "52fe44ec9251416c75045aef",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 63707,
+        "known_for_department": "Acting",
+        "name": "Kazuo Kitamura",
+        "original_name": "\u5317\u6751\u548c\u592b",
+        "popularity": 0.5908,
+        "profile_path": "/eYwt9Bk4bz3mcsbqiHr5dHMwJy2.jpg",
+        "cast_id": 39,
+        "character": "Third Reporter",
+        "credit_id": "52fe44ec9251416c75045af3",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 552187,
+        "known_for_department": "Acting",
+        "name": "Gen Shimizu",
+        "original_name": "\u6e05\u6c34\u5143",
+        "popularity": 0.4102,
+        "profile_path": "/j8cTqUE8RbrqwO5VUE2oZvDHgWn.jpg",
+        "cast_id": 40,
+        "character": "Chief Physician",
+        "credit_id": "52fe44ec9251416c75045af7",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20337,
+        "known_for_department": "Acting",
+        "name": "Akira Nagoya",
+        "original_name": "\u540d\u53e4\u5c4b\u7ae0",
+        "popularity": 0.6364,
+        "profile_path": "/dkPU1ibDTdZpK4XnPx1f5zpckbQ.jpg",
+        "cast_id": 41,
+        "character": "Detective Yamamoto",
+        "credit_id": "52fe44ec9251416c75045afb",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 97629,
+        "known_for_department": "Acting",
+        "name": "Jun Hamamura",
+        "original_name": "\u6d5c\u6751\u7d14",
+        "popularity": 0.438,
+        "profile_path": "/sNffnZJIGCzuCmJlKjUKtGLwLRw.jpg",
+        "cast_id": 42,
+        "character": "Second Creditor",
+        "credit_id": "52fe44ec9251416c75045aff",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 552188,
+        "known_for_department": "Acting",
+        "name": "Masao Oda",
+        "original_name": "\u7e54\u7530\u653f\u96c4",
+        "popularity": 0.5421,
+        "profile_path": "/ahc1cBIt5lOsfIKf0W7AhIJUPXv.jpg",
+        "cast_id": 43,
+        "character": "First Executor at Tax Office",
+        "credit_id": "52fe44ec9251416c75045b03",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 25462,
+        "known_for_department": "Acting",
+        "name": "K\u014d Nishimura",
+        "original_name": "\u897f\u6751\u6643",
+        "popularity": 0.7033,
+        "profile_path": "/vIJRKuIndIdwHwrgJpse4yCMweK.jpg",
+        "cast_id": 44,
+        "character": "Third Creditor",
+        "credit_id": "52fe44ec9251416c75045b07",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30475,
+        "known_for_department": "Acting",
+        "name": "Yoshibumi Tajima",
+        "original_name": "\u7530\u5cf6 \u7fa9\u6587",
+        "popularity": 0.3531,
+        "profile_path": "/yB0WErBl8xETP5PUaQf5xTmgGHW.jpg",
+        "cast_id": 45,
+        "character": "Chief Prison Officer",
+        "credit_id": "52fe44ec9251416c75045b0b",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5026,
+        "known_for_department": "Directing",
+        "name": "Akira Kurosawa",
+        "original_name": "\u9ed2\u6fa4\u660e",
+        "popularity": 3.1534,
+        "profile_path": "/ca8fRqLDfTJTCamLKHp70up23ET.jpg",
+        "credit_id": "52fe44ec9251416c75045a3f",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 18604,
+        "known_for_department": "Production",
+        "name": "Tomoyuki Tanaka",
+        "original_name": "\u7530\u4e2d\u53cb\u5e78",
+        "popularity": 1.1278,
+        "profile_path": "/fceS19GAexPnmtVQJHG9VxaVHGZ.jpg",
+        "credit_id": "52fe44ec9251416c75045a6d",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 34373,
+        "known_for_department": "Writing",
+        "name": "Ryuzo Kikushima",
+        "original_name": "\u83ca\u5cf6\u9686\u4e09",
+        "popularity": 1.0882,
+        "profile_path": "/gNNF41FS2hqSKRHR0Rwkanvv68D.jpg",
+        "credit_id": "52fe44ec9251416c75045a67",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: High and Low (1963)\n\nDirector: Akira Kurosawa\n\nProducer: Tomoyuki Tanaka\n\nProducer: Ryuzo Kikushima\n\nGenres: Drama, Crime\n\nThemes and Keywords: chauffeur, police, ransom, manager, kidnapping, blackmail, heroin, film noir, black and white, shoe, criminal investigation, japanese noir, anxious, yokohama, sh\u014dwa era (1926-89), intense, audacious, cruel, japanese society\n\nTop Cast: Toshir\u014d Mifune, Tatsuya Nakadai, Ky\u014dko Kagawa, Tatsuya Mihashi, Isao Kimura, Kenjir\u014d Ishiyama, Takeshi Kat\u014d, Takashi Shimura, Jun Tazaki, Nobuo Nakamura, Y\u016bnosuke It\u014d, Tsutomu Yamazaki, Minoru Chiaki, Eijir\u014d T\u014dno, Masao Shimizu, Yutaka Sada, Masahiko Shimazu, Toshio Egi, K\u014dji Mitsui, Ky\u016b Sazanka, Susumu Fujita, Kamatari Fujiwara, Yoshio Tsuchiya, Kazuo Kitamura, Gen Shimizu, Akira Nagoya, Jun Hamamura, Masao Oda, K\u014d Nishimura, Yoshibumi Tajima\n\nPlot: A Yokohama shoe executive faces a wrenching choice when kidnappers mistakenly seize his chauffeur\u2019s son but demand the ransom anyway.\n\n"
+}

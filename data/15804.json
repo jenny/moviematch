@@ -1,0 +1,614 @@
+{
+  "adult": false,
+  "backdrop_path": "/hypv7bDxzqdhJfEpjRKf1aQbdc.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "homepage": "",
+  "id": 15804,
+  "imdb_id": "tt0101985",
+  "origin_country": [
+    "TW"
+  ],
+  "original_language": "zh",
+  "original_title": "\u726f\u5dba\u8857\u5c11\u5e74\u6bba\u4eba\u4e8b\u4ef6",
+  "overview": "A boy experiences first love, friendships and injustices growing up in 1960s Taiwan.",
+  "popularity": 2.6292,
+  "poster_path": "/3l8fOAwiN3N5n3hHnZ51eog7Zu2.jpg",
+  "production_companies": [
+    {
+      "id": 70884,
+      "logo_path": null,
+      "name": "Yang & His Gang Filmmakers",
+      "origin_country": "TW"
+    },
+    {
+      "id": 238336,
+      "logo_path": null,
+      "name": "Brighter Summer Productions",
+      "origin_country": "TW"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "TW",
+      "name": "Taiwan"
+    }
+  ],
+  "release_date": "1991-07-27",
+  "revenue": 0,
+  "runtime": 237,
+  "spoken_languages": [
+    {
+      "english_name": "Mandarin",
+      "iso_639_1": "zh",
+      "name": "\u666e\u901a\u8bdd"
+    },
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "",
+  "title": "A Brighter Summer Day",
+  "video": false,
+  "vote_average": 8.28,
+  "vote_count": 375,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 6270,
+        "name": "high school"
+      },
+      {
+        "id": 3605,
+        "name": "baseball bat"
+      },
+      {
+        "id": 9672,
+        "name": "based on true story"
+      },
+      {
+        "id": 10683,
+        "name": "coming of age"
+      },
+      {
+        "id": 9322,
+        "name": "taiwan"
+      },
+      {
+        "id": 10614,
+        "name": "tragedy"
+      },
+      {
+        "id": 9826,
+        "name": "murder"
+      },
+      {
+        "id": 10766,
+        "name": "youth gang"
+      },
+      {
+        "id": 10726,
+        "name": "gang"
+      },
+      {
+        "id": 14857,
+        "name": "juvenile delinquent"
+      },
+      {
+        "id": 18068,
+        "name": "teenage boy"
+      },
+      {
+        "id": 156316,
+        "name": "troubled teen"
+      },
+      {
+        "id": 157303,
+        "name": "first love"
+      },
+      {
+        "id": 188610,
+        "name": "taipei"
+      },
+      {
+        "id": 208992,
+        "name": "1960s"
+      },
+      {
+        "id": 228988,
+        "name": "slow cinema"
+      },
+      {
+        "id": 242689,
+        "name": "teenage protagonist"
+      },
+      {
+        "id": 324886,
+        "name": "bitter"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1622,
+        "known_for_department": "Acting",
+        "name": "Chang Chen",
+        "original_name": "\u5f35\u9707",
+        "popularity": 1.2222,
+        "profile_path": "/4BOQ5pJXdsArkMHvyVhrV8Ditnr.jpg",
+        "cast_id": 4,
+        "character": "Xiao Si'r",
+        "credit_id": "52fe467f9251416c7507a24f",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 150162,
+        "known_for_department": "Acting",
+        "name": "Lisa Yang",
+        "original_name": "\u694a\u975c\u6021",
+        "popularity": 0.5164,
+        "profile_path": "/ptV4yPHZMsR4Z99qhY2h2a45y1P.jpg",
+        "cast_id": 12,
+        "character": "Ming",
+        "credit_id": "52fe467f9251416c7507a26b",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1088685,
+        "known_for_department": "Acting",
+        "name": "Chang Kuo-Chu",
+        "original_name": "\u5f35\u570b\u67f1",
+        "popularity": 0.6811,
+        "profile_path": "/6hGLo2VE970oi3LMPr9QcmiaDSG.jpg",
+        "cast_id": 37,
+        "character": "Father",
+        "credit_id": "567f7ffd9251414d9800224e",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 103598,
+        "known_for_department": "Acting",
+        "name": "Elaine Jin Yan-Ling",
+        "original_name": "\u91d1\u71d5\u73b2",
+        "popularity": 0.6499,
+        "profile_path": "/eXhTJ8vMsflpvoU4lOWeFTahbVY.jpg",
+        "cast_id": 14,
+        "character": "Mother",
+        "credit_id": "52fe467f9251416c7507a273",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1293234,
+        "known_for_department": "Acting",
+        "name": "Chuan Wang",
+        "original_name": "\u738b\u7404",
+        "popularity": 0.6949,
+        "profile_path": "/yJq73sOtT5NGXGXhqscXcGSfmpA.jpg",
+        "cast_id": 22,
+        "character": "Eldest Sister",
+        "credit_id": "54a4428292514117dd005065",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1089570,
+        "known_for_department": "Acting",
+        "name": "Chang Han",
+        "original_name": "\u5f35\u7ff0",
+        "popularity": 0.4011,
+        "profile_path": "/jroxa0xd9OXRrPBNr9UCap4Nezl.jpg",
+        "cast_id": 18,
+        "character": "Elder Brother",
+        "credit_id": "5445171cc3a3683e0500786a",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1083229,
+        "known_for_department": "Directing",
+        "name": "Chiang Hsiu-Chiung",
+        "original_name": "\u59dc\u79c0\u74ca",
+        "popularity": 0.8354,
+        "profile_path": "/lUrreu3uxTJw7WAlMyKsPTMIlK5.jpg",
+        "cast_id": 21,
+        "character": "Middle Sister",
+        "credit_id": "54944331c3a3686af3001756",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1554172,
+        "known_for_department": "Acting",
+        "name": "Stephanie Lai",
+        "original_name": "Stephanie Lai",
+        "popularity": 0.3706,
+        "profile_path": null,
+        "cast_id": 38,
+        "character": "Youngest Sister",
+        "credit_id": "567f82449251412e5200a01c",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1554174,
+        "known_for_department": "Acting",
+        "name": "Tan Chih-Kang",
+        "original_name": "\u8b5a\u81f3\u525b",
+        "popularity": 0.8919,
+        "profile_path": "/nSJ3uhYlRgF5ZspZEywVgOqht3o.jpg",
+        "cast_id": 40,
+        "character": "Ma",
+        "credit_id": "567f836592514131df009a46",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1554173,
+        "known_for_department": "Acting",
+        "name": "Wang Chi-tsan",
+        "original_name": "Wang Chi-tsan",
+        "popularity": 0.4299,
+        "profile_path": "/uRnRLuAWRjp8Gjb4XTWt3EAXLu.jpg",
+        "cast_id": 39,
+        "character": "Cat",
+        "credit_id": "567f82aac3a36828f50018a7",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 150609,
+        "known_for_department": "Acting",
+        "name": "Lawrence Ko Yu-Luen",
+        "original_name": "\u67ef\u5b87\u7db8",
+        "popularity": 0.5606,
+        "profile_path": "/bFcsOt2onOUDmaUz9SyCNHo8nI.jpg",
+        "cast_id": 19,
+        "character": "Airplane",
+        "credit_id": "547563aac3a368432d001811",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1554175,
+        "known_for_department": "Acting",
+        "name": "Chang Ming-Hsin",
+        "original_name": "Chang Ming-Hsin",
+        "popularity": 0.0801,
+        "profile_path": null,
+        "cast_id": 41,
+        "character": "Underpants",
+        "credit_id": "567f84a1c3a368607500a44f",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1554176,
+        "known_for_department": "Acting",
+        "name": "Jung Chun-Lung",
+        "original_name": "Jung Chun-Lung",
+        "popularity": 0.2381,
+        "profile_path": null,
+        "cast_id": 42,
+        "character": "Bomber",
+        "credit_id": "567f84c992514131df009a77",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2968392,
+        "known_for_department": "Acting",
+        "name": "Hui-Kuo Chou",
+        "original_name": "Hui-Kuo Chou",
+        "popularity": 0.1016,
+        "profile_path": null,
+        "cast_id": 55,
+        "character": "Tiger",
+        "credit_id": "601fcbac0e597b003da1e50e",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1495062,
+        "known_for_department": "Crew",
+        "name": "Chi-Chung Liu",
+        "original_name": "Chi-Chung Liu",
+        "popularity": 0.2585,
+        "profile_path": null,
+        "cast_id": 62,
+        "character": "Hefty",
+        "credit_id": "63730fefed2ac20091f25ebd",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786492,
+        "known_for_department": "Acting",
+        "name": "Ching-Hsiang Ho",
+        "original_name": "Ching-Hsiang Ho",
+        "popularity": 0.166,
+        "profile_path": null,
+        "cast_id": 63,
+        "character": "Animal",
+        "credit_id": "6373102fed2ac200b40c3d66",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786493,
+        "known_for_department": "Acting",
+        "name": "Chang-Ta Tsai",
+        "original_name": "Chang-Ta Tsai",
+        "popularity": 0.0905,
+        "profile_path": null,
+        "cast_id": 64,
+        "character": "Tiger's Buddy",
+        "credit_id": "6373106a5a469000753b120a",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786494,
+        "known_for_department": "Acting",
+        "name": "Tsung-Ming Lee",
+        "original_name": "Tsung-Ming Lee",
+        "popularity": 0.2817,
+        "profile_path": null,
+        "cast_id": 65,
+        "character": "Tiger's Buddy",
+        "credit_id": "6373108a5a469000919e2ae1",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2498804,
+        "known_for_department": "Acting",
+        "name": "Hung-Ming Lin",
+        "original_name": "Hung-Ming Lin",
+        "popularity": 0.3505,
+        "profile_path": null,
+        "cast_id": 52,
+        "character": "Honey",
+        "credit_id": "5e0fb45d58361b0010c0d73d",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2468221,
+        "known_for_department": "Acting",
+        "name": "Wang Bosen",
+        "original_name": "Wang Bosen",
+        "popularity": 0.3533,
+        "profile_path": "/eqhOgjm8YJmJiYrhWJe6hZBlF3O.jpg",
+        "cast_id": 57,
+        "character": "Deuce",
+        "credit_id": "601fcc099979d2003fdffdaa",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2968394,
+        "known_for_department": "Acting",
+        "name": "Hung-Yu Chen",
+        "original_name": "Hung-Yu Chen",
+        "popularity": 0.1923,
+        "profile_path": null,
+        "cast_id": 58,
+        "character": "Sly",
+        "credit_id": "601fcc4a5690b50040200553",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2968393,
+        "known_for_department": "Acting",
+        "name": "Hsiao-Tsui Tang",
+        "original_name": "Hsiao-Tsui Tang",
+        "popularity": 0.2293,
+        "profile_path": null,
+        "cast_id": 56,
+        "character": "Jade",
+        "credit_id": "601fcbec0e597b003fa2054e",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786495,
+        "known_for_department": "Acting",
+        "name": "Ming-Ying Chiang",
+        "original_name": "Ming-Ying Chiang",
+        "popularity": 0.0905,
+        "profile_path": null,
+        "cast_id": 66,
+        "character": "Jade's Girlfriend",
+        "credit_id": "637311126bdec3007a43d917",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786496,
+        "known_for_department": "Acting",
+        "name": "Tien-Hsiang Yang",
+        "original_name": "Tien-Hsiang Yang",
+        "popularity": 0.091,
+        "profile_path": null,
+        "cast_id": 67,
+        "character": "Worm",
+        "credit_id": "6373114221621b00cd63dec4",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786498,
+        "known_for_department": "Acting",
+        "name": "Hsiao-Wei Liao",
+        "original_name": "Hsiao-Wei Liao",
+        "popularity": 0.056,
+        "profile_path": null,
+        "cast_id": 68,
+        "character": "Gang Member",
+        "credit_id": "6373116b5a469000753b128c",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786499,
+        "known_for_department": "Acting",
+        "name": "Cheng-Ching Lin",
+        "original_name": "Cheng-Ching Lin",
+        "popularity": 0.1779,
+        "profile_path": null,
+        "cast_id": 69,
+        "character": "Gang Member",
+        "credit_id": "637311878fdda9009835bea4",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786502,
+        "known_for_department": "Acting",
+        "name": "Ming-Hsun Lee",
+        "original_name": "Ming-Hsun Lee",
+        "popularity": 0.2713,
+        "profile_path": null,
+        "cast_id": 70,
+        "character": "Gang Member",
+        "credit_id": "637311bf798e0600b4d179aa",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1756690,
+        "known_for_department": "Acting",
+        "name": "Tai-song Chen",
+        "original_name": "Tai-song Chen",
+        "popularity": 0.4484,
+        "profile_path": null,
+        "cast_id": 71,
+        "character": "Gang Member",
+        "credit_id": "637311dc798e0600dc37584d",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3786503,
+        "known_for_department": "Acting",
+        "name": "Ming-Che Lee",
+        "original_name": "Ming-Che Lee",
+        "popularity": 0.1801,
+        "profile_path": null,
+        "cast_id": 72,
+        "character": "Gang Member",
+        "credit_id": "6373121bca4f67007adac47b",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 5126250,
+        "known_for_department": "Acting",
+        "name": "Yu-Cheng Lin",
+        "original_name": "Yu-Cheng Lin",
+        "popularity": 0.3016,
+        "profile_path": null,
+        "cast_id": 157,
+        "character": "Gang Member",
+        "credit_id": "67620a6236a474e531ce1d3c",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 143035,
+        "known_for_department": "Directing",
+        "name": "Edward Yang",
+        "original_name": "\u694a\u5fb7\u660c",
+        "popularity": 0.6911,
+        "profile_path": "/mvQ0oSfPgyohdTpr3hETXQy7ilz.jpg",
+        "credit_id": "52fe467f9251416c7507a27d",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1299769,
+        "known_for_department": "Production",
+        "name": "Yu Wei-Yen",
+        "original_name": "Yu Wei-Yen",
+        "popularity": 0.6859,
+        "profile_path": null,
+        "credit_id": "567f7823c3a3684be300c35f",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1554163,
+        "known_for_department": "Production",
+        "name": "Jan Hung-Tze",
+        "original_name": "Jan Hung-Tze",
+        "popularity": 0.3204,
+        "profile_path": null,
+        "credit_id": "567f780f9251417def00c1cd",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: A Brighter Summer Day (1991)\n\nDirector: Edward Yang\n\nProducer: Yu Wei-Yen\n\nExecutive Producer: Jan Hung-Tze\n\nGenres: Crime, Drama, Romance\n\nThemes and Keywords: high school, baseball bat, based on true story, coming of age, taiwan, tragedy, murder, youth gang, gang, juvenile delinquent, teenage boy, troubled teen, first love, taipei, 1960s, slow cinema, teenage protagonist, bitter\n\nTop Cast: Chang Chen, Lisa Yang, Chang Kuo-Chu, Elaine Jin Yan-Ling, Chuan Wang, Chang Han, Chiang Hsiu-Chiung, Stephanie Lai, Tan Chih-Kang, Wang Chi-tsan, Lawrence Ko Yu-Luen, Chang Ming-Hsin, Jung Chun-Lung, Hui-Kuo Chou, Chi-Chung Liu, Ching-Hsiang Ho, Chang-Ta Tsai, Tsung-Ming Lee, Hung-Ming Lin, Wang Bosen, Hung-Yu Chen, Hsiao-Tsui Tang, Ming-Ying Chiang, Tien-Hsiang Yang, Hsiao-Wei Liao, Cheng-Ching Lin, Ming-Hsun Lee, Tai-song Chen, Ming-Che Lee, Yu-Cheng Lin\n\nPlot: A boy experiences first love, friendships and injustices growing up in 1960s Taiwan.\n\n"
+}

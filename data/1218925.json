@@ -1,0 +1,566 @@
+{
+  "adult": false,
+  "backdrop_path": "/kfXgo2rMF1A19celCwLyQ4Xwpf8.jpg",
+  "belongs_to_collection": null,
+  "budget": 4100000,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "homepage": "https://chainsawman.movie",
+  "id": 1218925,
+  "imdb_id": "tt30472557",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u5287\u5834\u7248 \u30c1\u30a7\u30f3\u30bd\u30fc\u30de\u30f3 \u30ec\u30bc\u7bc7",
+  "overview": "In a brutal war between devils, hunters, and secret enemies, a mysterious girl named Reze has stepped into Denji's world, and he faces his deadliest battle yet, fueled by love in a world where survival knows no rules.",
+  "popularity": 24.7688,
+  "poster_path": "/pHyxb2RV5wLlboAwm9ZJ9qTVEDw.jpg",
+  "production_companies": [
+    {
+      "id": 21444,
+      "logo_path": "/wSejGn3lAZdQ5muByxvzigwyDY6.png",
+      "name": "MAPPA",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2025-09-19",
+  "revenue": 174502910,
+  "runtime": 99,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Live your life human\u2026 and live it well.",
+  "title": "Chainsaw Man - The Movie: Reze Arc",
+  "video": false,
+  "vote_average": 8.336,
+  "vote_count": 736,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 802,
+        "name": "regret"
+      },
+      {
+        "id": 1721,
+        "name": "fight"
+      },
+      {
+        "id": 1284,
+        "name": "identity"
+      },
+      {
+        "id": 6152,
+        "name": "supernatural"
+      },
+      {
+        "id": 2803,
+        "name": "affectation"
+      },
+      {
+        "id": 2887,
+        "name": "manipulation"
+      },
+      {
+        "id": 3271,
+        "name": "secret organization"
+      },
+      {
+        "id": 10292,
+        "name": "gore"
+      },
+      {
+        "id": 9663,
+        "name": "sequel"
+      },
+      {
+        "id": 9957,
+        "name": "loneliness"
+      },
+      {
+        "id": 12394,
+        "name": "chainsaw"
+      },
+      {
+        "id": 13141,
+        "name": "based on manga"
+      },
+      {
+        "id": 15001,
+        "name": "demon"
+      },
+      {
+        "id": 161919,
+        "name": "adult animation"
+      },
+      {
+        "id": 186956,
+        "name": "tragic romance"
+      },
+      {
+        "id": 207826,
+        "name": "shounen"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 298549,
+        "name": "urban fantasy"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3651176,
+        "known_for_department": "Acting",
+        "name": "Kikunosuke Toya",
+        "original_name": "\u6238\u8c37\u83ca\u4e4b\u4ecb",
+        "popularity": 0.893,
+        "profile_path": "/tSAHe7tjN7luUD1Tx5yPSCuCnuD.jpg",
+        "cast_id": 2,
+        "character": "Denji (voice)",
+        "credit_id": "657ebff248333a3e85cb03e4",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1452028,
+        "known_for_department": "Acting",
+        "name": "Reina Ueda",
+        "original_name": "\u4e0a\u7530\u9e97\u5948",
+        "popularity": 2.8212,
+        "profile_path": "/cddK6dQtVCg6ToQRpETbRYRJK4G.jpg",
+        "cast_id": 3,
+        "character": "Reze (voice)",
+        "credit_id": "657ec011ea84c7163eb81aa4",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2004086,
+        "known_for_department": "Acting",
+        "name": "Tomori Kusunoki",
+        "original_name": "\u6960\u6728\u3068\u3082\u308a",
+        "popularity": 1.4452,
+        "profile_path": "/t5aBzyYiJZDE6DWeTcGMrcQpiI5.jpg",
+        "cast_id": 6,
+        "character": "Makima (voice)",
+        "credit_id": "657fe0d88dbc33088999685b",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2812912,
+        "known_for_department": "Acting",
+        "name": "Shogo Sakata",
+        "original_name": "\u5742\u7530\u5c06\u543e",
+        "popularity": 1.0917,
+        "profile_path": "/fRRPNBz3OCNRdmLdUTdpq7dGqxM.jpg",
+        "cast_id": 7,
+        "character": "Aki (voice)",
+        "credit_id": "658049d4226c5607fe9e62cf",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1296667,
+        "known_for_department": "Acting",
+        "name": "Maaya Uchida",
+        "original_name": "\u5185\u7530\u771f\u793c",
+        "popularity": 2.8739,
+        "profile_path": "/rq4glg2SZwGyt3TIxR3ElalKmhH.jpg",
+        "cast_id": 31,
+        "character": "Angel Devil (voice)",
+        "credit_id": "6767bb2db67e4547255e4ebf",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1256603,
+        "known_for_department": "Acting",
+        "name": "Natsuki Hanae",
+        "original_name": "\u82b1\u6c5f\u590f\u6a39",
+        "popularity": 2.4286,
+        "profile_path": "/alTb0DlcPIbcwM08WSmxFai58sd.jpg",
+        "cast_id": 29,
+        "character": "Beam (voice)",
+        "credit_id": "6767bb08b67e4547255e4eb4",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1783522,
+        "known_for_department": "Acting",
+        "name": "Karin Takahashi",
+        "original_name": "\u9ad8\u6a4b\u82b1\u6797",
+        "popularity": 0.6064,
+        "profile_path": "/40eynav2SoYcfd0McfiF46Hu16o.jpg",
+        "cast_id": 28,
+        "character": "Kobeni (voice)",
+        "credit_id": "6767bafd87b92a43be5e3e38",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2359492,
+        "known_for_department": "Acting",
+        "name": "Fairouz Ai",
+        "original_name": "\u30d5\u30a1\u30a4\u30eb\u30fc\u30ba\u3042\u3044",
+        "popularity": 1.3504,
+        "profile_path": "/coFu6WOVBZvqd1fw89vbHkiC0zB.jpg",
+        "cast_id": 5,
+        "character": "Power (voice)",
+        "credit_id": "657fe0beac617c087214c109",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1252998,
+        "known_for_department": "Acting",
+        "name": "Yuuya Uchida",
+        "original_name": "\u5185\u7530\u5915\u591c",
+        "popularity": 0.8787,
+        "profile_path": "/4xLLQGEDWtmLWUapo0UnfvCdsXp.jpg",
+        "cast_id": 30,
+        "character": "The Violence Fiend (voice)",
+        "credit_id": "6767bb1c8e9d9ccdeb910da0",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1647448,
+        "known_for_department": "Acting",
+        "name": "Shiori Izawa",
+        "original_name": "\u4e95\u6fa4\u8a69\u7e54",
+        "popularity": 0.9479,
+        "profile_path": "/f9V38OeDvRGevWuKc4dN6LB62TH.jpg",
+        "cast_id": 27,
+        "character": "Pochita (voice)",
+        "credit_id": "6767baeb03a3aa53309119b3",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 135524,
+        "known_for_department": "Acting",
+        "name": "Kenjiro Tsuda",
+        "original_name": "\u6d25\u7530\u5065\u6b21\u90ce",
+        "popularity": 2.0407,
+        "profile_path": "/yBlT8FzQqZYbDcJlnCEayNQHrzS.jpg",
+        "cast_id": 39,
+        "character": "Kishibe (voice)",
+        "credit_id": "68689905a38e6c90e9ed4f6a",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 90135,
+        "known_for_department": "Acting",
+        "name": "Marina Inoue",
+        "original_name": "\u4e95\u4e0a\u9ebb\u91cc\u5948",
+        "popularity": 2.2222,
+        "profile_path": "/nQ7a3krkbea6ukw9KGvvTpMma96.jpg",
+        "cast_id": 108,
+        "character": "Child Denji (voice)",
+        "credit_id": "69376c720d5fa54a36eb1866",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1518605,
+        "known_for_department": "Acting",
+        "name": "Hidenori Takahashi",
+        "original_name": "\u9ad8\u6a4b\u82f1\u5247",
+        "popularity": 0.5257,
+        "profile_path": "/uwtvViVOTBpqjgv90YSls2xoQy7.jpg",
+        "cast_id": 40,
+        "character": "Vice Captain (voice)",
+        "credit_id": "68689913275bb46eee6e78a3",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1071545,
+        "known_for_department": "Acting",
+        "name": "Kenji Akabane",
+        "original_name": "\u8d64\u7fbd\u6839\u5065\u6cbb",
+        "popularity": 0.971,
+        "profile_path": "/sBduxft8NwdbASvtL14bMx86cPq.jpg",
+        "cast_id": 41,
+        "character": "Nomo (voice)",
+        "credit_id": "68689920787b8e0829ed4f71",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 9716,
+        "known_for_department": "Acting",
+        "name": "Kenji Nomura",
+        "original_name": "\u4e43\u6751\u5065\u6b21",
+        "popularity": 1.0976,
+        "profile_path": "/rmTziYxlPje4PiKhPgqMEHu9Axd.jpg",
+        "cast_id": 42,
+        "character": "Mysterious Man (voice)",
+        "credit_id": "6868992c14560498449a35d0",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 225999,
+        "known_for_department": "Acting",
+        "name": "Eri Kitamura",
+        "original_name": "\u559c\u591a\u6751\u82f1\u68a8",
+        "popularity": 1.1307,
+        "profile_path": "/9WWqr734lWfs6YOQikkBBs7Rgo4.jpg",
+        "cast_id": 43,
+        "character": "Typhoon Devil (voice)",
+        "credit_id": "6868993be7e769a787cedb0f",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 550913,
+        "known_for_department": "Acting",
+        "name": "Kenichi Ono",
+        "original_name": "\u5c0f\u91ce\u5065\u4e00",
+        "popularity": 0.8797,
+        "profile_path": "/rCp0kZslK2BJPxjtLrYioHJXFCF.jpg",
+        "cast_id": 109,
+        "character": "Owner of Crossroads (voice)",
+        "credit_id": "69376d6da5ab6d1e46f871e4",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 222340,
+        "known_for_department": "Acting",
+        "name": "Yuhko Kaida",
+        "original_name": "\u7532\u6590\u7530\u88d5\u5b50",
+        "popularity": 1.1914,
+        "profile_path": "/wttsRGyYySLPfNcDtAbNLVizHLx.jpg",
+        "cast_id": 110,
+        "character": "Fox Devil (voice)",
+        "credit_id": "69376d8f3f3a1608be069985",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2019889,
+        "known_for_department": "Acting",
+        "name": "Kento Shiraishi",
+        "original_name": "\u767d\u77f3\u517c\u6597",
+        "popularity": 0.7265,
+        "profile_path": "/kQheInTNjl06xWak4kGQjPGzr4h.jpg",
+        "cast_id": 111,
+        "character": "Kato (voice)",
+        "credit_id": "69376deabc7274a954aefc90",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1696913,
+        "known_for_department": "Acting",
+        "name": "Taro Kiuchi",
+        "original_name": "\u6728\u5185\u592a\u90ce",
+        "popularity": 0.4593,
+        "profile_path": "/wzLSYTwQGIXdfaSeXtDZ7FfMBFt.jpg",
+        "cast_id": 112,
+        "character": "Tanabe (voice)",
+        "credit_id": "69376df645961850b47fc33a",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3099792,
+        "known_for_department": "Acting",
+        "name": "Akihiro Mine",
+        "original_name": "\u5cf0\u6643\u5f18",
+        "popularity": 0.5909,
+        "profile_path": "/sC2ZAcINt14YqWLhHMLN71GL0Qg.jpg",
+        "cast_id": 113,
+        "character": "Masaki Ando (voice)",
+        "credit_id": "69376e0b1863489cb206994f",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2947518,
+        "known_for_department": "Acting",
+        "name": "Misano Sakai",
+        "original_name": "\u9152\u4e95\u7f8e\u6c99\u4e43",
+        "popularity": 0.2479,
+        "profile_path": "/7Uhp1kL5eB1NrAswvK82YBTMGUE.jpg",
+        "cast_id": 114,
+        "character": "(voice)",
+        "credit_id": "69376e47c5c15ddbab7fc401",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 5865736,
+        "known_for_department": "Acting",
+        "name": "Hikari Aomi",
+        "original_name": "\u78a7\u6d77\u5149",
+        "popularity": 0.0364,
+        "profile_path": "/gipPfIa3pZ9n4fERT0gHHgEeNso.jpg",
+        "cast_id": 115,
+        "character": "(voice)",
+        "credit_id": "69376e72448dbe00d0eb1819",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1479582,
+        "known_for_department": "Acting",
+        "name": "Hayato Kimura",
+        "original_name": "\u6728\u6751\u96bc\u4eba",
+        "popularity": 0.4326,
+        "profile_path": "/zUsWnIq72NBk71XZCvU5NtZwKlQ.jpg",
+        "cast_id": 116,
+        "character": "(voice)",
+        "credit_id": "69376ea4bcbc6a478b638073",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4504162,
+        "known_for_department": "Acting",
+        "name": "Takeo Motoi",
+        "original_name": "\u5143\u4e95\u5065\u96c4",
+        "popularity": 0.2749,
+        "profile_path": "/f2V1FtSfxlWIJV7FcQQijrLcOKH.jpg",
+        "cast_id": 117,
+        "character": "(voice)",
+        "credit_id": "69376ea9e34b83875b6380ba",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2747380,
+        "known_for_department": "Acting",
+        "name": "Ryo Nishitani",
+        "original_name": "\u897f\u8c37\u4eae",
+        "popularity": 0.3507,
+        "profile_path": "/uof8C892Lm3sKty12f1s5trrXsR.jpg",
+        "cast_id": 118,
+        "character": "(voice)",
+        "credit_id": "69376eae9ca7f2007ff87169",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2784782,
+        "known_for_department": "Acting",
+        "name": "Takahiro Sumi",
+        "original_name": "\u9df2\u898b\u6602\u5927",
+        "popularity": 0.273,
+        "profile_path": "/iHjM0MjIjbWOGG4YK1TqlB9H9yI.jpg",
+        "cast_id": 119,
+        "character": "(voice)",
+        "credit_id": "69376eb2fc555ffe0ef7cb4f",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1321071,
+        "known_for_department": "Acting",
+        "name": "Chihiro Ikki",
+        "original_name": "\u4e00\u6728\u5343\u6d0b",
+        "popularity": 0.7081,
+        "profile_path": "/pnCnDFiQB51ECymVXYsz1gaLhAz.jpg",
+        "cast_id": 120,
+        "character": "(voice)",
+        "credit_id": "69376ebcea49e1be0b3ce582",
+        "order": 27
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1286723,
+        "known_for_department": "Directing",
+        "name": "Tatsuya Yoshihara",
+        "original_name": "\u5409\u539f\u9054\u77e2",
+        "popularity": 0.6415,
+        "profile_path": null,
+        "credit_id": "676797d841db2b4b9c74a61a",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4717610,
+        "known_for_department": "Production",
+        "name": "Yusuke Nakai",
+        "original_name": "\u4e2d\u4e95\u53cb\u4f51",
+        "popularity": 0.4096,
+        "profile_path": null,
+        "credit_id": "6970cffeab813c1db726f1da",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Chainsaw Man - The Movie: Reze Arc (2025)\n\nDirector: Tatsuya Yoshihara\n\nProducer: Yusuke Nakai\n\nGenres: Animation, Action, Romance, Fantasy\n\nThemes and Keywords: regret, fight, identity, supernatural, affectation, manipulation, secret organization, gore, sequel, loneliness, chainsaw, based on manga, demon, adult animation, tragic romance, shounen, anime, urban fantasy\n\nTop Cast: Kikunosuke Toya, Reina Ueda, Tomori Kusunoki, Shogo Sakata, Maaya Uchida, Natsuki Hanae, Karin Takahashi, Fairouz Ai, Yuuya Uchida, Shiori Izawa, Kenjiro Tsuda, Marina Inoue, Hidenori Takahashi, Kenji Akabane, Kenji Nomura, Eri Kitamura, Kenichi Ono, Yuhko Kaida, Kento Shiraishi, Taro Kiuchi, Akihiro Mine, Misano Sakai, Hikari Aomi, Hayato Kimura, Takeo Motoi, Ryo Nishitani, Takahiro Sumi, Chihiro Ikki\n\nPlot: In a brutal war between devils, hunters, and secret enemies, a mysterious girl named Reze has stepped into Denji's world, and he faces his deadliest battle yet, fueled by love in a world where survival knows no rules.\n\n"
+}

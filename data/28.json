@@ -1,0 +1,637 @@
+{
+  "adult": false,
+  "backdrop_path": "/eN5G8vTWLnZxJ0LTd4g27oPObcZ.jpg",
+  "belongs_to_collection": null,
+  "budget": 31500000,
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "homepage": "http://www.apocalypsenow.com",
+  "id": 28,
+  "imdb_id": "tt0078788",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Apocalypse Now",
+  "overview": "At the height of the Vietnam war, Captain Benjamin Willard is sent on a dangerous mission that, officially, \"does not exist, nor will it ever exist.\" His goal is to locate - and eliminate - a mysterious Green Beret Colonel named Walter Kurtz, who has been leading his personal army on illegal guerrilla missions into enemy territory.",
+  "popularity": 12.6949,
+  "poster_path": "/gQB8Y5RCMkv2zwzFHbUJX3kAhvA.jpg",
+  "production_companies": [
+    {
+      "id": 70,
+      "logo_path": "/ueaENQkPcy8rlr5fGZVBXKOhlBh.png",
+      "name": "American Zoetrope",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1979-05-19",
+  "revenue": 150000000,
+  "runtime": 147,
+  "spoken_languages": [
+    {
+      "english_name": "Khmer",
+      "iso_639_1": "km",
+      "name": ""
+    },
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "French",
+      "iso_639_1": "fr",
+      "name": "Fran\u00e7ais"
+    },
+    {
+      "english_name": "Vietnamese",
+      "iso_639_1": "vi",
+      "name": "Ti\u1ebfng Vi\u1ec7t"
+    }
+  ],
+  "status": "Released",
+  "tagline": "This is the end...",
+  "title": "Apocalypse Now",
+  "video": false,
+  "vote_average": 8.266,
+  "vote_count": 8908,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 1008,
+        "name": "guerrilla warfare"
+      },
+      {
+        "id": 2957,
+        "name": "vietnam war"
+      },
+      {
+        "id": 736,
+        "name": "journalist"
+      },
+      {
+        "id": 10364,
+        "name": "mission"
+      },
+      {
+        "id": 2956,
+        "name": "vietnam"
+      },
+      {
+        "id": 2959,
+        "name": "vietcong"
+      },
+      {
+        "id": 591,
+        "name": "central intelligence agency (cia)"
+      },
+      {
+        "id": 2960,
+        "name": "cambodia"
+      },
+      {
+        "id": 6092,
+        "name": "army"
+      },
+      {
+        "id": 726,
+        "name": "drug abuse"
+      },
+      {
+        "id": 818,
+        "name": "based on novel or book"
+      },
+      {
+        "id": 3269,
+        "name": "secret mission"
+      },
+      {
+        "id": 6255,
+        "name": "insanity"
+      },
+      {
+        "id": 9887,
+        "name": "surrealism"
+      },
+      {
+        "id": 10148,
+        "name": "tribe"
+      },
+      {
+        "id": 10403,
+        "name": "green beret"
+      },
+      {
+        "id": 10787,
+        "name": "jungle"
+      },
+      {
+        "id": 11323,
+        "name": "descent into madness"
+      },
+      {
+        "id": 14707,
+        "name": "brutality"
+      },
+      {
+        "id": 158244,
+        "name": "riverboat"
+      },
+      {
+        "id": 162365,
+        "name": "military"
+      },
+      {
+        "id": 162810,
+        "name": "macabre"
+      },
+      {
+        "id": 165431,
+        "name": "anti war"
+      },
+      {
+        "id": 309974,
+        "name": "absurd"
+      },
+      {
+        "id": 325775,
+        "name": "awestruck"
+      },
+      {
+        "id": 325785,
+        "name": "commanding"
+      },
+      {
+        "id": 325801,
+        "name": "distressing"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8349,
+        "known_for_department": "Acting",
+        "name": "Martin Sheen",
+        "original_name": "Martin Sheen",
+        "popularity": 2.0143,
+        "profile_path": "/m2Y3Q0uyuW6htrn2W9UWCWMkpZu.jpg",
+        "cast_id": 29,
+        "character": "Captain Benjamin Willard",
+        "credit_id": "52fe4210c3a36847f800135b",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3084,
+        "known_for_department": "Acting",
+        "name": "Marlon Brando",
+        "original_name": "Marlon Brando",
+        "popularity": 2.1979,
+        "profile_path": "/iyO183LVAJ0I4ZkNibINPjfAjCP.jpg",
+        "cast_id": 30,
+        "character": "Colonel Walter Kurtz",
+        "credit_id": "52fe4210c3a36847f800135f",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8351,
+        "known_for_department": "Acting",
+        "name": "Frederic Forrest",
+        "original_name": "Frederic Forrest",
+        "popularity": 0.8076,
+        "profile_path": "/gxHgIe9swYgCcxSSCewQTF4J4VO.jpg",
+        "cast_id": 34,
+        "character": "Jay 'Chef' Hicks",
+        "credit_id": "52fe4210c3a36847f800136f",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8354,
+        "known_for_department": "Acting",
+        "name": "Albert Hall",
+        "original_name": "Albert Hall",
+        "popularity": 1.1477,
+        "profile_path": "/jvcOpEO0vSNy3KaDkhIldI1CoaU.jpg",
+        "cast_id": 35,
+        "character": "Chief Phillips",
+        "credit_id": "52fe4210c3a36847f8001373",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2975,
+        "known_for_department": "Acting",
+        "name": "Laurence Fishburne",
+        "original_name": "Laurence Fishburne",
+        "popularity": 2.8977,
+        "profile_path": "/2GbXERENPpl5MmlqOLlPVaVtifD.jpg",
+        "cast_id": 32,
+        "character": "Tyrone 'Clean' Miller",
+        "credit_id": "52fe4210c3a36847f8001367",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8350,
+        "known_for_department": "Acting",
+        "name": "Sam Bottoms",
+        "original_name": "Sam Bottoms",
+        "popularity": 1.264,
+        "profile_path": "/82ACmkTCHtKAuw42Jwx4JbjuVw0.jpg",
+        "cast_id": 33,
+        "character": "Lance B. Johnson",
+        "credit_id": "52fe4210c3a36847f800136b",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3087,
+        "known_for_department": "Acting",
+        "name": "Robert Duvall",
+        "original_name": "Robert Duvall",
+        "popularity": 5.1639,
+        "profile_path": "/3tcKxC5Sc3DJ6XPDKKC2EAomEWn.jpg",
+        "cast_id": 31,
+        "character": "Lieutenant Colonel Bill Kilgore",
+        "credit_id": "52fe4210c3a36847f8001363",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3173,
+        "known_for_department": "Acting",
+        "name": "G.D. Spradlin",
+        "original_name": "G.D. Spradlin",
+        "popularity": 0.919,
+        "profile_path": "/pWNa9H3ABB3Ug9CwTfVNtHsCFjV.jpg",
+        "cast_id": 39,
+        "character": "General Corman",
+        "credit_id": "52fe4210c3a36847f800137f",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3,
+        "known_for_department": "Acting",
+        "name": "Harrison Ford",
+        "original_name": "Harrison Ford",
+        "popularity": 7.3588,
+        "profile_path": "/zVnHagUvXkR2StdOtquEwsiwSVt.jpg",
+        "cast_id": 36,
+        "character": "Colonel",
+        "credit_id": "52fe4210c3a36847f8001377",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8346,
+        "known_for_department": "Directing",
+        "name": "Jerry Ziesmer",
+        "original_name": "Jerry Ziesmer",
+        "popularity": 1.0732,
+        "profile_path": null,
+        "cast_id": 40,
+        "character": "Jerry, Civilian",
+        "credit_id": "52fe4210c3a36847f8001383",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 349,
+        "known_for_department": "Acting",
+        "name": "Scott Glenn",
+        "original_name": "Scott Glenn",
+        "popularity": 1.6897,
+        "profile_path": "/keBKcMPojtRTi5ImLXOoKDmDbqU.jpg",
+        "cast_id": 44,
+        "character": "Lieutenant Richard M. Colby",
+        "credit_id": "52fe4210c3a36847f8001395",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1402117,
+        "known_for_department": "Crew",
+        "name": "Kerry Rossall",
+        "original_name": "Kerry Rossall",
+        "popularity": 0.3774,
+        "profile_path": null,
+        "cast_id": 48,
+        "character": "Mike from San Diego",
+        "credit_id": "570d2411c3a368508c0004da",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1739,
+        "known_for_department": "Acting",
+        "name": "James Keane",
+        "original_name": "James Keane",
+        "popularity": 0.5417,
+        "profile_path": "/qGOuDCsYQ6IVfUr2P5K2pV6v9Ij.jpg",
+        "cast_id": 47,
+        "character": "Kilgore's Gunner",
+        "credit_id": "570d23e3c3a36850810003d5",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 80874,
+        "known_for_department": "Acting",
+        "name": "Tom Mason",
+        "original_name": "Tom Mason",
+        "popularity": 0.5541,
+        "profile_path": "/ljxKA8lNf3HtMzDopBy2w7Zj0CM.jpg",
+        "cast_id": 43,
+        "character": "Supply Sergeant",
+        "credit_id": "52fe4210c3a36847f8001391",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 550106,
+        "known_for_department": "Acting",
+        "name": "Cynthia Wood",
+        "original_name": "Cynthia Wood",
+        "popularity": 0.6056,
+        "profile_path": "/fXPJT1M0M4cAI0PH33de3XZi3es.jpg",
+        "cast_id": 50,
+        "character": "Playmate of the Year",
+        "credit_id": "570d2470c3a3687e00000002",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2778,
+        "known_for_department": "Acting",
+        "name": "Dennis Hopper",
+        "original_name": "Dennis Hopper",
+        "popularity": 2.2914,
+        "profile_path": "/8qgrHITunVA5RXiaUPI0NFNIZeK.jpg",
+        "cast_id": 38,
+        "character": "Photojournalist",
+        "credit_id": "52fe4210c3a36847f800137b",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 13023,
+        "known_for_department": "Acting",
+        "name": "Colleen Camp",
+        "original_name": "Colleen Camp",
+        "popularity": 2.0307,
+        "profile_path": "/hNAIkUVtsQfpC95BDkXr1lmoI2F.jpg",
+        "cast_id": 46,
+        "character": "Miss May",
+        "credit_id": "52fe4211c3a36847f800139f",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1664821,
+        "known_for_department": "Acting",
+        "name": "Linda Carpenter",
+        "original_name": "Linda Carpenter",
+        "popularity": 0.2675,
+        "profile_path": null,
+        "cast_id": 86,
+        "character": "Playmate",
+        "credit_id": "57accb1ec3a3681f2e001317",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 9893,
+        "known_for_department": "Acting",
+        "name": "Aurore Cl\u00e9ment",
+        "original_name": "Aurore Cl\u00e9ment",
+        "popularity": 0.9158,
+        "profile_path": "/9vZxPV8LvY1wp32AIm35CZ7WelG.jpg",
+        "cast_id": 110,
+        "character": "Roxanne Sarrault",
+        "credit_id": "5f6e4a71a6e2d2003a769f07",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14320,
+        "known_for_department": "Acting",
+        "name": "Jack Thibeau",
+        "original_name": "Jack Thibeau",
+        "popularity": 0.7456,
+        "profile_path": "/cKJ2ck7NfxY7KXS9jZInnluKMig.jpg",
+        "cast_id": 51,
+        "character": "Soldier in Trench",
+        "credit_id": "570d24a0c3a3687e1100000a",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1532851,
+        "known_for_department": "Acting",
+        "name": "Glenn Walken",
+        "original_name": "Glenn Walken",
+        "popularity": 0.7396,
+        "profile_path": null,
+        "cast_id": 52,
+        "character": "Lieutenant Carlsen",
+        "credit_id": "570d24bfc3a3687e0600000d",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 159948,
+        "known_for_department": "Acting",
+        "name": "Damien Leake",
+        "original_name": "Damien Leake",
+        "popularity": 0.3784,
+        "profile_path": "/7E0kD9z3lSXnAxNIC4ijnsAUsgf.jpg",
+        "cast_id": 53,
+        "character": "Machine Gunner",
+        "credit_id": "570d24fc9251413982000015",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 103853,
+        "known_for_department": "Acting",
+        "name": "Marc Coppola",
+        "original_name": "Marc Coppola",
+        "popularity": 0.452,
+        "profile_path": "/9wT4CU3lwKtXwbzlqtgIyRP2i7V.jpg",
+        "cast_id": 54,
+        "character": "AFRS Announcer",
+        "credit_id": "570d2560c3a3687e02000020",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 65553,
+        "known_for_department": "Acting",
+        "name": "Bill Graham",
+        "original_name": "Bill Graham",
+        "popularity": 0.9026,
+        "profile_path": null,
+        "cast_id": 55,
+        "character": "Agent",
+        "credit_id": "570d258ec3a3687dfc000023",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2342448,
+        "known_for_department": "Acting",
+        "name": "Herb Rice",
+        "original_name": "Herb Rice",
+        "popularity": 0.5631,
+        "profile_path": null,
+        "cast_id": 108,
+        "character": "Roach",
+        "credit_id": "5eefc8c4283ed900368d25ee",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1391387,
+        "known_for_department": "Sound",
+        "name": "Jerry Ross",
+        "original_name": "Jerry Ross",
+        "popularity": 0.7926,
+        "profile_path": null,
+        "cast_id": 56,
+        "character": "Johnny from Malibu / Mike from San Diego",
+        "credit_id": "570d2618925141398400003a",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 43524,
+        "known_for_department": "Acting",
+        "name": "Charles Robinson",
+        "original_name": "Charles Robinson",
+        "popularity": 0.671,
+        "profile_path": "/zEy4ZnzuhhyueT5bef1jzQUFW7.jpg",
+        "cast_id": 65,
+        "character": "Soldier with Colby (uncredited)",
+        "credit_id": "570d280e9251413991000066",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 107323,
+        "known_for_department": "Acting",
+        "name": "Nick Nicholson",
+        "original_name": "Nick Nicholson",
+        "popularity": 0.3967,
+        "profile_path": null,
+        "cast_id": 64,
+        "character": "Soldier (uncredited)",
+        "credit_id": "570d27dbc3a3687dfa000088",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1073850,
+        "known_for_department": "Acting",
+        "name": "Don Gordon Bell",
+        "original_name": "Don Gordon Bell",
+        "popularity": 0.6487,
+        "profile_path": "/jAvxYXAce0uKECsyT3f0mT8TNlC.jpg",
+        "cast_id": 62,
+        "character": "Soldier (uncredited)",
+        "credit_id": "570d2796c3a3687dfc000086",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 8655,
+        "known_for_department": "Acting",
+        "name": "R. Lee Ermey",
+        "original_name": "R. Lee Ermey",
+        "popularity": 1.4527,
+        "profile_path": "/aXFJlEGHlQT7bwxkKwq6Sx7PeEp.jpg",
+        "cast_id": 66,
+        "character": "Eagle Thrust Seven Helicopter Pilot (uncredited)",
+        "credit_id": "570d28449251413993000099",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1776,
+        "known_for_department": "Directing",
+        "name": "Francis Ford Coppola",
+        "original_name": "Francis Ford Coppola",
+        "popularity": 2.0087,
+        "profile_path": "/IwGgkmW6IoJ9vuNF0T9CU3FYUX.jpg",
+        "credit_id": "52fe4210c3a36847f80012d9",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1776,
+        "known_for_department": "Directing",
+        "name": "Francis Ford Coppola",
+        "original_name": "Francis Ford Coppola",
+        "popularity": 2.0087,
+        "profile_path": "/IwGgkmW6IoJ9vuNF0T9CU3FYUX.jpg",
+        "credit_id": "52fe4210c3a36847f80012c7",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: Apocalypse Now (1979)\n\nProducer: Francis Ford Coppola\n\nDirector: Francis Ford Coppola\n\nGenres: Drama, War\n\nThemes and Keywords: guerrilla warfare, vietnam war, journalist, mission, vietnam, vietcong, central intelligence agency (cia), cambodia, army, drug abuse, based on novel or book, secret mission, insanity, surrealism, tribe, green beret, jungle, descent into madness, brutality, riverboat, military, macabre, anti war, absurd, awestruck, commanding, distressing\n\nTop Cast: Martin Sheen, Marlon Brando, Frederic Forrest, Albert Hall, Laurence Fishburne, Sam Bottoms, Robert Duvall, G.D. Spradlin, Harrison Ford, Jerry Ziesmer, Scott Glenn, Kerry Rossall, James Keane, Tom Mason, Cynthia Wood, Dennis Hopper, Colleen Camp, Linda Carpenter, Aurore Cl\u00e9ment, Jack Thibeau, Glenn Walken, Damien Leake, Marc Coppola, Bill Graham, Herb Rice, Jerry Ross, Charles Robinson, Nick Nicholson, Don Gordon Bell, R. Lee Ermey\n\nPlot: At the height of the Vietnam war, Captain Benjamin Willard is sent on a dangerous mission that, officially, \"does not exist, nor will it ever exist.\" His goal is to locate - and eliminate - a mysterious Green Beret Colonel named Walter Kurtz, who has been leading his personal army on illegal guerrilla missions into enemy territory.\n\n"
+}

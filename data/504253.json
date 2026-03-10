@@ -1,0 +1,545 @@
+{
+  "adult": false,
+  "backdrop_path": "/YLyORLsYIjC0d1TFBSpJKk7piP.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "homepage": "https://kimisui-anime.com/",
+  "id": 504253,
+  "imdb_id": "tt7236034",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u541b\u306e\u81b5\u81d3\u3092\u305f\u3079\u305f\u3044",
+  "overview": "After his classmate and crush is diagnosed with a pancreatic disease, an average high schooler sets out to make the most of her final days.",
+  "popularity": 4.6098,
+  "poster_path": "/qDWA7fB4cZ4sBP6YgwlxvraDHi7.jpg",
+  "production_companies": [
+    {
+      "id": 86839,
+      "logo_path": "/cnOJAkVVmKZLIzmgw4fRRZ2dctT.png",
+      "name": "ABC Animation",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2883,
+      "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+      "name": "Aniplex",
+      "origin_country": "JP"
+    },
+    {
+      "id": 8157,
+      "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+      "name": "jeki",
+      "origin_country": "JP"
+    },
+    {
+      "id": 62866,
+      "logo_path": "/uYawQ0Lb8smRXNNCoq8gTHG92Pz.png",
+      "name": "Futabasha",
+      "origin_country": "JP"
+    },
+    {
+      "id": 56933,
+      "logo_path": "/ogbbk2xvszgQwkf4msNbH5lhsM9.png",
+      "name": "Studio VOLN",
+      "origin_country": "JP"
+    },
+    {
+      "id": 145105,
+      "logo_path": "/oFUDvCLCRmAXlGqjmwO8CN33ygl.png",
+      "name": "Tohan",
+      "origin_country": "JP"
+    },
+    {
+      "id": 3031,
+      "logo_path": "/2JcgVKZ1gEY5RsLJU1CGj1MaKFj.png",
+      "name": "The Asahi Shimbun",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2018-09-01",
+  "revenue": 33748006,
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "This is a story about an unforgettable spring...",
+  "title": "I Want to Eat Your Pancreas",
+  "video": false,
+  "vote_average": 8.23,
+  "vote_count": 1726,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 3737,
+        "name": "dying and death"
+      },
+      {
+        "id": 2913,
+        "name": "diary"
+      },
+      {
+        "id": 6564,
+        "name": "terminal illness"
+      },
+      {
+        "id": 10614,
+        "name": "tragedy"
+      },
+      {
+        "id": 11612,
+        "name": "hospital"
+      },
+      {
+        "id": 33910,
+        "name": "high school student"
+      },
+      {
+        "id": 200234,
+        "name": "shocking"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 215787,
+        "name": "bucket list"
+      },
+      {
+        "id": 235790,
+        "name": "japanese high school"
+      },
+      {
+        "id": 318933,
+        "name": "based on web novel"
+      },
+      {
+        "id": 324429,
+        "name": "romantic"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1318732,
+        "known_for_department": "Acting",
+        "name": "Mahiro Takasugi",
+        "original_name": "\u9ad8\u6749\u771f\u5b99",
+        "popularity": 1.5064,
+        "profile_path": "/gP5lShrAl4ovliqAqJQTgrTeEwz.jpg",
+        "cast_id": 2,
+        "character": "Haruki Shiga (voice)",
+        "credit_id": "5b2bfbcc0e0a26084e009c40",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1691384,
+        "known_for_department": "Acting",
+        "name": "Lynn",
+        "original_name": "Lynn",
+        "popularity": 1.0437,
+        "profile_path": "/eJ2NqgzpnzNbT6Nt9EpDfzqNeZM.jpg",
+        "cast_id": 1,
+        "character": "Sakura Yamauchi (voice)",
+        "credit_id": "5b2bfbb50e0a26086000a1ee",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1287794,
+        "known_for_department": "Acting",
+        "name": "Yukiyo Fujii",
+        "original_name": "\u85e4\u4e95\u3086\u304d\u3088",
+        "popularity": 1.1327,
+        "profile_path": "/tLG4K1iix3QNHFexf98mrZ25jT6.jpg",
+        "cast_id": 3,
+        "character": "Kyoko Takimoto (voice)",
+        "credit_id": "5b2bfbdec3a3687d2000c0a8",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1492992,
+        "known_for_department": "Acting",
+        "name": "Yuma Uchida",
+        "original_name": "\u5185\u7530\u96c4\u99ac",
+        "popularity": 1.9735,
+        "profile_path": "/2otstbLfQ7MXuFt1X8MFOb4OIgd.jpg",
+        "cast_id": 4,
+        "character": "Takahiro (voice)",
+        "credit_id": "5b2bfbf192514164d5007045",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 115301,
+        "known_for_department": "Acting",
+        "name": "Jun Fukushima",
+        "original_name": "\u798f\u5cf6\u6f64",
+        "popularity": 0.8783,
+        "profile_path": "/xo2A4cr8TnhC9rLFxSQvhwCbIOw.jpg",
+        "cast_id": 6,
+        "character": "Issei Miyata (voice)",
+        "credit_id": "5b2bfc1d0e0a26085a009737",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 34923,
+        "known_for_department": "Acting",
+        "name": "Atsuko Tanaka",
+        "original_name": "\u7530\u4e2d\u6566\u5b50",
+        "popularity": 2.3511,
+        "profile_path": "/pacuup8TMK9SFsSJOY8jlbyzkFt.jpg",
+        "cast_id": 5,
+        "character": "Haruki's Mother (voice)",
+        "credit_id": "5b2bfc0b0e0a26085a009725",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 62318,
+        "known_for_department": "Acting",
+        "name": "Shin-ichiro Miki",
+        "original_name": "\u4e09\u6728\u771e\u4e00\u90ce",
+        "popularity": 2.3899,
+        "profile_path": "/yL9Tx2HZgK7t5AssYl6oGE9bjdj.jpg",
+        "cast_id": 7,
+        "character": "Haruki's Father (voice)",
+        "credit_id": "5b2bfc2e92514164fc009d06",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 237304,
+        "known_for_department": "Acting",
+        "name": "Emi Wakui",
+        "original_name": "\u548c\u4e45\u4e95\u6620\u898b",
+        "popularity": 0.6651,
+        "profile_path": "/p6yRJ4ZgdEjA0rvVsk1uvzae36E.jpg",
+        "cast_id": 15,
+        "character": "Sakura's Mother (voice)",
+        "credit_id": "5c9984ec9251416b0cf59da6",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2409932,
+        "known_for_department": "Acting",
+        "name": "Nanami Atsugi",
+        "original_name": "\u539a\u6728\u90a3\u5948\u7f8e",
+        "popularity": 0.6482,
+        "profile_path": "/xueVOu33hWyl3BWZOLYEHinCuHd.jpg",
+        "cast_id": 205,
+        "character": "Hospital Announcement (voice)",
+        "credit_id": "648eb489c3c891014ebe078a",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2864076,
+        "known_for_department": "Acting",
+        "name": "Kazuya Saji",
+        "original_name": "\u4f50\u6cbb\u548c\u4e5f",
+        "popularity": 0.3629,
+        "profile_path": "/8etIlbu9mBZPyYsUX7zKMRy1eBC.jpg",
+        "cast_id": 206,
+        "character": "Father of the Boy and Girl (voice)",
+        "credit_id": "648eb49342bf0100c7fbc020",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2420906,
+        "known_for_department": "Acting",
+        "name": "Narumi Kaho",
+        "original_name": "\u4f73\u7a42\u6210\u7f8e",
+        "popularity": 0.4176,
+        "profile_path": "/9QKQnv8C9usNDeg3z1B9j7qwJxX.jpg",
+        "cast_id": 207,
+        "character": "Boy (voice)",
+        "credit_id": "648eb49b559d2200e2069068",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1971815,
+        "known_for_department": "Acting",
+        "name": "Nene Hieda",
+        "original_name": "\u7a17\u7530\u5be7\u3005",
+        "popularity": 0.8326,
+        "profile_path": "/kg2cNTQ83bDadVBPJSrY2quRQpT.jpg",
+        "cast_id": 208,
+        "character": "Girl (voice)",
+        "credit_id": "648eb4a7c2ff3d00c59a4f62",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4118196,
+        "known_for_department": "Acting",
+        "name": "Tomoe Tanii",
+        "original_name": "\u8c37\u4e95\u667a\u6c5f",
+        "popularity": 0.339,
+        "profile_path": null,
+        "cast_id": 209,
+        "character": "Classmate (voice)",
+        "credit_id": "648eb4f026346200ca1a738a",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2381002,
+        "known_for_department": "Acting",
+        "name": "Reiou Tsuchida",
+        "original_name": "\u571f\u7530\u73b2\u592e",
+        "popularity": 0.6273,
+        "profile_path": "/9GZBqBZp8s1Ini3UadvI2z5anqE.jpg",
+        "cast_id": 210,
+        "character": "Delinquent 1 (voice)",
+        "credit_id": "648eb56642bf0100ae31bace",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1479582,
+        "known_for_department": "Acting",
+        "name": "Hayato Kimura",
+        "original_name": "\u6728\u6751\u96bc\u4eba",
+        "popularity": 0.4326,
+        "profile_path": "/zUsWnIq72NBk71XZCvU5NtZwKlQ.jpg",
+        "cast_id": 211,
+        "character": "Delinquent 2 (voice)",
+        "credit_id": "648eb572263462014e584214",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3054961,
+        "known_for_department": "Acting",
+        "name": "Anju Nitta",
+        "original_name": "\u65b0\u7530\u674f\u6a39",
+        "popularity": 0.5219,
+        "profile_path": "/yA1GvKCLE9w1CxojcfHgeMtmhbN.jpg",
+        "cast_id": 212,
+        "character": "Man from the Dried Food Store (voice)",
+        "credit_id": "648eb5912f8d09011d2453d9",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1566512,
+        "known_for_department": "Acting",
+        "name": "Emiko Takeuchi",
+        "original_name": "\u7af9\u5185\u6075\u7f8e\u5b50",
+        "popularity": 0.4713,
+        "profile_path": "/gZAtnuuHvQOltimOP3jPo5PKjb1.jpg",
+        "cast_id": 213,
+        "character": "Old Lady (voice)",
+        "credit_id": "648eb59ec2ff3d00ffbbbfd1",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1846471,
+        "known_for_department": "Acting",
+        "name": "Takaaki Uchino",
+        "original_name": "\u5185\u91ce\u5b5d\u8061",
+        "popularity": 0.3506,
+        "profile_path": "/2ll2XvDfM3NbiBQaF9Uh4SVAq9j.jpg",
+        "cast_id": 214,
+        "character": "Shopkeeper (voice)",
+        "credit_id": "648eb5a92f8d090100aa8421",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4118201,
+        "known_for_department": "Sound",
+        "name": "Kenta Kataoka",
+        "original_name": "\u7247\u5ca1\u5065\u592a",
+        "popularity": 0.6672,
+        "profile_path": "/qNbD0EAEChmmyHYaHrlShTx3ZSq.jpg",
+        "cast_id": 215,
+        "character": "Police Officer 1 (voice)",
+        "credit_id": "648eb5fcc3c89100eb32fdbb",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4118202,
+        "known_for_department": "Sound",
+        "name": "Tomoyuki Arai",
+        "original_name": "\u8352\u4e95\u667a\u4e4b",
+        "popularity": 0.5178,
+        "profile_path": "/91HUd7ydCTYXtxYyPHLKbQoDM29.jpg",
+        "cast_id": 216,
+        "character": "Police Officer 2 (voice)",
+        "credit_id": "648eb76cc3c89100eb32feac",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3008825,
+        "known_for_department": "Sound",
+        "name": "Takayuki Ogawa",
+        "original_name": "\u5c0f\u5ddd\u8cb4\u4e4b",
+        "popularity": 0.4796,
+        "profile_path": "/gEUiaygEO4T4LRnu51UHO1Ir4ln.jpg",
+        "cast_id": 255,
+        "character": "Office Worker (voice)",
+        "credit_id": "66952cc325235fd5835f6b37",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3220381,
+        "known_for_department": "Sound",
+        "name": "Junnosuke Kuroda",
+        "original_name": "\u9ed2\u7530\u96bc\u4e4b\u4ecb",
+        "popularity": 0.1272,
+        "profile_path": "/kgZRsfXOKT4OZi1nKOWxvSQlkNi.jpg",
+        "cast_id": 217,
+        "character": "Old Man from the Fish Shop (voice)",
+        "credit_id": "648ecbe542bf0100c7fbcf96",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2539429,
+        "known_for_department": "Acting",
+        "name": "Yurina Amami",
+        "original_name": "\u5929\u6d77\u7531\u68a8\u5948",
+        "popularity": 0.6118,
+        "profile_path": "/peSPIgRkaiowkDTNfw7GpbW2J5Z.jpg",
+        "cast_id": 220,
+        "character": "TV Anchor (voice)",
+        "credit_id": "648ed637263462014e5858ac",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2976849,
+        "known_for_department": "Acting",
+        "name": "Momoko Notomi",
+        "original_name": "\u7d0d\u5bcc\u3082\u3082\u3053",
+        "popularity": 0.5341,
+        "profile_path": "/hziyIhBcLKqTI2MTg0SlUxLVg9e.jpg",
+        "cast_id": 221,
+        "character": "Female Student (voice)",
+        "credit_id": "648ed640263462012d4a91ba",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4118272,
+        "known_for_department": "Acting",
+        "name": "Kotaro Ishikawa",
+        "original_name": "\u77f3\u5ddd\u5149\u592a\u90ce",
+        "popularity": 0.5321,
+        "profile_path": "/t8AWYr50WcDP7EXsIdt7u74i3RX.jpg",
+        "cast_id": 222,
+        "character": "News Presenter (voice)",
+        "credit_id": "648ed6c62f8d0900e385df5e",
+        "order": 24
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2279351,
+        "known_for_department": "Production",
+        "name": "Shinichiro Kashiwada",
+        "original_name": "\u67cf\u7530\u771f\u4e00\u90ce",
+        "popularity": 0.3518,
+        "profile_path": "/hFzxbLUoPGavSJF8LQWNcTBaeYO.jpg",
+        "credit_id": "63efd3394a4bfc00f07c4ef8",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1938744,
+        "known_for_department": "Directing",
+        "name": "Shinichiro Ushijima",
+        "original_name": "\u725b\u5d8b\u65b0\u4e00\u90ce",
+        "popularity": 0.4809,
+        "profile_path": "/vNrNNafv5hM1EW3CMqY32F1peV6.jpg",
+        "credit_id": "5b2bfc47925141650a00a9a2",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2652979,
+        "known_for_department": "Production",
+        "name": "Yuma Takahashi",
+        "original_name": "\u9ad8\u6a4b\u7950\u99ac",
+        "popularity": 0.2467,
+        "profile_path": "/asdAsIojiSQ0WQ6m315b6YF3rZt.jpg",
+        "credit_id": "602e90cacedac4003e534240",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: I Want to Eat Your Pancreas (2018)\n\nProducer: Shinichiro Kashiwada\n\nDirector: Shinichiro Ushijima\n\nProducer: Yuma Takahashi\n\nGenres: Animation, Drama, Romance\n\nThemes and Keywords: dying and death, diary, terminal illness, tragedy, hospital, high school student, shocking, anime, bucket list, japanese high school, based on web novel, romantic\n\nTop Cast: Mahiro Takasugi, Lynn, Yukiyo Fujii, Yuma Uchida, Jun Fukushima, Atsuko Tanaka, Shin-ichiro Miki, Emi Wakui, Nanami Atsugi, Kazuya Saji, Narumi Kaho, Nene Hieda, Tomoe Tanii, Reiou Tsuchida, Hayato Kimura, Anju Nitta, Emiko Takeuchi, Takaaki Uchino, Kenta Kataoka, Tomoyuki Arai, Takayuki Ogawa, Junnosuke Kuroda, Yurina Amami, Momoko Notomi, Kotaro Ishikawa\n\nPlot: After his classmate and crush is diagnosed with a pancreatic disease, an average high schooler sets out to make the most of her final days.\n\n"
+}

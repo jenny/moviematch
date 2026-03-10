@@ -1,0 +1,605 @@
+{
+  "adult": false,
+  "backdrop_path": "/ukfI9QkU1aIhOhKXYWE9n3z1mFR.jpg",
+  "belongs_to_collection": null,
+  "budget": 19000000,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "homepage": "https://gkids.com/films/spirited-away",
+  "id": 129,
+  "imdb_id": "tt0245429",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u5343\u3068\u5343\u5c0b\u306e\u795e\u96a0\u3057",
+  "overview": "A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.",
+  "popularity": 20.3092,
+  "poster_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+  "production_companies": [
+    {
+      "id": 10342,
+      "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+      "name": "Studio Ghibli",
+      "origin_country": "JP"
+    },
+    {
+      "id": 1779,
+      "logo_path": "/41nGzTdCnORYZIZzaGZtfsBwQCl.png",
+      "name": "Tokuma Shoten",
+      "origin_country": "JP"
+    },
+    {
+      "id": 6755,
+      "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+      "name": "Nippon Television Network Corporation",
+      "origin_country": "JP"
+    },
+    {
+      "id": 11847,
+      "logo_path": "/rZP0I1p3hZNUMNFPHUSal6rWThQ.png",
+      "name": "Mitsubishi",
+      "origin_country": "JP"
+    },
+    {
+      "id": 1778,
+      "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+      "name": "dentsu",
+      "origin_country": "JP"
+    },
+    {
+      "id": 1780,
+      "logo_path": "/4Qzhr7FxVtaMwmsh7118G3yvOhO.png",
+      "name": "TFC",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2001-07-20",
+  "revenue": 274925095,
+  "runtime": 125,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Beyond the tunnel was a mysterious town.",
+  "title": "Spirited Away",
+  "video": false,
+  "vote_average": 8.534,
+  "vote_count": 18011,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 616,
+        "name": "witch"
+      },
+      {
+        "id": 970,
+        "name": "parent child relationship"
+      },
+      {
+        "id": 3762,
+        "name": "darkness"
+      },
+      {
+        "id": 4652,
+        "name": "bath house"
+      },
+      {
+        "id": 2343,
+        "name": "magic"
+      },
+      {
+        "id": 13153,
+        "name": "spirit"
+      },
+      {
+        "id": 33465,
+        "name": "parallel world"
+      },
+      {
+        "id": 155582,
+        "name": "amusement park"
+      },
+      {
+        "id": 196509,
+        "name": "youkai"
+      },
+      {
+        "id": 207695,
+        "name": "japanese mythology"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 19587,
+        "known_for_department": "Acting",
+        "name": "Rumi Hiiragi",
+        "original_name": "\u67ca\u7460\u7f8e",
+        "popularity": 0.7619,
+        "profile_path": "/zITaVtFyc4xSM3mxSoPRWHbqgJI.jpg",
+        "cast_id": 3,
+        "character": "Chihiro (voice)",
+        "credit_id": "52fe421bc3a36847f8004a97",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 19588,
+        "known_for_department": "Acting",
+        "name": "Miyu Irino",
+        "original_name": "\u5165\u91ce\u81ea\u7531",
+        "popularity": 1.7199,
+        "profile_path": "/8qEEhHUObNvGQr4e6eqLu5z4qTz.jpg",
+        "cast_id": 4,
+        "character": "Haku (voice)",
+        "credit_id": "52fe421bc3a36847f8004a9b",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 19589,
+        "known_for_department": "Acting",
+        "name": "Mari Natsuki",
+        "original_name": "\u590f\u6728\u30de\u30ea",
+        "popularity": 0.9394,
+        "profile_path": "/MIFzUc77Sx57FQOZsoiGWEbpH2.jpg",
+        "cast_id": 5,
+        "character": "Yubaba / Zeniba (voice)",
+        "credit_id": "52fe421bc3a36847f8004a9f",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 19590,
+        "known_for_department": "Acting",
+        "name": "Takashi Naito",
+        "original_name": "\u5185\u85e4\u525b\u5fd7",
+        "popularity": 1.0795,
+        "profile_path": "/xwsm0ygjG79jLIogutwo6r64igy.jpg",
+        "cast_id": 6,
+        "character": "Father (voice)",
+        "credit_id": "52fe421bc3a36847f8004aa3",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 19591,
+        "known_for_department": "Acting",
+        "name": "Yasuko Sawaguchi",
+        "original_name": "\u6ca2\u53e3\u9756\u5b50",
+        "popularity": 0.7558,
+        "profile_path": "/rWspusb13VeJowmctnniXYYTcqq.jpg",
+        "cast_id": 7,
+        "character": "Mother (voice)",
+        "credit_id": "52fe421bc3a36847f8004aa7",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 19592,
+        "known_for_department": "Acting",
+        "name": "Tatsuya Gash\u00fbin",
+        "original_name": "\u6211\u4fee\u9662\u9054\u4e5f",
+        "popularity": 0.8718,
+        "profile_path": "/fLqIdkShknsJmZy4EfBWuWyHN4C.jpg",
+        "cast_id": 8,
+        "character": "Aogaeru (voice)",
+        "credit_id": "52fe421bc3a36847f8004aab",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 225730,
+        "known_for_department": "Acting",
+        "name": "Ryunosuke Kamiki",
+        "original_name": "\u795e\u6728\u9686\u4e4b\u4ecb",
+        "popularity": 1.6524,
+        "profile_path": "/ut7ewXjdgUmgkhJ1EtbOo9tbc7s.jpg",
+        "cast_id": 30,
+        "character": "Boh (voice)",
+        "credit_id": "52fe421bc3a36847f8004b17",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 19594,
+        "known_for_department": "Acting",
+        "name": "Yumi Tamai",
+        "original_name": "\u7389\u4e95\u5915\u6d77",
+        "popularity": 0.8317,
+        "profile_path": "/x9Td7e5F21cK9S1FCkobfqiJZ1c.jpg",
+        "cast_id": 10,
+        "character": "Rin (voice)",
+        "credit_id": "52fe421bc3a36847f8004aaf",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 40450,
+        "known_for_department": "Acting",
+        "name": "Yo Oizumi",
+        "original_name": "\u5927\u6cc9\u6d0b",
+        "popularity": 0.8446,
+        "profile_path": "/qw5KLuww2AEAk6JEssEkJY3wBn1.jpg",
+        "cast_id": 25,
+        "character": "Bandai Frog (voice)",
+        "credit_id": "52fe421bc3a36847f8004b07",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 554423,
+        "known_for_department": "Acting",
+        "name": "Koba Hayashi",
+        "original_name": "\u306f\u3084\u3057\u30fb\u3053\u3070",
+        "popularity": 0.6449,
+        "profile_path": "/ceQ58tRgqMZ9gePHg8xkKarZm0M.jpg",
+        "cast_id": 26,
+        "character": "River Spirit (voice)",
+        "credit_id": "52fe421bc3a36847f8004b0b",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20334,
+        "known_for_department": "Acting",
+        "name": "Tsunehiko Kamij\u00f4",
+        "original_name": "\u4e0a\u689d\u6052\u5f66",
+        "popularity": 0.5344,
+        "profile_path": "/v2poQi0qYEWdTaMf2pVTWmcdwZp.jpg",
+        "cast_id": 27,
+        "character": "Chichiyaku (voice)",
+        "credit_id": "52fe421bc3a36847f8004b0f",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 544088,
+        "known_for_department": "Acting",
+        "name": "Takehiko Ono",
+        "original_name": "\u5c0f\u91ce\u6b66\u5f66",
+        "popularity": 0.4887,
+        "profile_path": "/8gcT8znk0l3YVZKvL7eVxYublTl.jpg",
+        "cast_id": 28,
+        "character": "Aniyaku (voice)",
+        "credit_id": "52fe421bc3a36847f8004b13",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 119243,
+        "known_for_department": "Acting",
+        "name": "Bunta Sugawara",
+        "original_name": "\u83c5\u539f\u6587\u592a",
+        "popularity": 0.7574,
+        "profile_path": "/lHPLlP8zNwGMmcUI8rGks5vp8Vn.jpg",
+        "cast_id": 31,
+        "character": "Kamaji (voice)",
+        "credit_id": "52fe421bc3a36847f8004b1b",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1530058,
+        "known_for_department": "Production",
+        "name": "Shigeru Wakita",
+        "original_name": "\u8107\u7530\u8302",
+        "popularity": 0.2046,
+        "profile_path": "/6iFm0U12QGmKDizbn08WqO1WXCU.jpg",
+        "cast_id": 97,
+        "character": "(voice)",
+        "credit_id": "5fb05ded3a48c5003c7d7a18",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1243817,
+        "known_for_department": "Acting",
+        "name": "Shirou Saitou",
+        "original_name": "\u658e\u85e4\u5fd7\u90ce",
+        "popularity": 0.3916,
+        "profile_path": "/yJSrzULl9EuXI25E8REdIPY1Lkm.jpg",
+        "cast_id": 98,
+        "character": "(voice)",
+        "credit_id": "5fb05df6c15f89003f838bc5",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1608518,
+        "known_for_department": "Acting",
+        "name": "Michiko Yamamoto",
+        "original_name": "\u5c71\u672c\u9053\u5b50",
+        "popularity": 0.2478,
+        "profile_path": "/cV4irDcmf4biTjTGaU1oPmFO7KR.jpg",
+        "cast_id": 99,
+        "character": "(voice)",
+        "credit_id": "5fb05e02a22d3e004103aaf6",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2844828,
+        "known_for_department": "Acting",
+        "name": "Keiko Tsukamoto",
+        "original_name": "\u3064\u304b\u3082\u3068\u666f\u5b50",
+        "popularity": 0.3604,
+        "profile_path": "/50AMEWXz2HUt3RFKoEuJk3Xl84k.jpg",
+        "cast_id": 100,
+        "character": "(voice)",
+        "credit_id": "5fb05e0b5ed962003e107c9c",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 554612,
+        "known_for_department": "Acting",
+        "name": "Akio Nakamura",
+        "original_name": "\u4e2d\u6751\u5f70\u7537",
+        "popularity": 0.8166,
+        "profile_path": "/z7GzSvEkb3vhA77FFS6JnkpEEbv.jpg",
+        "cast_id": 101,
+        "character": "(voice)",
+        "credit_id": "5fb05e14b54002003f597b15",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2856717,
+        "known_for_department": "Acting",
+        "name": "Shinji Tokumaru",
+        "original_name": "\u5f97\u4e38\u4f38\u4e8c",
+        "popularity": 0.5516,
+        "profile_path": "/rYRs9Fbe5Cd0bJwxbM4bZp5MrKX.jpg",
+        "cast_id": 102,
+        "character": "(voice)",
+        "credit_id": "5fb05e1f9ca75900404b384b",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 554367,
+        "known_for_department": "Acting",
+        "name": "Kaori Yamagata",
+        "original_name": "\u5c71\u50cf\u304b\u304a\u308a",
+        "popularity": 0.4915,
+        "profile_path": "/bhtFlZCoBxhq1FeNwx7ODNOZ73R.jpg",
+        "cast_id": 103,
+        "character": "(voice)",
+        "credit_id": "5fb05e293a48c5003c7d7a9b",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2023580,
+        "known_for_department": "Acting",
+        "name": "Tsuzuki Kayako",
+        "original_name": "\u90fd\u7bc9\u9999\u5f25\u5b50",
+        "popularity": 0.5043,
+        "profile_path": "/9lKIm8V4yU3LztYj3B6LlOF9FyN.jpg",
+        "cast_id": 104,
+        "character": "(voice)",
+        "credit_id": "5fb05e33d55e4d003cd049c2",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2856718,
+        "known_for_department": "Acting",
+        "name": "Masahiro Asano",
+        "original_name": "\u6d45\u91ce\u96c5\u535a",
+        "popularity": 0.2845,
+        "profile_path": "/1FczbddfHUGlKg3z3opoV04pBZE.jpg",
+        "cast_id": 105,
+        "character": "(voice)",
+        "credit_id": "5fb05e3cb54002004058bca5",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2856719,
+        "known_for_department": "Acting",
+        "name": "Kazutaka Hayashida",
+        "original_name": "Kazutaka Hayashida",
+        "popularity": 0.2969,
+        "profile_path": "/qxSLhaJLstgBm9DkWpD5AW4Va8A.jpg",
+        "cast_id": 106,
+        "character": "(voice)",
+        "credit_id": "5fb05e45a22d3e004003380d",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2856720,
+        "known_for_department": "Acting",
+        "name": "Ikuko Yamamoto",
+        "original_name": "\u5c71\u672c\u90c1\u5b50",
+        "popularity": 0.2487,
+        "profile_path": "/ybMkOM1ztKz8vHH2SKlMb4RgkZ6.jpg",
+        "cast_id": 107,
+        "character": "(voice)",
+        "credit_id": "5fb05e4e945c20003ee8575e",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2856721,
+        "known_for_department": "Acting",
+        "name": "Mina Meguro",
+        "original_name": "\u76ee\u9ed2\u672a\u5948",
+        "popularity": 0.3452,
+        "profile_path": "/mx1n8cmUTMT0oZH4zyqo3zx84MN.jpg",
+        "cast_id": 108,
+        "character": "(voice)",
+        "credit_id": "5fb05e5837b3a9003f015040",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2856722,
+        "known_for_department": "Acting",
+        "name": "Tetsur\u00f4 Ishibashi",
+        "original_name": "\u77f3\u6a4b\u5fb9\u90ce",
+        "popularity": 0.3719,
+        "profile_path": "/lMTfxLJEOSNFk0MgpA3RsoqxEdn.jpg",
+        "cast_id": 109,
+        "character": "(voice)",
+        "credit_id": "5fb05e63d8f44e003ef7a213",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2856723,
+        "known_for_department": "Acting",
+        "name": "Katsutomo Sh\u00eebara",
+        "original_name": "\u690e\u539f\u514b\u77e5",
+        "popularity": 0.3773,
+        "profile_path": "/o8Wcta86QK2uHURyDqjTAxEajsj.jpg",
+        "cast_id": 110,
+        "character": "(voice)",
+        "credit_id": "5fb05e75b6cff1003ac3a3cc",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2856724,
+        "known_for_department": "Acting",
+        "name": "Shinobu Katabuchi",
+        "original_name": "\u7247\u6e15\u5fcd",
+        "popularity": 0.4437,
+        "profile_path": "/gYMuEq00H2ESNnSNfGmBNSjld7T.jpg",
+        "cast_id": 111,
+        "character": "(voice)",
+        "credit_id": "5fb05e88626208003eb39c17",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1241949,
+        "known_for_department": "Acting",
+        "name": "Noriko Kitou",
+        "original_name": "\u9b3c\u982d\u5178\u5b50",
+        "popularity": 0.8324,
+        "profile_path": "/hHtABHbBeTHA9ZGF2uX0zyWvS4H.jpg",
+        "cast_id": 112,
+        "character": "(voice)",
+        "credit_id": "5fb05e91945c200041e92f35",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2856725,
+        "known_for_department": "Acting",
+        "name": "Naoto Kaji",
+        "original_name": "\u935b\u6cbb\u76f4\u4eba",
+        "popularity": 0.7952,
+        "profile_path": "/6fzuj6fYwrogkJ62sPAp5BMrFMw.jpg",
+        "cast_id": 113,
+        "character": "(voice)",
+        "credit_id": "5fb05e9ad8f44e003ef7a28f",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 608,
+        "known_for_department": "Directing",
+        "name": "Hayao Miyazaki",
+        "original_name": "\u5bae\u5d0e\u99ff",
+        "popularity": 2.8591,
+        "profile_path": "/ouhjt9KugzhWtdEyBPipihB3ic8.jpg",
+        "credit_id": "52fe421bc3a36847f8004a8d",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1417,
+        "known_for_department": "Production",
+        "name": "Toshio Suzuki",
+        "original_name": "\u9234\u6728\u654f\u592b",
+        "popularity": 1.3769,
+        "profile_path": "/h8KzdSl5kIHgXputSBhxDZ1CA1g.jpg",
+        "credit_id": "52fe421bc3a36847f8004ab5",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 19595,
+        "known_for_department": "Production",
+        "name": "Yasuyoshi Tokuma",
+        "original_name": "\u5fb3\u9593\u5eb7\u5feb",
+        "popularity": 0.2151,
+        "profile_path": "/51eA89ChgsUad46HXYcML4WXtM9.jpg",
+        "credit_id": "52fe421bc3a36847f8004abb",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Spirited Away (2001)\n\nDirector: Hayao Miyazaki\n\nProducer: Toshio Suzuki\n\nExecutive Producer: Yasuyoshi Tokuma\n\nGenres: Animation, Family, Fantasy\n\nThemes and Keywords: witch, parent child relationship, darkness, bath house, magic, spirit, parallel world, amusement park, youkai, japanese mythology, anime\n\nTop Cast: Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naito, Yasuko Sawaguchi, Tatsuya Gash\u00fbin, Ryunosuke Kamiki, Yumi Tamai, Yo Oizumi, Koba Hayashi, Tsunehiko Kamij\u00f4, Takehiko Ono, Bunta Sugawara, Shigeru Wakita, Shirou Saitou, Michiko Yamamoto, Keiko Tsukamoto, Akio Nakamura, Shinji Tokumaru, Kaori Yamagata, Tsuzuki Kayako, Masahiro Asano, Kazutaka Hayashida, Ikuko Yamamoto, Mina Meguro, Tetsur\u00f4 Ishibashi, Katsutomo Sh\u00eebara, Shinobu Katabuchi, Noriko Kitou, Naoto Kaji\n\nPlot: A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.\n\n"
+}

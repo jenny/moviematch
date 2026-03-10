@@ -1,0 +1,634 @@
+{
+  "adult": false,
+  "backdrop_path": "/kSlO1pHpwQfPQdgVPr7dJiJNtJ8.jpg",
+  "belongs_to_collection": null,
+  "budget": 1500000,
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "homepage": "",
+  "id": 3082,
+  "imdb_id": "tt0027977",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Modern Times",
+  "overview": "A bumbling tramp desires to build a home with a young woman, yet is thwarted time and time again by his lack of experience and habit of being in the wrong place at the wrong time..",
+  "popularity": 3.8028,
+  "poster_path": "/7uoiKOEjxBBW0AgDGQWrlfGQ90w.jpg",
+  "production_companies": [
+    {
+      "id": 1315,
+      "logo_path": null,
+      "name": "Charles Chaplin Productions",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1936-02-05",
+  "revenue": 1800000,
+  "runtime": 87,
+  "spoken_languages": [
+    {
+      "english_name": "No Language",
+      "iso_639_1": "xx",
+      "name": "No Language"
+    }
+  ],
+  "status": "Released",
+  "tagline": "He stands alone as the greatest entertainer of modern times! No one on earth can make you laugh as heartily or touch your heart as deeply...the whole world laughs, cries and thrills to his priceless genius!",
+  "title": "Modern Times",
+  "video": false,
+  "vote_average": 8.281,
+  "vote_count": 4008,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 1382,
+        "name": "factory"
+      },
+      {
+        "id": 1546,
+        "name": "ambulance"
+      },
+      {
+        "id": 3338,
+        "name": "invention"
+      },
+      {
+        "id": 4280,
+        "name": "mental breakdown"
+      },
+      {
+        "id": 5386,
+        "name": "tramp"
+      },
+      {
+        "id": 5571,
+        "name": "great depression"
+      },
+      {
+        "id": 7025,
+        "name": "industrial revolution"
+      },
+      {
+        "id": 9253,
+        "name": "slapstick comedy"
+      },
+      {
+        "id": 5046,
+        "name": "automation"
+      },
+      {
+        "id": 9890,
+        "name": "jail"
+      },
+      {
+        "id": 11612,
+        "name": "hospital"
+      },
+      {
+        "id": 12999,
+        "name": "black and white"
+      },
+      {
+        "id": 33618,
+        "name": "machine"
+      },
+      {
+        "id": 33619,
+        "name": "pardon"
+      },
+      {
+        "id": 154802,
+        "name": "silent film"
+      },
+      {
+        "id": 156052,
+        "name": "unemployment"
+      },
+      {
+        "id": 162466,
+        "name": "screwdriver"
+      },
+      {
+        "id": 165458,
+        "name": "police arrest"
+      },
+      {
+        "id": 171989,
+        "name": "wrongful conviction"
+      },
+      {
+        "id": 173644,
+        "name": "communism"
+      },
+      {
+        "id": 216620,
+        "name": "assembly line"
+      },
+      {
+        "id": 237390,
+        "name": "prison break attempt"
+      },
+      {
+        "id": 241860,
+        "name": "burglars"
+      },
+      {
+        "id": 294521,
+        "name": "smuggling"
+      },
+      {
+        "id": 325120,
+        "name": "orphans"
+      },
+      {
+        "id": 354871,
+        "name": "mudo"
+      },
+      {
+        "id": 356249,
+        "name": "drogas"
+      },
+      {
+        "id": 361522,
+        "name": "coca\u00edna"
+      },
+      {
+        "id": 361523,
+        "name": "pris\u00e3o"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "cast_id": 8,
+        "character": "The Tramp (A Factory Worker)",
+        "credit_id": "52fe4383c3a36847f8059ee9",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 14027,
+        "known_for_department": "Acting",
+        "name": "Paulette Goddard",
+        "original_name": "Paulette Goddard",
+        "popularity": 0.6382,
+        "profile_path": "/7fMtXuVbJMbsFB4U3CsgDdivizP.jpg",
+        "cast_id": 9,
+        "character": "A Gamin",
+        "credit_id": "52fe4383c3a36847f8059eed",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 14438,
+        "known_for_department": "Acting",
+        "name": "Henry Bergman",
+        "original_name": "Henry Bergman",
+        "popularity": 0.6022,
+        "profile_path": "/x41Z1XOGnBg6xnFhxunVQBmcJ36.jpg",
+        "cast_id": 10,
+        "character": "Cafe Proprietor",
+        "credit_id": "52fe4383c3a36847f8059ef1",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30194,
+        "known_for_department": "Acting",
+        "name": "Tiny Sandford",
+        "original_name": "Tiny Sandford",
+        "popularity": 0.7671,
+        "profile_path": "/dsfbvZOIb1rdBx8eUGa2QTYyqGE.jpg",
+        "cast_id": 11,
+        "character": "Big Bill",
+        "credit_id": "52fe4383c3a36847f8059ef5",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30195,
+        "known_for_department": "Acting",
+        "name": "Chester Conklin",
+        "original_name": "Chester Conklin",
+        "popularity": 0.4013,
+        "profile_path": "/qaEgtSQU4eTX2fMng7Grc7G2xzq.jpg",
+        "cast_id": 12,
+        "character": "Mechanic",
+        "credit_id": "52fe4383c3a36847f8059ef9",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13856,
+        "known_for_department": "Acting",
+        "name": "Hank Mann",
+        "original_name": "Hank Mann",
+        "popularity": 0.8395,
+        "profile_path": "/5EGNEc8hjNmyNA6bh39czJ0BcGS.jpg",
+        "cast_id": 13,
+        "character": "Burglar",
+        "credit_id": "52fe4383c3a36847f8059efd",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30196,
+        "known_for_department": "Acting",
+        "name": "Stanley Blystone",
+        "original_name": "Stanley Blystone",
+        "popularity": 0.7357,
+        "profile_path": "/9kYGxCZeyYJWTJuvpt7YFrZOx3Y.jpg",
+        "cast_id": 14,
+        "character": "Gamin's Father",
+        "credit_id": "52fe4383c3a36847f8059f01",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13855,
+        "known_for_department": "Acting",
+        "name": "Al Ernest Garcia",
+        "original_name": "Al Ernest Garcia",
+        "popularity": 0.32,
+        "profile_path": "/pz1VDUCBCvNiZ8qAHg9N4ejXmSX.jpg",
+        "cast_id": 15,
+        "character": "President of the Electro Steel Corp.",
+        "credit_id": "52fe4383c3a36847f8059f05",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30197,
+        "known_for_department": "Acting",
+        "name": "Richard Alexander",
+        "original_name": "Richard Alexander",
+        "popularity": 0.7484,
+        "profile_path": "/slzm6BNole2pXxjrfnoeZKmFEUY.jpg",
+        "cast_id": 16,
+        "character": "Prison Cellmate",
+        "credit_id": "52fe4383c3a36847f8059f09",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 30198,
+        "known_for_department": "Acting",
+        "name": "Cecil Reynolds",
+        "original_name": "Cecil Reynolds",
+        "popularity": 0.1356,
+        "profile_path": null,
+        "cast_id": 17,
+        "character": "Minister",
+        "credit_id": "52fe4383c3a36847f8059f0d",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 30199,
+        "known_for_department": "Acting",
+        "name": "Mira McKinney",
+        "original_name": "Mira McKinney",
+        "popularity": 0.7445,
+        "profile_path": "/sXVpY94JuS4hKARBsw2eu5oF7F.jpg",
+        "cast_id": 18,
+        "character": "Minister's Wife",
+        "credit_id": "52fe4383c3a36847f8059f11",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30200,
+        "known_for_department": "Acting",
+        "name": "Murdock MacQuarrie",
+        "original_name": "Murdock MacQuarrie",
+        "popularity": 0.1543,
+        "profile_path": "/xjXY0di1hFXfnErsfAwkOgBSCjd.jpg",
+        "cast_id": 19,
+        "character": "J. Widdecombe Billows",
+        "credit_id": "52fe4383c3a36847f8059f15",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30201,
+        "known_for_department": "Acting",
+        "name": "Wilfred Lucas",
+        "original_name": "Wilfred Lucas",
+        "popularity": 0.695,
+        "profile_path": "/rr70uPoMMtkHFYSPn0JTwI9ikQ9.jpg",
+        "cast_id": 20,
+        "character": "Juvenile Officer",
+        "credit_id": "52fe4383c3a36847f8059f19",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30202,
+        "known_for_department": "Acting",
+        "name": "Edward LeSaint",
+        "original_name": "Edward LeSaint",
+        "popularity": 0.7782,
+        "profile_path": "/rCA5jMyJYJOZmZT3enMdv4ZfPKk.jpg",
+        "cast_id": 21,
+        "character": "Sheriff Couler",
+        "credit_id": "52fe4383c3a36847f8059f1d",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30203,
+        "known_for_department": "Acting",
+        "name": "Fred Malatesta",
+        "original_name": "Fred Malatesta",
+        "popularity": 0.6443,
+        "profile_path": "/jLwBxc5dLtk1ynq2bcnUbgRFwG0.jpg",
+        "cast_id": 22,
+        "character": "Cafe Head Waiter",
+        "credit_id": "52fe4383c3a36847f8059f21",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30204,
+        "known_for_department": "Acting",
+        "name": "Sammy Stein",
+        "original_name": "Sammy Stein",
+        "popularity": 0.3551,
+        "profile_path": "/lOKuSve2HeIDTeCEfrBZuN6sVDx.jpg",
+        "cast_id": 23,
+        "character": "Turbine Operator",
+        "credit_id": "52fe4383c3a36847f8059f25",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 30205,
+        "known_for_department": "Acting",
+        "name": "Juana Sutton",
+        "original_name": "Juana Sutton",
+        "popularity": 0.1828,
+        "profile_path": null,
+        "cast_id": 24,
+        "character": "Woman with Buttoned Bosom",
+        "credit_id": "52fe4383c3a36847f8059f29",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30206,
+        "known_for_department": "Acting",
+        "name": "Ted Oliver",
+        "original_name": "Ted Oliver",
+        "popularity": 0.5313,
+        "profile_path": null,
+        "cast_id": 25,
+        "character": "Billows' Assistant",
+        "credit_id": "52fe4383c3a36847f8059f2d",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2941,
+        "known_for_department": "Acting",
+        "name": "Norman Ainsley",
+        "original_name": "Norman Ainsley",
+        "popularity": 0.5571,
+        "profile_path": null,
+        "cast_id": 35,
+        "character": "Billows' Silent Assistant (uncredited)",
+        "credit_id": "56227765c3a368240d004923",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1550460,
+        "known_for_department": "Acting",
+        "name": "Walter Bacon",
+        "original_name": "Walter Bacon",
+        "popularity": 0.7393,
+        "profile_path": null,
+        "cast_id": 67,
+        "character": "Shopkeeper (uncredited)",
+        "credit_id": "66464b83e68b7c68cb7835f2",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 30117,
+        "known_for_department": "Acting",
+        "name": "Bobby Barber",
+        "original_name": "Bobby Barber",
+        "popularity": 0.3177,
+        "profile_path": "/hshe0L8zSxTEUuN1SPHRRoeOmSb.jpg",
+        "cast_id": 36,
+        "character": "Worker (uncredited)",
+        "credit_id": "562277889251417f470093af",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1250223,
+        "known_for_department": "Acting",
+        "name": "Heinie Conklin",
+        "original_name": "Heinie Conklin",
+        "popularity": 1.5394,
+        "profile_path": "/37E72Hv6GpN4FbjIeMZgSToifsl.jpg",
+        "cast_id": 40,
+        "character": "Assembly Line Worker Next to Big Bill (uncredited)",
+        "credit_id": "5622784592514171d000b932",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 120306,
+        "known_for_department": "Acting",
+        "name": "Gloria DeHaven",
+        "original_name": "Gloria DeHaven",
+        "popularity": 0.5614,
+        "profile_path": "/ij6RuBeiDE0ugrBgBFfiMF0RkdY.jpg",
+        "cast_id": 26,
+        "character": "Gamin's Sister (uncredited)",
+        "credit_id": "558ab29bc3a3680dfb00280b",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4718240,
+        "known_for_department": "Acting",
+        "name": "Gloria Delson",
+        "original_name": "Gloria Delson",
+        "popularity": 0.2193,
+        "profile_path": null,
+        "cast_id": 68,
+        "character": "Gamin's Sister (uncredited)",
+        "credit_id": "66464bd524159ce9d42dc331",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 125842,
+        "known_for_department": "Acting",
+        "name": "Pat Flaherty",
+        "original_name": "Pat Flaherty",
+        "popularity": 0.9164,
+        "profile_path": "/qqEUkwI8daY5pTxMn5ZrPyFtlXt.jpg",
+        "cast_id": 63,
+        "character": "Jail Guard (uncredited)",
+        "credit_id": "5aa8a10a0e0a263dcd02d78c",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 34168,
+        "known_for_department": "Acting",
+        "name": "Frank Hagney",
+        "original_name": "Frank Hagney",
+        "popularity": 0.655,
+        "profile_path": "/eUun6Blqa6hEBrlscgz9qnH6Ly0.jpg",
+        "cast_id": 69,
+        "character": "Shipbuilder (uncredited)",
+        "credit_id": "66464cc1a10ed68e1b246e4f",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 34187,
+        "known_for_department": "Acting",
+        "name": "Chuck Hamilton",
+        "original_name": "Chuck Hamilton",
+        "popularity": 0.7558,
+        "profile_path": "/heIF5jo8STMh6aAATBIZ4iwRHwZ.jpg",
+        "cast_id": 37,
+        "character": "Worker (uncredited)",
+        "credit_id": "562277b692514163d50003bf",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 148416,
+        "known_for_department": "Acting",
+        "name": "Pat Harmon",
+        "original_name": "Pat Harmon",
+        "popularity": 0.5199,
+        "profile_path": "/pMs3in0qiatVEUeJ5Uf96MfdH3Y.jpg",
+        "cast_id": 62,
+        "character": "Paddywagon Policeman (uncredited)",
+        "credit_id": "58f2cdb49251413dbe0072e9",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 121247,
+        "known_for_department": "Acting",
+        "name": "Lloyd Ingraham",
+        "original_name": "Lloyd Ingraham",
+        "popularity": 0.526,
+        "profile_path": "/rt2FD3CxxiBDcyQAUvyb9P0OasY.jpg",
+        "cast_id": 43,
+        "character": "Frustrated Cafe Patron (uncredited)",
+        "credit_id": "5622799e92514127d40006d8",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 97996,
+        "known_for_department": "Acting",
+        "name": "Walter James",
+        "original_name": "Walter James",
+        "popularity": 0.7043,
+        "profile_path": "/hA4hBotY5pCg9LlLUOxv2uYotIz.jpg",
+        "cast_id": 44,
+        "character": "Assembly Line Foreman (uncredited)",
+        "credit_id": "562279e3c3a3680e1600ada0",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "credit_id": "52fe4383c3a36847f8059ec1",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13848,
+        "known_for_department": "Acting",
+        "name": "Charlie Chaplin",
+        "original_name": "Charlie Chaplin",
+        "popularity": 1.4308,
+        "profile_path": "/eZAynbZFJB4L8ZfMXTUSG3RmBcg.jpg",
+        "credit_id": "52fe4383c3a36847f8059ecd",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Modern Times (1936)\n\nDirector: Charlie Chaplin\n\nProducer: Charlie Chaplin\n\nGenres: Comedy, Drama, Romance\n\nThemes and Keywords: factory, ambulance, invention, mental breakdown, tramp, great depression, industrial revolution, slapstick comedy, automation, jail, hospital, black and white, machine, pardon, silent film, unemployment, screwdriver, police arrest, wrongful conviction, communism, assembly line, prison break attempt, burglars, smuggling, orphans, mudo, drogas, coca\u00edna, pris\u00e3o\n\nTop Cast: Charlie Chaplin, Paulette Goddard, Henry Bergman, Tiny Sandford, Chester Conklin, Hank Mann, Stanley Blystone, Al Ernest Garcia, Richard Alexander, Cecil Reynolds, Mira McKinney, Murdock MacQuarrie, Wilfred Lucas, Edward LeSaint, Fred Malatesta, Sammy Stein, Juana Sutton, Ted Oliver, Norman Ainsley, Walter Bacon, Bobby Barber, Heinie Conklin, Gloria DeHaven, Gloria Delson, Pat Flaherty, Frank Hagney, Chuck Hamilton, Pat Harmon, Lloyd Ingraham, Walter James\n\nPlot: A bumbling tramp desires to build a home with a young woman, yet is thwarted time and time again by his lack of experience and habit of being in the wrong place at the wrong time..\n\n"
+}

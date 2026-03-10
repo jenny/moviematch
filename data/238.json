@@ -1,0 +1,669 @@
+{
+  "adult": false,
+  "backdrop_path": "/tSPT36ZKlP2WVHJLM4cQPLSzv3b.jpg",
+  "belongs_to_collection": {
+    "id": 230,
+    "name": "The Godfather Collection",
+    "poster_path": "/e5iVtjkjM30znn86JsvkBYtvEo1.jpg",
+    "backdrop_path": "/dIqp8unLVLykgDAlHNalrRVOKjI.jpg"
+  },
+  "budget": 6000000,
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "homepage": "http://www.thegodfather.com/",
+  "id": 238,
+  "imdb_id": "tt0068646",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Godfather",
+  "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+  "popularity": 34.3582,
+  "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+  "production_companies": [
+    {
+      "id": 4,
+      "logo_path": "/jay6WcMgagAklUt7i9Euwj1pzTF.png",
+      "name": "Paramount Pictures",
+      "origin_country": "US"
+    },
+    {
+      "id": 10211,
+      "logo_path": null,
+      "name": "Alfran Productions",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1972-03-14",
+  "revenue": 245066411,
+  "runtime": 175,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "Italian",
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "english_name": "Latin",
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "status": "Released",
+  "tagline": "An offer you can't refuse.",
+  "title": "The Godfather",
+  "video": false,
+  "vote_average": 8.687,
+  "vote_count": 22534,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 818,
+        "name": "based on novel or book"
+      },
+      {
+        "id": 697,
+        "name": "loss of loved one"
+      },
+      {
+        "id": 699,
+        "name": "love at first sight"
+      },
+      {
+        "id": 131,
+        "name": "italy"
+      },
+      {
+        "id": 3149,
+        "name": "gangster"
+      },
+      {
+        "id": 1715,
+        "name": "symbolism"
+      },
+      {
+        "id": 4677,
+        "name": "patriarch"
+      },
+      {
+        "id": 1295,
+        "name": "europe"
+      },
+      {
+        "id": 10291,
+        "name": "organized crime"
+      },
+      {
+        "id": 10391,
+        "name": "mafia"
+      },
+      {
+        "id": 11001,
+        "name": "religion"
+      },
+      {
+        "id": 10909,
+        "name": "lawyer"
+      },
+      {
+        "id": 15095,
+        "name": "revenge motive"
+      },
+      {
+        "id": 33421,
+        "name": "crime family"
+      },
+      {
+        "id": 155538,
+        "name": "sicilian mafia"
+      },
+      {
+        "id": 156043,
+        "name": "religious hypocrisy"
+      },
+      {
+        "id": 163656,
+        "name": "gun violence"
+      },
+      {
+        "id": 165725,
+        "name": "rise to power"
+      },
+      {
+        "id": 180173,
+        "name": "dead horse"
+      },
+      {
+        "id": 181858,
+        "name": "gang violence"
+      },
+      {
+        "id": 202371,
+        "name": "aggressive"
+      },
+      {
+        "id": 207883,
+        "name": "1940s"
+      },
+      {
+        "id": 208611,
+        "name": "1950s"
+      },
+      {
+        "id": 257630,
+        "name": "mafia war"
+      },
+      {
+        "id": 316832,
+        "name": "tense"
+      },
+      {
+        "id": 349776,
+        "name": "tomate"
+      },
+      {
+        "id": 366270,
+        "name": "\u0627\u0644\u0639\u0631\u0627\u0628"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3084,
+        "known_for_department": "Acting",
+        "name": "Marlon Brando",
+        "original_name": "Marlon Brando",
+        "popularity": 2.1979,
+        "profile_path": "/iyO183LVAJ0I4ZkNibINPjfAjCP.jpg",
+        "cast_id": 146,
+        "character": "Don Vito Corleone",
+        "credit_id": "6489aa85e2726001072483a9",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1158,
+        "known_for_department": "Acting",
+        "name": "Al Pacino",
+        "original_name": "Al Pacino",
+        "popularity": 4.9836,
+        "profile_path": "/m8HAAjq1T75JypKk0v1FFQn4ysZ.jpg",
+        "cast_id": 147,
+        "character": "Michael Corleone",
+        "credit_id": "6489aa936f8d9500afdf219c",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3085,
+        "known_for_department": "Acting",
+        "name": "James Caan",
+        "original_name": "James Caan",
+        "popularity": 3.3103,
+        "profile_path": "/v3flJtQEyczxENi29yJyvnN6LVt.jpg",
+        "cast_id": 148,
+        "character": "Sonny Corleone",
+        "credit_id": "6489aabc99259c00ff111136",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3087,
+        "known_for_department": "Acting",
+        "name": "Robert Duvall",
+        "original_name": "Robert Duvall",
+        "popularity": 5.1639,
+        "profile_path": "/3tcKxC5Sc3DJ6XPDKKC2EAomEWn.jpg",
+        "cast_id": 149,
+        "character": "Tom Hagen",
+        "credit_id": "6489aace99259c011c42808d",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3086,
+        "known_for_department": "Acting",
+        "name": "Richard S. Castellano",
+        "original_name": "Richard S. Castellano",
+        "popularity": 0.783,
+        "profile_path": "/1vr75BdHWret81vuSJ3ugiCBkxw.jpg",
+        "cast_id": 150,
+        "character": "Clemenza",
+        "credit_id": "6489aaf86f8d9500c88bea14",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3092,
+        "known_for_department": "Acting",
+        "name": "Diane Keaton",
+        "original_name": "Diane Keaton",
+        "popularity": 2.5647,
+        "profile_path": "/A8B3BsFgbmw2WEmJuQX38qeU9eR.jpg",
+        "cast_id": 151,
+        "character": "Kay Adams",
+        "credit_id": "6489ab23bf31f25055a33a46",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3094,
+        "known_for_department": "Acting",
+        "name": "Talia Shire",
+        "original_name": "Talia Shire",
+        "popularity": 2.4459,
+        "profile_path": "/oktJmlLeyYKBCWPNjHskDwAfjct.jpg",
+        "cast_id": 152,
+        "character": "Connie Corleone Rizzi",
+        "credit_id": "6489ab5799259c011c4280d8",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3095,
+        "known_for_department": "Acting",
+        "name": "Gianni Russo",
+        "original_name": "Gianni Russo",
+        "popularity": 0.5916,
+        "profile_path": "/jfeGnQfXMzKXsuSPm9oTxm6FOuz.jpg",
+        "cast_id": 153,
+        "character": "Carlo Rizzi",
+        "credit_id": "6489ab77e375c00139c26e5b",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3088,
+        "known_for_department": "Acting",
+        "name": "Sterling Hayden",
+        "original_name": "Sterling Hayden",
+        "popularity": 1.0764,
+        "profile_path": "/dCTe6BsGSp9QTcva2Pz4wbxxYMY.jpg",
+        "cast_id": 154,
+        "character": "Captain McCluskey",
+        "credit_id": "6489abe0d2b209014e0b8df9",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3142,
+        "known_for_department": "Acting",
+        "name": "John Marley",
+        "original_name": "John Marley",
+        "popularity": 0.8052,
+        "profile_path": "/xyzwd0CiBjXfowH3HcPhvuWcV5B.jpg",
+        "cast_id": 155,
+        "character": "Jack Woltz",
+        "credit_id": "6489ac0299259c011c42811f",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3090,
+        "known_for_department": "Acting",
+        "name": "Richard Conte",
+        "original_name": "Richard Conte",
+        "popularity": 0.6121,
+        "profile_path": "/bDegodf4dYGXMejdm4T6XgOJwlr.jpg",
+        "cast_id": 156,
+        "character": "Barzini",
+        "credit_id": "6489ac126f8d9500afdf2251",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3091,
+        "known_for_department": "Acting",
+        "name": "Al Lettieri",
+        "original_name": "Al Lettieri",
+        "popularity": 0.9769,
+        "profile_path": "/fE5mEWPkkVJlCji0EoKht8PYw89.jpg",
+        "cast_id": 157,
+        "character": "Sollozzo",
+        "credit_id": "6489ac20e375c000acc796d1",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3093,
+        "known_for_department": "Acting",
+        "name": "Abe Vigoda",
+        "original_name": "Abe Vigoda",
+        "popularity": 1.498,
+        "profile_path": "/luWKPNb58IgJ2ovrtgPAzHGLLYL.jpg",
+        "cast_id": 158,
+        "character": "Sal Tessio",
+        "credit_id": "6489ac2dbf31f2505708a65c",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3096,
+        "known_for_department": "Acting",
+        "name": "John Cazale",
+        "original_name": "John Cazale",
+        "popularity": 2.3503,
+        "profile_path": "/7uKBc2BVbLlAiHuSdfioe1OUnCX.jpg",
+        "cast_id": 159,
+        "character": "Fredo Corleone",
+        "credit_id": "6489ac3a6f8d9500afdf2260",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3143,
+        "known_for_department": "Acting",
+        "name": "Rudy Bond",
+        "original_name": "Rudy Bond",
+        "popularity": 1.1968,
+        "profile_path": "/bd3YONpGsvQrpz6MkhsqsiPSaOD.jpg",
+        "cast_id": 160,
+        "character": "Cuneo",
+        "credit_id": "6489ac5de375c00139c26eb2",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3144,
+        "known_for_department": "Acting",
+        "name": "Al Martino",
+        "original_name": "Al Martino",
+        "popularity": 0.5014,
+        "profile_path": "/jrxnZxAOBVXZaDr9r0nYpMnQwiU.jpg",
+        "cast_id": 161,
+        "character": "Johnny Fontane",
+        "credit_id": "6489ac7199259c01392da0db",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 933716,
+        "known_for_department": "Acting",
+        "name": "Morgana King",
+        "original_name": "Morgana King",
+        "popularity": 0.9898,
+        "profile_path": "/1zzGZpZqedECtHMwfFIqd51nncM.jpg",
+        "cast_id": 162,
+        "character": "Mama Corleone",
+        "credit_id": "6489ac82e272600107248470",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 106811,
+        "known_for_department": "Acting",
+        "name": "Lenny Montana",
+        "original_name": "Lenny Montana",
+        "popularity": 0.5234,
+        "profile_path": "/3R52Zh3MBCaSPqmcyWcD1Y0N4wo.jpg",
+        "cast_id": 163,
+        "character": "Luca Brasi",
+        "credit_id": "6489ac90d2b20900ca220c08",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 99724,
+        "known_for_department": "Acting",
+        "name": "John Martino",
+        "original_name": "John Martino",
+        "popularity": 1.1142,
+        "profile_path": "/3c8BOgJ8UdHi5x5BS3lYnFngxB5.jpg",
+        "cast_id": 164,
+        "character": "Paulie Gatto",
+        "credit_id": "6489ac9dd2b20900ca220c0f",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1195877,
+        "known_for_department": "Acting",
+        "name": "Salvatore Corsitto",
+        "original_name": "Salvatore Corsitto",
+        "popularity": 0.656,
+        "profile_path": "/79OfgwtdP5qsR1UX6ERkrdmRT8c.jpg",
+        "cast_id": 165,
+        "character": "Bonasera",
+        "credit_id": "6489acaae375c000acc79705",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3174,
+        "known_for_department": "Acting",
+        "name": "Richard Bright",
+        "original_name": "Richard Bright",
+        "popularity": 0.5404,
+        "profile_path": "/potMaJ2u5PRjXZb7qF9lSW1ldNZ.jpg",
+        "cast_id": 166,
+        "character": "Neri",
+        "credit_id": "6489acc2bf31f25054b828e4",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20752,
+        "known_for_department": "Acting",
+        "name": "Alex Rocco",
+        "original_name": "Alex Rocco",
+        "popularity": 0.8468,
+        "profile_path": "/uAG4qvYhYHuCyyXGm3lqC4o6ujc.jpg",
+        "cast_id": 167,
+        "character": "Moe Greene",
+        "credit_id": "6489acd1d2b20900ad3ec8cf",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3414,
+        "known_for_department": "Acting",
+        "name": "Tony Giorgio",
+        "original_name": "Tony Giorgio",
+        "popularity": 0.4392,
+        "profile_path": "/1uhgwgjoX7WaakEOBmtBRJKtgEB.jpg",
+        "cast_id": 168,
+        "character": "Bruno Tattaglia",
+        "credit_id": "6489ad08bf31f25055a33b08",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 82779,
+        "known_for_department": "Acting",
+        "name": "Vito Scotti",
+        "original_name": "Vito Scotti",
+        "popularity": 1.0235,
+        "profile_path": "/zDGtXkASxpo3DzMNz6OI3NOp9v0.jpg",
+        "cast_id": 169,
+        "character": "Nazorine",
+        "credit_id": "6489ad166f8d9501023e6cb2",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 982089,
+        "known_for_department": "Acting",
+        "name": "Tere Livrano",
+        "original_name": "Tere Livrano",
+        "popularity": 0.6316,
+        "profile_path": "/zQo1Q7B3oLO9trJS0TTUKutiW27.jpg",
+        "cast_id": 170,
+        "character": "Theresa Hagen",
+        "credit_id": "6489ad23d2b20900ad3ec8f9",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3413,
+        "known_for_department": "Acting",
+        "name": "Victor Rendina",
+        "original_name": "Victor Rendina",
+        "popularity": 0.6401,
+        "profile_path": "/vuNdsjDpgom80WBdB2WBTWuEIuM.jpg",
+        "cast_id": 171,
+        "character": "Philip Tattaglia",
+        "credit_id": "6489ad306f8d9500c88beb2c",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 167363,
+        "known_for_department": "Acting",
+        "name": "Jeannie Linero",
+        "original_name": "Jeannie Linero",
+        "popularity": 0.576,
+        "profile_path": "/dhHy17fMADYBdLnEzcaCG7tbP7P.jpg",
+        "cast_id": 172,
+        "character": "Lucy Mancini",
+        "credit_id": "6489ad4f6f8d95011f2439db",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 160728,
+        "known_for_department": "Acting",
+        "name": "Julie Gregg",
+        "original_name": "Julie Gregg",
+        "popularity": 0.6937,
+        "profile_path": "/8Kx71BnZNtpzb86jH7fcArWhJBh.jpg",
+        "cast_id": 173,
+        "character": "Sandra Corleone",
+        "credit_id": "6489ad696f8d9500c88beb4e",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4111331,
+        "known_for_department": "Acting",
+        "name": "Ardell Sheridan",
+        "original_name": "Ardell Sheridan",
+        "popularity": 0.1296,
+        "profile_path": null,
+        "cast_id": 174,
+        "character": "Mrs. Clemenza",
+        "credit_id": "6489adb8bf31f25054b8295f",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3145,
+        "known_for_department": "Acting",
+        "name": "Simonetta Stefanelli",
+        "original_name": "Simonetta Stefanelli",
+        "popularity": 1.3709,
+        "profile_path": "/qcBJaSf8Rs6ka5zBP5STEs8hKf1.jpg",
+        "cast_id": 175,
+        "character": "Apollonia - Sicilian Sequence",
+        "credit_id": "6489ae04bf31f25055a33b87",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 457,
+        "known_for_department": "Production",
+        "name": "Albert S. Ruddy",
+        "original_name": "Albert S. Ruddy",
+        "popularity": 0.4887,
+        "profile_path": "/jSkLkR79OmqYHg0kx4WWXI1TYPP.jpg",
+        "credit_id": "52fe422bc3a36847f80093cf",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1776,
+        "known_for_department": "Directing",
+        "name": "Francis Ford Coppola",
+        "original_name": "Francis Ford Coppola",
+        "popularity": 2.0087,
+        "profile_path": "/IwGgkmW6IoJ9vuNF0T9CU3FYUX.jpg",
+        "credit_id": "664dc33ded26e32ff7349b13",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 12288,
+        "known_for_department": "Production",
+        "name": "Robert Evans",
+        "original_name": "Robert Evans",
+        "popularity": 0.5702,
+        "profile_path": "/5OvhrPq1I4GaTlNrHFKnh3jfUP6.jpg",
+        "credit_id": "668cdc982c318ef8460d18ff",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1776,
+        "known_for_department": "Directing",
+        "name": "Francis Ford Coppola",
+        "original_name": "Francis Ford Coppola",
+        "popularity": 2.0087,
+        "profile_path": "/IwGgkmW6IoJ9vuNF0T9CU3FYUX.jpg",
+        "credit_id": "5e92505cccb15f00136de455",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: The Godfather (1972)\n\nProducer: Albert S. Ruddy\n\nProducer: Francis Ford Coppola\n\nProducer: Robert Evans\n\nDirector: Francis Ford Coppola\n\nGenres: Drama, Crime\n\nThemes and Keywords: based on novel or book, loss of loved one, love at first sight, italy, gangster, symbolism, patriarch, europe, organized crime, mafia, religion, lawyer, revenge motive, crime family, sicilian mafia, religious hypocrisy, gun violence, rise to power, dead horse, gang violence, aggressive, 1940s, 1950s, mafia war, tense, tomate, \u0627\u0644\u0639\u0631\u0627\u0628\n\nTop Cast: Marlon Brando, Al Pacino, James Caan, Robert Duvall, Richard S. Castellano, Diane Keaton, Talia Shire, Gianni Russo, Sterling Hayden, John Marley, Richard Conte, Al Lettieri, Abe Vigoda, John Cazale, Rudy Bond, Al Martino, Morgana King, Lenny Montana, John Martino, Salvatore Corsitto, Richard Bright, Alex Rocco, Tony Giorgio, Vito Scotti, Tere Livrano, Victor Rendina, Jeannie Linero, Julie Gregg, Ardell Sheridan, Simonetta Stefanelli\n\nPlot: Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.\n\n"
+}

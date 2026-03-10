@@ -1,0 +1,570 @@
+{
+  "adult": false,
+  "backdrop_path": "/27ZkYMWynuK2qiDP6awc3MsCaOs.jpg",
+  "belongs_to_collection": null,
+  "budget": 7000000,
+  "genres": [
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 527641,
+  "imdb_id": "tt6472976",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Five Feet Apart",
+  "overview": "Seventeen-year-old Stella spends most of her time in the hospital as a cystic fibrosis patient. Her life is full of routines, boundaries and self-control \u2014 all of which get put to the test when she meets Will, an impossibly charming teen who has the same illness. There's an instant flirtation, though restrictions dictate that they must maintain a safe distance between them. As their connection intensifies, so does the temptation to throw the rules out the window and embrace that attraction.",
+  "popularity": 5.4945,
+  "poster_path": "/kreTuJBkUjVWePRfhHZuYfhNE1T.jpg",
+  "production_companies": [
+    {
+      "id": 84409,
+      "logo_path": null,
+      "name": "Wayfarer Entertainment",
+      "origin_country": "US"
+    },
+    {
+      "id": 5490,
+      "logo_path": "/xuJSR4dWsvkE194aemIJwflyNF2.png",
+      "name": "CBS Films",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "2019-03-14",
+  "revenue": 92600000,
+  "runtime": 116,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "French",
+      "iso_639_1": "fr",
+      "name": "Fran\u00e7ais"
+    },
+    {
+      "english_name": "Spanish",
+      "iso_639_1": "es",
+      "name": "Espa\u00f1ol"
+    }
+  ],
+  "status": "Released",
+  "tagline": "When life keeps you apart, fight for every inch.",
+  "title": "Five Feet Apart",
+  "video": false,
+  "vote_average": 8.221,
+  "vote_count": 5863,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 3691,
+        "name": "forbidden love"
+      },
+      {
+        "id": 6564,
+        "name": "terminal illness"
+      },
+      {
+        "id": 11612,
+        "name": "hospital"
+      },
+      {
+        "id": 12392,
+        "name": "best friend"
+      },
+      {
+        "id": 13072,
+        "name": "falling in love"
+      },
+      {
+        "id": 160767,
+        "name": "cystic fibrosis"
+      },
+      {
+        "id": 165086,
+        "name": "star crossed lovers"
+      },
+      {
+        "id": 184783,
+        "name": "first date"
+      },
+      {
+        "id": 188993,
+        "name": "true love"
+      },
+      {
+        "id": 296608,
+        "name": "teenager"
+      },
+      {
+        "id": 311315,
+        "name": "dramatic"
+      },
+      {
+        "id": 319319,
+        "name": "sentimental"
+      },
+      {
+        "id": 324429,
+        "name": "romantic"
+      },
+      {
+        "id": 325835,
+        "name": "melodramatic"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1286328,
+        "known_for_department": "Acting",
+        "name": "Haley Lu Richardson",
+        "original_name": "Haley Lu Richardson",
+        "popularity": 3.0216,
+        "profile_path": "/iTNWzU5FlKT8s0CBZQyMIvebBPh.jpg",
+        "cast_id": 2,
+        "character": "Stella Grant",
+        "credit_id": "5b1086780e0a26307100e1bc",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 56730,
+        "known_for_department": "Acting",
+        "name": "Cole Sprouse",
+        "original_name": "Cole Sprouse",
+        "popularity": 4.6942,
+        "profile_path": "/mQAXL0rUGwX316d1FBBQmloZzHu.jpg",
+        "cast_id": 1,
+        "character": "Will Newman",
+        "credit_id": "5b10866a9251415ee900e722",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 57412,
+        "known_for_department": "Acting",
+        "name": "Mois\u00e9s Arias",
+        "original_name": "Mois\u00e9s Arias",
+        "popularity": 2.1616,
+        "profile_path": "/fc7krDmEA4VkIY4KOJjpMXGdsfg.jpg",
+        "cast_id": 3,
+        "character": "Poe Ram\u00edrez",
+        "credit_id": "5b1086810e0a26308e00c543",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1538035,
+        "known_for_department": "Acting",
+        "name": "Kimberly H\u00e9bert Gregory",
+        "original_name": "Kimberly H\u00e9bert Gregory",
+        "popularity": 0.4591,
+        "profile_path": "/qHhb8bU2oWscATbSwsxPz1NVwGZ.jpg",
+        "cast_id": 4,
+        "character": "Barbara",
+        "credit_id": "5b108698c3a3686218010b05",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 231610,
+        "known_for_department": "Acting",
+        "name": "Parminder Nagra",
+        "original_name": "Parminder Nagra",
+        "popularity": 0.9566,
+        "profile_path": "/6c8NU6wlvfoaOshohQCBX52ycud.jpg",
+        "cast_id": 5,
+        "character": "Dr. Noor Hamid",
+        "credit_id": "5b1086a39251415ef800c648",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4174,
+        "known_for_department": "Acting",
+        "name": "Claire Forlani",
+        "original_name": "Claire Forlani",
+        "popularity": 2.643,
+        "profile_path": "/tKVunk7XoOWPTS0toajbE3EjNdy.jpg",
+        "cast_id": 8,
+        "character": "Meredith Newman",
+        "credit_id": "5c47b3afc3a368663483f1e7",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1127577,
+        "known_for_department": "Acting",
+        "name": "Cynthia Evans",
+        "original_name": "Cynthia Evans",
+        "popularity": 0.8713,
+        "profile_path": "/xXr3cS0IUH8LXlBHGkNW25jaJoF.jpg",
+        "cast_id": 20,
+        "character": "Erin Grant",
+        "credit_id": "5c93ecb692514173007454cd",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 168875,
+        "known_for_department": "Acting",
+        "name": "Gary Weeks",
+        "original_name": "Gary Weeks",
+        "popularity": 0.701,
+        "profile_path": "/n4taftpteF6qUTeYRDkdGPHC58.jpg",
+        "cast_id": 7,
+        "character": "Tom Grant",
+        "credit_id": "5b1086b9c3a368622d012d93",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2270490,
+        "known_for_department": "Acting",
+        "name": "Sophia Bernard",
+        "original_name": "Sophia Bernard",
+        "popularity": 0.514,
+        "profile_path": "/oV5Zz4ltdOExB19ATfC4ni354Sf.jpg",
+        "cast_id": 22,
+        "character": "Abby Grant",
+        "credit_id": "5c93ecde925141731e7453c7",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 209200,
+        "known_for_department": "Acting",
+        "name": "Emily Baldoni",
+        "original_name": "Emily Baldoni",
+        "popularity": 0.9488,
+        "profile_path": "/zJoIHD7MWd0jTPszxOjHskm85Xj.jpg",
+        "cast_id": 6,
+        "character": "Julie",
+        "credit_id": "5b1086b00e0a26308900bf42",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1386301,
+        "known_for_department": "Acting",
+        "name": "Rebecca Chulew",
+        "original_name": "Rebecca Chulew",
+        "popularity": 1.1177,
+        "profile_path": "/csHJLrC3AHCO7e9ib7N8tgMf00L.jpg",
+        "cast_id": 9,
+        "character": "Doctor",
+        "credit_id": "5c47b3b0c3a368478c8783cd",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1560335,
+        "known_for_department": "Acting",
+        "name": "Sue-Lynn Ansari",
+        "original_name": "Sue-Lynn Ansari",
+        "popularity": 0.4276,
+        "profile_path": "/lJuW2N6JhG2GJTulmkJYzQXvhvA.jpg",
+        "cast_id": 10,
+        "character": "Nurse",
+        "credit_id": "5c47b3b0c3a368663483f1ea",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1702392,
+        "known_for_department": "Acting",
+        "name": "Ariana Guerra",
+        "original_name": "Ariana Guerra",
+        "popularity": 1.0022,
+        "profile_path": "/1bZcu30gkzKkLHRKgz5b2dg59et.jpg",
+        "cast_id": 11,
+        "character": "Hope Gomez",
+        "credit_id": "5c47b3b0c3a3684782878147",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2270488,
+        "known_for_department": "Acting",
+        "name": "Cecilia Leal",
+        "original_name": "Cecilia Leal",
+        "popularity": 0.5159,
+        "profile_path": "/sxgbMUQKLU7WkHpsD7L0T8W8XnD.jpg",
+        "cast_id": 19,
+        "character": "Camila",
+        "credit_id": "5c93ecaac3a3682e5bf190e2",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1860890,
+        "known_for_department": "Acting",
+        "name": "Trina LaFargue",
+        "original_name": "Trina LaFargue",
+        "popularity": 0.1648,
+        "profile_path": null,
+        "cast_id": 21,
+        "character": "Maya",
+        "credit_id": "5c93ecbec3a3682e4df196ec",
+        "order": 14
+      },
+      {
+        "adult": true,
+        "gender": 2,
+        "id": 2270491,
+        "known_for_department": "Acting",
+        "name": "Brett Austin Johnson",
+        "original_name": "Brett Austin Johnson",
+        "popularity": 0.6,
+        "profile_path": "/6alxzlqJTZgB1F1fXzAXGMFRuV.jpg",
+        "cast_id": 23,
+        "character": "Jason",
+        "credit_id": "5c93ece892514173037455e6",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2478146,
+        "known_for_department": "Acting",
+        "name": "Evangeline Hill",
+        "original_name": "Evangeline Hill",
+        "popularity": 0.1405,
+        "profile_path": "/iZpCgpLpt4ux3W4JX6eOFlkKgo7.jpg",
+        "cast_id": 29,
+        "character": "Stella Grant (young)",
+        "credit_id": "5ded5effdaf57c0013ec745e",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2478147,
+        "known_for_department": "Acting",
+        "name": "Ivy Dubreuil",
+        "original_name": "Ivy Dubreuil",
+        "popularity": 0.2774,
+        "profile_path": "/g4Pts8sjOVjUW0rNohFoLEw68CK.jpg",
+        "cast_id": 30,
+        "character": "Abby Grant (young)",
+        "credit_id": "5ded5f5b85da12001a496568",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2478148,
+        "known_for_department": "Acting",
+        "name": "Kristopher Perez",
+        "original_name": "Kristopher Perez",
+        "popularity": 0.1646,
+        "profile_path": null,
+        "cast_id": 31,
+        "character": "Poe Ram\u00edrez (young)",
+        "credit_id": "5ded5fc4dc86470011c3b2b4",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1494513,
+        "known_for_department": "Acting",
+        "name": "Demi\u00e1n Castro",
+        "original_name": "Demi\u00e1n Castro",
+        "popularity": 1.1969,
+        "profile_path": "/ddUS8OUqbaeesEEsy1P0ezy3AqF.jpg",
+        "cast_id": 32,
+        "character": "Anesthesiologist",
+        "credit_id": "5ded6071025764001853210f",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2478149,
+        "known_for_department": "Acting",
+        "name": "Keianna Nutley",
+        "original_name": "Keianna Nutley",
+        "popularity": 0.189,
+        "profile_path": null,
+        "cast_id": 33,
+        "character": "Young Patient",
+        "credit_id": "5ded60d4daf57c0015ec5cf1",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 932104,
+        "known_for_department": "Acting",
+        "name": "Armando Leduc",
+        "original_name": "Armando Leduc",
+        "popularity": 0.3028,
+        "profile_path": "/ebaRBXmbrMfFXLJzvazE5tVv3ZJ.jpg",
+        "cast_id": 34,
+        "character": "RRT Doctor",
+        "credit_id": "5ded60eedc86470019c3aca0",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 168942,
+        "known_for_department": "Acting",
+        "name": "Jim Gleason",
+        "original_name": "Jim Gleason",
+        "popularity": 0.7139,
+        "profile_path": "/q1AcVjW6Xb0mOTHHobMSm9AXcOr.jpg",
+        "cast_id": 35,
+        "character": "ER Doctor",
+        "credit_id": "5ded610132489b0014c21f5e",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2478151,
+        "known_for_department": "Acting",
+        "name": "Phillip Mullings Jr.",
+        "original_name": "Phillip Mullings Jr.",
+        "popularity": 0.5837,
+        "profile_path": "/ocLUruXRU7cC377LHnKcNrbK0aU.jpg",
+        "cast_id": 36,
+        "character": "EMT",
+        "credit_id": "5ded610f32489b0014c21f86",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2478154,
+        "known_for_department": "Acting",
+        "name": "Maxwell Baldoni",
+        "original_name": "Maxwell Baldoni",
+        "popularity": 0.1023,
+        "profile_path": null,
+        "cast_id": 38,
+        "character": "Julie's Baby",
+        "credit_id": "5ded61c5dc86470019c3aec7",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1178637,
+        "known_for_department": "Acting",
+        "name": "Todd Terry",
+        "original_name": "Todd Terry",
+        "popularity": 0.9297,
+        "profile_path": "/vB9zZNg8qZPlSijYs84F4LpwVpo.jpg",
+        "cast_id": 41,
+        "character": "Surgeon",
+        "credit_id": "606da9ac1c6aa7006eb189cd",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1601441,
+        "known_for_department": "Acting",
+        "name": "Johnny Otto",
+        "original_name": "Johnny Otto",
+        "popularity": 1.6384,
+        "profile_path": "/i5LOfr6GLH6hvBdCoMyKY457IQZ.jpg",
+        "cast_id": 91,
+        "character": "Dr. Mansfield",
+        "credit_id": "61cad724681888001d16bdef",
+        "order": 26
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 88675,
+        "known_for_department": "Acting",
+        "name": "Justin Baldoni",
+        "original_name": "Justin Baldoni",
+        "popularity": 1.7342,
+        "profile_path": "/a7Z3lA96nyZswEc80nXAKCWfXn1.jpg",
+        "credit_id": "5b10865c9251415ed200b780",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1932098,
+        "known_for_department": "Production",
+        "name": "Christopher H. Warner",
+        "original_name": "Christopher H. Warner",
+        "popularity": 0.4789,
+        "profile_path": "/ShgaPywYjhXOkzt3MxdX6oNygF.jpg",
+        "credit_id": "5c89c3aac3a368216e0c0efa",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 88675,
+        "known_for_department": "Acting",
+        "name": "Justin Baldoni",
+        "original_name": "Justin Baldoni",
+        "popularity": 1.7342,
+        "profile_path": "/a7Z3lA96nyZswEc80nXAKCWfXn1.jpg",
+        "credit_id": "5c89c3669251410ccfc260a1",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 17451,
+        "known_for_department": "Production",
+        "name": "Cathy Schulman",
+        "original_name": "Cathy Schulman",
+        "popularity": 0.7148,
+        "profile_path": "/ij1JtBArVmeNOS1KDjVXgHomIkc.jpg",
+        "credit_id": "5c89c3830e0a260b60c2b37c",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Five Feet Apart (2019)\n\nDirector: Justin Baldoni\n\nExecutive Producer: Christopher H. Warner\n\nProducer: Justin Baldoni\n\nProducer: Cathy Schulman\n\nGenres: Romance, Drama\n\nThemes and Keywords: forbidden love, terminal illness, hospital, best friend, falling in love, cystic fibrosis, star crossed lovers, first date, true love, teenager, dramatic, sentimental, romantic, melodramatic\n\nTop Cast: Haley Lu Richardson, Cole Sprouse, Mois\u00e9s Arias, Kimberly H\u00e9bert Gregory, Parminder Nagra, Claire Forlani, Cynthia Evans, Gary Weeks, Sophia Bernard, Emily Baldoni, Rebecca Chulew, Sue-Lynn Ansari, Ariana Guerra, Cecilia Leal, Trina LaFargue, Brett Austin Johnson, Evangeline Hill, Ivy Dubreuil, Kristopher Perez, Demi\u00e1n Castro, Keianna Nutley, Armando Leduc, Jim Gleason, Phillip Mullings Jr., Maxwell Baldoni, Todd Terry, Johnny Otto\n\nPlot: Seventeen-year-old Stella spends most of her time in the hospital as a cystic fibrosis patient. Her life is full of routines, boundaries and self-control \u2014 all of which get put to the test when she meets Will, an impossibly charming teen who has the same illness. There's an instant flirtation, though restrictions dictate that they must maintain a safe distance between them. As their connection intensifies, so does the temptation to throw the rules out the window and embrace that attraction.\n\n"
+}

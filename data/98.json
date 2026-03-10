@@ -1,0 +1,716 @@
+{
+  "adult": false,
+  "backdrop_path": "/jhk6D8pim3yaByu1801kMoxXFaX.jpg",
+  "belongs_to_collection": {
+    "id": 1069584,
+    "name": "Gladiator Collection",
+    "poster_path": "/41RyTMtScaSYJ5ZHwOrkv3NJKEv.jpg",
+    "backdrop_path": "/1VdLvSIeHuwqCT13H9EafxCacGB.jpg"
+  },
+  "budget": 103000000,
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    }
+  ],
+  "homepage": "",
+  "id": 98,
+  "imdb_id": "tt0172495",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Gladiator",
+  "overview": "After the death of Emperor Marcus Aurelius, his devious son takes power and demotes Maximus, one of Rome's most capable generals who Marcus preferred. Eventually, Maximus is forced to become a gladiator and battle to the death against other men for the amusement of paying audiences.",
+  "popularity": 16.3071,
+  "poster_path": "/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",
+  "production_companies": [
+    {
+      "id": 33,
+      "logo_path": "/8lvHyhjr8oUKOOy2dKXoALWKdp0.png",
+      "name": "Universal Pictures",
+      "origin_country": "US"
+    },
+    {
+      "id": 1645,
+      "logo_path": "/6Ry6uNBaa0IbbSs1XYIgX5DkA9r.png",
+      "name": "Scott Free Productions",
+      "origin_country": "GB"
+    },
+    {
+      "id": 14440,
+      "logo_path": "/gk9zllyMFnaVBWTdZpm7VcfQrHC.png",
+      "name": "Red Wagon Entertainment",
+      "origin_country": "US"
+    },
+    {
+      "id": 21904,
+      "logo_path": null,
+      "name": "Mill Film",
+      "origin_country": "GB"
+    },
+    {
+      "id": 7,
+      "logo_path": "/vru2SssLX3FPhnKZGtYw00pVIS9.png",
+      "name": "DreamWorks Pictures",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "GB",
+      "name": "United Kingdom"
+    },
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "2000-05-04",
+  "revenue": 465516248,
+  "runtime": 155,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "What we do in life echoes in eternity.",
+  "title": "Gladiator",
+  "video": false,
+  "vote_average": 8.221,
+  "vote_count": 20566,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 1394,
+        "name": "gladiator"
+      },
+      {
+        "id": 588,
+        "name": "rome, italy"
+      },
+      {
+        "id": 1395,
+        "name": "arena"
+      },
+      {
+        "id": 1399,
+        "name": "senate"
+      },
+      {
+        "id": 1405,
+        "name": "roman empire"
+      },
+      {
+        "id": 970,
+        "name": "parent child relationship"
+      },
+      {
+        "id": 2280,
+        "name": "emperor"
+      },
+      {
+        "id": 2831,
+        "name": "slavery"
+      },
+      {
+        "id": 5049,
+        "name": "ancient rome"
+      },
+      {
+        "id": 9748,
+        "name": "revenge"
+      },
+      {
+        "id": 10141,
+        "name": "battlefield"
+      },
+      {
+        "id": 10520,
+        "name": "slave auction"
+      },
+      {
+        "id": 12995,
+        "name": "historical fiction"
+      },
+      {
+        "id": 14704,
+        "name": "ancient world"
+      },
+      {
+        "id": 18543,
+        "name": "combat"
+      },
+      {
+        "id": 179780,
+        "name": "chariot"
+      },
+      {
+        "id": 192230,
+        "name": "philosopher"
+      },
+      {
+        "id": 235791,
+        "name": "barbarian horde"
+      },
+      {
+        "id": 235792,
+        "name": "2nd century"
+      },
+      {
+        "id": 235793,
+        "name": "successor"
+      },
+      {
+        "id": 242039,
+        "name": "commodus"
+      },
+      {
+        "id": 250224,
+        "name": "maximus"
+      },
+      {
+        "id": 271944,
+        "name": "serene"
+      },
+      {
+        "id": 325791,
+        "name": "defiant"
+      },
+      {
+        "id": 351452,
+        "name": "gladiador"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 934,
+        "known_for_department": "Acting",
+        "name": "Russell Crowe",
+        "original_name": "Russell Crowe",
+        "popularity": 3.2815,
+        "profile_path": "/uxiXuVH4vNWrKlJMVVPG1sxAJFe.jpg",
+        "cast_id": 8,
+        "character": "Maximus",
+        "credit_id": "52fe4217c3a36847f8003435",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 73421,
+        "known_for_department": "Acting",
+        "name": "Joaquin Phoenix",
+        "original_name": "Joaquin Phoenix",
+        "popularity": 3.7814,
+        "profile_path": "/u38k3hQBDwNX0VA22aQceDp9Iyv.jpg",
+        "cast_id": 9,
+        "character": "Commodus",
+        "credit_id": "52fe4217c3a36847f8003439",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 935,
+        "known_for_department": "Acting",
+        "name": "Connie Nielsen",
+        "original_name": "Connie Nielsen",
+        "popularity": 4.4753,
+        "profile_path": "/gSQ3O3PJ6ly6nT63joOtfZyscFP.jpg",
+        "cast_id": 10,
+        "character": "Lucilla",
+        "credit_id": "52fe4217c3a36847f800343d",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 936,
+        "known_for_department": "Acting",
+        "name": "Oliver Reed",
+        "original_name": "Oliver Reed",
+        "popularity": 1.6696,
+        "profile_path": "/dWfotc1X71wNCGyPO9hXpv8U9Gw.jpg",
+        "cast_id": 11,
+        "character": "Proximo",
+        "credit_id": "52fe4217c3a36847f8003441",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 194,
+        "known_for_department": "Acting",
+        "name": "Richard Harris",
+        "original_name": "Richard Harris",
+        "popularity": 2.7554,
+        "profile_path": "/lCvcVMuxrg1f5A8OMqY9AqkkcZR.jpg",
+        "cast_id": 12,
+        "character": "Marcus Aurelius",
+        "credit_id": "52fe4217c3a36847f8003445",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 937,
+        "known_for_department": "Acting",
+        "name": "Derek Jacobi",
+        "original_name": "Derek Jacobi",
+        "popularity": 1.5377,
+        "profile_path": "/yHENzHZSVpnNrqsoATuDSMiQflf.jpg",
+        "cast_id": 13,
+        "character": "Gracchus",
+        "credit_id": "52fe4217c3a36847f8003449",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 938,
+        "known_for_department": "Acting",
+        "name": "Djimon Hounsou",
+        "original_name": "Djimon Hounsou",
+        "popularity": 2.3166,
+        "profile_path": "/tpvtxxvCx2Mb5DV632hmuYlHoiY.jpg",
+        "cast_id": 14,
+        "character": "Juba",
+        "credit_id": "52fe4217c3a36847f800344d",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 939,
+        "known_for_department": "Acting",
+        "name": "David Schofield",
+        "original_name": "David Schofield",
+        "popularity": 1.1696,
+        "profile_path": "/2Dlxu9pqbjKA0dbfy4yMUFjiqeW.jpg",
+        "cast_id": 15,
+        "character": "Falco",
+        "credit_id": "52fe4217c3a36847f8003451",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 940,
+        "known_for_department": "Acting",
+        "name": "John Shrapnel",
+        "original_name": "John Shrapnel",
+        "popularity": 1.0785,
+        "profile_path": "/A4Wmltbkz3sz79GcBkLeTqwfkvE.jpg",
+        "cast_id": 16,
+        "character": "Gaius",
+        "credit_id": "52fe4217c3a36847f8003455",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 941,
+        "known_for_department": "Acting",
+        "name": "Tomas Arana",
+        "original_name": "Tomas Arana",
+        "popularity": 2.0215,
+        "profile_path": "/qMuQWxUQ2sXDiN2d9EDVT5VXHo2.jpg",
+        "cast_id": 17,
+        "character": "Quintus",
+        "credit_id": "52fe4217c3a36847f8003459",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 942,
+        "known_for_department": "Acting",
+        "name": "Ralf Moeller",
+        "original_name": "Ralf Moeller",
+        "popularity": 0.9326,
+        "profile_path": "/lfx7pAL0einahCePvn10SmMCfoU.jpg",
+        "cast_id": 18,
+        "character": "Hagen",
+        "credit_id": "52fe4217c3a36847f800345d",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4012,
+        "known_for_department": "Acting",
+        "name": "Spencer Treat Clark",
+        "original_name": "Spencer Treat Clark",
+        "popularity": 1.6282,
+        "profile_path": "/8qb2Unu2907rU7k6UxmF9PFamau.jpg",
+        "cast_id": 29,
+        "character": "Lucius",
+        "credit_id": "52fe4217c3a36847f8003495",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 15196,
+        "known_for_department": "Acting",
+        "name": "David Hemmings",
+        "original_name": "David Hemmings",
+        "popularity": 0.8013,
+        "profile_path": "/44De37NQX5Lcr7jfttNqwP9Sspq.jpg",
+        "cast_id": 30,
+        "character": "Cassius",
+        "credit_id": "52fe4217c3a36847f8003499",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2478,
+        "known_for_department": "Acting",
+        "name": "Tommy Flanagan",
+        "original_name": "Tommy Flanagan",
+        "popularity": 1.8112,
+        "profile_path": "/5OnvT1KpEk3juZavqOCSAEYOtwl.jpg",
+        "cast_id": 28,
+        "character": "Cicero",
+        "credit_id": "52fe4217c3a36847f8003491",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 20761,
+        "known_for_department": "Acting",
+        "name": "Sven-Ole Thorsen",
+        "original_name": "Sven-Ole Thorsen",
+        "popularity": 0.4585,
+        "profile_path": "/7uhBGHXs6xLwFwzWbLEsHDgYzHP.jpg",
+        "cast_id": 31,
+        "character": "Tiger",
+        "credit_id": "52fe4217c3a36847f800349d",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 41379,
+        "known_for_department": "Acting",
+        "name": "Omid Djalili",
+        "original_name": "Omid Djalili",
+        "popularity": 1.3893,
+        "profile_path": "/lCgVvAw8EkIKbc93ZtINdwxH1CV.jpg",
+        "cast_id": 108,
+        "character": "Slave Trader",
+        "credit_id": "55338c68925141101400343c",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 80368,
+        "known_for_department": "Acting",
+        "name": "Nicholas McGaughey",
+        "original_name": "Nicholas McGaughey",
+        "popularity": 0.3154,
+        "profile_path": "/uKhCZeIOWNT8u5tXpIG4QbeC9Wu.jpg",
+        "cast_id": 260,
+        "character": "Praetorian Officer",
+        "credit_id": "637236cf798e0600914fa122",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3785463,
+        "known_for_department": "Acting",
+        "name": "Chris Kell",
+        "original_name": "Chris Kell",
+        "popularity": 0.1083,
+        "profile_path": null,
+        "cast_id": 261,
+        "character": "Scribe",
+        "credit_id": "637236dd02842000dcabae8f",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2220,
+        "known_for_department": "Acting",
+        "name": "Tony Curran",
+        "original_name": "Tony Curran",
+        "popularity": 1.1451,
+        "profile_path": "/3jDsskeIzbCNKuqu2WIxmtmv8mG.jpg",
+        "cast_id": 262,
+        "character": "Assassin #1",
+        "credit_id": "637236e6ca4f670082126ea8",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 27408,
+        "known_for_department": "Acting",
+        "name": "Mark Lewis",
+        "original_name": "Mark Lewis",
+        "popularity": 0.4785,
+        "profile_path": "/yrFrMIS4alAZAU8L2IlWhhsTtCR.jpg",
+        "cast_id": 263,
+        "character": "Assassin #2",
+        "credit_id": "6372373dca4f6700bbc076c3",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 200689,
+        "known_for_department": "Acting",
+        "name": "John Quinn",
+        "original_name": "John Quinn",
+        "popularity": 0.3914,
+        "profile_path": "/A2rGP50d0vHAv7FG3lOe4JDkf6y.jpg",
+        "cast_id": 264,
+        "character": "Valerius",
+        "credit_id": "6372374c798e0600aaa07ef9",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1052482,
+        "known_for_department": "Acting",
+        "name": "Alun Raglan",
+        "original_name": "Alun Raglan",
+        "popularity": 0.4294,
+        "profile_path": "/u4QQEuuWn2yIyA41J0TmR2W6bUh.jpg",
+        "cast_id": 265,
+        "character": "Praetorian Guard #1",
+        "credit_id": "637237596bdec3007d9fccc4",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1715,
+        "known_for_department": "Acting",
+        "name": "David Bailie",
+        "original_name": "David Bailie",
+        "popularity": 0.3897,
+        "profile_path": "/k2UbrUPJMTZOHIw8Z9V3hutQRAe.jpg",
+        "cast_id": 266,
+        "character": "Engineer",
+        "credit_id": "6372377702842000a321c3c5",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3785484,
+        "known_for_department": "Acting",
+        "name": "Chick Allan",
+        "original_name": "Chick Allan",
+        "popularity": 0.1372,
+        "profile_path": null,
+        "cast_id": 267,
+        "character": "German Leader",
+        "credit_id": "637237ea21621b00b49fa46f",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1760088,
+        "known_for_department": "Acting",
+        "name": "David J. Nicholls",
+        "original_name": "David J. Nicholls",
+        "popularity": 0.5095,
+        "profile_path": null,
+        "cast_id": 268,
+        "character": "Giant Man",
+        "credit_id": "63723836ca4f670082126fc7",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 124314,
+        "known_for_department": "Acting",
+        "name": "Al Hunter Ashton",
+        "original_name": "Al Hunter Ashton",
+        "popularity": 0.6348,
+        "profile_path": "/hUkcVLyvZrF3pDyEaOdwA9c3gOl.jpg",
+        "cast_id": 269,
+        "character": "Rome Trainer #1",
+        "credit_id": "6372384021621b00cd63845d",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2219097,
+        "known_for_department": "Production",
+        "name": "Billy Dowd",
+        "original_name": "Billy Dowd",
+        "popularity": 0.7052,
+        "profile_path": null,
+        "cast_id": 270,
+        "character": "Narrator",
+        "credit_id": "63723864798e0600dc36ff44",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 5056482,
+        "known_for_department": "Acting",
+        "name": "Ray Calleja",
+        "original_name": "Ray Calleja",
+        "popularity": 0.1168,
+        "profile_path": null,
+        "cast_id": 323,
+        "character": "Lucius' Attendant",
+        "credit_id": "67343d4379280b32169f0dc9",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 58787,
+        "known_for_department": "Acting",
+        "name": "Giannina Facio",
+        "original_name": "Giannina Facio",
+        "popularity": 1.811,
+        "profile_path": "/8ndgZB1rkkee3jwFB9Lx7i2ebJT.jpg",
+        "cast_id": 272,
+        "character": "Maximus' Wife",
+        "credit_id": "6372387c6bdec300d57b9a79",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 9236,
+        "known_for_department": "Acting",
+        "name": "Giorgio Cantarini",
+        "original_name": "Giorgio Cantarini",
+        "popularity": 0.8224,
+        "profile_path": "/1tKZHpVTYcw8EP3naVTZFlrOkhQ.jpg",
+        "cast_id": 273,
+        "character": "Maximus' Son",
+        "credit_id": "6372388402842000827a1ff7",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 578,
+        "known_for_department": "Directing",
+        "name": "Ridley Scott",
+        "original_name": "Ridley Scott",
+        "popularity": 2.6401,
+        "profile_path": "/zABJmN9opmqD4orWl3KSdCaSo7Q.jpg",
+        "credit_id": "52fe4217c3a36847f800340d",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 930,
+        "known_for_department": "Production",
+        "name": "Branko Lustig",
+        "original_name": "Branko Lustig",
+        "popularity": 0.423,
+        "profile_path": "/yHRAgKCRESvnLN72L32BUwXLHIT.jpg",
+        "credit_id": "52fe4217c3a36847f8003419",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 931,
+        "known_for_department": "Production",
+        "name": "Douglas Wick",
+        "original_name": "Douglas Wick",
+        "popularity": 1.1309,
+        "profile_path": "/aI1Qz1jvKu8ask3PL0bKWdqHxH3.jpg",
+        "credit_id": "52fe4217c3a36847f800341f",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 929,
+        "known_for_department": "Writing",
+        "name": "David Franzoni",
+        "original_name": "David Franzoni",
+        "popularity": 1.5284,
+        "profile_path": "/uNDu3nnt5HCxuSxWAlDWrzQfWSz.jpg",
+        "credit_id": "52fe4217c3a36847f8003413",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 578,
+        "known_for_department": "Directing",
+        "name": "Ridley Scott",
+        "original_name": "Ridley Scott",
+        "popularity": 2.6401,
+        "profile_path": "/zABJmN9opmqD4orWl3KSdCaSo7Q.jpg",
+        "credit_id": "569fd21dc3a3683413001914",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 8701,
+        "known_for_department": "Production",
+        "name": "Laurie MacDonald",
+        "original_name": "Laurie MacDonald",
+        "popularity": 1.0651,
+        "profile_path": "/qmshY2CdaZKjl6s7K0fVWVFeO7p.jpg",
+        "credit_id": "569fd1ae9251415e6700a5b2",
+        "department": "Production",
+        "job": "Executive Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2212,
+        "known_for_department": "Production",
+        "name": "Walter F. Parkes",
+        "original_name": "Walter F. Parkes",
+        "popularity": 1.0748,
+        "profile_path": "/voOB5IhqOMvaweh44mfNnAYJBrq.jpg",
+        "credit_id": "569fd2089251415e6700a5c4",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Gladiator (2000)\n\nDirector: Ridley Scott\n\nProducer: Branko Lustig\n\nProducer: Douglas Wick\n\nProducer: David Franzoni\n\nExecutive Producer: Ridley Scott\n\nExecutive Producer: Laurie MacDonald\n\nExecutive Producer: Walter F. Parkes\n\nGenres: Action, Drama, Adventure\n\nThemes and Keywords: gladiator, rome, italy, arena, senate, roman empire, parent child relationship, emperor, slavery, ancient rome, revenge, battlefield, slave auction, historical fiction, ancient world, combat, chariot, philosopher, barbarian horde, 2nd century, successor, commodus, maximus, serene, defiant, gladiador\n\nTop Cast: Russell Crowe, Joaquin Phoenix, Connie Nielsen, Oliver Reed, Richard Harris, Derek Jacobi, Djimon Hounsou, David Schofield, John Shrapnel, Tomas Arana, Ralf Moeller, Spencer Treat Clark, David Hemmings, Tommy Flanagan, Sven-Ole Thorsen, Omid Djalili, Nicholas McGaughey, Chris Kell, Tony Curran, Mark Lewis, John Quinn, Alun Raglan, David Bailie, Chick Allan, David J. Nicholls, Al Hunter Ashton, Billy Dowd, Ray Calleja, Giannina Facio, Giorgio Cantarini\n\nPlot: After the death of Emperor Marcus Aurelius, his devious son takes power and demotes Maximus, one of Rome's most capable generals who Marcus preferred. Eventually, Maximus is forced to become a gladiator and battle to the death against other men for the amusement of paying audiences.\n\n"
+}

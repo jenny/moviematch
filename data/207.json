@@ -1,0 +1,643 @@
+{
+  "adult": false,
+  "backdrop_path": "/yYvBNN96Ym3wtPxGCFl7F888WwB.jpg",
+  "belongs_to_collection": null,
+  "budget": 16400000,
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 207,
+  "imdb_id": "tt0097165",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "Dead Poets Society",
+  "overview": "At an elite, old-fashioned boarding school in New England, a passionate English teacher inspires his students to rebel against convention and seize the potential of every day, courting the disdain of the stern headmaster.",
+  "popularity": 13.7332,
+  "poster_path": "/l5NbiHKUmahlAT3Q1ig8Tyl9xrc.jpg",
+  "production_companies": [
+    {
+      "id": 184460,
+      "logo_path": null,
+      "name": "A Steven Haft Production",
+      "origin_country": ""
+    },
+    {
+      "id": 1089,
+      "logo_path": null,
+      "name": "Witt/Thomas Productions",
+      "origin_country": ""
+    },
+    {
+      "id": 10282,
+      "logo_path": null,
+      "name": "Silver Screen Partners IV",
+      "origin_country": "US"
+    },
+    {
+      "id": 9195,
+      "logo_path": "/geK5QOBsXIPGHutKwXtYjMUyYSG.png",
+      "name": "Touchstone Pictures",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1989-06-02",
+  "revenue": 235860116,
+  "runtime": 129,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "Latin",
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "status": "Released",
+  "tagline": "He was their inspiration. He made their lives extraordinary.",
+  "title": "Dead Poets Society",
+  "video": false,
+  "vote_average": 8.301,
+  "vote_count": 12333,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 30,
+        "name": "individual"
+      },
+      {
+        "id": 6054,
+        "name": "friendship"
+      },
+      {
+        "id": 490,
+        "name": "philosophy"
+      },
+      {
+        "id": 496,
+        "name": "poetry"
+      },
+      {
+        "id": 2132,
+        "name": "literature"
+      },
+      {
+        "id": 1992,
+        "name": "professor"
+      },
+      {
+        "id": 9672,
+        "name": "based on true story"
+      },
+      {
+        "id": 10683,
+        "name": "coming of age"
+      },
+      {
+        "id": 10508,
+        "name": "teacher"
+      },
+      {
+        "id": 15165,
+        "name": "school play"
+      },
+      {
+        "id": 41393,
+        "name": "new england"
+      },
+      {
+        "id": 156799,
+        "name": "vermont"
+      },
+      {
+        "id": 170378,
+        "name": "schoolteacher"
+      },
+      {
+        "id": 185158,
+        "name": "preparatory school"
+      },
+      {
+        "id": 200918,
+        "name": "angry"
+      },
+      {
+        "id": 208611,
+        "name": "1950s"
+      },
+      {
+        "id": 211659,
+        "name": "somber"
+      },
+      {
+        "id": 259376,
+        "name": "playful"
+      },
+      {
+        "id": 296608,
+        "name": "teenager"
+      },
+      {
+        "id": 325771,
+        "name": "arrogant"
+      },
+      {
+        "id": 325791,
+        "name": "defiant"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2157,
+        "known_for_department": "Acting",
+        "name": "Robin Williams",
+        "original_name": "Robin Williams",
+        "popularity": 3.4078,
+        "profile_path": "/iYdeP6K0qz44Wg2Nw9LPJGMBkQ5.jpg",
+        "cast_id": 3,
+        "character": "John Keating",
+        "credit_id": "52fe4227c3a36847f8007feb",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2692,
+        "known_for_department": "Acting",
+        "name": "Robert Sean Leonard",
+        "original_name": "Robert Sean Leonard",
+        "popularity": 3.0708,
+        "profile_path": "/jXehZM0AWLJ2OIz4o0jFtHEzcMI.jpg",
+        "cast_id": 5,
+        "character": "Neil Perry",
+        "credit_id": "52fe4227c3a36847f8007ff3",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 569,
+        "known_for_department": "Acting",
+        "name": "Ethan Hawke",
+        "original_name": "Ethan Hawke",
+        "popularity": 4.2173,
+        "profile_path": "/oojD9jSshvUT4t6AUySsBxoekHk.jpg",
+        "cast_id": 4,
+        "character": "Todd Anderson",
+        "credit_id": "52fe4227c3a36847f8007fef",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2694,
+        "known_for_department": "Acting",
+        "name": "Josh Charles",
+        "original_name": "Josh Charles",
+        "popularity": 2.0715,
+        "profile_path": "/xmFdIoFKVRNUmXaslBlErA3UHfF.jpg",
+        "cast_id": 7,
+        "character": "Knox Overstreet",
+        "credit_id": "52fe4227c3a36847f8007ffb",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2693,
+        "known_for_department": "Acting",
+        "name": "Gale Hansen",
+        "original_name": "Gale Hansen",
+        "popularity": 1.731,
+        "profile_path": "/gVZ9TFvseA3I0fLLJiXKInzBygp.jpg",
+        "cast_id": 6,
+        "character": "Charlie Dalton",
+        "credit_id": "52fe4227c3a36847f8007ff7",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2695,
+        "known_for_department": "Acting",
+        "name": "Dylan Kussman",
+        "original_name": "Dylan Kussman",
+        "popularity": 1.164,
+        "profile_path": "/33V8NdkLrpSCEVeIiKk5DoGRthx.jpg",
+        "cast_id": 8,
+        "character": "Richard Cameron",
+        "credit_id": "52fe4227c3a36847f8007fff",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2696,
+        "known_for_department": "Acting",
+        "name": "Allelon Ruggiero",
+        "original_name": "Allelon Ruggiero",
+        "popularity": 1.692,
+        "profile_path": "/sSjaviVlBCnZYipURQY5o9rvPl7.jpg",
+        "cast_id": 9,
+        "character": "Steven Meeks",
+        "credit_id": "52fe4227c3a36847f8008003",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2697,
+        "known_for_department": "Acting",
+        "name": "James Waterston",
+        "original_name": "James Waterston",
+        "popularity": 0.6166,
+        "profile_path": "/7IPxmwB7f2CqCJvxAea0BjwI5Fz.jpg",
+        "cast_id": 10,
+        "character": "Gerard Pitts",
+        "credit_id": "52fe4227c3a36847f8008007",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2698,
+        "known_for_department": "Acting",
+        "name": "Norman Lloyd",
+        "original_name": "Norman Lloyd",
+        "popularity": 1.3222,
+        "profile_path": "/z7jg1zuFfC5jqn4kI40OGAOrD5U.jpg",
+        "cast_id": 11,
+        "character": "Mr. Nolan",
+        "credit_id": "52fe4227c3a36847f800800b",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2115,
+        "known_for_department": "Acting",
+        "name": "Kurtwood Smith",
+        "original_name": "Kurtwood Smith",
+        "popularity": 1.2353,
+        "profile_path": "/7dqsk4NYbNZNnmppv2zPuf1hKBn.jpg",
+        "cast_id": 12,
+        "character": "Mr. Perry",
+        "credit_id": "52fe4227c3a36847f800800f",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2699,
+        "known_for_department": "Acting",
+        "name": "Carla Belver",
+        "original_name": "Carla Belver",
+        "popularity": 0.2004,
+        "profile_path": "/8OpEr0VIJjghnZ4pdIH0sNuXJWn.jpg",
+        "cast_id": 13,
+        "character": "Mrs. Perry",
+        "credit_id": "52fe4227c3a36847f8008013",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2700,
+        "known_for_department": "Acting",
+        "name": "Leon Pownall",
+        "original_name": "Leon Pownall",
+        "popularity": 1.6233,
+        "profile_path": null,
+        "cast_id": 14,
+        "character": "McAllister",
+        "credit_id": "52fe4227c3a36847f8008017",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2701,
+        "known_for_department": "Acting",
+        "name": "George Martin",
+        "original_name": "George Martin",
+        "popularity": 0.7521,
+        "profile_path": "/nIgCta2DazdhpJLQKqyxHpKbqpl.jpg",
+        "cast_id": 15,
+        "character": "Dr. Hager",
+        "credit_id": "52fe4227c3a36847f800801b",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2444534,
+        "known_for_department": "Acting",
+        "name": "Joe Aufiery",
+        "original_name": "Joe Aufiery",
+        "popularity": 0.6829,
+        "profile_path": null,
+        "cast_id": 28,
+        "character": "Chemistry Teacher",
+        "credit_id": "5db95f8b2d37210015eaccef",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2444541,
+        "known_for_department": "Acting",
+        "name": "Matt Carey",
+        "original_name": "Matt Carey",
+        "popularity": 0.1446,
+        "profile_path": null,
+        "cast_id": 29,
+        "character": "Hopkins",
+        "credit_id": "5db96245d2c0c100161a79a6",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 25711,
+        "known_for_department": "Acting",
+        "name": "Kevin Cooney",
+        "original_name": "Kevin Cooney",
+        "popularity": 0.979,
+        "profile_path": "/iPhJ6276RTcdpyeuhi6U6y1p8Ci.jpg",
+        "cast_id": 36,
+        "character": "Joe Danburry",
+        "credit_id": "610c6fe44cbe1200818fba2d",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1719917,
+        "known_for_department": "Acting",
+        "name": "Jane Moore",
+        "original_name": "Jane Moore",
+        "popularity": 0.2913,
+        "profile_path": null,
+        "cast_id": 37,
+        "character": "Mrs. Danburry",
+        "credit_id": "610c70065bce9e005e4c2de3",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 6684,
+        "known_for_department": "Acting",
+        "name": "Lara Flynn Boyle",
+        "original_name": "Lara Flynn Boyle",
+        "popularity": 2.6605,
+        "profile_path": "/1VL97IlddM29sypHuI36XY2h5Z2.jpg",
+        "cast_id": 38,
+        "character": "Ginny Danburry",
+        "credit_id": "610c7021e78687005e923487",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 2444648,
+        "known_for_department": "Acting",
+        "name": "Colin Irving",
+        "original_name": "Colin Irving",
+        "popularity": 0.3095,
+        "profile_path": null,
+        "cast_id": 33,
+        "character": "Chet Danburry",
+        "credit_id": "5db988fad2c0c10018194bec",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 131183,
+        "known_for_department": "Acting",
+        "name": "Alexandra Powers",
+        "original_name": "Alexandra Powers",
+        "popularity": 1.0096,
+        "profile_path": "/zfz44FfM0YbGeScUTlUmf7gPvpq.jpg",
+        "cast_id": 25,
+        "character": "Chris Noel",
+        "credit_id": "53af20edc3a3682ed8003d67",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 4766,
+        "known_for_department": "Acting",
+        "name": "Melora Walters",
+        "original_name": "Melora Walters",
+        "popularity": 1.1789,
+        "profile_path": "/FSxiDBekrKgmzow1j3UhmNHOhI.jpg",
+        "cast_id": 27,
+        "character": "Gloria",
+        "credit_id": "5bb53dbe9251415b64007903",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 93620,
+        "known_for_department": "Acting",
+        "name": "Welker White",
+        "original_name": "Welker White",
+        "popularity": 0.756,
+        "profile_path": "/iBHVPZZkVUIZcRDV6NaGuAL2OeI.jpg",
+        "cast_id": 39,
+        "character": "Tina",
+        "credit_id": "610c70805bce9e0075a3d5e8",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3187830,
+        "known_for_department": "Acting",
+        "name": "Steve Mathios",
+        "original_name": "Steve Mathios",
+        "popularity": 0.0744,
+        "profile_path": null,
+        "cast_id": 40,
+        "character": "Steve",
+        "credit_id": "610c70989f5dfb004684f3d6",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1391363,
+        "known_for_department": "Acting",
+        "name": "Alan Pottinger",
+        "original_name": "Alan Pottinger",
+        "popularity": 0.5076,
+        "profile_path": "/f2VT3ZqnZQ10W3S2NHr2H15e8kZ.jpg",
+        "cast_id": 41,
+        "character": "Bubba",
+        "credit_id": "610c70abb234b900462841f7",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 164385,
+        "known_for_department": "Acting",
+        "name": "Pamela Burrell",
+        "original_name": "Pamela Burrell",
+        "popularity": 0.1826,
+        "profile_path": null,
+        "cast_id": 42,
+        "character": "Directing Teacher",
+        "credit_id": "610c70cd7719d70072c842f0",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3187832,
+        "known_for_department": "Acting",
+        "name": "Allison Hedges",
+        "original_name": "Allison Hedges",
+        "popularity": 0.1224,
+        "profile_path": null,
+        "cast_id": 43,
+        "character": "Actor / Fairy",
+        "credit_id": "610c71425a46900080484d81",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3187833,
+        "known_for_department": "Acting",
+        "name": "Christine D'Ercole",
+        "original_name": "Christine D'Ercole",
+        "popularity": 0.0815,
+        "profile_path": null,
+        "cast_id": 44,
+        "character": "Titania",
+        "credit_id": "610c715bdcf8750060717e32",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 167561,
+        "known_for_department": "Acting",
+        "name": "John Cunningham",
+        "original_name": "John Cunningham",
+        "popularity": 0.4704,
+        "profile_path": "/hXBlmWKvD342CcHzYbOeucslaJU.jpg",
+        "cast_id": 45,
+        "character": "Mr. Anderson",
+        "credit_id": "610c717c9f5dfb002a34832c",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 69504,
+        "known_for_department": "Acting",
+        "name": "Debra Mooney",
+        "original_name": "Debra Mooney",
+        "popularity": 1.4146,
+        "profile_path": "/4je0xiNyZwJZlDDupiHTjhzqVrB.jpg",
+        "cast_id": 46,
+        "character": "Mrs. Anderson",
+        "credit_id": "610c718f9f5dfb005ec27fa3",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 3187834,
+        "known_for_department": "Acting",
+        "name": "John Martin Bradley",
+        "original_name": "John Martin Bradley",
+        "popularity": 2.1169,
+        "profile_path": null,
+        "cast_id": 47,
+        "character": "Bagpiper",
+        "credit_id": "610c71adee43e8007f401000",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2690,
+        "known_for_department": "Directing",
+        "name": "Peter Weir",
+        "original_name": "Peter Weir",
+        "popularity": 1.3888,
+        "profile_path": "/4GxIZX5gtbMpW4ZgHwvGmLSIHOE.jpg",
+        "credit_id": "52fe4227c3a36847f8007fe1",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2708,
+        "known_for_department": "Production",
+        "name": "Tony Thomas",
+        "original_name": "Tony Thomas",
+        "popularity": 0.3706,
+        "profile_path": null,
+        "credit_id": "52fe4227c3a36847f800803f",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2706,
+        "known_for_department": "Production",
+        "name": "Steven Haft",
+        "original_name": "Steven Haft",
+        "popularity": 1.7188,
+        "profile_path": null,
+        "credit_id": "52fe4227c3a36847f8008033",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2707,
+        "known_for_department": "Production",
+        "name": "Paul Junger Witt",
+        "original_name": "Paul Junger Witt",
+        "popularity": 0.3623,
+        "profile_path": "/1aKgavN6FLH7QbfIBn9KH1nfa0F.jpg",
+        "credit_id": "52fe4227c3a36847f8008039",
+        "department": "Production",
+        "job": "Producer"
+      }
+    ]
+  },
+  "richtext": "Title: Dead Poets Society (1989)\n\nDirector: Peter Weir\n\nProducer: Tony Thomas\n\nProducer: Steven Haft\n\nProducer: Paul Junger Witt\n\nGenres: Drama\n\nThemes and Keywords: individual, friendship, philosophy, poetry, literature, professor, based on true story, coming of age, teacher, school play, new england, vermont, schoolteacher, preparatory school, angry, 1950s, somber, playful, teenager, arrogant, defiant\n\nTop Cast: Robin Williams, Robert Sean Leonard, Ethan Hawke, Josh Charles, Gale Hansen, Dylan Kussman, Allelon Ruggiero, James Waterston, Norman Lloyd, Kurtwood Smith, Carla Belver, Leon Pownall, George Martin, Joe Aufiery, Matt Carey, Kevin Cooney, Jane Moore, Lara Flynn Boyle, Colin Irving, Alexandra Powers, Melora Walters, Welker White, Steve Mathios, Alan Pottinger, Pamela Burrell, Allison Hedges, Christine D'Ercole, John Cunningham, Debra Mooney, John Martin Bradley\n\nPlot: At an elite, old-fashioned boarding school in New England, a passionate English teacher inspires his students to rebel against convention and seize the potential of every day, courting the disdain of the stern headmaster.\n\n"
+}

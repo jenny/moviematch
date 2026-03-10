@@ -1,0 +1,654 @@
+{
+  "adult": false,
+  "backdrop_path": "/aYcnDyLMnpKce1FOYUpZrXtgUye.jpg",
+  "belongs_to_collection": {
+    "id": 9743,
+    "name": "The Hannibal Lecter Collection",
+    "poster_path": "/lTtnUnKVFLX10Ui19WGiL7CqZ1y.jpg",
+    "backdrop_path": "/yiwhEr1BV3K9fCsZuFxUHtZezHZ.jpg"
+  },
+  "budget": 19000000,
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "homepage": "",
+  "id": 274,
+  "imdb_id": "tt0102926",
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Silence of the Lambs",
+  "overview": "Clarice Starling is a top student at the FBI's training academy.  Jack Crawford wants Clarice to interview Dr. Hannibal Lecter, a brilliant psychiatrist who is also a violent psychopath, serving life behind bars for various acts of murder and cannibalism.  Crawford believes that Lecter may have insight into a case and that Starling, as an attractive young woman, may be just the bait to draw him out.",
+  "popularity": 4.1419,
+  "poster_path": "/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg",
+  "production_companies": [
+    {
+      "id": 41,
+      "logo_path": "/em0rOXVRu3qprWZCx58uDDV2fze.png",
+      "name": "Orion Pictures",
+      "origin_country": "US"
+    },
+    {
+      "id": 55072,
+      "logo_path": null,
+      "name": "Strong Heart",
+      "origin_country": "US"
+    },
+    {
+      "id": 276744,
+      "logo_path": "/1SQmA2oZbp7ddFDucwma8aMNZ2t.png",
+      "name": "A Luta Continua",
+      "origin_country": "US"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1991-02-14",
+  "revenue": 272742922,
+  "runtime": 119,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "To enter the mind of a killer she must challenge the mind of a madman.",
+  "title": "The Silence of the Lambs",
+  "video": false,
+  "vote_average": 8.347,
+  "vote_count": 17636,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 818,
+        "name": "based on novel or book"
+      },
+      {
+        "id": 1930,
+        "name": "kidnapping"
+      },
+      {
+        "id": 6259,
+        "name": "psychopath"
+      },
+      {
+        "id": 1812,
+        "name": "fbi"
+      },
+      {
+        "id": 2878,
+        "name": "scientific study"
+      },
+      {
+        "id": 9826,
+        "name": "murder"
+      },
+      {
+        "id": 10714,
+        "name": "serial killer"
+      },
+      {
+        "id": 12565,
+        "name": "psychological thriller"
+      },
+      {
+        "id": 14707,
+        "name": "brutality"
+      },
+      {
+        "id": 14895,
+        "name": "cannibal"
+      },
+      {
+        "id": 15106,
+        "name": "psychiatrist"
+      },
+      {
+        "id": 156176,
+        "name": "moth"
+      },
+      {
+        "id": 160977,
+        "name": "virginia"
+      },
+      {
+        "id": 207268,
+        "name": "neo-noir"
+      },
+      {
+        "id": 243026,
+        "name": "twisted"
+      },
+      {
+        "id": 247372,
+        "name": "skinning"
+      },
+      {
+        "id": 309487,
+        "name": "sequestro"
+      },
+      {
+        "id": 312365,
+        "name": "past history"
+      },
+      {
+        "id": 328708,
+        "name": "psychological profiling"
+      },
+      {
+        "id": 357973,
+        "name": "assassino em s\u00e9rie"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1038,
+        "known_for_department": "Acting",
+        "name": "Jodie Foster",
+        "original_name": "Jodie Foster",
+        "popularity": 3.7932,
+        "profile_path": "/8DAd9knKivHR4CCStxlNEQXzjIh.jpg",
+        "cast_id": 1,
+        "character": "Clarice Starling",
+        "credit_id": "52fe4230c3a36847f800ada3",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 4173,
+        "known_for_department": "Acting",
+        "name": "Anthony Hopkins",
+        "original_name": "Anthony Hopkins",
+        "popularity": 4.7817,
+        "profile_path": "/u8AAGd2tF6uQcj9TXgyR4q8kn4H.jpg",
+        "cast_id": 2,
+        "character": "Dr. Hannibal Lecter",
+        "credit_id": "52fe4230c3a36847f800ada7",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 349,
+        "known_for_department": "Acting",
+        "name": "Scott Glenn",
+        "original_name": "Scott Glenn",
+        "popularity": 1.6897,
+        "profile_path": "/keBKcMPojtRTi5ImLXOoKDmDbqU.jpg",
+        "cast_id": 4,
+        "character": "Jack Crawford",
+        "credit_id": "52fe4230c3a36847f800adaf",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 15854,
+        "known_for_department": "Acting",
+        "name": "Ted Levine",
+        "original_name": "Ted Levine",
+        "popularity": 1.7284,
+        "profile_path": "/451KSkowLW6M2Au0wBKZZcidgGm.jpg",
+        "cast_id": 5,
+        "character": "Jame Gumb",
+        "credit_id": "52fe4230c3a36847f800adb3",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16293,
+        "known_for_department": "Acting",
+        "name": "Anthony Heald",
+        "original_name": "Anthony Heald",
+        "popularity": 1.0655,
+        "profile_path": "/e0E6Z1Y0debr4mAHgj0HO7MYyXG.jpg",
+        "cast_id": 3,
+        "character": "Dr. Frederick Chilton",
+        "credit_id": "52fe4230c3a36847f800adab",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 31649,
+        "known_for_department": "Acting",
+        "name": "Brooke Smith",
+        "original_name": "Brooke Smith",
+        "popularity": 1.9158,
+        "profile_path": "/zD6SyVPGnrtnHvC0QtucEDxDTk5.jpg",
+        "cast_id": 16,
+        "character": "Catherine Martin",
+        "credit_id": "52fe4230c3a36847f800ade3",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 6930,
+        "known_for_department": "Acting",
+        "name": "Diane Baker",
+        "original_name": "Diane Baker",
+        "popularity": 1.2503,
+        "profile_path": "/doyBqSMhFzf4XJgOQJxJCYe5n54.jpg",
+        "cast_id": 21,
+        "character": "Senator Ruth Martin",
+        "credit_id": "52fe4230c3a36847f800adf7",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 51864,
+        "known_for_department": "Acting",
+        "name": "Kasi Lemmons",
+        "original_name": "Kasi Lemmons",
+        "popularity": 0.7793,
+        "profile_path": "/7iiZTyu8TnN242AS9m3LcrwVuzz.jpg",
+        "cast_id": 15,
+        "character": "Ardelia Mapp",
+        "credit_id": "52fe4230c3a36847f800addf",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 13936,
+        "known_for_department": "Acting",
+        "name": "Frankie Faison",
+        "original_name": "Frankie Faison",
+        "popularity": 2.1027,
+        "profile_path": "/3717JOXK2Z8qelfyvScDGimfFBf.jpg",
+        "cast_id": 6,
+        "character": "Barney",
+        "credit_id": "52fe4230c3a36847f800adb7",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3801,
+        "known_for_department": "Acting",
+        "name": "Tracey Walter",
+        "original_name": "Tracey Walter",
+        "popularity": 1.6655,
+        "profile_path": "/9aALfdCcP0PDYcBmqB6auHF0Eud.jpg",
+        "cast_id": 19,
+        "character": "Lamar",
+        "credit_id": "52fe4230c3a36847f800adef",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16119,
+        "known_for_department": "Acting",
+        "name": "Charles Napier",
+        "original_name": "Charles Napier",
+        "popularity": 1.1392,
+        "profile_path": "/w16LEJlHDtqGWeFCk5a7a2GDeBK.jpg",
+        "cast_id": 23,
+        "character": "Lt. Boyle",
+        "credit_id": "52fe4230c3a36847f800adff",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 183640,
+        "known_for_department": "Acting",
+        "name": "Danny Darst",
+        "original_name": "Danny Darst",
+        "popularity": 0.684,
+        "profile_path": "/s7A7chIgR7vufCsFbJqV6MFSW0C.jpg",
+        "cast_id": 62,
+        "character": "Sgt. Tate",
+        "credit_id": "52fe4230c3a36847f800aea5",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280997,
+        "known_for_department": "Acting",
+        "name": "Alex Coleman",
+        "original_name": "Alex Coleman",
+        "popularity": 1.2841,
+        "profile_path": null,
+        "cast_id": 65,
+        "character": "Sgt. Pembry",
+        "credit_id": "52fe4230c3a36847f800aeb1",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 76470,
+        "known_for_department": "Acting",
+        "name": "Dan Butler",
+        "original_name": "Dan Butler",
+        "popularity": 0.8696,
+        "profile_path": "/6RcrSFeqZooY4YZouS2HX5iMUay.jpg",
+        "cast_id": 53,
+        "character": "Roden",
+        "credit_id": "52fe4230c3a36847f800ae81",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 138988,
+        "known_for_department": "Acting",
+        "name": "Paul Lazar",
+        "original_name": "Paul Lazar",
+        "popularity": 0.5927,
+        "profile_path": "/oJVjkbm3e3EfyZpHwjLdmLd50Ec.jpg",
+        "cast_id": 54,
+        "character": "Pilcher",
+        "credit_id": "52fe4230c3a36847f800ae85",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 32592,
+        "known_for_department": "Acting",
+        "name": "Ron Vawter",
+        "original_name": "Ron Vawter",
+        "popularity": 1.0361,
+        "profile_path": "/f5WDxaiBGOP5bg3JsZEpotnJYbE.jpg",
+        "cast_id": 58,
+        "character": "Paul Krendler",
+        "credit_id": "52fe4230c3a36847f800ae95",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 102429,
+        "known_for_department": "Production",
+        "name": "Roger Corman",
+        "original_name": "Roger Corman",
+        "popularity": 1.3071,
+        "profile_path": "/m0ApZMol42l8vLV8MLpUSCpyA6n.jpg",
+        "cast_id": 22,
+        "character": "FBI Director Hayden Burke",
+        "credit_id": "52fe4230c3a36847f800adfb",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280985,
+        "known_for_department": "Acting",
+        "name": "Lawrence A. Bonney",
+        "original_name": "Lawrence A. Bonney",
+        "popularity": 0.09,
+        "profile_path": null,
+        "cast_id": 38,
+        "character": "FBI Instructor",
+        "credit_id": "52fe4230c3a36847f800ae49",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 192268,
+        "known_for_department": "Acting",
+        "name": "Lawrence T. Wrentz",
+        "original_name": "Lawrence T. Wrentz",
+        "popularity": 0.2152,
+        "profile_path": "/sDi4IxpyGQnId2PETXMep4TuCmL.jpg",
+        "cast_id": 39,
+        "character": "Agent Burroughs",
+        "credit_id": "52fe4230c3a36847f800ae4d",
+        "order": 18
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 31118,
+        "known_for_department": "Acting",
+        "name": "Don Brockett",
+        "original_name": "Don Brockett",
+        "popularity": 0.9312,
+        "profile_path": null,
+        "cast_id": 17,
+        "character": "Friendly Psychopath",
+        "credit_id": "52fe4230c3a36847f800ade7",
+        "order": 19
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280986,
+        "known_for_department": "Acting",
+        "name": "Frank Seals Jr.",
+        "original_name": "Frank Seals Jr.",
+        "popularity": 0.4135,
+        "profile_path": null,
+        "cast_id": 40,
+        "character": "Brooding Psychopath",
+        "credit_id": "52fe4230c3a36847f800ae51",
+        "order": 20
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 94435,
+        "known_for_department": "Acting",
+        "name": "Stuart Rudin",
+        "original_name": "Stuart Rudin",
+        "popularity": 1.009,
+        "profile_path": "/2jhEJ2zLnRL0iuG5i3fYw4FObgl.jpg",
+        "cast_id": 41,
+        "character": "Miggs",
+        "credit_id": "52fe4230c3a36847f800ae55",
+        "order": 21
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1447788,
+        "known_for_department": "Acting",
+        "name": "Maria Skorobogatov",
+        "original_name": "Maria Skorobogatov",
+        "popularity": 0.1669,
+        "profile_path": "/u2a8kIyOYIAAtaLFcW4a6bqqdGI.jpg",
+        "cast_id": 78,
+        "character": "Young Clarice",
+        "credit_id": "5519b9c5c3a36830ce000085",
+        "order": 22
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280988,
+        "known_for_department": "Acting",
+        "name": "Jeffrie Lane",
+        "original_name": "Jeffrie Lane",
+        "popularity": 0.159,
+        "profile_path": null,
+        "cast_id": 43,
+        "character": "Clarice's Father",
+        "credit_id": "52fe4230c3a36847f800ae5d",
+        "order": 23
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 68927,
+        "known_for_department": "Acting",
+        "name": "Leib Lensky",
+        "original_name": "Leib Lensky",
+        "popularity": 1.5225,
+        "profile_path": null,
+        "cast_id": 44,
+        "character": "Mr. Lang",
+        "credit_id": "52fe4230c3a36847f800ae61",
+        "order": 24
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 68926,
+        "known_for_department": "Acting",
+        "name": "George 'Red' Schwartz",
+        "original_name": "George 'Red' Schwartz",
+        "popularity": 0.3083,
+        "profile_path": null,
+        "cast_id": 45,
+        "character": "Mr. Lang's Driver",
+        "credit_id": "52fe4230c3a36847f800ae65",
+        "order": 25
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280989,
+        "known_for_department": "Acting",
+        "name": "Jim Roche",
+        "original_name": "Jim Roche",
+        "popularity": 0.3546,
+        "profile_path": null,
+        "cast_id": 46,
+        "character": "TV Evangelist",
+        "credit_id": "52fe4230c3a36847f800ae69",
+        "order": 26
+      },
+      {
+        "adult": false,
+        "gender": 0,
+        "id": 1280990,
+        "known_for_department": "Acting",
+        "name": "James B. Howard",
+        "original_name": "James B. Howard",
+        "popularity": 0.1954,
+        "profile_path": null,
+        "cast_id": 47,
+        "character": "Boxing Instructor",
+        "credit_id": "52fe4230c3a36847f800ae6d",
+        "order": 27
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 174914,
+        "known_for_department": "Acting",
+        "name": "Bill Miller",
+        "original_name": "Bill Miller",
+        "popularity": 0.1325,
+        "profile_path": null,
+        "cast_id": 48,
+        "character": "Mr. Brigham",
+        "credit_id": "52fe4230c3a36847f800ae71",
+        "order": 28
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 102805,
+        "known_for_department": "Acting",
+        "name": "Chuck Aber",
+        "original_name": "Chuck Aber",
+        "popularity": 0.2304,
+        "profile_path": null,
+        "cast_id": 18,
+        "character": "Agent Terry",
+        "credit_id": "52fe4230c3a36847f800adeb",
+        "order": 29
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16294,
+        "known_for_department": "Directing",
+        "name": "Jonathan Demme",
+        "original_name": "Jonathan Demme",
+        "popularity": 0.8761,
+        "profile_path": "/w9Lw3xTEFQUYELkl9AH5i3p5OhJ.jpg",
+        "credit_id": "52fe4230c3a36847f800adbd",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16296,
+        "known_for_department": "Production",
+        "name": "Ron Bozman",
+        "original_name": "Ron Bozman",
+        "popularity": 0.6388,
+        "profile_path": null,
+        "credit_id": "53b9f4530e0a2676c700abae",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16297,
+        "known_for_department": "Production",
+        "name": "Edward Saxon",
+        "original_name": "Edward Saxon",
+        "popularity": 0.8551,
+        "profile_path": "/AdlBT3K169zQiZygXv0dkJmzczO.jpg",
+        "credit_id": "53b9f386c3a3685eb40060cc",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 16298,
+        "known_for_department": "Production",
+        "name": "Kenneth Utt",
+        "original_name": "Kenneth Utt",
+        "popularity": 0.4037,
+        "profile_path": "/aRYXUGXoIhSuBXM0SyaPzZynNgt.jpg",
+        "credit_id": "53b9f35bc3a3685eb1006509",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 27098,
+        "known_for_department": "Production",
+        "name": "Gary Goetzman",
+        "original_name": "Gary Goetzman",
+        "popularity": 0.5744,
+        "profile_path": "/345YKCrfjMNWdV6OJSvOnAcG9Ft.jpg",
+        "credit_id": "55746f58c3a368234e001c2c",
+        "department": "Production",
+        "job": "Executive Producer"
+      }
+    ]
+  },
+  "richtext": "Title: The Silence of the Lambs (1991)\n\nDirector: Jonathan Demme\n\nProducer: Ron Bozman\n\nProducer: Edward Saxon\n\nProducer: Kenneth Utt\n\nExecutive Producer: Gary Goetzman\n\nGenres: Crime, Thriller, Drama\n\nThemes and Keywords: based on novel or book, kidnapping, psychopath, fbi, scientific study, murder, serial killer, psychological thriller, brutality, cannibal, psychiatrist, moth, virginia, neo-noir, twisted, skinning, sequestro, past history, psychological profiling, assassino em s\u00e9rie\n\nTop Cast: Jodie Foster, Anthony Hopkins, Scott Glenn, Ted Levine, Anthony Heald, Brooke Smith, Diane Baker, Kasi Lemmons, Frankie Faison, Tracey Walter, Charles Napier, Danny Darst, Alex Coleman, Dan Butler, Paul Lazar, Ron Vawter, Roger Corman, Lawrence A. Bonney, Lawrence T. Wrentz, Don Brockett, Frank Seals Jr., Stuart Rudin, Maria Skorobogatov, Jeffrie Lane, Leib Lensky, George 'Red' Schwartz, Jim Roche, James B. Howard, Bill Miller, Chuck Aber\n\nPlot: Clarice Starling is a top student at the FBI's training academy.  Jack Crawford wants Clarice to interview Dr. Hannibal Lecter, a brilliant psychiatrist who is also a violent psychopath, serving life behind bars for various acts of murder and cannibalism.  Crawford believes that Lecter may have insight into a case and that Starling, as an attractive young woman, may be just the bait to draw him out.\n\n"
+}

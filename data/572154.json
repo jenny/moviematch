@@ -1,0 +1,472 @@
+{
+  "adult": false,
+  "backdrop_path": "/tyxqfALuq02khuKNCwmeMxrqt8T.jpg",
+  "belongs_to_collection": {
+    "id": 1073290,
+    "name": "Rascal Does Not Dream Collection",
+    "poster_path": "/7im32TwK4yc95FGgh7FrkFrLWnK.jpg",
+    "backdrop_path": "/cjK7BlgvgmXwVByo0uSrTYvZByp.jpg"
+  },
+  "budget": 0,
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "homepage": "https://rascaldoesnotdream.com/dreaming-girl",
+  "id": 572154,
+  "imdb_id": "tt9881586",
+  "origin_country": [
+    "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "\u9752\u6625\u30d6\u30bf\u91ce\u90ce\u306f\u3086\u3081\u307f\u308b\u5c11\u5973\u306e\u5922\u3092\u898b\u306a\u3044",
+  "overview": "In Fujisawa, Sakuta Azusagawa is in his second year of high school. Blissful days with his girlfriend and upperclassman, Mai Sakurajima, are interrupted by the appearance of his first crush, Shoko Makinohara.",
+  "popularity": 3.0936,
+  "poster_path": "/AtFnN4OztDJy8IFwYd5JfU0jlEM.jpg",
+  "production_companies": [
+    {
+      "id": 121589,
+      "logo_path": "/kZvTniBgpTzAThHCa0OZ1FJtRjy.png",
+      "name": "CloverWorks",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2883,
+      "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+      "name": "Aniplex",
+      "origin_country": "JP"
+    },
+    {
+      "id": 86839,
+      "logo_path": "/cnOJAkVVmKZLIzmgw4fRRZ2dctT.png",
+      "name": "ABC Animation",
+      "origin_country": "JP"
+    },
+    {
+      "id": 2073,
+      "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+      "name": "KADOKAWA",
+      "origin_country": "JP"
+    },
+    {
+      "id": 157002,
+      "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+      "name": "Tokyo MX",
+      "origin_country": "JP"
+    },
+    {
+      "id": 81418,
+      "logo_path": "/kW9bMQqnMFtPHvdoyCDpRqh7Gxt.png",
+      "name": "Nagoya Broadcasting Network",
+      "origin_country": "JP"
+    },
+    {
+      "id": 118502,
+      "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+      "name": "BS11",
+      "origin_country": "JP"
+    },
+    {
+      "id": 142186,
+      "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+      "name": "Hakuhodo DY Music & Pictures",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2019-06-15",
+  "revenue": 0,
+  "runtime": 90,
+  "spoken_languages": [
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "\u65e5\u672c\u8a9e"
+    }
+  ],
+  "status": "Released",
+  "tagline": "",
+  "title": "Rascal Does Not Dream of a Dreaming Girl",
+  "video": false,
+  "vote_average": 8.253,
+  "vote_count": 576,
+  "keywords": {
+    "keywords": [
+      {
+        "id": 6155,
+        "name": "afterlife"
+      },
+      {
+        "id": 6152,
+        "name": "supernatural"
+      },
+      {
+        "id": 9663,
+        "name": "sequel"
+      },
+      {
+        "id": 10614,
+        "name": "tragedy"
+      },
+      {
+        "id": 10873,
+        "name": "school"
+      },
+      {
+        "id": 190116,
+        "name": "school life"
+      },
+      {
+        "id": 195668,
+        "name": "seinen"
+      },
+      {
+        "id": 210024,
+        "name": "anime"
+      },
+      {
+        "id": 220800,
+        "name": "time-manipulation"
+      },
+      {
+        "id": 235790,
+        "name": "japanese high school"
+      },
+      {
+        "id": 319900,
+        "name": "based on light novel"
+      }
+    ]
+  },
+  "credits": {
+    "cast": [
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1324666,
+        "known_for_department": "Acting",
+        "name": "Kaito Ishikawa",
+        "original_name": "\u77f3\u5ddd\u754c\u4eba",
+        "popularity": 2.0629,
+        "profile_path": "/fzjIkotjUHHs3wgftM9tqdsG8ph.jpg",
+        "cast_id": 4,
+        "character": "Sakuta Azusagawa (voice)",
+        "credit_id": "5db40ca1d2c0c100180fcbd3",
+        "order": 0
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1254672,
+        "known_for_department": "Acting",
+        "name": "Asami Seto",
+        "original_name": "\u702c\u6238\u9ebb\u6c99\u7f8e",
+        "popularity": 1.7973,
+        "profile_path": "/iKKCPgKrNd4pJ0iBOC1SBZy2Y4Y.jpg",
+        "cast_id": 5,
+        "character": "Mai Sakurajima (voice)",
+        "credit_id": "5db40cb025a5360013e20b5f",
+        "order": 1
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1325949,
+        "known_for_department": "Acting",
+        "name": "Inori Minase",
+        "original_name": "\u6c34\u702c\u3044\u306e\u308a",
+        "popularity": 2.0086,
+        "profile_path": "/cqOrQDUbbQLKpujzcK47YqjFdNp.jpg",
+        "cast_id": 6,
+        "character": "Shoko Makinohara (voice)",
+        "credit_id": "5db40cba25a5360013e20b72",
+        "order": 2
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1168909,
+        "known_for_department": "Acting",
+        "name": "Nao Toyama",
+        "original_name": "\u6771\u5c71\u5948\u592e",
+        "popularity": 3.5108,
+        "profile_path": "/6WJDd1z946yFfZBgpC7dWi0FyQw.jpg",
+        "cast_id": 9,
+        "character": "Tomoe Koga (voice)",
+        "credit_id": "5db40cdcf056d500180da72c",
+        "order": 3
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1588597,
+        "known_for_department": "Acting",
+        "name": "Atsumi Tanezaki",
+        "original_name": "\u7a2e\ufa11\u6566\u7f8e",
+        "popularity": 1.8142,
+        "profile_path": "/6tM8GU7QvrdUCvR4kxqVUZivtvO.jpg",
+        "cast_id": 8,
+        "character": "Rio Futaba (voice)",
+        "credit_id": "5db40ccff056d500140d456a",
+        "order": 4
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1296667,
+        "known_for_department": "Acting",
+        "name": "Maaya Uchida",
+        "original_name": "\u5185\u7530\u771f\u793c",
+        "popularity": 2.8739,
+        "profile_path": "/rq4glg2SZwGyt3TIxR3ElalKmhH.jpg",
+        "cast_id": 10,
+        "character": "Nodoka Toyohama (voice)",
+        "credit_id": "5db40cead40d4c0012f9a5de",
+        "order": 5
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1288294,
+        "known_for_department": "Acting",
+        "name": "Yurika Kubo",
+        "original_name": "\u4e45\u4fdd\u30e6\u30ea\u30ab",
+        "popularity": 1.8213,
+        "profile_path": "/tpzwj1J6HRq2H6xZjM5Irg7FzT2.jpg",
+        "cast_id": 11,
+        "character": "Kaede Azusagawa (voice)",
+        "credit_id": "5e3c55143dd1260018125822",
+        "order": 6
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1492992,
+        "known_for_department": "Acting",
+        "name": "Yuma Uchida",
+        "original_name": "\u5185\u7530\u96c4\u99ac",
+        "popularity": 1.9735,
+        "profile_path": "/2otstbLfQ7MXuFt1X8MFOb4OIgd.jpg",
+        "cast_id": 13,
+        "character": "Yuma Kunimi (voice)",
+        "credit_id": "5e3c555e0c2710001a78797c",
+        "order": 7
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1241611,
+        "known_for_department": "Acting",
+        "name": "Satomi Sato",
+        "original_name": "\u4f50\u85e4\u8061\u7f8e",
+        "popularity": 1.0597,
+        "profile_path": "/ke0ROEfZo7kbu7icfO6ClWEtXIW.jpg",
+        "cast_id": 35,
+        "character": "Fumika Nanjo (voice)",
+        "credit_id": "6180dd29e741460084b98aa9",
+        "order": 8
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1487722,
+        "known_for_department": "Acting",
+        "name": "Natsuki Aikawa",
+        "original_name": "\u76f8\u5ddd\u5948\u90fd\u59eb",
+        "popularity": 0.6379,
+        "profile_path": "/td6r7OahCBEaZ1vv5MvhCj46yta.jpg",
+        "cast_id": 37,
+        "character": "Ryoko Hanawa (voice)",
+        "credit_id": "6180dd2984f249008d418cff",
+        "order": 9
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 553294,
+        "known_for_department": "Acting",
+        "name": "Tomoyuki Shimura",
+        "original_name": "\u5fd7\u6751\u77e5\u5e78",
+        "popularity": 1.0576,
+        "profile_path": "/vHMVy89m2BEr90iHWNd5ZDjyreM.jpg",
+        "cast_id": 36,
+        "character": "Sakuta's Father (voice)",
+        "credit_id": "6180dd29d388ae00612316ce",
+        "order": 10
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1848106,
+        "known_for_department": "Acting",
+        "name": "Airi Ootsu",
+        "original_name": "\u5927\u6d25\u611b\u7406",
+        "popularity": 0.5275,
+        "profile_path": "/2XiWIddh3tXUwLPxt4eUFGAtgfN.jpg",
+        "cast_id": 38,
+        "character": "Mai's Mother (voice)",
+        "credit_id": "6180dd29e741460043852939",
+        "order": 11
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2652077,
+        "known_for_department": "Acting",
+        "name": "Masaya Fukunishi",
+        "original_name": "\u798f\u897f\u52dd\u4e5f",
+        "popularity": 0.7821,
+        "profile_path": "/8paIbTobS6266x57pIhJCq3mBJh.jpg",
+        "cast_id": 39,
+        "character": "Shoko's Father (voice)",
+        "credit_id": "6180dd2ae93e950062588685",
+        "order": 12
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1845882,
+        "known_for_department": "Acting",
+        "name": "Karin Nanami",
+        "original_name": "\u5948\u6ce2\u679c\u6797",
+        "popularity": 0.6527,
+        "profile_path": "/a3gLMJa2LNc7NrUIzHJTJQaWYqA.jpg",
+        "cast_id": 40,
+        "character": "Shoko's Mother (voice)",
+        "credit_id": "6180dd2ac7c2240043b268e8",
+        "order": 13
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 2020139,
+        "known_for_department": "Acting",
+        "name": "Shoko Yuzuki",
+        "original_name": "\u67da\u6728\u5c1a\u5b50",
+        "popularity": 0.8546,
+        "profile_path": "/zJi9LBzH3czxr5jSEHwQiKotG5a.jpg",
+        "cast_id": 177,
+        "character": "Ichihara (voice)",
+        "credit_id": "681c5c7555e00b37e488c0eb",
+        "order": 14
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 2891088,
+        "known_for_department": "Acting",
+        "name": "Fumitake Ishiguro",
+        "original_name": "\u77f3\u9ed2\u53f2\u525b",
+        "popularity": 0.9448,
+        "profile_path": "/gCQOuPDRepw1FbptMAPJQhAsO8f.jpg",
+        "cast_id": 178,
+        "character": "Principal (voice)",
+        "credit_id": "681c5c9efa06a95b3388c128",
+        "order": 15
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1846471,
+        "known_for_department": "Acting",
+        "name": "Takaaki Uchino",
+        "original_name": "\u5185\u91ce\u5b5d\u8061",
+        "popularity": 0.3506,
+        "profile_path": "/2ll2XvDfM3NbiBQaF9Uh4SVAq9j.jpg",
+        "cast_id": 179,
+        "character": "Doctor (voice)",
+        "credit_id": "681c5cadf25bc4116688c0aa",
+        "order": 16
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1789230,
+        "known_for_department": "Acting",
+        "name": "Fumiko Uchimura",
+        "original_name": "\u5185\u6751\u53f2\u5b50",
+        "popularity": 0.3888,
+        "profile_path": "/69DJZqpZ9krAYNBkgQAL8RBPDCG.jpg",
+        "cast_id": 180,
+        "character": "Nurse (voice)",
+        "credit_id": "681c5ccb911ef6071eb1c821",
+        "order": 17
+      },
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 1788697,
+        "known_for_department": "Acting",
+        "name": "Akari Kageyama",
+        "original_name": "\u5f71\u5c71\u706f",
+        "popularity": 0.9165,
+        "profile_path": "/qEkOqmEDRFw8kkxLBgMIAJCM339.jpg",
+        "cast_id": 181,
+        "character": "Primary School Student (voice)",
+        "credit_id": "681c5ce7df2ce0c3723ec6b4",
+        "order": 18
+      }
+    ],
+    "crew": [
+      {
+        "adult": false,
+        "gender": 1,
+        "id": 3433100,
+        "known_for_department": "Production",
+        "name": "Shuko Yokoyama",
+        "original_name": "\u6a2a\u5c71\u6731\u5b50",
+        "popularity": 0.1179,
+        "profile_path": "/2sAyuBLMzRD2pKgZPanYncP0uEo.jpg",
+        "credit_id": "638bcdddc3aa3f00b6d5b795",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 3454174,
+        "known_for_department": "Production",
+        "name": "Yuichiro Kurokawa",
+        "original_name": "\u9ed2\u5ddd\u96c4\u4e00\u6717",
+        "popularity": 0.5205,
+        "profile_path": null,
+        "credit_id": "638bcde28d77c40083ed5fd0",
+        "department": "Production",
+        "job": "Producer"
+      },
+      {
+        "adult": false,
+        "gender": 2,
+        "id": 1145368,
+        "known_for_department": "Directing",
+        "name": "Soichi Masui",
+        "original_name": "\u5897\u4e95\u58ee\u4e00",
+        "popularity": 0.4062,
+        "profile_path": "/eRCRldZdRnflFnzRJbSs6QNEmwm.jpg",
+        "credit_id": "5c2c135692514122a96dae84",
+        "department": "Directing",
+        "job": "Director"
+      }
+    ]
+  },
+  "richtext": "Title: Rascal Does Not Dream of a Dreaming Girl (2019)\n\nProducer: Shuko Yokoyama\n\nProducer: Yuichiro Kurokawa\n\nDirector: Soichi Masui\n\nGenres: Animation, Romance, Drama, Fantasy\n\nThemes and Keywords: afterlife, supernatural, sequel, tragedy, school, school life, seinen, anime, time-manipulation, japanese high school, based on light novel\n\nTop Cast: Kaito Ishikawa, Asami Seto, Inori Minase, Nao Toyama, Atsumi Tanezaki, Maaya Uchida, Yurika Kubo, Yuma Uchida, Satomi Sato, Natsuki Aikawa, Tomoyuki Shimura, Airi Ootsu, Masaya Fukunishi, Karin Nanami, Shoko Yuzuki, Fumitake Ishiguro, Takaaki Uchino, Fumiko Uchimura, Akari Kageyama\n\nPlot: In Fujisawa, Sakuta Azusagawa is in his second year of high school. Blissful days with his girlfriend and upperclassman, Mai Sakurajima, are interrupted by the appearance of his first crush, Shoko Makinohara.\n\n"
+}
