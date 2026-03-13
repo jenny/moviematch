@@ -1,68 +1,49 @@
-import chromadb
-from sentence_transformers import SentenceTransformer
+from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
+from db import get_model, get_collection
+from claude import rerank
 
-from prompt_claude import rerank
 
-# load model (downloads automatically)
-try:
-    MODEL = SentenceTransformer('all-mpnet-base-v2')
-except Exception as e:
-    raise RuntimeError(f"Failed to load Sentence Transformers model: {e}")
+def search(query: str) -> list[dict]:
+    collection = get_collection()
 
-try:
-    chroma = chromadb.PersistentClient(path='./embeddings/chroma_db')
-    collection = chroma.get_collection(name='movies')
-except ValueError:
-    raise RuntimeError("ChromaDB collection 'movies' not found. Please run init_embeddings.py first.")
-except Exception as e:
-    raise RuntimeError(f"Failed to connect to ChromaDB: {e}")
-
-def search(query):
     if collection.count() == 0:
-        print("ChromaDB collection is empty. Please run init_embeddings.py first.")
-        return
+        raise RuntimeError("ChromaDB collection is empty. Please run embeddings.py first.")
 
     try:
-        q_embeddings = MODEL.encode(query)
-        n_results = min(20, collection.count())
+        q_embeddings = get_model().encode(query)
+        n_results = min(SEARCH_CANDIDATES, collection.count())
         q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
     except Exception as e:
-        print(f"Error querying ChromaDB: {e}")
-        return
+        raise RuntimeError(f"Error querying ChromaDB: {e}")
 
-    q_results_metadatas = q_results["metadatas"][0]
-    q_results_documents = q_results["documents"][0]
+    metadatas = q_results["metadatas"][0]
+    documents = q_results["documents"][0]
 
     candidates = []
-    for i in range(len(q_results_metadatas)):
-        title = q_results_metadatas[i].get("title")
+    for i in range(len(metadatas)):
+        title = metadatas[i].get("title")
         if not title:
             print(f"Warning: missing title for result {i}, skipping.")
             continue
-        candidates.append({"title": title, "document": q_results_documents[i][:300]})
+        candidates.append({"title": title, "document": documents[i][:SEARCH_DOC_TRUNCATE]})
 
     if not candidates:
-        print("No valid candidates found. Try re-running init_embeddings.py.")
-        return
+        return []
 
-    print(f"\nSearching {len(candidates)} candidates for \"{query}\"...\n")
-
-    try:
-        reranked = rerank(query, candidates)
-    except Exception as e:
-        print(f"Error calling Claude API: {e}")
-        return
-
-    if not reranked:
-        print("No relevant matches found. Please try a different query.")
-        return
-
-    print(f"Found {len(reranked)} relevant matches:\n")
-    for i, result in enumerate(reranked, start=1):
-        print(f"{i}. {result['title']}")
-        print(f"   {result['explanation']}\n")
+    return rerank(query, candidates)
 
 
 if __name__ == "__main__":
     query = input("Enter a search query: ")
-    search(query)
+    try:
+        results = search(query)
+    except RuntimeError as e:
+        print(f"Error: {e}")
+    else:
+        if not results:
+            print("No relevant matches found. Please try a different query.")
+        else:
+            print(f"\nFound {len(results)} relevant matches:\n")
+            for i, result in enumerate(results, start=1):
+                print(f"{i}. {result['title']}")
+                print(f"   {result['explanation']}\n")
