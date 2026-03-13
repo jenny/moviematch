@@ -5,3 +5,4 @@ embeddings/
 .DS_Store
 __pycache__/
 .vscode/
+local/
