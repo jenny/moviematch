@@ -19,10 +19,17 @@ class InitializeRequest(BaseModel):
     n: int
 
 
+class LastInitResult(BaseModel):
+    movie_count: int
+    indexed_count: int
+    embedded_count: int
+
+
 class StatusResponse(BaseModel):
     movie_count: int
     chroma_count: int
     initializing: bool
+    last_init_result: LastInitResult | None = None
 
 
 def _run_pipeline(n: int):
@@ -59,5 +66,6 @@ def status():
     return StatusResponse(
         movie_count=len(movie_files),
         chroma_count=chroma_count,
-        initializing=_init_status["running"]
+        initializing=_init_status["running"],
+        last_init_result=_init_status["last_result"]
     )
