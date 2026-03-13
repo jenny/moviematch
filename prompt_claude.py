@@ -73,7 +73,7 @@ Only include movies that are genuinely relevant. If a movie is a poor match, exc
         messages=[{"role": "user", "content": prompt}],
     )
 
-    return response.content[0].input["results"]
+    return response.content[0].input.get("results", [])
 
 if __name__ == "__main__":
     message = input("Enter a message for Claude: ")
