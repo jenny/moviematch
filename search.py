@@ -1,5 +1,4 @@
 import chromadb
-from chromadb.errors import InvalidCollectionException
 from sentence_transformers import SentenceTransformer
 
 from prompt_claude import rerank
@@ -13,7 +12,7 @@ except Exception as e:
 try:
     chroma = chromadb.PersistentClient(path='./embeddings/chroma_db')
     collection = chroma.get_collection(name='movies')
-except InvalidCollectionException:
+except ValueError:
     raise RuntimeError("ChromaDB collection 'movies' not found. Please run init_embeddings.py first.")
 except Exception as e:
     raise RuntimeError(f"Failed to connect to ChromaDB: {e}")
