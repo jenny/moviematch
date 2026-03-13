@@ -1,7 +1,7 @@
 import os
 import requests
 import json
-import time # todo add sleep to tmdb calls
+import time
 import math
 
 from dotenv import load_dotenv
@@ -37,10 +37,11 @@ def initialize_index(n):
     os.makedirs("data", exist_ok=True)
     with open("data/index.json", "w") as file:
         for page in range (1,pages+1):
-            # print("page " + str(page))
             response = requests.get(
-                TMDB_BASE_URL + "/movie/top_rated",
+                TMDB_BASE_URL + "/discover/movie",
                 params = {
+                    "sort_by": "vote_average.desc",
+                    "vote_count.gte": "200",
                     "page": str(page)
                 },
                 headers = TMDB_HEADERS
@@ -66,7 +67,8 @@ def initialize_movie_metadata(movie_id):
     )
     response.raise_for_status()
     movie_json = response.json()
-    
+    time.sleep(0.25)
+
     # filter cast here
     movie_json = filter_movie_cast(movie_json)
 
