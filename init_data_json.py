@@ -11,11 +11,13 @@ from anthropic import Anthropic
 load_dotenv() # Reload the .env file
 CLAUDE_KEY = os.getenv("ANTHROPIC_API_KEY")
 TMDB_KEY = os.getenv("TMDB_READ_ACCESS_TOKEN")
+if not TMDB_KEY:
+    raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
 TMDB_HEADERS = headers={
     "accept": "application/json",
     "Authorization": "Bearer " + TMDB_KEY
-} 
+}
 
 # already initialized data for top 100 movies, don't need to do again
 def initialize_app_data(n):
@@ -39,10 +41,11 @@ def initialize_index(n):
             response = requests.get(
                 TMDB_BASE_URL + "/movie/top_rated",
                 params = {
-                    "page": str(page) 
+                    "page": str(page)
                 },
                 headers = TMDB_HEADERS
             )
+            response.raise_for_status()
             for movie in response.json()["results"]:
                 if len(ids) < n: 
                     ids += [movie["id"]]
@@ -61,6 +64,7 @@ def initialize_movie_metadata(movie_id):
         TMDB_BASE_URL + "/movie/"+str(movie_id)+"?append_to_response=keywords,credits",
         headers = TMDB_HEADERS
     )
+    response.raise_for_status()
     movie_json = response.json()
     
     # filter cast here
@@ -88,8 +92,8 @@ def filter_and_sort_movie_crew(movie_json):
             member["job"] == "Executive Producer" or
             member["job"] == "Producer"):
             filtered_crew.append(member)
-    sorted_crew = sorted(filtered_crew, key = lambda c: c.job)
-    movie_json["credits"]["crew"] = filtered_crew    
+    sorted_crew = sorted(filtered_crew, key = lambda c: c["job"])
+    movie_json["credits"]["crew"] = sorted_crew
     return movie_json
 
 # Compiles a 'richtext' string for each movie: 
@@ -108,19 +112,22 @@ def initialize_movie_richtext():
             with open(file_name, "r") as file:
                 movie_json = json.load(file)
 
-                rich_text = "Title: " + movie_json["title"] + " (" + movie_json["release_date"][:4] + ")\n\n"
-                for crew in movie_json["credits"]["crew"]:
-                    rich_text += crew["job"] + ": " + crew["name"] + "\n\n"
-                rich_text += "Genres: "
-                rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
-                rich_text += "\n\n"
+
+
+                rich_text = "Plot: " + movie_json["overview"] + "\n\n"
                 rich_text += "Themes and Keywords: "
                 rich_text += ', '.join(k["name"] for k in movie_json["keywords"].get("keywords", []))
                 rich_text += "\n\n"
-                rich_text += "Top Cast: "
-                rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", []))
-                rich_text += "\n\n"
-                rich_text += "Plot: " + movie_json["overview"] + "\n\n"
+                #rich_text += "Genres: "
+                #rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
+                #rich_text += "\n\n"
+                #for crew in movie_json["credits"]["crew"]:
+                #    rich_text += crew["job"] + ": " + crew["name"] + "\n\n"
+                #rich_text += "Top Cast: "
+                #rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", []))
+                #rich_text += "\n\n"
+                #rich_text += "Title: " + movie_json["title"] + " (" + movie_json["release_date"][:4] + ")\n\n"
+                #todo: add belongs to collection
 
                 movie_json["richtext"] = rich_text
             
@@ -143,32 +150,6 @@ def debug_wordcount(field):
                     word_count = len(movie_json[field].split())
                     print(str(word_count) + ": " + str(movie["title"]) + " (" + str(movie["id"]) + ")")
 
-# RUN CODE HERE
+if __name__ == "__main__":
+    initialize_movie_richtext()
 
-# debug_wordcount("richtext")
-
-# initialize_movie_richtext()
-
-
-
-    
-
-# OLDER STUFF BELOW HERE
-
-# claude poc
-def hello_claude():
-    client = Anthropic(
-        CLAUDE_KEY #api_key=os.environ.get("ANTHROPIC_API_KEY")
-    )
-
-    message = client.messages.create(
-        max_tokens=1024,
-        messages=[
-            {
-                "role": "user",
-                "content": "Hello, Claude",
-            }
-        ],
-        model="claude-opus-4-6",
-    )
-    print(message.content)
