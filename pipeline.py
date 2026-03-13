@@ -8,17 +8,27 @@ def initialize_all(n: int) -> dict:
 
     movie_ids = ingest_index(n)
 
+    failed_ids = []
     for movie_id in movie_ids:
-        ingest_movie(movie_id)
+        try:
+            ingest_movie(movie_id)
+        except Exception as e:
+            print(f"Failed to ingest movie {movie_id}: {e}")
+            failed_ids.append(movie_id)
+
+    if failed_ids:
+        print(f"Warning: {len(failed_ids)} movies failed to ingest: {failed_ids}")
 
     compile_all_richtexts()
 
     embedded_count = initialize_all_embeddings()
 
     return {
-        "movie_count": len(movie_ids),
+        "movie_count": len(movie_ids) - len(failed_ids),
         "indexed_count": len(movie_ids),
-        "embedded_count": embedded_count
+        "embedded_count": embedded_count,
+        "failed_count": len(failed_ids),
+        "failed_ids": failed_ids
     }
 
 

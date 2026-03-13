@@ -23,6 +23,8 @@ class LastInitResult(BaseModel):
     movie_count: int
     indexed_count: int
     embedded_count: int
+    failed_count: int
+    failed_ids: list[int]
 
 
 class StatusResponse(BaseModel):
