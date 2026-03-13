@@ -26,7 +26,7 @@ def search(query):
     try:
         q_embeddings = MODEL.encode(query)
         n_results = min(10, collection.count())
-    q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
+        q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
     except Exception as e:
         print(f"Error querying ChromaDB: {e}")
         return
