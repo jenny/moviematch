@@ -1,10 +1,10 @@
 # moviematch
 
-A local CLI tool for semantic movie search. Query by mood, theme, or plot description and get ranked matches from a database of top-rated films.
+A local CLI tool for semantic movie search. Query by mood, theme, or plot description and get ranked matches from a database of up to 500 top-rated films.
 
 ## How it works
 
-1. Movie metadata (plot, keywords) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) and stored as local JSON files
+1. Movie metadata (plot, keywords) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint, sorted by rating with a minimum vote threshold, and stored as local JSON files
 2. A richtext string is compiled for each movie and embedded using a local [Sentence Transformers](https://www.sbert.net/) model (`all-mpnet-base-v2`)
 3. Embeddings are stored in a local [ChromaDB](https://www.trychroma.com/) vector database
 4. Queries are embedded at search time and matched against the database using cosine similarity
@@ -39,7 +39,7 @@ ANTHROPIC_API_KEY=your_anthropic_key_here
 Run these scripts once in order to populate the local database:
 
 ```bash
-# 1. Fetch movie metadata from TMDB
+# 1. Fetch movie metadata from TMDB (prompts for number of movies, up to 500)
 python init_data_json.py
 
 # 2. Build richtext strings for embedding
