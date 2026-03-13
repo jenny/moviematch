@@ -21,7 +21,7 @@ class SearchResponse(BaseModel):
     message: str | None = None
 
 
-@router.post("/search", response_model=SearchResponse)
+@router.post("/recommend", response_model=SearchResponse)
 def search_endpoint(request: SearchRequest):
     try:
         results = search(request.query)
