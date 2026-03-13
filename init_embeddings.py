@@ -29,21 +29,23 @@ def upsert_movie_single(id: str):
         embeddings = MODEL.encode(richtext).tolist()
         collection.upsert(ids=[id],
                         embeddings=[embeddings],
-                        documents=[richtext])
+                        documents=[richtext],
+                        metadatas=[{"title": movie["title"]}])
 
     #print(collection.count())
     #print(collection.peek())
 
 # load all richtext strings into memory for batch embedding
-def load_richtexts_batch() -> tuple[list[str], list[str]]:
-    ids, texts = [], []
+def load_richtexts_batch() -> tuple[list[str], list[str], list[dict]]:
+    ids, texts, metadatas = [], [], []
     for file in glob.glob(f"./data/*.json"):
         if("index" not in file):
             with open(file) as f:
                 movie = json.load(f)
             ids.append(str(movie["id"]))
             texts.append(movie["richtext"])
-    return ids, texts # returns tuple
+            metadatas.append({"title": movie["title"]})
+    return ids, texts, metadatas
 
 # batch embeddings
 def get_embeddings_batch(texts: list[str], batch_size: int = 64) -> list[list[float]]:
@@ -52,16 +54,14 @@ def get_embeddings_batch(texts: list[str], batch_size: int = 64) -> list[list[fl
     return vectors.tolist()
 
 def initialize_embeddings_batch():
-    richtexts = load_richtexts_batch()
-    ids = richtexts[0]
-    docs = richtexts[1]
+    ids, docs, metadatas = load_richtexts_batch()
 
     # Embed in batches of 64
     embeddings = get_embeddings_batch(docs, batch_size=64)
 
     # Upsert into Chroma (safe to re-run)
     collection.upsert(ids=ids, embeddings=embeddings,
-                      documents=docs)
+                      documents=docs, metadatas=metadatas)
     print(f"Ingested {len(ids)} movies into Chroma.")
     #print(f"\n\n{collection.count()}")
     #print(f"\n\n{collection.peek()}")
