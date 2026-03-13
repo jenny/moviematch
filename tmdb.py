@@ -4,6 +4,7 @@ import time
 import math
 
 import requests
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from config import (
     TMDB_BASE_URL, TMDB_HEADERS, TMDB_KEY,
@@ -16,6 +17,7 @@ def _require_tmdb_key():
         raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def fetch_discover_page(page: int) -> list[dict]:
     _require_tmdb_key()
     response = requests.get(
@@ -31,6 +33,7 @@ def fetch_discover_page(page: int) -> list[dict]:
     return response.json()["results"]
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def fetch_movie_detail(movie_id: int) -> dict:
     _require_tmdb_key()
     response = requests.get(

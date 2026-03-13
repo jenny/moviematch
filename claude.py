@@ -1,4 +1,5 @@
 from anthropic import Anthropic
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from config import ANTHROPIC_API_KEY, CLAUDE_MODEL
 
@@ -14,6 +15,7 @@ def get_client() -> Anthropic:
     return _client
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def prompt_claude(message: str) -> str:
     response = get_client().messages.create(
         model=CLAUDE_MODEL,
@@ -46,6 +48,7 @@ RERANK_TOOL = {
 }
 
 
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def rerank(query: str, candidates: list[dict]) -> list[dict]:
     candidate_text = "\n\n".join(
         f"Title: {r['title']}\n{r['document']}"
