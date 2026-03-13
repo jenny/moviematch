@@ -19,7 +19,8 @@ def build_richtext(movie_json: dict) -> str:
     rich_text += "Top Cast: "
     rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", [])[:RICHTEXT_CAST_LIMIT])
     rich_text += "\n\n"
-    rich_text += "Title: " + movie_json["title"] + " (" + movie_json["release_date"][:4] + ")\n\n"
+    release_year = movie_json.get("release_date", "")[:4] or "Unknown"
+    rich_text += "Title: " + movie_json["title"] + " (" + release_year + ")\n\n"
     return rich_text
 
 

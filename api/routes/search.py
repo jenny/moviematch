@@ -18,6 +18,7 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     query: str
     results: list[SearchResult]
+    message: str | None = None
 
 
 @router.post("/search", response_model=SearchResponse)
@@ -26,4 +27,6 @@ def search_endpoint(request: SearchRequest):
         results = search(request.query)
     except RuntimeError as e:
         raise HTTPException(status_code=503, detail=str(e))
+    if not results:
+        return SearchResponse(query=request.query, results=[], message="No relevant matches found.")
     return SearchResponse(query=request.query, results=results)

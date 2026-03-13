@@ -16,7 +16,7 @@ def initialize_all(n: int) -> dict:
     embedded_count = initialize_all_embeddings()
 
     return {
-        "movie_count": n,
+        "movie_count": len(movie_ids),
         "indexed_count": len(movie_ids),
         "embedded_count": embedded_count
     }

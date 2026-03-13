@@ -11,11 +11,13 @@ from config import (
     DATA_DIR, CAST_LIMIT, CREW_JOBS
 )
 
-if not TMDB_KEY:
-    raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
+def _require_tmdb_key():
+    if not TMDB_KEY:
+        raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 
 
 def fetch_discover_page(page: int) -> list[dict]:
+    _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + "/discover/movie",
         params={
@@ -30,6 +32,7 @@ def fetch_discover_page(page: int) -> list[dict]:
 
 
 def fetch_movie_detail(movie_id: int) -> dict:
+    _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + f"/movie/{movie_id}?append_to_response=keywords,credits",
         headers=TMDB_HEADERS

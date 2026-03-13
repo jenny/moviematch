@@ -2,15 +2,14 @@ from anthropic import Anthropic
 
 from config import ANTHROPIC_API_KEY, CLAUDE_MODEL
 
-if not ANTHROPIC_API_KEY:
-    raise ValueError("ANTHROPIC_API_KEY is not set. Check your .env file.")
-
 _client = None
 
 
 def get_client() -> Anthropic:
     global _client
     if _client is None:
+        if not ANTHROPIC_API_KEY:
+            raise ValueError("ANTHROPIC_API_KEY is not set. Check your .env file.")
         _client = Anthropic(api_key=ANTHROPIC_API_KEY)
     return _client
 

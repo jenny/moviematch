@@ -1,5 +1,6 @@
 import os
 import glob
+import threading
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel
@@ -10,6 +11,7 @@ from config import DATA_DIR
 
 router = APIRouter()
 
+_init_lock = threading.Lock()
 _init_status = {"running": False, "last_result": None}
 
 
@@ -24,19 +26,22 @@ class StatusResponse(BaseModel):
 
 
 def _run_pipeline(n: int):
-    global _init_status
-    _init_status["running"] = True
+    with _init_lock:
+        _init_status["running"] = True
     try:
         result = initialize_all(n)
         _init_status["last_result"] = result
     finally:
-        _init_status["running"] = False
+        with _init_lock:
+            _init_status["running"] = False
 
 
 @router.post("/initialize", status_code=202)
 def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
-    if _init_status["running"]:
-        raise HTTPException(status_code=409, detail="Initialization already in progress.")
+    with _init_lock:
+        if _init_status["running"]:
+            raise HTTPException(status_code=409, detail="Initialization already in progress.")
+        _init_status["running"] = True
     background_tasks.add_task(_run_pipeline, request.n)
     return {"message": "Initialization started", "n": request.n}
 
