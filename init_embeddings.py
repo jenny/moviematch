@@ -26,7 +26,7 @@ def upsert_movie_single(id: str):
     with open(file, "r") as f:
         movie = json.load(f)
         richtext = movie["richtext"]
-        embeddings = MODEL.encode(richtext)
+        embeddings = MODEL.encode(richtext).tolist()
         collection.upsert(ids=[id],
                         embeddings=[embeddings],
                         documents=[richtext])
