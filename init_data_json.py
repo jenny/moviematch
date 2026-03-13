@@ -5,14 +5,15 @@ import time # todo add sleep to tmdb calls
 import math
 
 from dotenv import load_dotenv
-from init_richtext import initialize_movie_richtext
 load_dotenv() # Reload the .env file
+
+from init_richtext import initialize_movie_richtext
 
 TMDB_KEY = os.getenv("TMDB_READ_ACCESS_TOKEN")
 if not TMDB_KEY:
     raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
-TMDB_HEADERS = headers={
+TMDB_HEADERS = {
     "accept": "application/json",
     "Authorization": "Bearer " + TMDB_KEY
 }
@@ -33,6 +34,7 @@ def initialize_index(n):
     index = {"results": []}
 
 
+    os.makedirs("data", exist_ok=True)
     with open("data/index.json", "w") as file:
         for page in range (1,pages+1):
             # print("page " + str(page))

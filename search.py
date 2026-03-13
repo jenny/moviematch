@@ -25,7 +25,8 @@ def search(query):
 
     try:
         q_embeddings = MODEL.encode(query)
-        q_results = collection.query(query_embeddings=q_embeddings, n_results=20)
+        n_results = min(10, collection.count())
+    q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
     except Exception as e:
         print(f"Error querying ChromaDB: {e}")
         return
@@ -39,7 +40,7 @@ def search(query):
         if not title:
             print(f"Warning: missing title for result {i}, skipping.")
             continue
-        candidates.append({"title": title, "document": q_results_documents[i]})
+        candidates.append({"title": title, "document": q_results_documents[i][:300]})
 
     if not candidates:
         print("No valid candidates found. Try re-running init_embeddings.py.")

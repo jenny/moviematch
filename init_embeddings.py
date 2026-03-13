@@ -5,15 +5,21 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 # load model (downloads automatically)
-MODEL = SentenceTransformer('all-mpnet-base-v2')
+try:
+    MODEL = SentenceTransformer('all-mpnet-base-v2')
+except Exception as e:
+    raise RuntimeError(f"Failed to load Sentence Transformers model: {e}")
 
 # load chromadb
-chroma = chromadb.PersistentClient(path='./embeddings/chroma_db')
-collection = chroma.get_or_create_collection(
-    name='movies',
-    embedding_function=None,
-    metadata={'hnsw:space': 'cosine'}  # cosine similarity
-)
+try:
+    chroma = chromadb.PersistentClient(path='./embeddings/chroma_db')
+    collection = chroma.get_or_create_collection(
+        name='movies',
+        embedding_function=None,
+        metadata={'hnsw:space': 'cosine'}  # cosine similarity
+    )
+except Exception as e:
+    raise RuntimeError(f"Failed to connect to ChromaDB: {e}")
 
 # embed a single string
 def embed_text_single(text: str) -> list[float]:
@@ -42,6 +48,8 @@ def load_richtexts_batch() -> tuple[list[str], list[str], list[dict]]:
         if("index" not in file):
             with open(file) as f:
                 movie = json.load(f)
+            if "richtext" not in movie:
+                raise KeyError(f"Movie {movie.get('id', '?')} is missing richtext. Please run init_richtext.py before init_embeddings.py.")
             ids.append(str(movie["id"]))
             texts.append(movie["richtext"])
             metadatas.append({"title": movie["title"]})
