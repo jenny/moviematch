@@ -1,6 +1,8 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
 
+from prompt_claude import rerank
+
 # load model (downloads automatically)
 MODEL = SentenceTransformer('all-mpnet-base-v2')
 
@@ -11,37 +13,31 @@ collection = chroma.get_collection(
 
 def search(query):
     q_embeddings = MODEL.encode(query)
-    all_results = [] # {"title": distance}
 
-    '''
-    # todo: include "contains" results
-    contains_results = collection.get(where_document={"$contains": query})["documents"]
-    for cr in contains_results:
-        title = cr.split('\n', maxsplit=1)[0]
-        all_results.append({title: 1})
-    '''
-
-    q_results = collection.query(query_embeddings=q_embeddings)
+    q_results = collection.query(query_embeddings=q_embeddings, n_results=20)
 
     q_results_metadatas = q_results["metadatas"][0]
-    q_results_distances = q_results["distances"][0]
-    print(f"\n\nFound {len(q_results_metadatas)} matches for query \"{query}\"\n")
+    q_results_documents = q_results["documents"][0]
 
-    for i in range(len(q_results_metadatas)):
-        title = q_results_metadatas[i]["title"]
-        distance = q_results_distances[i]
-        all_results.append({"title": title, "distance": distance})
+    candidates = [
+        {"title": q_results_metadatas[i]["title"], "document": q_results_documents[i]}
+        for i in range(len(q_results_metadatas))
+    ]
 
-    for i in all_results:
-        t = i["title"]
-        s = i["distance"]
-        print(f"{t}, distance: {s}")
-    
-    
+    print(f"\nSearching {len(candidates)} candidates for \"{query}\"...\n")
+
+    reranked = rerank(query, candidates)
+
+    if not reranked:
+        print("No relevant matches found. Please try a different query.")
+        return
+
+    print(f"Found {len(reranked)} relevant matches:\n")
+    for i, result in enumerate(reranked, start=1):
+        print(f"{i}. {result['title']}")
+        print(f"   {result['explanation']}\n")
+
+
 if __name__ == "__main__":
     query = input("Enter a search query: ")
     search(query)
-
-
-
-
