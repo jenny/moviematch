@@ -20,15 +20,16 @@ def initialize_movie_richtext():
                 rich_text += "Themes and Keywords: "
                 rich_text += ', '.join(k["name"] for k in movie_json["keywords"].get("keywords", []))
                 rich_text += "\n\n"
-                #rich_text += "Genres: "
-                #rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
-                #rich_text += "\n\n"
-                #for crew in movie_json["credits"]["crew"]:
-                #    rich_text += crew["job"] + ": " + crew["name"] + "\n\n"
-                #rich_text += "Top Cast: "
-                #rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", []))
-                #rich_text += "\n\n"
-                #rich_text += "Title: " + movie_json["title"] + " (" + movie_json["release_date"][:4] + ")\n\n"
+                rich_text += "Genres: "
+                rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
+                rich_text += "\n\n"
+                for crew in movie_json["credits"]["crew"]:
+                    if crew["job"] == "Director":
+                        rich_text += "Director: " + crew["name"] + "\n\n"
+                rich_text += "Top Cast: "
+                rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", [])[:5])
+                rich_text += "\n\n"
+                rich_text += "Title: " + movie_json["title"] + " (" + movie_json["release_date"][:4] + ")\n\n"
                 #todo: add belongs to collection
 
                 movie_json["richtext"] = rich_text
