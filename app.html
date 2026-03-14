@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>moviematch</title>
+  <title>MovieMatch</title>
   <style>
     *,
     *::before,
@@ -27,19 +27,27 @@
 
     header {
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 24px;
     }
 
     header h1 {
-      font-size: 2.4rem;
+      font-size: 3rem;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: #fff;
+      margin-bottom: 36px;
+    }
+
+    header h4 {
+      margin-top: 8px;
+      font-size: 1.8rem;
+      color: #888;
     }
 
     header p {
       margin-top: 8px;
       font-size: 1rem;
+      font-style: italic;
       color: #888;
     }
 
@@ -198,13 +206,14 @@
 <body>
 
   <header>
-    <h1>moviematch</h1>
+    <h1>MovieMatch</h1>
+    <h4>What would you like to watch today?</h4>
     <p>Describe what you're in the mood for and we'll find the best matches.</p>
   </header>
 
   <form class="search-form" id="searchForm">
-    <input type="text" id="queryInput" placeholder="e.g., a feel-good coming of age set in the 1990s" autocomplete="off"
-      autofocus />
+    <input type="text" id="queryInput" placeholder="e.g., a gangster movie that is also a little bit funny"
+      autocomplete="off" autofocus />
     <button type="submit" id="submitBtn">Search</button>
   </form>
 
