@@ -25,12 +25,16 @@ def search(query: str) -> list[dict]:
         if not title:
             print(f"Warning: missing title for result {i}, skipping.")
             continue
-        candidates.append({"title": title, "document": documents[i][:SEARCH_DOC_TRUNCATE]})
+        candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
 
     if not candidates:
         return []
 
-    return rerank(query, candidates)
+    poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+    reranked = rerank(query, candidates)
+    for result in reranked:
+        result["movie_poster"] = poster_by_title.get(result["title"], "")
+    return reranked
 
 
 if __name__ == "__main__":

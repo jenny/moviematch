@@ -37,7 +37,7 @@ def load_all_richtexts() -> tuple[list[str], list[str], list[dict]]:
                 raise KeyError(f"Movie {movie.get('id', '?')} is missing richtext. Please run richtext.py before embeddings.py.")
             ids.append(str(movie["id"]))
             texts.append(movie["richtext"])
-            metadatas.append({"title": movie["title"]})
+            metadatas.append({"title": movie["title"], "movie_poster": movie.get("poster_path") or ""})
     return ids, texts, metadatas
 
 

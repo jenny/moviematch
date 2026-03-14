@@ -13,6 +13,7 @@ class SearchRequest(BaseModel):
 class SearchResult(BaseModel):
     title: str
     explanation: str
+    movie_poster: str = ""
 
 
 class SearchResponse(BaseModel):

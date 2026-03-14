@@ -123,6 +123,22 @@
       animation: fadeIn 0.3s ease both;
     }
 
+    .card-poster {
+      width: 60px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #2a2a2a;
+      aspect-ratio: 2/3;
+    }
+
+    .card-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -263,8 +279,12 @@
         const card = document.createElement("div");
         card.className = "card";
         card.style.animationDelay = `${i * 60}ms`;
+        const posterHtml = result.movie_poster
+          ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
+          : "";
         card.innerHTML = `
           <div class="card-rank">${i + 1}</div>
+          ${posterHtml}
           <div class="card-body">
             <div class="card-title">${escapeHtml(result.title)}</div>
             <div class="card-explanation">${escapeHtml(result.explanation)}</div>
