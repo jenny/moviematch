@@ -1,13 +1,13 @@
-# moviematch
+# MovieMatch
 
-A local CLI tool for semantic movie search. Query by mood, theme, or plot description and get ranked matches from a database of up to 500 top-rated films.
+A semantic movie recommendation engine. Describe what you're in the mood for and get ranked matches from a database of top-rated films.
 
 ## How it works
 
-1. Movie metadata (plot, keywords) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint, sorted by rating with a minimum vote threshold, and stored as local JSON files
+1. Movie metadata (plot, keywords, cast, crew) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint, sorted by rating with a minimum vote threshold, and stored as local JSON files
 2. A richtext string is compiled for each movie and embedded using a local [Sentence Transformers](https://www.sbert.net/) model (`all-mpnet-base-v2`)
 3. Embeddings are stored in a local [ChromaDB](https://www.trychroma.com/) vector database
-4. Queries are embedded at search time and matched against the database using cosine similarity
+4. At search time, the query is embedded and matched against the database using cosine similarity; the top candidates are reranked by [Claude](https://www.anthropic.com/claude) for relevance
 
 ## Setup
 
@@ -15,14 +15,14 @@ A local CLI tool for semantic movie search. Query by mood, theme, or plot descri
 
 - Python 3.11+
 - A [TMDB API read access token](https://developer.themoviedb.org/docs/getting-started)
-- An [Anthropic API key](https://console.anthropic.com/) (for Claude integration)
+- An [Anthropic API key](https://console.anthropic.com/)
 
 ### Installation
 
 ```bash
 python -m venv venv
 source venv/bin/activate
-pip install requests python-dotenv anthropic sentence-transformers chromadb
+pip install requests python-dotenv anthropic sentence-transformers chromadb fastapi uvicorn
 ```
 
 ### Environment variables
@@ -36,36 +36,65 @@ ANTHROPIC_API_KEY=your_anthropic_key_here
 
 ## Initialization
 
-Run these scripts once in order to populate the local database:
+Run the pipeline once to fetch metadata, build embeddings, and populate the database:
 
 ```bash
-# 1. Fetch movie metadata from TMDB (prompts for number of movies, up to 500)
-python init_data_json.py
-
-# 2. Build richtext strings for embedding
-python init_richtext.py
-
-# 3. Generate embeddings and store in ChromaDB
-python init_embeddings.py
+python pipeline.py
 ```
 
-## Usage
+You will be prompted for the number of movies to index (up to 500).
+
+## Running the server
 
 ```bash
-python search.py
+uvicorn api.app:app --reload
 ```
 
-Enter a natural language query when prompted, e.g.:
-- `"a heist movie with a twist ending"`
-- `"feel-good films about friendship"`
-- `"dark psychological thriller"`
+Then open `app.html` in a browser.
+
+## API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/recommend` | Get movie recommendations for a query |
+| `GET` | `/health` | Health check |
+| `POST` | `/admin/initialize` | Trigger pipeline initialization |
+| `GET` | `/admin/status` | Get database stats and initialization status |
+
+### POST /recommend
+
+```json
+// Request
+{ "query": "a feel-good coming of age story" }
+
+// Response
+{
+  "query": "a feel-good coming of age story",
+  "results": [
+    {
+      "title": "Stand by Me",
+      "explanation": "A nostalgic and heartfelt coming of age story...",
+      "movie_poster": "/eze1b4v9GSnwNLpSaO4gqJ7FaBT.jpg"
+    }
+  ]
+}
+```
 
 ## Project structure
 
 ```
-init_data_json.py    # Fetch and filter movie metadata from TMDB
-init_richtext.py     # Build richtext strings from movie metadata
-init_embeddings.py   # Generate and store embeddings in ChromaDB
-search.py            # CLI search interface
-prompt_claude.py     # Claude API integration
+api/
+  app.py               # FastAPI app
+  routes/
+    search.py          # POST /recommend endpoint
+    admin.py           # POST /admin/initialize, GET /admin/status endpoints
+app.html               # Frontend UI
+pipeline.py            # Initialization pipeline (ingest → embed → store)
+search.py              # Core search logic (embed query → retrieve → rerank)
+claude.py              # Claude reranking integration
+embeddings.py          # Embedding generation and ChromaDB upsert
+tmdb.py                # TMDB API integration
+richtext.py            # Movie metadata → text for embedding
+db.py                  # ChromaDB and Sentence Transformer singletons
+config.py              # Configuration constants
 ```
