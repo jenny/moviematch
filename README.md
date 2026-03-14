@@ -39,6 +39,7 @@ ANTHROPIC_API_KEY=your_anthropic_key_here
 Run the pipeline once to fetch metadata, build embeddings, and populate the database:
 
 ```bash
+source venv/bin/activate
 python pipeline.py
 ```
 
@@ -47,6 +48,7 @@ You will be prompted for the number of movies to index (up to 500).
 ## Running the server
 
 ```bash
+source venv/bin/activate
 uvicorn api.app:app --reload
 ```
 
