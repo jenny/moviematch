@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>moviematch</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #888;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+
+    .search-form input {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #e8e8e8;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-form input::placeholder {
+      color: #555;
+    }
+
+    .search-form input:focus {
+      border-color: #555;
+    }
+
+    .search-form button {
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      background: #e8e8e8;
+      color: #0f0f0f;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-form button:hover {
+      background: #fff;
+    }
+
+    .search-form button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #status {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 32px;
+      min-height: 1.2em;
+    }
+
+    #status.error {
+      color: #e05c5c;
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-rank {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #444;
+      min-width: 24px;
+      padding-top: 2px;
+    }
+
+    .card-body {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .card-explanation {
+      font-size: 0.9rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #333;
+      border-top-color: #888;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>moviematch</h1>
+    <p>Describe what you're in the mood for and we'll find the best matches.</p>
+  </header>
+
+  <form class="search-form" id="searchForm">
+    <input type="text" id="queryInput" placeholder="e.g., a feel-good coming of age set in the 1990s" autocomplete="off"
+      autofocus />
+    <button type="submit" id="submitBtn">Search</button>
+  </form>
+
+  <div id="status"></div>
+  <div class="spinner" id="spinner"></div>
+  <div class="results" id="results"></div>
+
+  <script>
+    const API_URL = "http://localhost:8000/recommend";
+
+    const form = document.getElementById("searchForm");
+    const input = document.getElementById("queryInput");
+    const btn = document.getElementById("submitBtn");
+    const statusEl = document.getElementById("status");
+    const spinner = document.getElementById("spinner");
+    const resultsEl = document.getElementById("results");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const query = input.value.trim();
+      if (!query) return;
+
+      setLoading(true);
+      clearResults();
+      setStatus("");
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `Server error (${res.status})`);
+        }
+
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) {
+          setStatus(data.message || "No relevant matches found. Try a different query.");
+          return;
+        }
+
+        setStatus(`${data.results.length} match${data.results.length !== 1 ? "es" : ""} for "${query}"`);
+        renderResults(data.results);
+
+      } catch (err) {
+        setStatus(err.message, true);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    function setLoading(loading) {
+      btn.disabled = loading;
+      spinner.style.display = loading ? "block" : "none";
+    }
+
+    function setStatus(msg, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.className = isError ? "error" : "";
+    }
+
+    function clearResults() {
+      resultsEl.innerHTML = "";
+    }
+
+    function renderResults(results) {
+      results.forEach((result, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.animationDelay = `${i * 60}ms`;
+        card.innerHTML = `
+          <div class="card-rank">${i + 1}</div>
+          <div class="card-body">
+            <div class="card-title">${escapeHtml(result.title)}</div>
+            <div class="card-explanation">${escapeHtml(result.explanation)}</div>
+          </div>
+        `;
+        resultsEl.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+
+</body>
+
+</html>
