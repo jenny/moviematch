@@ -11,7 +11,10 @@ TMDB_HEADERS = {
     "Authorization": f"Bearer {TMDB_KEY}" if TMDB_KEY else ""
 }
 TMDB_MIN_VOTE_COUNT = 200
-TMDB_RATE_LIMIT_SLEEP = 0.25
+TMDB_RATE_LIMIT_SLEEP = 0.3  # seconds; keeps requests under TMDB's 40 req/10s limit
+# Composite ranking weights (must sum to 1.0): Bayesian weighted rating vs. popularity
+SCORE_WEIGHT_RATING = 0.6
+SCORE_WEIGHT_POPULARITY = 0.4
 
 # Anthropic
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")

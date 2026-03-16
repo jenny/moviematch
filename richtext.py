@@ -30,6 +30,9 @@ def compile_all_richtexts() -> None:
         movies = json.load(f)
     for movie in movies["results"]:
         file_path = os.path.join(DATA_DIR, f"{movie['id']}.json")
+        if not os.path.exists(file_path):
+            print(f"Warning: skipping richtext for {movie['title']} ({movie['id']}) — file not found")
+            continue
         with open(file_path, "r") as f:
             movie_json = json.load(f)
         movie_json["richtext"] = build_richtext(movie_json)
