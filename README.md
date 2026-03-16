@@ -4,7 +4,7 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 
 ## How it works
 
-1. Movie metadata (plot, keywords, cast, crew) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint, sorted by rating with a minimum vote threshold, and stored as local JSON files
+1. Movie metadata (plot, keywords, cast, crew) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint across three sort criteria (rating, popularity, revenue), ranked by a composite Bayesian score, and stored as local JSON files
 2. A richtext string is compiled for each movie and embedded using a local [Sentence Transformers](https://www.sbert.net/) model (`all-mpnet-base-v2`)
 3. Embeddings are stored in a local [ChromaDB](https://www.trychroma.com/) vector database
 4. At search time, the query is embedded and matched against the database using cosine similarity; the top candidates are reranked by [Claude](https://www.anthropic.com/claude) for relevance
@@ -43,7 +43,7 @@ source venv/bin/activate
 python pipeline.py
 ```
 
-You will be prompted for the number of movies to index (up to 500).
+You will be prompted for the number of movies to index. The default dataset is **5,000 movies**, which takes approximately 50 minutes (mostly TMDB API calls). If the pipeline is interrupted, re-running it will skip already-ingested movies and resume from where it left off.
 
 ## Running the server
 
@@ -98,5 +98,5 @@ embeddings.py          # Embedding generation and ChromaDB upsert
 tmdb.py                # TMDB API integration
 richtext.py            # Movie metadata → text for embedding
 db.py                  # ChromaDB and Sentence Transformer singletons
-config.py              # Configuration constants
+config.py              # Configuration constants (dataset size, scoring weights, rate limits)
 ```
