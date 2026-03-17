@@ -3,7 +3,7 @@ from db import get_model, get_collection
 from claude import rerank
 
 
-def search(query: str) -> list[dict]:
+def search(query: str) -> tuple[list[dict], dict | None]:
     collection = get_collection()
 
     if collection.count() == 0:
@@ -28,19 +28,19 @@ def search(query: str) -> list[dict]:
         candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
 
     if not candidates:
-        return []
+        return [], None
 
     poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
-    reranked = rerank(query, candidates)
+    reranked, usage = rerank(query, candidates)
     for result in reranked:
         result["movie_poster"] = poster_by_title.get(result["title"], "")
-    return reranked
+    return reranked, usage
 
 
 if __name__ == "__main__":
     query = input("Enter a search query: ")
     try:
-        results = search(query)
+        results, usage = search(query)
     except RuntimeError as e:
         print(f"Error: {e}")
     else:
@@ -51,3 +51,5 @@ if __name__ == "__main__":
             for i, result in enumerate(results, start=1):
                 print(f"{i}. {result['title']}")
                 print(f"   {result['explanation']}\n")
+            if usage:
+                print(f"Usage: {usage}")

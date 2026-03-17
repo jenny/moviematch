@@ -154,6 +154,81 @@ def ingest_index(n: int) -> list[int]:
     return ids
 
 
+@retry(
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=2, min=1, max=30),
+    retry=retry_if_exception(_is_rate_limit_or_server_error),
+)
+def search_person(name: str) -> list[dict]:
+    """Search TMDB for a person by name. Returns top 3 results with id, name, department."""
+    _require_tmdb_key()
+    response = requests.get(
+        TMDB_BASE_URL + "/search/person",
+        params={"query": name},
+        headers=TMDB_HEADERS
+    )
+    response.raise_for_status()
+    time.sleep(TMDB_RATE_LIMIT_SLEEP)
+    results = response.json().get("results", [])[:3]
+    return [
+        {
+            "id": p["id"],
+            "name": p["name"],
+            "known_for_department": p.get("known_for_department", ""),
+            "known_for": [m.get("title") or m.get("name", "") for m in p.get("known_for", [])[:3]],
+        }
+        for p in results
+    ]
+
+
+@retry(
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=2, min=1, max=30),
+    retry=retry_if_exception(_is_rate_limit_or_server_error),
+)
+def get_filmography(person_id: int, department: str = "directing") -> list[dict]:
+    """Get movie credits for a person. department: 'directing' or 'cast'."""
+    _require_tmdb_key()
+    response = requests.get(
+        TMDB_BASE_URL + f"/person/{person_id}/movie_credits",
+        headers=TMDB_HEADERS
+    )
+    response.raise_for_status()
+    time.sleep(TMDB_RATE_LIMIT_SLEEP)
+    data = response.json()
+    if department == "directing":
+        seen: set[int] = set()
+        movies = []
+        for m in data.get("crew", []):
+            if m.get("job") == "Director" and m["id"] not in seen:
+                seen.add(m["id"])
+                movies.append({
+                    "id": m["id"],
+                    "title": m["title"],
+                    "vote_average": m.get("vote_average", 0),
+                    "vote_count": m.get("vote_count", 0),
+                    "release_date": m.get("release_date", ""),
+                })
+    else:
+        # Cap cast credits at 30 highest-rated to avoid overwhelming Claude
+        movies = sorted(
+            [
+                {
+                    "id": m["id"],
+                    "title": m["title"],
+                    "vote_average": m.get("vote_average", 0),
+                    "vote_count": m.get("vote_count", 0),
+                    "release_date": m.get("release_date", ""),
+                    "character": m.get("character", ""),
+                }
+                for m in data.get("cast", [])
+            ],
+            key=lambda m: m["vote_average"],
+            reverse=True,
+        )[:30]
+    return sorted(movies, key=lambda m: m["vote_average"], reverse=True)
+
+
 def update_index(movie_id: int, title: str) -> None:
     """Thread-safely append a movie to index.json if not already present."""
     index_path = os.path.join(DATA_DIR, "index.json")
