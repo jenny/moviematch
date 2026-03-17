@@ -2,6 +2,7 @@ import os
 import json
 import time
 import math
+import threading
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
@@ -14,6 +15,7 @@ from config import (
 )
 
 TMDB_MAX_PAGE = 500
+_index_lock = threading.Lock()
 
 
 def _is_rate_limit_or_server_error(exc: BaseException) -> bool:
@@ -150,6 +152,20 @@ def ingest_index(n: int) -> list[int]:
         json.dump(index, f, indent=2)
     print(f"Indexed {len(ids)} movies → data/index.json")
     return ids
+
+
+def update_index(movie_id: int, title: str) -> None:
+    """Thread-safely append a movie to index.json if not already present."""
+    index_path = os.path.join(DATA_DIR, "index.json")
+    with _index_lock:
+        with open(index_path, "r") as f:
+            index = json.load(f)
+        if any(m["id"] == movie_id for m in index["results"]):
+            return
+        index["results"].append({"id": movie_id, "title": title})
+        with open(index_path, "w") as f:
+            json.dump(index, f, indent=2)
+    print(f"Updated index.json → added {title} ({movie_id})")
 
 
 if __name__ == "__main__":

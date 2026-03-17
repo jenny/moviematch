@@ -91,12 +91,12 @@ api/
     search.py          # POST /recommend endpoint
     admin.py           # POST /admin/initialize, GET /admin/status endpoints
 app.html               # Frontend UI
-pipeline.py            # Initialization pipeline (ingest → embed → store)
+pipeline.py            # Initialization pipeline (ingest → embed → store); lazy single-movie ingestion
 search.py              # Core search logic (embed query → retrieve → rerank)
 claude.py              # Claude reranking integration
 embeddings.py          # Embedding generation and ChromaDB upsert
 tmdb.py                # TMDB API integration
 richtext.py            # Movie metadata → text for embedding
 db.py                  # ChromaDB and Sentence Transformer singletons
-config.py              # Configuration constants (dataset size, scoring weights, rate limits)
+config.py              # Configuration constants (dataset size, scoring weights, rate limits, quality thresholds)
 ```

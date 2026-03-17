@@ -1,6 +1,40 @@
-from tmdb import ingest_index, ingest_movie
-from richtext import compile_all_richtexts
-from embeddings import initialize_all_embeddings
+import json
+import os
+
+from config import DATA_DIR, MIN_INGEST_VOTE_AVERAGE, MIN_INGEST_VOTE_COUNT
+from tmdb import ingest_index, ingest_movie, update_index
+from richtext import compile_all_richtexts, build_richtext
+from embeddings import initialize_all_embeddings, upsert_movie
+
+
+def ingest_single(movie_id: int, vote_average: float, vote_count: int) -> bool:
+    """Quality-gate, ingest, embed, and index a single movie. Returns True if added.
+
+    Intended for lazy ingestion of tool-discovered movies. Safe to call concurrently —
+    index.json writes are serialized via a lock in update_index().
+    """
+    if vote_average < MIN_INGEST_VOTE_AVERAGE or vote_count < MIN_INGEST_VOTE_COUNT:
+        print(f"Skipping movie {movie_id}: below quality threshold "
+              f"(rating={vote_average}, votes={vote_count})")
+        return False
+
+    file_path = os.path.join(DATA_DIR, f"{movie_id}.json")
+    if os.path.exists(file_path):
+        with open(file_path) as f:
+            existing = json.load(f)
+        if "richtext" in existing:
+            print(f"Skipping {existing.get('title', movie_id)}: already in dataset")
+            return False
+
+    movie_json = ingest_movie(movie_id)
+    movie_json["richtext"] = build_richtext(movie_json)
+    with open(file_path, "w") as f:
+        json.dump(movie_json, f, indent=2)
+
+    upsert_movie(str(movie_id))
+    update_index(movie_id, movie_json["title"])
+    print(f"Lazily ingested {movie_json['title']} ({movie_id})")
+    return True
 
 
 def initialize_all(n: int) -> dict:

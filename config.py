@@ -15,6 +15,9 @@ TMDB_RATE_LIMIT_SLEEP = 0.3  # seconds; keeps requests under TMDB's 40 req/10s l
 # Composite ranking weights (must sum to 1.0): Bayesian weighted rating vs. popularity
 SCORE_WEIGHT_RATING = 0.6
 SCORE_WEIGHT_POPULARITY = 0.4
+# Quality thresholds for lazy ingestion of tool-discovered movies
+MIN_INGEST_VOTE_AVERAGE = 7.0
+MIN_INGEST_VOTE_COUNT = 100
 
 # Anthropic
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
