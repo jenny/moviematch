@@ -240,6 +240,8 @@
       clearResults();
       setStatus("");
 
+      let resultCount = 0;
+
       try {
         const res = await fetch(API_URL, {
           method: "POST",
@@ -252,15 +254,38 @@
           throw new Error(err.detail || `Server error (${res.status})`);
         }
 
-        const data = await res.json();
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
 
-        if (!data.results || data.results.length === 0) {
-          setStatus(data.message || "No relevant matches found. Try a different query.");
-          return;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            let event;
+            try { event = JSON.parse(line.slice(6)); } catch { continue; }
+
+            if (event.type === "result") {
+              if (resultCount === 0) setLoading(false);
+              appendResult(event, resultCount);
+              resultCount++;
+            } else if (event.type === "done") {
+              if (resultCount === 0) {
+                setStatus(event.message || "No relevant matches found. Try a different query.");
+              } else {
+                setStatus(`${resultCount} match${resultCount !== 1 ? "es" : ""} for "${query}"`);
+              }
+            } else if (event.type === "error") {
+              throw new Error(event.message);
+            }
+          }
         }
-
-        setStatus(`${data.results.length} match${data.results.length !== 1 ? "es" : ""} for "${query}"`);
-        renderResults(data.results);
 
       } catch (err) {
         setStatus(err.message, true);
@@ -283,24 +308,21 @@
       resultsEl.innerHTML = "";
     }
 
-    function renderResults(results) {
-      results.forEach((result, i) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.style.animationDelay = `${i * 60}ms`;
-        const posterHtml = result.movie_poster
-          ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
-          : "";
-        card.innerHTML = `
-          <div class="card-rank">${i + 1}</div>
-          ${posterHtml}
-          <div class="card-body">
-            <div class="card-title">${escapeHtml(result.title)}</div>
-            <div class="card-explanation">${escapeHtml(result.explanation)}</div>
-          </div>
-        `;
-        resultsEl.appendChild(card);
-      });
+    function appendResult(result, i) {
+      const card = document.createElement("div");
+      card.className = "card";
+      const posterHtml = result.movie_poster
+        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
+        : "";
+      card.innerHTML = `
+        <div class="card-rank">${i + 1}</div>
+        ${posterHtml}
+        <div class="card-body">
+          <div class="card-title">${escapeHtml(result.title)}</div>
+          <div class="card-explanation">${escapeHtml(result.explanation)}</div>
+        </div>
+      `;
+      resultsEl.appendChild(card);
     }
 
     function escapeHtml(str) {

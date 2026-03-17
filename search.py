@@ -2,7 +2,7 @@ import time
 
 from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
 from db import get_model, get_collection
-from claude import rerank
+from claude import rerank, rerank_stream
 
 
 def search(query: str) -> tuple[list[dict], dict | None, dict]:
@@ -48,6 +48,56 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
     for result in reranked:
         result["movie_poster"] = poster_by_title.get(result["title"], "")
     return reranked, usage, timing
+
+
+def search_stream(query: str):
+    """Generator that yields result dicts (with movie_poster) as they stream from Claude,
+    then yields {"__meta": {"embedding_ms": ..., "chroma_ms": ..., "claude_ms": ..., "usage": ...}}."""
+    collection = get_collection()
+
+    if collection.count() == 0:
+        raise RuntimeError("ChromaDB collection is empty. Please run embeddings.py first.")
+
+    try:
+        t0 = time.perf_counter()
+        q_embeddings = get_model().encode(query)
+        embedding_ms = round((time.perf_counter() - t0) * 1000)
+
+        t0 = time.perf_counter()
+        n_results = min(SEARCH_CANDIDATES, collection.count())
+        q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
+        chroma_ms = round((time.perf_counter() - t0) * 1000)
+    except Exception as e:
+        raise RuntimeError(f"Error querying ChromaDB: {e}")
+
+    metadatas = q_results["metadatas"][0]
+    documents = q_results["documents"][0]
+
+    candidates = []
+    for i in range(len(metadatas)):
+        title = metadatas[i].get("title")
+        if not title:
+            print(f"Warning: missing title for result {i}, skipping.")
+            continue
+        candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
+
+    if not candidates:
+        yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
+        return
+
+    poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+
+    t0 = time.perf_counter()
+    usage = None
+    for item in rerank_stream(query, candidates):
+        if "__usage" in item:
+            usage = item["__usage"]
+        else:
+            item["movie_poster"] = poster_by_title.get(item.get("title", ""), "")
+            yield item
+
+    claude_ms = round((time.perf_counter() - t0) * 1000)
+    yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": claude_ms, "usage": usage}}
 
 
 if __name__ == "__main__":
