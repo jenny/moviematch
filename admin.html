@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MovieMatch Admin</title>
   <style>
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -155,10 +157,21 @@
       transition: width 0.4s ease;
     }
 
-    .seg-embedding { background: #4a9eff; }
-    .seg-chroma    { background: #4adf86; }
-    .seg-claude    { background: #ff9f4a; }
-    .seg-other     { background: #2a2a2a; }
+    .seg-embedding {
+      background: #4a9eff;
+    }
+
+    .seg-chroma {
+      background: #4adf86;
+    }
+
+    .seg-claude {
+      background: #ff9f4a;
+    }
+
+    .seg-other {
+      background: #2a2a2a;
+    }
 
     .latency-legend {
       display: flex;
@@ -277,8 +290,15 @@
       font-weight: 600;
     }
 
-    .badge-ok    { background: #1a3a1a; color: #4adf86; }
-    .badge-error { background: #3a1a1a; color: #e05c5c; }
+    .badge-ok {
+      background: #1a3a1a;
+      color: #4adf86;
+    }
+
+    .badge-error {
+      background: #3a1a1a;
+      color: #e05c5c;
+    }
 
     td.num {
       text-align: right;
@@ -295,6 +315,77 @@
       text-align: center;
       color: #555;
       padding: 32px;
+    }
+
+    .table-footer {
+      padding: 12px 16px;
+      border-top: 1px solid #222;
+      text-align: center;
+    }
+
+    .table-footer button {
+      background: none;
+      border: none;
+      color: #4a9eff;
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .table-footer button:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Cost projector ── */
+
+    .projector-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .projector-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .projector-baseline,
+    .projector-result {
+      flex: 1;
+    }
+
+    .projector-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .projector-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .projector-value.highlight {
+      color: #ff9f4a;
+    }
+
+    .projector-sub {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .projector-arrow {
+      font-size: 1.5rem;
+      color: #333;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -340,9 +431,19 @@
           </tr>
         </thead>
         <tbody id="queryTableBody">
-          <tr class="empty-row"><td colspan="8">Loading…</td></tr>
+          <tr class="empty-row">
+            <td colspan="8">Loading…</td>
+          </tr>
         </tbody>
       </table>
+      <div class="table-footer" id="tableFooter"></div>
+    </div>
+
+    <div class="projector-section">
+      <div class="section-title">Cost projector</div>
+      <div id="projectorContent">
+        <div class="no-data">No data yet.</div>
+      </div>
     </div>
 
   </div>
@@ -361,6 +462,7 @@
         const data = await res.json();
         renderStats(data.stats);
         renderLatencyBar(data.stats);
+        renderProjector(data.stats);
         renderTable(data.entries);
         document.getElementById("last-updated").textContent =
           "Updated " + new Date().toLocaleTimeString();
@@ -382,16 +484,20 @@
         : "—";
 
       const cards = [
-        { label: "Total requests",     value: fmt(s.total_requests),     sub: `${fmt(s.error_count)} errors (${errorRate})` },
-        { label: "Avg total (ms)",     value: fmt(s.avg_total_ms),        sub: `p95: ${fmt(s.p95_total_ms)} ms` },
-        { label: "Avg Claude (ms)",    value: fmt(s.avg_claude_ms),       sub: "of avg total" },
-        { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms),    sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
-        { label: "Avg tokens",         value: s.avg_input_tokens != null ? fmt(s.avg_input_tokens) : "—",
-          sub: `out: ${fmt(s.avg_output_tokens)}` },
-        { label: "Tool use rate",      value: s.tool_use_rate != null ? s.tool_use_rate + "%" : "—",
-          sub: "queries with tool calls" },
-        { label: "Avg cost / query",   value: fmtCost(s.avg_cost_usd),    sub: "est. based on token split" },
-        { label: "Total est. cost",    value: fmtCostTotal(s.total_cost_usd), sub: "across all logged requests" },
+        { label: "Total requests", value: fmt(s.total_requests), sub: `${fmt(s.error_count)} errors (${errorRate})` },
+        { label: "Avg total (ms)", value: fmt(s.avg_total_ms), sub: `p95: ${fmt(s.p95_total_ms)} ms` },
+        { label: "Avg Claude (ms)", value: fmt(s.avg_claude_ms), sub: "of avg total" },
+        { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms), sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
+        {
+          label: "Avg tokens", value: s.avg_input_tokens != null ? fmt(s.avg_input_tokens) : "—",
+          sub: `out: ${fmt(s.avg_output_tokens)}`
+        },
+        {
+          label: "Tool use rate", value: s.tool_use_rate != null ? s.tool_use_rate + "%" : "—",
+          sub: "queries with tool calls"
+        },
+        { label: "Avg cost / query", value: fmtCost(s.avg_cost_usd), sub: "est. based on token split" },
+        { label: "Total est. cost", value: fmtCostTotal(s.total_cost_usd), sub: "across all logged requests" },
       ];
 
       const grid = document.getElementById("statsGrid");
@@ -412,10 +518,10 @@
         return;
       }
 
-      const embed  = s.avg_embedding_ms || 0;
-      const chroma = s.avg_chroma_ms    || 0;
-      const claude = s.avg_claude_ms    || 0;
-      const other  = Math.max(0, total - embed - chroma - claude);
+      const embed = s.avg_embedding_ms || 0;
+      const chroma = s.avg_chroma_ms || 0;
+      const claude = s.avg_claude_ms || 0;
+      const other = Math.max(0, total - embed - chroma - claude);
 
       const pct = v => Math.min(100, Math.round(v / total * 100));
 
@@ -447,14 +553,60 @@
       `;
     }
 
-    function renderTable(entries) {
-      const tbody = document.getElementById("queryTableBody");
-      if (!entries || entries.length === 0) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No requests logged yet.</td></tr>';
+    function renderProjector(s) {
+      const container = document.getElementById("projectorContent");
+      const avg = s.recent_avg_cost_usd;
+      const count = s.recent_query_count || 0;
+
+      if (avg === null || avg === undefined) {
+        container.innerHTML = '<div class="no-data">No cost data yet.</div>';
         return;
       }
 
-      tbody.innerHTML = entries.map(e => {
+      const proj1k = avg * 1000;
+      const countLabel = count === 1 ? "last 1 query" : `last ${count.toLocaleString()} queries`;
+
+      container.innerHTML = `
+        <div class="projector-row">
+          <div class="projector-baseline">
+            <div class="projector-label">Avg cost / query</div>
+            <div class="projector-value">${fmtCost(avg)}</div>
+            <div class="projector-sub">${countLabel}</div>
+          </div>
+          <div class="projector-arrow">→</div>
+          <div class="projector-result">
+            <div class="projector-label">Projected cost at 1,000 queries</div>
+            <div class="projector-value highlight">${fmtCostTotal(proj1k)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    const TABLE_PREVIEW = 5;
+    let _tableEntries = [];
+    let _tableExpanded = false;
+
+    function renderTable(entries) {
+      _tableEntries = entries || [];
+      _tableExpanded = false;
+      _renderTableRows();
+      _renderTableFooter();
+    }
+
+    function toggleTable() {
+      _tableExpanded = !_tableExpanded;
+      _renderTableRows();
+      _renderTableFooter();
+    }
+
+    function _renderTableRows() {
+      const tbody = document.getElementById("queryTableBody");
+      if (_tableEntries.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No requests logged yet.</td></tr>';
+        return;
+      }
+      const visible = _tableExpanded ? _tableEntries : _tableEntries.slice(0, TABLE_PREVIEW);
+      tbody.innerHTML = visible.map(e => {
         const time = formatTime(e.timestamp);
         const query = renderQuery(e.query || "");
         const badge = e.status === "ok"
@@ -469,7 +621,6 @@
         const tools = (e.tools_called && e.tools_called.length > 0)
           ? e.tools_called.map(abbreviateTool).join(", ")
           : "—";
-
         return `
           <tr>
             <td class="time">${time}</td>
@@ -485,13 +636,26 @@
       }).join("");
     }
 
+    function _renderTableFooter() {
+      const footer = document.getElementById("tableFooter");
+      if (_tableEntries.length <= TABLE_PREVIEW) {
+        footer.innerHTML = "";
+        return;
+      }
+      if (_tableExpanded) {
+        footer.innerHTML = `<button onclick="toggleTable()">Show less</button>`;
+      } else {
+        footer.innerHTML = `<button onclick="toggleTable()">Show all (${_tableEntries.length.toLocaleString()})</button>`;
+      }
+    }
+
     let _queryId = 0;
 
     function renderQuery(query) {
       if (query.length <= QUERY_TRUNCATE) return escapeHtml(query);
       const id = ++_queryId;
       return `<span id="qs-${id}">${escapeHtml(query.slice(0, QUERY_TRUNCATE))}&hellip;<button class="toggle-btn" onclick="toggleQuery(${id})">more</button></span>`
-           + `<span id="qf-${id}" hidden>${escapeHtml(query)}<button class="toggle-btn" onclick="toggleQuery(${id})">less</button></span>`;
+        + `<span id="qf-${id}" hidden>${escapeHtml(query)}<button class="toggle-btn" onclick="toggleQuery(${id})">less</button></span>`;
     }
 
     function toggleQuery(id) {
@@ -527,12 +691,12 @@
       const d = new Date(ts);
       const diffMs = Date.now() - d.getTime();
       const diffMin = Math.floor(diffMs / 60000);
-      if (diffMin < 1)  return "just now";
+      if (diffMin < 1) return "just now";
       if (diffMin < 60) return diffMin + "m ago";
       const diffHr = Math.floor(diffMin / 60);
-      if (diffHr < 24)  return diffHr + "h ago";
+      if (diffHr < 24) return diffHr + "h ago";
       return d.toLocaleDateString(undefined, { month: "short", day: "numeric" })
-           + " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+        + " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
     }
 
     function escapeHtml(str) {

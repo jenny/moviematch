@@ -102,6 +102,8 @@ def logs():
     tool_queries = [e for e in ok if e.get("tools_called")]
     costs = [e["estimated_cost_usd"] for e in ok if e.get("estimated_cost_usd") is not None]
 
+    recent_costs = [e["estimated_cost_usd"] for e in ok[-50:] if e.get("estimated_cost_usd") is not None]
+
     stats = {
         "total_requests": len(entries),
         "error_count": len([e for e in entries if e.get("status") == "error"]),
@@ -115,6 +117,8 @@ def logs():
         "tool_use_rate": round(len(tool_queries) / len(ok) * 100) if ok else None,
         "avg_cost_usd": round(sum(costs) / len(costs), 6) if costs else None,
         "total_cost_usd": round(sum(costs), 6) if costs else None,
+        "recent_avg_cost_usd": round(sum(recent_costs) / len(recent_costs), 6) if recent_costs else None,
+        "recent_query_count": len(recent_costs),
     }
 
     return {"entries": list(reversed(entries[-50:])), "stats": stats}
