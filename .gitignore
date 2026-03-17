@@ -6,3 +6,4 @@ embeddings/
 __pycache__/
 .vscode/
 local/
+logs/
