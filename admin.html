@@ -49,6 +49,15 @@
       gap: 16px;
     }
 
+    header a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    header a:hover {
+      text-decoration: underline;
+    }
+
     #last-updated {
       font-size: 0.8rem;
       color: #555;
@@ -393,7 +402,7 @@
 <body>
 
   <header>
-    <h1>MovieMatch <span>/ Admin</span></h1>
+    <h1><a href="/">MovieMatch</a> <span>/ Admin</span></h1>
     <div class="header-right">
       <span id="last-updated"></span>
       <button class="refresh-btn" id="refreshBtn" onclick="load()">Refresh</button>
@@ -449,7 +458,7 @@
   </div>
 
   <script>
-    const API_LOGS = "http://localhost:8000/admin/logs";
+    const API_LOGS = "/admin/logs";
     const QUERY_TRUNCATE = 60;
 
     async function load() {

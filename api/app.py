@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 
 from api.routes import search, admin
 
@@ -17,6 +18,18 @@ app.add_middleware(
 
 app.include_router(search.router)
 app.include_router(admin.router, prefix="/admin")
+
+
+@app.get("/")
+def root():
+    with open("app.html") as f:
+        return HTMLResponse(f.read())
+
+
+@app.get("/admin.html")
+def admin_ui():
+    with open("admin.html") as f:
+        return HTMLResponse(f.read())
 
 
 @app.get("/health")
