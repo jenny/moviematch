@@ -1,12 +1,23 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
 from api.routes import search, admin
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from db import get_model
+    get_model()
+    yield
+
+
 app = FastAPI(
     title="moviematch",
-    description="Semantic movie search powered by Claude"
+    description="Semantic movie search powered by Claude",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
