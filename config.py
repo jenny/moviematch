@@ -34,7 +34,9 @@ MODEL_NAME = "all-mpnet-base-v2"
 EMBEDDING_BATCH_SIZE = 64
 
 # Claude
-CLAUDE_MODEL = "claude-opus-4-6"
+CLAUDE_MODEL = "claude-opus-4-6"          # used when tools are invoked
+CLAUDE_FAST_MODEL = "claude-haiku-4-5-20251001"  # used for round 1 and tool-free queries
+AGENT_MAX_TOOL_ROUNDS = 4  # search_person → get_filmography (×1-2) → return_results
 
 # Filtering
 CAST_LIMIT = 30
