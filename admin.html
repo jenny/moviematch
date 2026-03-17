@@ -86,7 +86,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
 
@@ -335,11 +335,12 @@
             <th style="text-align:right">Results</th>
             <th style="text-align:right">Total ms</th>
             <th style="text-align:right">Tokens in / out</th>
+            <th style="text-align:right">Est. cost</th>
             <th>Tools</th>
           </tr>
         </thead>
         <tbody id="queryTableBody">
-          <tr class="empty-row"><td colspan="7">Loading…</td></tr>
+          <tr class="empty-row"><td colspan="8">Loading…</td></tr>
         </tbody>
       </table>
     </div>
@@ -381,14 +382,16 @@
         : "—";
 
       const cards = [
-        { label: "Total requests",   value: fmt(s.total_requests),   sub: `${fmt(s.error_count)} errors (${errorRate})` },
-        { label: "Avg total (ms)",   value: fmt(s.avg_total_ms),      sub: `p95: ${fmt(s.p95_total_ms)} ms` },
-        { label: "Avg Claude (ms)",  value: fmt(s.avg_claude_ms),     sub: `of avg total` },
-        { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms), sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
-        { label: "Avg tokens",       value: s.avg_input_tokens !== null ? fmt(s.avg_input_tokens) : "—",
+        { label: "Total requests",     value: fmt(s.total_requests),     sub: `${fmt(s.error_count)} errors (${errorRate})` },
+        { label: "Avg total (ms)",     value: fmt(s.avg_total_ms),        sub: `p95: ${fmt(s.p95_total_ms)} ms` },
+        { label: "Avg Claude (ms)",    value: fmt(s.avg_claude_ms),       sub: "of avg total" },
+        { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms),    sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
+        { label: "Avg tokens",         value: s.avg_input_tokens != null ? fmt(s.avg_input_tokens) : "—",
           sub: `out: ${fmt(s.avg_output_tokens)}` },
-        { label: "Tool use rate",    value: s.tool_use_rate !== null ? s.tool_use_rate + "%" : "—",
+        { label: "Tool use rate",      value: s.tool_use_rate != null ? s.tool_use_rate + "%" : "—",
           sub: "queries with tool calls" },
+        { label: "Avg cost / query",   value: fmtCost(s.avg_cost_usd),    sub: "est. based on token split" },
+        { label: "Total est. cost",    value: fmtCostTotal(s.total_cost_usd), sub: "across all logged requests" },
       ];
 
       const grid = document.getElementById("statsGrid");
@@ -447,7 +450,7 @@
     function renderTable(entries) {
       const tbody = document.getElementById("queryTableBody");
       if (!entries || entries.length === 0) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No requests logged yet.</td></tr>';
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No requests logged yet.</td></tr>';
         return;
       }
 
@@ -462,6 +465,7 @@
         const tokens = (e.input_tokens != null && e.output_tokens != null)
           ? `${fmtTokens(e.input_tokens)} / ${fmtTokens(e.output_tokens)}`
           : "—";
+        const cost = fmtCost(e.estimated_cost_usd);
         const tools = (e.tools_called && e.tools_called.length > 0)
           ? e.tools_called.map(abbreviateTool).join(", ")
           : "—";
@@ -474,6 +478,7 @@
             <td class="num">${results}</td>
             <td class="num">${totalMs}</td>
             <td class="num">${tokens}</td>
+            <td class="num">${cost}</td>
             <td class="tools">${escapeHtml(tools)}</td>
           </tr>
         `;
@@ -500,6 +505,21 @@
 
     function fmtTokens(n) {
       return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
+    }
+
+    function fmtCost(usd) {
+      if (usd === null || usd === undefined) return "—";
+      if (usd === 0) return "$0.00";
+      if (usd < 0.0001) return "<$0.0001";
+      return "$" + usd.toFixed(4);
+    }
+
+    function fmtCostTotal(usd) {
+      if (usd === null || usd === undefined) return "—";
+      if (usd === 0) return "$0.00";
+      if (usd >= 1) return "$" + usd.toFixed(2);
+      if (usd < 0.0001) return "<$0.0001";
+      return "$" + usd.toFixed(4);
     }
 
     function formatTime(ts) {

@@ -100,6 +100,7 @@ def logs():
         return s[min(int(len(s) * 0.95), len(s) - 1)]
 
     tool_queries = [e for e in ok if e.get("tools_called")]
+    costs = [e["estimated_cost_usd"] for e in ok if e.get("estimated_cost_usd") is not None]
 
     stats = {
         "total_requests": len(entries),
@@ -112,6 +113,8 @@ def logs():
         "avg_input_tokens": avg([e["input_tokens"] for e in ok if e.get("input_tokens") is not None]),
         "avg_output_tokens": avg([e["output_tokens"] for e in ok if e.get("output_tokens") is not None]),
         "tool_use_rate": round(len(tool_queries) / len(ok) * 100) if ok else None,
+        "avg_cost_usd": round(sum(costs) / len(costs), 6) if costs else None,
+        "total_cost_usd": round(sum(costs), 6) if costs else None,
     }
 
     return {"entries": list(reversed(entries[-50:])), "stats": stats}

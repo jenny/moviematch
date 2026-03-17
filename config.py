@@ -37,6 +37,11 @@ EMBEDDING_BATCH_SIZE = 64
 CLAUDE_MODEL = "claude-opus-4-6"          # used when tools are invoked
 CLAUDE_FAST_MODEL = "claude-haiku-4-5-20251001"  # used for round 1 and tool-free queries
 AGENT_MAX_TOOL_ROUNDS = 4  # search_person → get_filmography (×1-2) → return_results
+# Token pricing in USD/token — update if Anthropic changes prices
+HAIKU_INPUT_PRICE  = 0.80  / 1_000_000
+HAIKU_OUTPUT_PRICE = 4.00  / 1_000_000
+OPUS_INPUT_PRICE   = 15.00 / 1_000_000
+OPUS_OUTPUT_PRICE  = 75.00 / 1_000_000
 
 # Filtering
 CAST_LIMIT = 30

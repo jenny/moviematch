@@ -162,6 +162,10 @@ Only include movies that are genuinely relevant."""
     messages = [{"role": "user", "content": prompt}]
     total_input_tokens = 0
     total_output_tokens = 0
+    haiku_input_tokens = 0
+    haiku_output_tokens = 0
+    opus_input_tokens = 0
+    opus_output_tokens = 0
     tools_called = []
     models_used = []
     current_model = CLAUDE_FAST_MODEL
@@ -171,8 +175,18 @@ Only include movies that are genuinely relevant."""
         models_used.append(current_model)
         response = _call_claude(current_model, messages)
 
-        total_input_tokens += response.usage.input_tokens
-        total_output_tokens += response.usage.output_tokens
+        in_toks = response.usage.input_tokens
+        out_toks = response.usage.output_tokens
+        total_input_tokens += in_toks
+        total_output_tokens += out_toks
+        # Round 1 always uses CLAUDE_FAST_MODEL (Haiku); subsequent rounds use
+        # CLAUDE_MODEL (Opus) after non-terminal tools are invoked (see below).
+        if current_model == CLAUDE_FAST_MODEL:
+            haiku_input_tokens += in_toks
+            haiku_output_tokens += out_toks
+        else:
+            opus_input_tokens += in_toks
+            opus_output_tokens += out_toks
 
         tool_uses = [b for b in response.content if b.type == "tool_use"]
 
@@ -193,6 +207,10 @@ Only include movies that are genuinely relevant."""
                 usage = {
                     "input_tokens": total_input_tokens,
                     "output_tokens": total_output_tokens,
+                    "haiku_input_tokens": haiku_input_tokens,
+                    "haiku_output_tokens": haiku_output_tokens,
+                    "opus_input_tokens": opus_input_tokens,
+                    "opus_output_tokens": opus_output_tokens,
                     "rounds": round_num,
                     "tools_called": tools_called,
                 }
@@ -226,6 +244,10 @@ Only include movies that are genuinely relevant."""
     usage = {
         "input_tokens": total_input_tokens,
         "output_tokens": total_output_tokens,
+        "haiku_input_tokens": haiku_input_tokens,
+        "haiku_output_tokens": haiku_output_tokens,
+        "opus_input_tokens": opus_input_tokens,
+        "opus_output_tokens": opus_output_tokens,
         "rounds": len(models_used),
         "tools_called": tools_called,
     }
