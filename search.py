@@ -1,18 +1,25 @@
+import time
+
 from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
 from db import get_model, get_collection
 from claude import rerank
 
 
-def search(query: str) -> tuple[list[dict], dict | None]:
+def search(query: str) -> tuple[list[dict], dict | None, dict]:
     collection = get_collection()
 
     if collection.count() == 0:
         raise RuntimeError("ChromaDB collection is empty. Please run embeddings.py first.")
 
     try:
+        t0 = time.perf_counter()
         q_embeddings = get_model().encode(query)
+        embedding_ms = round((time.perf_counter() - t0) * 1000)
+
+        t0 = time.perf_counter()
         n_results = min(SEARCH_CANDIDATES, collection.count())
         q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
+        chroma_ms = round((time.perf_counter() - t0) * 1000)
     except Exception as e:
         raise RuntimeError(f"Error querying ChromaDB: {e}")
 
@@ -27,20 +34,26 @@ def search(query: str) -> tuple[list[dict], dict | None]:
             continue
         candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
 
+    timing = {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0}
+
     if not candidates:
-        return [], None
+        return [], None, timing
 
     poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+
+    t0 = time.perf_counter()
     reranked, usage = rerank(query, candidates)
+    timing["claude_ms"] = round((time.perf_counter() - t0) * 1000)
+
     for result in reranked:
         result["movie_poster"] = poster_by_title.get(result["title"], "")
-    return reranked, usage
+    return reranked, usage, timing
 
 
 if __name__ == "__main__":
     query = input("Enter a search query: ")
     try:
-        results, usage = search(query)
+        results, usage, timing = search(query)
     except RuntimeError as e:
         print(f"Error: {e}")
     else:
@@ -53,3 +66,4 @@ if __name__ == "__main__":
                 print(f"   {result['explanation']}\n")
             if usage:
                 print(f"Usage: {usage}")
+            print(f"Timing: {timing}")

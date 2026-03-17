@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieMatch Admin</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 48px 32px;
+    }
+
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    header h1 span {
+      color: #555;
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #last-updated {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    button.refresh-btn {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: #e8e8e8;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    button.refresh-btn:hover {
+      background: #242424;
+      border-color: #444;
+    }
+
+    button.refresh-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* ── Stats cards ── */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .card-value.muted {
+      color: #888;
+    }
+
+    .card-sub {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    /* ── Latency bar ── */
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 14px;
+    }
+
+    .latency-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .latency-bar {
+      display: flex;
+      height: 28px;
+      border-radius: 6px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .bar-segment {
+      height: 100%;
+      min-width: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .seg-embedding { background: #4a9eff; }
+    .seg-chroma    { background: #4adf86; }
+    .seg-claude    { background: #ff9f4a; }
+    .seg-other     { background: #2a2a2a; }
+
+    .latency-legend {
+      display: flex;
+      gap: 24px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #888;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .legend-item strong {
+      color: #ccc;
+    }
+
+    .no-data {
+      font-size: 0.9rem;
+      color: #555;
+      padding: 8px 0;
+    }
+
+    /* ── Queries table ── */
+
+    .table-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      border-bottom: 1px solid #222;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #1f1f1f;
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #202020;
+    }
+
+    td {
+      padding: 11px 16px;
+      vertical-align: top;
+      color: #aaa;
+    }
+
+    td.time {
+      white-space: nowrap;
+      color: #555;
+      font-size: 0.8rem;
+    }
+
+    td.query-cell {
+      max-width: 300px;
+      color: #e8e8e8;
+      line-height: 1.4;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: #4a9eff;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 0 2px;
+      margin-left: 4px;
+    }
+
+    .toggle-btn:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-ok    { background: #1a3a1a; color: #4adf86; }
+    .badge-error { background: #3a1a1a; color: #e05c5c; }
+
+    td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    td.tools {
+      font-size: 0.78rem;
+      color: #ff9f4a;
+    }
+
+    .empty-row td {
+      text-align: center;
+      color: #555;
+      padding: 32px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>MovieMatch <span>/ Admin</span></h1>
+    <div class="header-right">
+      <span id="last-updated"></span>
+      <button class="refresh-btn" id="refreshBtn" onclick="load()">Refresh</button>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <div class="stats-grid" id="statsGrid">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="latency-section">
+      <div class="section-title">Avg latency breakdown</div>
+      <div id="latencyContent">
+        <div class="no-data">No data yet.</div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-header">
+        <div class="section-title">Recent queries</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Query</th>
+            <th>Status</th>
+            <th style="text-align:right">Results</th>
+            <th style="text-align:right">Total ms</th>
+            <th style="text-align:right">Tokens in / out</th>
+            <th>Tools</th>
+          </tr>
+        </thead>
+        <tbody id="queryTableBody">
+          <tr class="empty-row"><td colspan="7">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    const API_LOGS = "http://localhost:8000/admin/logs";
+    const QUERY_TRUNCATE = 60;
+
+    async function load() {
+      const btn = document.getElementById("refreshBtn");
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_LOGS);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        renderStats(data.stats);
+        renderLatencyBar(data.stats);
+        renderTable(data.entries);
+        document.getElementById("last-updated").textContent =
+          "Updated " + new Date().toLocaleTimeString();
+      } catch (err) {
+        document.getElementById("last-updated").textContent = "Error: " + err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function fmt(val, suffix = "") {
+      if (val === null || val === undefined) return "—";
+      return val.toLocaleString() + suffix;
+    }
+
+    function renderStats(s) {
+      const errorRate = s.total_requests > 0
+        ? Math.round(s.error_count / s.total_requests * 100) + "%"
+        : "—";
+
+      const cards = [
+        { label: "Total requests",   value: fmt(s.total_requests),   sub: `${fmt(s.error_count)} errors (${errorRate})` },
+        { label: "Avg total (ms)",   value: fmt(s.avg_total_ms),      sub: `p95: ${fmt(s.p95_total_ms)} ms` },
+        { label: "Avg Claude (ms)",  value: fmt(s.avg_claude_ms),     sub: `of avg total` },
+        { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms), sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
+        { label: "Avg tokens",       value: s.avg_input_tokens !== null ? fmt(s.avg_input_tokens) : "—",
+          sub: `out: ${fmt(s.avg_output_tokens)}` },
+        { label: "Tool use rate",    value: s.tool_use_rate !== null ? s.tool_use_rate + "%" : "—",
+          sub: "queries with tool calls" },
+      ];
+
+      const grid = document.getElementById("statsGrid");
+      grid.innerHTML = cards.map(c => `
+        <div class="card">
+          <div class="card-label">${c.label}</div>
+          <div class="card-value ${c.value === "—" ? "muted" : ""}">${c.value}</div>
+          <div class="card-sub">${c.sub}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderLatencyBar(s) {
+      const container = document.getElementById("latencyContent");
+      const total = s.avg_total_ms;
+      if (!total) {
+        container.innerHTML = '<div class="no-data">No data yet.</div>';
+        return;
+      }
+
+      const embed  = s.avg_embedding_ms || 0;
+      const chroma = s.avg_chroma_ms    || 0;
+      const claude = s.avg_claude_ms    || 0;
+      const other  = Math.max(0, total - embed - chroma - claude);
+
+      const pct = v => Math.min(100, Math.round(v / total * 100));
+
+      container.innerHTML = `
+        <div class="latency-bar">
+          <div class="bar-segment seg-embedding" style="width:${pct(embed)}%"></div>
+          <div class="bar-segment seg-chroma"    style="width:${pct(chroma)}%"></div>
+          <div class="bar-segment seg-claude"    style="width:${pct(claude)}%"></div>
+          <div class="bar-segment seg-other"     style="width:${pct(other)}%"></div>
+        </div>
+        <div class="latency-legend">
+          <div class="legend-item">
+            <div class="legend-dot seg-embedding"></div>
+            Embedding <strong>${embed} ms</strong> (${pct(embed)}%)
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot seg-chroma"></div>
+            Chroma <strong>${chroma} ms</strong> (${pct(chroma)}%)
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot seg-claude"></div>
+            Claude <strong>${claude} ms</strong> (${pct(claude)}%)
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot seg-other"></div>
+            Other <strong>${other} ms</strong> (${pct(other)}%)
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTable(entries) {
+      const tbody = document.getElementById("queryTableBody");
+      if (!entries || entries.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No requests logged yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = entries.map(e => {
+        const time = formatTime(e.timestamp);
+        const query = renderQuery(e.query || "");
+        const badge = e.status === "ok"
+          ? '<span class="badge badge-ok">ok</span>'
+          : '<span class="badge badge-error">error</span>';
+        const results = e.status === "ok" ? fmt(e.result_count) : "—";
+        const totalMs = fmt(e.total_ms);
+        const tokens = (e.input_tokens != null && e.output_tokens != null)
+          ? `${fmtTokens(e.input_tokens)} / ${fmtTokens(e.output_tokens)}`
+          : "—";
+        const tools = (e.tools_called && e.tools_called.length > 0)
+          ? e.tools_called.map(abbreviateTool).join(", ")
+          : "—";
+
+        return `
+          <tr>
+            <td class="time">${time}</td>
+            <td class="query-cell">${query}</td>
+            <td>${badge}</td>
+            <td class="num">${results}</td>
+            <td class="num">${totalMs}</td>
+            <td class="num">${tokens}</td>
+            <td class="tools">${escapeHtml(tools)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    let _queryId = 0;
+
+    function renderQuery(query) {
+      if (query.length <= QUERY_TRUNCATE) return escapeHtml(query);
+      const id = ++_queryId;
+      return `<span id="qs-${id}">${escapeHtml(query.slice(0, QUERY_TRUNCATE))}&hellip;<button class="toggle-btn" onclick="toggleQuery(${id})">more</button></span>`
+           + `<span id="qf-${id}" hidden>${escapeHtml(query)}<button class="toggle-btn" onclick="toggleQuery(${id})">less</button></span>`;
+    }
+
+    function toggleQuery(id) {
+      document.getElementById("qs-" + id).hidden = !document.getElementById("qs-" + id).hidden;
+      document.getElementById("qf-" + id).hidden = !document.getElementById("qf-" + id).hidden;
+    }
+
+    function abbreviateTool(name) {
+      return name === "search_person" ? "person" : name === "get_filmography" ? "filmography" : name;
+    }
+
+    function fmtTokens(n) {
+      return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "—";
+      const d = new Date(ts);
+      const diffMs = Date.now() - d.getTime();
+      const diffMin = Math.floor(diffMs / 60000);
+      if (diffMin < 1)  return "just now";
+      if (diffMin < 60) return diffMin + "m ago";
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24)  return diffHr + "h ago";
+      return d.toLocaleDateString(undefined, { month: "short", day: "numeric" })
+           + " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    load();
+  </script>
+
+</body>
+
+</html>

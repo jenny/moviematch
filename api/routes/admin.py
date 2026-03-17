@@ -1,3 +1,4 @@
+import json
 import os
 import glob
 import threading
@@ -71,3 +72,46 @@ def status():
         initializing=_init_status["running"],
         last_init_result=_init_status["last_result"]
     )
+
+
+@router.get("/logs")
+def logs():
+    entries = []
+    log_path = "logs/search.log"
+    if os.path.exists(log_path):
+        with open(log_path) as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        entries.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        pass
+
+    ok = [e for e in entries if e.get("status") == "ok"]
+
+    def avg(values):
+        return round(sum(values) / len(values)) if values else None
+
+    def p95(values):
+        if not values:
+            return None
+        s = sorted(values)
+        return s[min(int(len(s) * 0.95), len(s) - 1)]
+
+    tool_queries = [e for e in ok if e.get("tools_called")]
+
+    stats = {
+        "total_requests": len(entries),
+        "error_count": len([e for e in entries if e.get("status") == "error"]),
+        "avg_total_ms": avg([e["total_ms"] for e in ok if e.get("total_ms") is not None]),
+        "p95_total_ms": p95([e["total_ms"] for e in ok if e.get("total_ms") is not None]),
+        "avg_embedding_ms": avg([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None]),
+        "avg_chroma_ms": avg([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None]),
+        "avg_claude_ms": avg([e["claude_ms"] for e in ok if e.get("claude_ms") is not None]),
+        "avg_input_tokens": avg([e["input_tokens"] for e in ok if e.get("input_tokens") is not None]),
+        "avg_output_tokens": avg([e["output_tokens"] for e in ok if e.get("output_tokens") is not None]),
+        "tool_use_rate": round(len(tool_queries) / len(ok) * 100) if ok else None,
+    }
+
+    return {"entries": list(reversed(entries[-50:])), "stats": stats}
