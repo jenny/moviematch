@@ -134,7 +134,7 @@
       color: #555;
     }
 
-    /* ── Latency bar ── */
+    /* ── Latency section ── */
 
     .section-title {
       font-size: 0.75rem;
@@ -152,61 +152,50 @@
       padding: 24px;
     }
 
-    .latency-bar {
-      display: flex;
-      height: 28px;
-      border-radius: 6px;
-      overflow: hidden;
-      gap: 2px;
+    .latency-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
     }
 
-    .bar-segment {
-      height: 100%;
-      min-width: 2px;
-      transition: width 0.4s ease;
+    .latency-table th {
+      text-align: right;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      padding: 0 16px 10px;
+      border-bottom: 1px solid #222;
     }
 
-    .seg-embedding {
-      background: #4a9eff;
+    .latency-table th:first-child {
+      text-align: left;
+      padding-left: 0;
     }
 
-    .seg-chroma {
-      background: #4adf86;
+    .latency-table td {
+      text-align: right;
+      padding: 10px 16px;
+      font-variant-numeric: tabular-nums;
+      color: #aaa;
+      border-bottom: 1px solid #1f1f1f;
     }
 
-    .seg-claude {
-      background: #ff9f4a;
+    .latency-table tr:last-child td {
+      border-bottom: none;
     }
 
-    .seg-other {
-      background: #2a2a2a;
+    .latency-table td:first-child {
+      text-align: left;
+      padding-left: 0;
+      color: #666;
+      font-size: 0.8rem;
     }
 
-    .latency-legend {
-      display: flex;
-      gap: 24px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      color: #888;
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    .legend-item strong {
-      color: #ccc;
-    }
+    .latency-table td.p50,
+    .latency-table td.p90,
+    .latency-table td.p99 { color: #e8e8e8; }
 
     .no-data {
       font-size: 0.9rem;
@@ -416,7 +405,7 @@
     </div>
 
     <div class="latency-section">
-      <div class="section-title">Avg latency breakdown</div>
+      <div class="section-title">Latency (ms)</div>
       <div id="latencyContent">
         <div class="no-data">No data yet.</div>
       </div>
@@ -494,7 +483,7 @@
 
       const cards = [
         { label: "Total requests", value: fmt(s.total_requests), sub: `${fmt(s.error_count)} errors (${errorRate})` },
-        { label: "Avg total (ms)", value: fmt(s.avg_total_ms), sub: `p95: ${fmt(s.p95_total_ms)} ms` },
+        { label: "Avg total (ms)", value: fmt(s.avg_total_ms), sub: `p50: ${fmt(s.p50_total_ms)} ms` },
         { label: "Avg Claude (ms)", value: fmt(s.avg_claude_ms), sub: "of avg total" },
         { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms), sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
         {
@@ -521,44 +510,41 @@
 
     function renderLatencyBar(s) {
       const container = document.getElementById("latencyContent");
-      const total = s.avg_total_ms;
-      if (!total) {
+      if (!s.p50_total_ms) {
         container.innerHTML = '<div class="no-data">No data yet.</div>';
         return;
       }
 
-      const embed = s.avg_embedding_ms || 0;
-      const chroma = s.avg_chroma_ms || 0;
-      const claude = s.avg_claude_ms || 0;
-      const other = Math.max(0, total - embed - chroma - claude);
-
-      const pct = v => Math.min(100, Math.round(v / total * 100));
+      const rows = [
+        { label: "Total",     avg: s.avg_total_ms,     p50: s.p50_total_ms,     p90: s.p90_total_ms,     p99: s.p99_total_ms },
+        { label: "Claude",    avg: s.avg_claude_ms,    p50: s.p50_claude_ms,    p90: s.p90_claude_ms,    p99: s.p99_claude_ms },
+        { label: "Embedding", avg: s.avg_embedding_ms, p50: s.p50_embedding_ms, p90: s.p90_embedding_ms, p99: s.p99_embedding_ms },
+        { label: "Chroma",    avg: s.avg_chroma_ms,    p50: s.p50_chroma_ms,    p90: s.p90_chroma_ms,    p99: s.p99_chroma_ms },
+      ];
 
       container.innerHTML = `
-        <div class="latency-bar">
-          <div class="bar-segment seg-embedding" style="width:${pct(embed)}%"></div>
-          <div class="bar-segment seg-chroma"    style="width:${pct(chroma)}%"></div>
-          <div class="bar-segment seg-claude"    style="width:${pct(claude)}%"></div>
-          <div class="bar-segment seg-other"     style="width:${pct(other)}%"></div>
-        </div>
-        <div class="latency-legend">
-          <div class="legend-item">
-            <div class="legend-dot seg-embedding"></div>
-            Embedding <strong>${embed} ms</strong> (${pct(embed)}%)
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot seg-chroma"></div>
-            Chroma <strong>${chroma} ms</strong> (${pct(chroma)}%)
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot seg-claude"></div>
-            Claude <strong>${claude} ms</strong> (${pct(claude)}%)
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot seg-other"></div>
-            Other <strong>${other} ms</strong> (${pct(other)}%)
-          </div>
-        </div>
+        <table class="latency-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>avg</th>
+              <th>p50</th>
+              <th>p90</th>
+              <th>p99</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td>${r.label}</td>
+                <td class="p50">${fmt(r.avg)}</td>
+                <td class="p50">${fmt(r.p50)}</td>
+                <td class="p90">${fmt(r.p90)}</td>
+                <td class="p99">${fmt(r.p99)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
       `;
     }
 

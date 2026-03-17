@@ -93,11 +93,11 @@ def logs():
     def avg(values):
         return round(sum(values) / len(values)) if values else None
 
-    def p95(values):
+    def pct(values, p):
         if not values:
             return None
         s = sorted(values)
-        return s[min(int(len(s) * 0.95), len(s) - 1)]
+        return s[min(int(len(s) * p / 100), len(s) - 1)]
 
     tool_queries = [e for e in ok if e.get("tools_called")]
     costs = [e["estimated_cost_usd"] for e in ok if e.get("estimated_cost_usd") is not None]
@@ -108,7 +108,18 @@ def logs():
         "total_requests": len(entries),
         "error_count": len([e for e in entries if e.get("status") == "error"]),
         "avg_total_ms": avg([e["total_ms"] for e in ok if e.get("total_ms") is not None]),
-        "p95_total_ms": p95([e["total_ms"] for e in ok if e.get("total_ms") is not None]),
+        "p50_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 50),
+        "p90_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 90),
+        "p99_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 99),
+        "p50_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 50),
+        "p90_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 90),
+        "p99_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 99),
+        "p50_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 50),
+        "p90_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 90),
+        "p99_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 99),
+        "p50_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 50),
+        "p90_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 90),
+        "p99_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 99),
         "avg_embedding_ms": avg([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None]),
         "avg_chroma_ms": avg([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None]),
         "avg_claude_ms": avg([e["claude_ms"] for e in ok if e.get("claude_ms") is not None]),
