@@ -1,6 +1,5 @@
 import json
 import threading
-import re
 
 from anthropic import Anthropic, RateLimitError, InternalServerError, APIConnectionError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
@@ -143,7 +142,8 @@ def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = f"""You are a movie recommendation assistant. A user searched for: "{query}"
+    prompt = f"""You are a movie recommendation assistant. A user searched for:
+<query>{query}</query>
 
 Here are candidate movies retrieved by semantic search:
 
@@ -295,7 +295,8 @@ def rerank_stream(query: str, candidates: list[dict]):
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = f"""You are a movie recommendation assistant. A user searched for: "{query}"
+    prompt = f"""You are a movie recommendation assistant. A user searched for:
+<query>{query}</query>
 
 Here are candidate movies retrieved by semantic search:
 

@@ -23,7 +23,7 @@ def upsert_movie(movie_id: str) -> None:
         ids=[movie_id],
         embeddings=[embedding],
         documents=[movie["richtext"]],
-        metadatas=[{"title": movie["title"]}]
+        metadatas=[{"title": movie["title"], "movie_poster": movie.get("poster_path") or ""}]
     )
 
 

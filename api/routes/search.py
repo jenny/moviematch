@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from config import HAIKU_INPUT_PRICE, HAIKU_OUTPUT_PRICE, OPUS_INPUT_PRICE, OPUS_OUTPUT_PRICE
 from logger import log_request
@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 class SearchRequest(BaseModel):
-    query: str
+    query: str = Field(..., min_length=1, max_length=500)
 
 
 @router.post("/recommend")
@@ -69,7 +69,7 @@ def search_endpoint(request: SearchRequest):
                     result_count += 1
                     yield f"data: {json.dumps({'type': 'result', **item})}\n\n"
 
-        except RuntimeError as e:
+        except Exception as e:
             total_ms = round((time.perf_counter() - t0) * 1000)
             log_request({
                 "timestamp": timestamp,

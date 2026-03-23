@@ -37,6 +37,7 @@ def _require_tmdb_key():
     retry=retry_if_exception(_is_rate_limit_or_server_error),
 )
 def fetch_discover_page(page: int, sort_by: str = "vote_average.desc") -> list[dict]:
+    _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + "/discover/movie",
         params={
@@ -44,7 +45,8 @@ def fetch_discover_page(page: int, sort_by: str = "vote_average.desc") -> list[d
             "vote_count.gte": str(TMDB_MIN_VOTE_COUNT),
             "page": str(page)
         },
-        headers=TMDB_HEADERS
+        headers=TMDB_HEADERS,
+        timeout=10,
     )
     response.raise_for_status()
     # Sleep after a successful response to stay within TMDB's rate limit
@@ -58,9 +60,11 @@ def fetch_discover_page(page: int, sort_by: str = "vote_average.desc") -> list[d
     retry=retry_if_exception(_is_rate_limit_or_server_error),
 )
 def fetch_movie_detail(movie_id: int) -> dict:
+    _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + f"/movie/{movie_id}?append_to_response=keywords,credits",
-        headers=TMDB_HEADERS
+        headers=TMDB_HEADERS,
+        timeout=10,
     )
     response.raise_for_status()
     # Sleep after a successful response to stay within TMDB's rate limit
@@ -148,8 +152,9 @@ def ingest_index(n: int) -> list[int]:
               "Consider lowering TMDB_MIN_VOTE_COUNT or requesting fewer movies.")
     index = {"results": [{"id": m_id, "title": candidates[m_id]["title"]} for m_id in ids]}
     os.makedirs(DATA_DIR, exist_ok=True)
-    with open(os.path.join(DATA_DIR, "index.json"), "w") as f:
-        json.dump(index, f, indent=2)
+    with _index_lock:
+        with open(os.path.join(DATA_DIR, "index.json"), "w") as f:
+            json.dump(index, f, indent=2)
     print(f"Indexed {len(ids)} movies → data/index.json")
     return ids
 
@@ -165,7 +170,8 @@ def search_person(name: str) -> list[dict]:
     response = requests.get(
         TMDB_BASE_URL + "/search/person",
         params={"query": name},
-        headers=TMDB_HEADERS
+        headers=TMDB_HEADERS,
+        timeout=10,
     )
     response.raise_for_status()
     time.sleep(TMDB_RATE_LIMIT_SLEEP)
@@ -191,7 +197,8 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
     _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + f"/person/{person_id}/movie_credits",
-        headers=TMDB_HEADERS
+        headers=TMDB_HEADERS,
+        timeout=10,
     )
     response.raise_for_status()
     time.sleep(TMDB_RATE_LIMIT_SLEEP)

@@ -52,7 +52,7 @@ def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
         if _init_status["running"]:
             raise HTTPException(status_code=409, detail="Initialization already in progress.")
         _init_status["running"] = True
-    background_tasks.add_task(_run_pipeline, request.n)
+        background_tasks.add_task(_run_pipeline, request.n)
     return {"message": "Initialization started", "n": request.n}
 
 

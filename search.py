@@ -5,7 +5,8 @@ from db import get_model, get_collection
 from claude import rerank, rerank_stream
 
 
-def search(query: str) -> tuple[list[dict], dict | None, dict]:
+def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
+    """Embed query, query ChromaDB, and return (candidates, embedding_ms, chroma_ms)."""
     collection = get_collection()
 
     if collection.count() == 0:
@@ -23,17 +24,23 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
     except Exception as e:
         raise RuntimeError(f"Error querying ChromaDB: {e}")
 
-    metadatas = q_results["metadatas"][0]
-    documents = q_results["documents"][0]
-
     candidates = []
-    for i in range(len(metadatas)):
-        title = metadatas[i].get("title")
+    for metadata, document in zip(q_results["metadatas"][0], q_results["documents"][0]):
+        title = metadata.get("title")
         if not title:
-            print(f"Warning: missing title for result {i}, skipping.")
+            print("Warning: missing title for result, skipping.")
             continue
-        candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
+        candidates.append({
+            "title": title,
+            "movie_poster": metadata.get("movie_poster") or "",
+            "document": document[:SEARCH_DOC_TRUNCATE],
+        })
 
+    return candidates, embedding_ms, chroma_ms
+
+
+def search(query: str) -> tuple[list[dict], dict | None, dict]:
+    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
     timing = {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0}
 
     if not candidates:
@@ -53,33 +60,7 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
 def search_stream(query: str):
     """Generator that yields result dicts (with movie_poster) as they stream from Claude,
     then yields {"__meta": {"embedding_ms": ..., "chroma_ms": ..., "claude_ms": ..., "usage": ...}}."""
-    collection = get_collection()
-
-    if collection.count() == 0:
-        raise RuntimeError("ChromaDB collection is empty. Please run embeddings.py first.")
-
-    try:
-        t0 = time.perf_counter()
-        q_embeddings = get_model().encode(query)
-        embedding_ms = round((time.perf_counter() - t0) * 1000)
-
-        t0 = time.perf_counter()
-        n_results = min(SEARCH_CANDIDATES, collection.count())
-        q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
-        chroma_ms = round((time.perf_counter() - t0) * 1000)
-    except Exception as e:
-        raise RuntimeError(f"Error querying ChromaDB: {e}")
-
-    metadatas = q_results["metadatas"][0]
-    documents = q_results["documents"][0]
-
-    candidates = []
-    for i in range(len(metadatas)):
-        title = metadatas[i].get("title")
-        if not title:
-            print(f"Warning: missing title for result {i}, skipping.")
-            continue
-        candidates.append({"title": title, "movie_poster": metadatas[i].get("movie_poster") or "", "document": documents[i][:SEARCH_DOC_TRUNCATE]})
+    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
 
     if not candidates:
         yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
