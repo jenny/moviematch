@@ -29,6 +29,7 @@ def search_endpoint(request: SearchRequest):
                 if "__meta" in item:
                     meta = item["__meta"]
                     usage = meta.get("usage")
+                    error = meta.get("error")
                     total_ms = round((time.perf_counter() - t0) * 1000)
 
                     estimated_cost_usd = None
@@ -44,7 +45,7 @@ def search_endpoint(request: SearchRequest):
                     log_request({
                         "timestamp": timestamp,
                         "query": request.query,
-                        "status": "ok",
+                        "status": "error" if error else "ok",
                         "result_count": result_count,
                         "embedding_ms": meta["embedding_ms"],
                         "chroma_ms": meta["chroma_ms"],
@@ -59,12 +60,16 @@ def search_endpoint(request: SearchRequest):
                         "claude_rounds": usage.get("rounds") if usage else None,
                         "tools_called": usage.get("tools_called") if usage else None,
                         "estimated_cost_usd": estimated_cost_usd,
+                        "error": error,
                     })
 
-                    done = {"type": "done", "result_count": result_count}
-                    if not result_count:
-                        done["message"] = "No relevant matches found."
-                    yield f"data: {json.dumps(done)}\n\n"
+                    if error:
+                        yield f"data: {json.dumps({'type': 'error', 'message': 'Could not connect to the AI service. Please try again.'})}\n\n"
+                    else:
+                        done = {"type": "done", "result_count": result_count}
+                        if not result_count:
+                            done["message"] = "No relevant matches found."
+                        yield f"data: {json.dumps(done)}\n\n"
                 else:
                     result_count += 1
                     yield f"data: {json.dumps({'type': 'result', **item})}\n\n"

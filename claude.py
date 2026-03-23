@@ -369,6 +369,7 @@ Only include movies that are genuinely relevant."""
                 "opus_output_tokens": opus_output_tokens,
                 "rounds": len(models_used),
                 "tools_called": tools_called,
+                "error": str(e),
             }}
             return
 

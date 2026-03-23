@@ -70,15 +70,17 @@ def search_stream(query: str):
 
     t0 = time.perf_counter()
     usage = None
+    error = None
     for item in rerank_stream(query, candidates):
         if "__usage" in item:
             usage = item["__usage"]
+            error = usage.pop("error", None)
         else:
             item["movie_poster"] = poster_by_title.get(item.get("title", ""), "")
             yield item
 
     claude_ms = round((time.perf_counter() - t0) * 1000)
-    yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": claude_ms, "usage": usage}}
+    yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": claude_ms, "usage": usage, "error": error}}
 
 
 if __name__ == "__main__":
