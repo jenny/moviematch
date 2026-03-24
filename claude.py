@@ -95,12 +95,12 @@ def _ingest_filmography_background(movies: list[dict]) -> None:
         try:
             ingest_single(movie["id"], movie.get("vote_average", 0), movie.get("vote_count", 0))
         except Exception as e:
-            print(f"Background ingestion failed for {movie.get('title', movie['id'])}: {e}")
+            print(f"[WARN] Background ingestion failed for {movie.get('title', movie['id'])}: {e}")
 
 
 def execute_tool(name: str, tool_input: dict) -> dict:
     args_summary = ", ".join(f"{k}={v}" for k, v in tool_input.items())
-    print(f"Tool call: {name}({args_summary})")
+    print(f"[DEBUG] Tool call: {name}({args_summary})")
     try:
         if name == "search_person":
             return {"results": search_person(tool_input["name"])}
@@ -114,7 +114,7 @@ def execute_tool(name: str, tool_input: dict) -> dict:
             return {"movies": movies}
         return {"error": f"Unknown tool: {name}"}
     except Exception as e:
-        print(f"Tool {name} failed: {e}")
+        print(f"[WARN] Tool {name} failed: {e}")
         return {"error": str(e)}
 
 
@@ -135,6 +135,15 @@ def _call_claude(model: str, messages: list) -> object:
         tool_choice={"type": "any"},
         messages=messages,
     )
+
+
+def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
+    """Drop any return_results entries whose title wasn't in the candidate or filmography set."""
+    filtered = [r for r in results if r.get("title") in valid_titles]
+    rejected = [r["title"] for r in results if r.get("title") not in valid_titles]
+    if rejected:
+        print(f"[WARN] return_results validation: rejected fabricated title(s): {rejected}")
+    return filtered
 
 
 def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
@@ -171,6 +180,7 @@ Only include movies that are genuinely relevant."""
     models_used = []
     current_model = CLAUDE_FAST_MODEL
     exit_reason = "exhausted"
+    valid_titles = {c["title"] for c in candidates}
 
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
@@ -216,30 +226,34 @@ Only include movies that are genuinely relevant."""
                     "tools_called": tools_called,
                 }
                 print(
-                    f"Claude usage: {total_input_tokens} input tokens, "
+                    f"[INFO] Claude usage: {total_input_tokens} input tokens, "
                     f"{total_output_tokens} output tokens, "
                     f"{round_num} round(s), "
                     f"models={model_log}, "
                     f"tools={tools_called or 'none'}"
                 )
-                return tool_use.input.get("results", []), usage
+                raw = tool_use.input.get("results", [])
+                results = _filter_results(raw, valid_titles)
+                return results, usage
 
         # No return_results this round — execute non-terminal tools and continue
         tools_called.extend(t.name for t in non_terminal)
         current_model = CLAUDE_MODEL
 
         messages.append({"role": "assistant", "content": response.content})
-        messages.append({
-            "role": "user",
-            "content": [
-                {
-                    "type": "tool_result",
-                    "tool_use_id": t.id,
-                    "content": json.dumps(execute_tool(t.name, t.input)),
-                }
-                for t in non_terminal
-            ],
-        })
+        tool_results = []
+        for t in non_terminal:
+            result = execute_tool(t.name, t.input)
+            if t.name == "get_filmography":
+                for movie in result.get("movies", []):
+                    if movie.get("title"):
+                        valid_titles.add(movie["title"])
+            tool_results.append({
+                "type": "tool_result",
+                "tool_use_id": t.id,
+                "content": json.dumps(result),
+            })
+        messages.append({"role": "user", "content": tool_results})
 
     model_log = "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
     usage = {
@@ -252,7 +266,7 @@ Only include movies that are genuinely relevant."""
         "rounds": len(models_used),
         "tools_called": tools_called,
     }
-    print(f"Claude usage: agent loop ended ({exit_reason}) after {len(models_used)} rounds, models={model_log}")
+    print(f"[INFO] Claude usage: agent loop ended ({exit_reason}) after {len(models_used)} rounds, models={model_log}")
     return [], usage
 
 
@@ -268,6 +282,11 @@ def _extract_result_objects(partial_json: str) -> list[str]:
         ch = partial_json[i]
         if in_string:
             if ch == "\\":
+                # Skip the backslash and the following character. This correctly
+                # handles all single-char JSON escapes (\", \\, \/, \b, \f, \n,
+                # \r, \t) and the \u in \uXXXX sequences — the 4 hex digits that
+                # follow are 0-9/a-f/A-F, none of which are ", {, or }, so they
+                # are safely processed as ordinary characters in subsequent loops.
                 i += 2
                 continue
             if ch == '"':
@@ -323,6 +342,7 @@ Only include movies that are genuinely relevant."""
     tools_called = []
     models_used = []
     current_model = CLAUDE_FAST_MODEL
+    valid_titles = {c["title"] for c in candidates}
 
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
@@ -353,13 +373,14 @@ Only include movies that are genuinely relevant."""
                             try:
                                 result = json.loads(obj_str)
                                 if "title" in result and "explanation" in result:
-                                    yield result
-                                    results_yielded += 1
+                                    if result["title"] in valid_titles:
+                                        yield result
+                                        results_yielded += 1
                             except json.JSONDecodeError:
                                 pass
                 final = stream.get_final_message()
         except (RateLimitError, InternalServerError, APIConnectionError) as e:
-            print(f"Claude streaming error: {e}")
+            print(f"[ERROR] Claude streaming error: {e}")
             yield {"__usage": {
                 "input_tokens": total_input_tokens,
                 "output_tokens": total_output_tokens,
@@ -388,8 +409,8 @@ Only include movies that are genuinely relevant."""
         return_results_call = next((t for t in tool_uses if t.name == "return_results"), None)
 
         if return_results_call:
-            # Safety net: yield any results the streaming parser missed
-            for r in return_results_call.input.get("results", [])[results_yielded:]:
+            # Safety net: yield any valid results the streaming parser missed
+            for r in _filter_results(return_results_call.input.get("results", []), valid_titles)[results_yielded:]:
                 yield r
             model_log = "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
             usage = {
@@ -403,7 +424,7 @@ Only include movies that are genuinely relevant."""
                 "tools_called": tools_called,
             }
             print(
-                f"Claude usage (stream): {total_input_tokens} input tokens, "
+                f"[INFO] Claude usage (stream): {total_input_tokens} input tokens, "
                 f"{total_output_tokens} output tokens, "
                 f"{round_num} round(s), models={model_log}, "
                 f"tools={tools_called or 'none'}"
@@ -416,20 +437,22 @@ Only include movies that are genuinely relevant."""
         current_model = CLAUDE_MODEL
 
         messages.append({"role": "assistant", "content": final.content})
-        messages.append({
-            "role": "user",
-            "content": [
-                {
-                    "type": "tool_result",
-                    "tool_use_id": t.id,
-                    "content": json.dumps(execute_tool(t.name, t.input)),
-                }
-                for t in non_terminal
-            ],
-        })
+        tool_results = []
+        for t in non_terminal:
+            result = execute_tool(t.name, t.input)
+            if t.name == "get_filmography":
+                for movie in result.get("movies", []):
+                    if movie.get("title"):
+                        valid_titles.add(movie["title"])
+            tool_results.append({
+                "type": "tool_result",
+                "tool_use_id": t.id,
+                "content": json.dumps(result),
+            })
+        messages.append({"role": "user", "content": tool_results})
 
     model_log = "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
-    print(f"Claude usage (stream): agent loop exhausted after {len(models_used)} rounds, models={model_log}")
+    print(f"[INFO] Claude usage (stream): agent loop exhausted after {len(models_used)} rounds, models={model_log}")
     yield {"__usage": {
         "input_tokens": total_input_tokens,
         "output_tokens": total_output_tokens,
