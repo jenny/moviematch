@@ -129,10 +129,10 @@ def _is_transient_claude_error(exc: BaseException) -> bool:
     wait=wait_exponential(multiplier=1, min=1, max=10),
     retry=retry_if_exception(_is_transient_claude_error),
 )
-def _call_claude(model: str, messages: list) -> object:
+def _call_claude(model: str, messages: list, max_tokens: int = 1024) -> object:
     return get_client().messages.create(
         model=model,
-        max_tokens=2048,
+        max_tokens=max_tokens,
         tools=TOOLS,
         tool_choice={"type": "any"},
         messages=messages,
@@ -186,7 +186,7 @@ Only include movies that are genuinely relevant."""
 
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
-        response = _call_claude(current_model, messages)
+        response = _call_claude(current_model, messages, max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048)
 
         in_toks = response.usage.input_tokens
         out_toks = response.usage.output_tokens
@@ -355,7 +355,7 @@ Only include movies that are genuinely relevant."""
         try:
             with get_client().messages.stream(
                 model=current_model,
-                max_tokens=2048,
+                max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048,
                 tools=TOOLS,
                 tool_choice={"type": "any"},
                 messages=messages,

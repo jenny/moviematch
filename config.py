@@ -59,8 +59,8 @@ RICHTEXT_CAST_LIMIT = 5
 CREW_JOBS = {"Director", "Executive Producer", "Producer"}
 
 # Search
-SEARCH_CANDIDATES = 20
-SEARCH_DOC_TRUNCATE = 300
+SEARCH_CANDIDATES = 15
+SEARCH_DOC_TRUNCATE = 200
 
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"
