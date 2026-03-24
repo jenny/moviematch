@@ -1,15 +1,17 @@
 import logging
 import threading
+import time
 
 import chromadb
-from pinecone import Pinecone
+from pinecone import Pinecone, ServerlessSpec
 from sentence_transformers import SentenceTransformer
 
 from config import (
     MODEL_NAME,
     VECTOR_DB,
     CHROMA_PATH, COLLECTION_NAME,
-    PINECONE_API_KEY, PINECONE_INDEX_NAME,
+    PINECONE_API_KEY, PINECONE_INDEX_NAME, PINECONE_CLOUD, PINECONE_REGION,
+    EMBEDDING_DIMENSION,
 )
 
 logger = logging.getLogger(__name__)
@@ -66,6 +68,21 @@ def _get_pinecone_index():
                     raise ValueError("PINECONE_API_KEY is not set. Check your .env file.")
                 try:
                     pc = Pinecone(api_key=PINECONE_API_KEY)
+                    existing = {idx.name for idx in pc.list_indexes()}
+                    if PINECONE_INDEX_NAME not in existing:
+                        logger.info(
+                            f"Creating Pinecone index '{PINECONE_INDEX_NAME}' "
+                            f"(dim={EMBEDDING_DIMENSION}, metric=cosine)..."
+                        )
+                        pc.create_index(
+                            name=PINECONE_INDEX_NAME,
+                            dimension=EMBEDDING_DIMENSION,
+                            metric="cosine",
+                            spec=ServerlessSpec(cloud=PINECONE_CLOUD, region=PINECONE_REGION),
+                        )
+                        while not pc.describe_index(PINECONE_INDEX_NAME).status["ready"]:
+                            time.sleep(1)
+                        logger.info(f"Pinecone index '{PINECONE_INDEX_NAME}' is ready.")
                     _pinecone_index = pc.Index(PINECONE_INDEX_NAME)
                 except Exception as e:
                     raise RuntimeError(f"Failed to connect to Pinecone: {e}")

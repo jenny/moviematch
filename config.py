@@ -35,9 +35,12 @@ COLLECTION_NAME = "movies"
 # Pinecone (used when VECTOR_DB=pinecone)
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "moviematch")
+PINECONE_CLOUD = os.getenv("PINECONE_CLOUD", "aws")
+PINECONE_REGION = os.getenv("PINECONE_REGION", "us-east-1")
 
 # Embedding model
 MODEL_NAME = "all-mpnet-base-v2"
+EMBEDDING_DIMENSION = 768  # output dimension of all-mpnet-base-v2
 EMBEDDING_BATCH_SIZE = 64
 
 # Claude
