@@ -36,8 +36,6 @@ class StatusResponse(BaseModel):
 
 
 def _run_pipeline(n: int):
-    with _init_lock:
-        _init_status["running"] = True
     try:
         result = initialize_all(n)
         _init_status["last_result"] = result
@@ -52,7 +50,12 @@ def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
         if _init_status["running"]:
             raise HTTPException(status_code=409, detail="Initialization already in progress.")
         _init_status["running"] = True
+    try:
         background_tasks.add_task(_run_pipeline, request.n)
+    except Exception:
+        with _init_lock:
+            _init_status["running"] = False
+        raise
     return {"message": "Initialization started", "n": request.n}
 
 
