@@ -63,7 +63,7 @@ def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
 def status():
     movie_files = [
         f for f in glob.glob(os.path.join(DATA_DIR, "*.json"))
-        if "index" not in f
+        if os.path.basename(f) != "index.json"
     ]
     try:
         chroma_count = get_or_create_collection().count()
