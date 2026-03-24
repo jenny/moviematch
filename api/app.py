@@ -10,11 +10,19 @@ from api.limiter import limiter
 from api.routes import search, admin
 from config import CORS_ORIGINS
 
+_app_html: str = ""
+_admin_html: str = ""
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    global _app_html, _admin_html
     from db import get_model
     get_model()
+    with open("app.html") as f:
+        _app_html = f.read()
+    with open("admin.html") as f:
+        _admin_html = f.read()
     yield
 
 
@@ -39,14 +47,12 @@ app.include_router(admin.router, prefix="/admin")
 
 @app.get("/")
 def root():
-    with open("app.html") as f:
-        return HTMLResponse(f.read())
+    return HTMLResponse(_app_html)
 
 
 @app.get("/admin.html")
 def admin_ui():
-    with open("admin.html") as f:
-        return HTMLResponse(f.read())
+    return HTMLResponse(_admin_html)
 
 
 @app.get("/health")
