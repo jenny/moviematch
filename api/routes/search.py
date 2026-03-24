@@ -2,11 +2,13 @@ import json
 import time
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from api.limiter import limiter
 from config import HAIKU_INPUT_PRICE, HAIKU_OUTPUT_PRICE, OPUS_INPUT_PRICE, OPUS_OUTPUT_PRICE
+from config import RATE_LIMIT
 from logger import log_request
 from search import search_stream
 
@@ -18,14 +20,15 @@ class SearchRequest(BaseModel):
 
 
 @router.post("/recommend")
-def search_endpoint(request: SearchRequest):
+@limiter.limit(RATE_LIMIT)
+def search_endpoint(request: Request, body: SearchRequest):
     timestamp = datetime.now(timezone.utc).isoformat()
     t0 = time.perf_counter()
 
     def generate():
         result_count = 0
         try:
-            for item in search_stream(request.query):
+            for item in search_stream(body.query):
                 if "__meta" in item:
                     meta = item["__meta"]
                     usage = meta.get("usage")
@@ -44,7 +47,7 @@ def search_endpoint(request: SearchRequest):
 
                     log_request({
                         "timestamp": timestamp,
-                        "query": request.query,
+                        "query": body.query,
                         "status": "error" if error else "ok",
                         "result_count": result_count,
                         "embedding_ms": meta["embedding_ms"],
@@ -78,11 +81,11 @@ def search_endpoint(request: SearchRequest):
             total_ms = round((time.perf_counter() - t0) * 1000)
             log_request({
                 "timestamp": timestamp,
-                "query": request.query,
+                "query": body.query,
                 "status": "error",
                 "error": str(e),
                 "total_ms": total_ms,
             })
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+            yield f"data: {json.dumps({'type': 'error', 'message': 'An error occurred. Please try again.'})}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
