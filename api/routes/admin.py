@@ -96,37 +96,43 @@ def logs():
     def avg(values):
         return round(sum(values) / len(values)) if values else None
 
-    def pct(values, p):
-        if not values:
+    def pct(sorted_values, p):
+        if not sorted_values:
             return None
-        s = sorted(values)
-        return s[min(int(len(s) * p / 100), len(s) - 1)]
+        return sorted_values[min(int(len(sorted_values) * p / 100), len(sorted_values) - 1)]
+
+    def collect(key):
+        return sorted([e[key] for e in ok if e.get(key) is not None])
 
     tool_queries = [e for e in ok if e.get("tools_called")]
     costs = [e["estimated_cost_usd"] for e in ok if e.get("estimated_cost_usd") is not None]
-
     recent_costs = [e["estimated_cost_usd"] for e in ok[-50:] if e.get("estimated_cost_usd") is not None]
+
+    total_ms   = collect("total_ms")
+    claude_ms  = collect("claude_ms")
+    embed_ms   = collect("embedding_ms")
+    chroma_ms  = collect("chroma_ms")
 
     stats = {
         "total_requests": len(entries),
         "error_count": len([e for e in entries if e.get("status") == "error"]),
-        "avg_total_ms": avg([e["total_ms"] for e in ok if e.get("total_ms") is not None]),
-        "p50_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 50),
-        "p90_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 90),
-        "p99_total_ms": pct([e["total_ms"] for e in ok if e.get("total_ms") is not None], 99),
-        "p50_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 50),
-        "p90_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 90),
-        "p99_claude_ms": pct([e["claude_ms"] for e in ok if e.get("claude_ms") is not None], 99),
-        "p50_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 50),
-        "p90_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 90),
-        "p99_embedding_ms": pct([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None], 99),
-        "p50_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 50),
-        "p90_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 90),
-        "p99_chroma_ms": pct([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None], 99),
-        "avg_embedding_ms": avg([e["embedding_ms"] for e in ok if e.get("embedding_ms") is not None]),
-        "avg_chroma_ms": avg([e["chroma_ms"] for e in ok if e.get("chroma_ms") is not None]),
-        "avg_claude_ms": avg([e["claude_ms"] for e in ok if e.get("claude_ms") is not None]),
-        "avg_input_tokens": avg([e["input_tokens"] for e in ok if e.get("input_tokens") is not None]),
+        "avg_total_ms":      avg(total_ms),
+        "p50_total_ms":      pct(total_ms, 50),
+        "p90_total_ms":      pct(total_ms, 90),
+        "p99_total_ms":      pct(total_ms, 99),
+        "p50_claude_ms":     pct(claude_ms, 50),
+        "p90_claude_ms":     pct(claude_ms, 90),
+        "p99_claude_ms":     pct(claude_ms, 99),
+        "p50_embedding_ms":  pct(embed_ms, 50),
+        "p90_embedding_ms":  pct(embed_ms, 90),
+        "p99_embedding_ms":  pct(embed_ms, 99),
+        "p50_chroma_ms":     pct(chroma_ms, 50),
+        "p90_chroma_ms":     pct(chroma_ms, 90),
+        "p99_chroma_ms":     pct(chroma_ms, 99),
+        "avg_embedding_ms":  avg(embed_ms),
+        "avg_chroma_ms":     avg(chroma_ms),
+        "avg_claude_ms":     avg(claude_ms),
+        "avg_input_tokens":  avg([e["input_tokens"] for e in ok if e.get("input_tokens") is not None]),
         "avg_output_tokens": avg([e["output_tokens"] for e in ok if e.get("output_tokens") is not None]),
         "tool_use_rate": round(len(tool_queries) / len(ok) * 100) if ok else None,
         "avg_cost_usd": round(sum(costs) / len(costs), 6) if costs else None,
