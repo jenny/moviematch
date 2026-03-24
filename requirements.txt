@@ -1,4 +1,3 @@
--c constraints.txt
 annotated-doc==0.0.4
 annotated-types==0.7.0
 anthropic==0.84.0
