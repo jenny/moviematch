@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 import time
@@ -13,6 +14,8 @@ from config import (
     SCORE_WEIGHT_RATING, SCORE_WEIGHT_POPULARITY,
     DATA_DIR, CAST_LIMIT, CREW_JOBS
 )
+
+logger = logging.getLogger(__name__)
 
 TMDB_MAX_PAGE = 500
 _index_lock = threading.Lock()
@@ -93,7 +96,7 @@ def collect_candidates(pages_per_sort: int) -> dict[int, dict]:
             for movie in fetch_discover_page(page, sort_by):
                 # First-seen wins: preserve the result from the highest-priority sort
                 candidates.setdefault(movie["id"], movie)
-            print(f"  [{sort_by}] page {page}/{pages_per_sort} — {len(candidates)} unique candidates so far")
+            logger.debug(f"  [{sort_by}] page {page}/{pages_per_sort} — {len(candidates)} unique candidates so far")
     return candidates
 
 
@@ -128,14 +131,14 @@ def ingest_movie(movie_id: int) -> dict:
     if os.path.exists(file_path):
         with open(file_path) as f:
             cached = json.load(f)
-        print(f"Skipping {cached.get('title', movie_id)} (already ingested)")
+        logger.debug(f"Skipping {cached.get('title', movie_id)} (already ingested)")
         return cached
     movie_json = fetch_movie_detail(movie_id)
     movie_json = filter_cast(movie_json)
     movie_json = filter_crew(movie_json)
     with open(file_path, "w") as f:
         json.dump(movie_json, f, indent=2)
-    print(f"Ingested {movie_json['title']} → {movie_id}.json")
+    logger.info(f"Ingested {movie_json['title']} → {movie_id}.json")
     return movie_json
 
 
@@ -143,19 +146,19 @@ def ingest_index(n: int) -> list[int]:
     _require_tmdb_key()
     # TMDB discover caps at page 500 (10,000 results per sort criterion)
     pages_per_sort = min(math.ceil(n / 20), TMDB_MAX_PAGE)
-    print(f"Collecting candidates ({pages_per_sort} pages × 3 sort criteria)...")
+    logger.info(f"Collecting candidates ({pages_per_sort} pages × 3 sort criteria)...")
     candidates = collect_candidates(pages_per_sort)
-    print(f"Collected {len(candidates)} unique candidates, ranking top {n}...")
+    logger.info(f"Collected {len(candidates)} unique candidates, ranking top {n}...")
     ids = select_top_n(candidates, n)
     if len(ids) < n:
-        print(f"Warning: only {len(ids)} unique candidates found (requested {n}). "
-              "Consider lowering TMDB_MIN_VOTE_COUNT or requesting fewer movies.")
+        logger.warning(f"Only {len(ids)} unique candidates found (requested {n}). "
+                       "Consider lowering TMDB_MIN_VOTE_COUNT or requesting fewer movies.")
     index = {"results": [{"id": m_id, "title": candidates[m_id]["title"]} for m_id in ids]}
     os.makedirs(DATA_DIR, exist_ok=True)
     with _index_lock:
         with open(os.path.join(DATA_DIR, "index.json"), "w") as f:
             json.dump(index, f, indent=2)
-    print(f"Indexed {len(ids)} movies → data/index.json")
+    logger.info(f"Indexed {len(ids)} movies → data/index.json")
     return ids
 
 
@@ -247,7 +250,7 @@ def update_index(movie_id: int, title: str) -> None:
         index["results"].append({"id": movie_id, "title": title})
         with open(index_path, "w") as f:
             json.dump(index, f, indent=2)
-    print(f"Updated index.json → added {title} ({movie_id})")
+    logger.info(f"Updated index.json → added {title} ({movie_id})")
 
 
 if __name__ == "__main__":

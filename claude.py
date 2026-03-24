@@ -1,4 +1,5 @@
 import json
+import logging
 import threading
 
 from anthropic import Anthropic, RateLimitError, InternalServerError, APIConnectionError
@@ -7,6 +8,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_FAST_MODEL, AGENT_MAX_TOOL_ROUNDS
 from tmdb import search_person, get_filmography
 
+logger = logging.getLogger(__name__)
 _client = None
 
 
@@ -95,12 +97,12 @@ def _ingest_filmography_background(movies: list[dict]) -> None:
         try:
             ingest_single(movie["id"], movie.get("vote_average", 0), movie.get("vote_count", 0))
         except Exception as e:
-            print(f"[WARN] Background ingestion failed for {movie.get('title', movie['id'])}: {e}")
+            logger.warning(f"Background ingestion failed for {movie.get('title', movie['id'])}: {e}")
 
 
 def execute_tool(name: str, tool_input: dict) -> dict:
     args_summary = ", ".join(f"{k}={v}" for k, v in tool_input.items())
-    print(f"[DEBUG] Tool call: {name}({args_summary})")
+    logger.debug(f"Tool call: {name}({args_summary})")
     try:
         if name == "search_person":
             return {"results": search_person(tool_input["name"])}
@@ -114,7 +116,7 @@ def execute_tool(name: str, tool_input: dict) -> dict:
             return {"movies": movies}
         return {"error": f"Unknown tool: {name}"}
     except Exception as e:
-        print(f"[WARN] Tool {name} failed: {e}")
+        logger.warning(f"Tool {name} failed: {e}")
         return {"error": str(e)}
 
 
@@ -142,7 +144,7 @@ def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
     filtered = [r for r in results if r.get("title") in valid_titles]
     rejected = [r["title"] for r in results if r.get("title") not in valid_titles]
     if rejected:
-        print(f"[WARN] return_results validation: rejected fabricated title(s): {rejected}")
+        logger.warning(f"return_results validation: rejected fabricated title(s): {rejected}")
     return filtered
 
 
@@ -225,8 +227,8 @@ Only include movies that are genuinely relevant."""
                     "rounds": round_num,
                     "tools_called": tools_called,
                 }
-                print(
-                    f"[INFO] Claude usage: {total_input_tokens} input tokens, "
+                logger.info(
+                    f"Claude usage: {total_input_tokens} input tokens, "
                     f"{total_output_tokens} output tokens, "
                     f"{round_num} round(s), "
                     f"models={model_log}, "
@@ -266,7 +268,7 @@ Only include movies that are genuinely relevant."""
         "rounds": len(models_used),
         "tools_called": tools_called,
     }
-    print(f"[INFO] Claude usage: agent loop ended ({exit_reason}) after {len(models_used)} rounds, models={model_log}")
+    logger.info(f"Claude usage: agent loop ended ({exit_reason}) after {len(models_used)} rounds, models={model_log}")
     return [], usage
 
 
@@ -380,7 +382,7 @@ Only include movies that are genuinely relevant."""
                                 pass
                 final = stream.get_final_message()
         except (RateLimitError, InternalServerError, APIConnectionError) as e:
-            print(f"[ERROR] Claude streaming error: {e}")
+            logger.error(f"Claude streaming error: {e}")
             yield {"__usage": {
                 "input_tokens": total_input_tokens,
                 "output_tokens": total_output_tokens,
@@ -423,8 +425,8 @@ Only include movies that are genuinely relevant."""
                 "rounds": round_num,
                 "tools_called": tools_called,
             }
-            print(
-                f"[INFO] Claude usage (stream): {total_input_tokens} input tokens, "
+            logger.info(
+                f"Claude usage (stream): {total_input_tokens} input tokens, "
                 f"{total_output_tokens} output tokens, "
                 f"{round_num} round(s), models={model_log}, "
                 f"tools={tools_called or 'none'}"
@@ -452,7 +454,7 @@ Only include movies that are genuinely relevant."""
         messages.append({"role": "user", "content": tool_results})
 
     model_log = "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
-    print(f"[INFO] Claude usage (stream): agent loop exhausted after {len(models_used)} rounds, models={model_log}")
+    logger.info(f"Claude usage (stream): agent loop exhausted after {len(models_used)} rounds, models={model_log}")
     yield {"__usage": {
         "input_tokens": total_input_tokens,
         "output_tokens": total_output_tokens,
