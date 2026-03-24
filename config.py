@@ -26,7 +26,8 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 DATA_DIR = "data"
 
 # Vector DB backend: "chroma" for local, "pinecone" for production
-VECTOR_DB = os.getenv("VECTOR_DB", "chroma")
+# Auto-detects Railway via RAILWAY_ENVIRONMENT; can always be overridden with VECTOR_DB
+VECTOR_DB = os.getenv("VECTOR_DB", "pinecone" if os.getenv("RAILWAY_ENVIRONMENT") else "chroma")
 
 # ChromaDB (used when VECTOR_DB=chroma)
 CHROMA_PATH = "./embeddings/chroma_db"
@@ -67,5 +68,5 @@ RATE_LIMIT = "10/minute"
 
 # CORS — comma-separated list of allowed origins; restrict in production
 CORS_ORIGINS = [o.strip() for o in os.getenv(
-    "CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000"
+    "CORS_ORIGINS", "https://moviematch-production-f65d.up.railway.app,http://localhost:8000,http://127.0.0.1:8000"
 ).split(",")]
