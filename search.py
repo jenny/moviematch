@@ -1,39 +1,41 @@
+import logging
 import time
 
 from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
-from db import get_model, get_collection
+from db import get_model, vector_count, vector_query
 from claude import rerank, rerank_stream
+
+logger = logging.getLogger(__name__)
 
 
 def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
-    """Embed query, query ChromaDB, and return (candidates, embedding_ms, chroma_ms)."""
-    collection = get_collection()
-
-    if collection.count() == 0:
-        raise RuntimeError("ChromaDB collection is empty. Please run embeddings.py first.")
+    """Embed query, query the vector store, and return (candidates, embedding_ms, chroma_ms)."""
+    count = vector_count()
+    if count == 0:
+        raise RuntimeError("Vector store is empty. Please run embeddings.py first.")
 
     try:
         t0 = time.perf_counter()
-        q_embeddings = get_model().encode(query)
+        q_embedding = get_model().encode(query).tolist()
         embedding_ms = round((time.perf_counter() - t0) * 1000)
 
         t0 = time.perf_counter()
-        n_results = min(SEARCH_CANDIDATES, collection.count())
-        q_results = collection.query(query_embeddings=q_embeddings, n_results=n_results)
+        n_results = min(SEARCH_CANDIDATES, count)
+        matches = vector_query(q_embedding, n_results)
         chroma_ms = round((time.perf_counter() - t0) * 1000)
     except Exception as e:
-        raise RuntimeError(f"Error querying ChromaDB: {e}")
+        raise RuntimeError(f"Error querying vector store: {e}")
 
     candidates = []
-    for metadata, document in zip(q_results["metadatas"][0], q_results["documents"][0]):
-        title = metadata.get("title")
+    for match in matches:
+        title = match.get("title")
         if not title:
-            print("Warning: missing title for result, skipping.")
+            logger.warning("Missing title in vector result, skipping.")
             continue
         candidates.append({
             "title": title,
-            "movie_poster": metadata.get("movie_poster") or "",
-            "document": document[:SEARCH_DOC_TRUNCATE],
+            "movie_poster": match.get("movie_poster") or "",
+            "document": match.get("document", "")[:SEARCH_DOC_TRUNCATE],
         })
 
     return candidates, embedding_ms, chroma_ms
