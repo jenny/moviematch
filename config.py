@@ -24,10 +24,17 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 # Paths
 DATA_DIR = "data"
-CHROMA_PATH = "./embeddings/chroma_db"
 
-# ChromaDB
+# Vector DB backend: "chroma" for local, "pinecone" for production
+VECTOR_DB = os.getenv("VECTOR_DB", "chroma")
+
+# ChromaDB (used when VECTOR_DB=chroma)
+CHROMA_PATH = "./embeddings/chroma_db"
 COLLECTION_NAME = "movies"
+
+# Pinecone (used when VECTOR_DB=pinecone)
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "moviematch")
 
 # Embedding model
 MODEL_NAME = "all-mpnet-base-v2"
