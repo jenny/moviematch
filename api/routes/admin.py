@@ -1,10 +1,13 @@
 import json
+import logging
 import os
 import glob
 import threading
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
 
 from pipeline import initialize_all
 from db import get_or_create_collection
@@ -89,7 +92,7 @@ def logs():
                     try:
                         entries.append(json.loads(line))
                     except json.JSONDecodeError:
-                        pass
+                        logger.warning(f"Malformed JSON in log file, skipping line: {line[:100]!r}")
 
     ok = [e for e in entries if e.get("status") == "ok"]
 
