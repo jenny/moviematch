@@ -1,16 +1,27 @@
+import logging
 import threading
 
 import chromadb
+from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
 
-from config import MODEL_NAME, CHROMA_PATH, COLLECTION_NAME
+from config import (
+    MODEL_NAME,
+    VECTOR_DB,
+    CHROMA_PATH, COLLECTION_NAME,
+    PINECONE_API_KEY, PINECONE_INDEX_NAME,
+)
+
+logger = logging.getLogger(__name__)
+
+_PINECONE_UPSERT_BATCH_SIZE = 100
 
 _model = None
-_collection = None
-_rw_collection = None
+_chroma_collection = None
+_pinecone_index = None
 _model_lock = threading.Lock()
-_collection_lock = threading.Lock()
-_rw_collection_lock = threading.Lock()
+_chroma_lock = threading.Lock()
+_pinecone_lock = threading.Lock()
 
 
 def get_model() -> SentenceTransformer:
@@ -25,33 +36,102 @@ def get_model() -> SentenceTransformer:
     return _model
 
 
-def get_collection() -> chromadb.Collection:
-    global _collection
-    if _collection is None:
-        with _collection_lock:
-            if _collection is None:
+# --- ChromaDB backend ---
+
+def _get_chroma_collection() -> chromadb.Collection:
+    global _chroma_collection
+    if _chroma_collection is None:
+        with _chroma_lock:
+            if _chroma_collection is None:
                 try:
                     chroma = chromadb.PersistentClient(path=CHROMA_PATH)
-                    _collection = chroma.get_collection(name=COLLECTION_NAME)
-                except ValueError:
-                    raise RuntimeError("ChromaDB collection 'movies' not found. Please run embeddings.py first.")
-                except Exception as e:
-                    raise RuntimeError(f"Failed to connect to ChromaDB: {e}")
-    return _collection
-
-
-def get_or_create_collection() -> chromadb.Collection:
-    global _rw_collection
-    if _rw_collection is None:
-        with _rw_collection_lock:
-            if _rw_collection is None:
-                try:
-                    chroma = chromadb.PersistentClient(path=CHROMA_PATH)
-                    _rw_collection = chroma.get_or_create_collection(
+                    _chroma_collection = chroma.get_or_create_collection(
                         name=COLLECTION_NAME,
                         embedding_function=None,
-                        metadata={"hnsw:space": "cosine"}
+                        metadata={"hnsw:space": "cosine"},
                     )
                 except Exception as e:
                     raise RuntimeError(f"Failed to connect to ChromaDB: {e}")
-    return _rw_collection
+    return _chroma_collection
+
+
+# --- Pinecone backend ---
+
+def _get_pinecone_index():
+    global _pinecone_index
+    if _pinecone_index is None:
+        with _pinecone_lock:
+            if _pinecone_index is None:
+                if not PINECONE_API_KEY:
+                    raise ValueError("PINECONE_API_KEY is not set. Check your .env file.")
+                try:
+                    pc = Pinecone(api_key=PINECONE_API_KEY)
+                    _pinecone_index = pc.Index(PINECONE_INDEX_NAME)
+                except Exception as e:
+                    raise RuntimeError(f"Failed to connect to Pinecone: {e}")
+    return _pinecone_index
+
+
+# --- Unified interface ---
+
+def vector_count() -> int:
+    """Return the total number of vectors in the configured backend."""
+    if VECTOR_DB == "pinecone":
+        return _get_pinecone_index().describe_index_stats().total_vector_count
+    return _get_chroma_collection().count()
+
+
+def vector_query(vector: list[float], top_k: int) -> list[dict]:
+    """Query the vector store. Returns [{title, movie_poster, document}, ...]."""
+    if VECTOR_DB == "pinecone":
+        results = _get_pinecone_index().query(vector=vector, top_k=top_k, include_metadata=True)
+        return [
+            {
+                "title": m.metadata.get("title", ""),
+                "movie_poster": m.metadata.get("movie_poster", ""),
+                "document": m.metadata.get("document", ""),
+            }
+            for m in results.matches
+            if m.metadata and m.metadata.get("title")
+        ]
+    results = _get_chroma_collection().query(query_embeddings=[vector], n_results=top_k)
+    return [
+        {
+            "title": meta.get("title", ""),
+            "movie_poster": meta.get("movie_poster", ""),
+            "document": doc,
+        }
+        for meta, doc in zip(results["metadatas"][0], results["documents"][0])
+        if meta.get("title")
+    ]
+
+
+def vector_upsert_batch(vectors: list[dict]) -> None:
+    """Upsert vectors into the configured backend.
+
+    Each dict must have: id (str), values (list[float]),
+    title (str), movie_poster (str), document (str).
+    """
+    if VECTOR_DB == "pinecone":
+        index = _get_pinecone_index()
+        pinecone_vectors = [
+            {
+                "id": v["id"],
+                "values": v["values"],
+                "metadata": {
+                    "title": v["title"],
+                    "movie_poster": v["movie_poster"],
+                    "document": v["document"],
+                },
+            }
+            for v in vectors
+        ]
+        for i in range(0, len(pinecone_vectors), _PINECONE_UPSERT_BATCH_SIZE):
+            index.upsert(vectors=pinecone_vectors[i:i + _PINECONE_UPSERT_BATCH_SIZE])
+    else:
+        _get_chroma_collection().upsert(
+            ids=[v["id"] for v in vectors],
+            embeddings=[v["values"] for v in vectors],
+            documents=[v["document"] for v in vectors],
+            metadatas=[{"title": v["title"], "movie_poster": v["movie_poster"]} for v in vectors],
+        )
