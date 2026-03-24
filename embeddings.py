@@ -1,8 +1,11 @@
+import logging
 import os
 import json
 import glob
 
 from config import DATA_DIR, EMBEDDING_BATCH_SIZE
+
+logger = logging.getLogger(__name__)
 from db import get_model, get_or_create_collection
 
 
@@ -47,7 +50,7 @@ def initialize_all_embeddings() -> int:
     ids, docs, metadatas = load_all_richtexts()
     embeddings = embed_texts(docs)
     get_or_create_collection().upsert(ids=ids, embeddings=embeddings, documents=docs, metadatas=metadatas)
-    print(f"Ingested {len(ids)} movies into ChromaDB.")
+    logger.info(f"Ingested {len(ids)} movies into ChromaDB.")
     return len(ids)
 
 

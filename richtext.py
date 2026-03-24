@@ -1,8 +1,11 @@
+import logging
 import os
 import json
 import glob
 
 from config import DATA_DIR, RICHTEXT_CAST_LIMIT
+
+logger = logging.getLogger(__name__)
 
 
 def build_richtext(movie_json: dict) -> str:
@@ -31,14 +34,14 @@ def compile_all_richtexts() -> None:
     for movie in movies["results"]:
         file_path = os.path.join(DATA_DIR, f"{movie['id']}.json")
         if not os.path.exists(file_path):
-            print(f"Warning: skipping richtext for {movie['title']} ({movie['id']}) — file not found")
+            logger.warning(f"Skipping richtext for {movie['title']} ({movie['id']}) — file not found")
             continue
         with open(file_path, "r") as f:
             movie_json = json.load(f)
         movie_json["richtext"] = build_richtext(movie_json)
         with open(file_path, "w") as f:
             json.dump(movie_json, f, indent=2)
-        print(f"Built richtext for {movie_json['title']} → {movie_json['id']}.json")
+        logger.info(f"Built richtext for {movie_json['title']} → {movie_json['id']}.json")
 
 
 def debug_wordcount(field: str) -> None:
