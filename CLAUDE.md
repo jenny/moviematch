@@ -56,3 +56,11 @@ Optional: `VECTOR_DB` (default `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RA
 
 ## Model Use
 - Use default model for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research
+
+## Forbidden Directories
+Do not read or modify files in these directories:
+- `venv/` — Python environment
+- `embeddings/` — ChromaDB binary data files
+- `data/` — raw TMDB JSON dumps
+- `local/` — scratch notes and design proposals (already digested into this file)
+- `.git/` — use `git` CLI commands instead
