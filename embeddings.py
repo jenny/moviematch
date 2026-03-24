@@ -18,6 +18,8 @@ def upsert_movie(movie_id: str) -> None:
     file_path = os.path.join(DATA_DIR, f"{movie_id}.json")
     with open(file_path, "r") as f:
         movie = json.load(f)
+    if "richtext" not in movie:
+        raise KeyError(f"Movie {movie.get('id', movie_id)} is missing richtext. Run richtext.py first.")
     embedding = embed_text(movie["richtext"])
     get_or_create_collection().upsert(
         ids=[movie_id],
