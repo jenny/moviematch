@@ -6,18 +6,18 @@ from config import DATA_DIR, RICHTEXT_CAST_LIMIT
 
 
 def build_richtext(movie_json: dict) -> str:
-    rich_text = "Plot: " + movie_json["overview"] + "\n\n"
+    rich_text = "Plot: " + movie_json.get("overview", "") + "\n\n"
     rich_text += "Themes and Keywords: "
-    rich_text += ', '.join(k["name"] for k in movie_json["keywords"].get("keywords", []))
+    rich_text += ', '.join(k["name"] for k in movie_json.get("keywords", {}).get("keywords", []))
     rich_text += "\n\n"
     rich_text += "Genres: "
     rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
     rich_text += "\n\n"
-    for crew in movie_json["credits"]["crew"]:
+    for crew in movie_json.get("credits", {}).get("crew", []):
         if crew["job"] == "Director":
             rich_text += "Director: " + crew["name"] + "\n\n"
     rich_text += "Top Cast: "
-    rich_text += ', '.join(c["name"] for c in movie_json["credits"].get("cast", [])[:RICHTEXT_CAST_LIMIT])
+    rich_text += ', '.join(c["name"] for c in movie_json.get("credits", {}).get("cast", [])[:RICHTEXT_CAST_LIMIT])
     rich_text += "\n\n"
     release_year = movie_json.get("release_date", "")[:4] or "Unknown"
     rich_text += "Title: " + movie_json["title"] + " (" + release_year + ")\n\n"
