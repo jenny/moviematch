@@ -54,7 +54,10 @@ opentelemetry-sdk==1.40.0
 opentelemetry-semantic-conventions==0.61b0
 orjson==3.11.7
 overrides==7.7.0
-packaging==26.0
+packaging==24.2
+pinecone==8.1.0
+pinecone-plugin-assistant==3.0.2
+pinecone-plugin-interface==0.0.7
 pluggy==1.6.0
 posthog==5.4.0
 protobuf==6.33.5
