@@ -1,0 +1,1 @@
+torch==2.10.0 --only-binary :all: --find-links https://download.pytorch.org/whl/cpu
