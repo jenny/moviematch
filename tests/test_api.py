@@ -129,8 +129,7 @@ class TestSearchEndpoint:
 
 class TestAdminStatus:
     def test_returns_expected_shape(self, client):
-        with patch("api.routes.admin.get_or_create_collection") as mock_coll:
-            mock_coll.return_value.count.return_value = 42
+        with patch("api.routes.admin.vector_count", return_value=42):
             response = client.get("/admin/status")
 
         assert response.status_code == 200
