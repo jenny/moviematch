@@ -6,7 +6,7 @@ import glob
 from config import DATA_DIR, EMBEDDING_BATCH_SIZE
 
 logger = logging.getLogger(__name__)
-from db import get_model, get_or_create_collection
+from db import get_model, vector_upsert_batch
 
 
 def embed_text(text: str) -> list[float]:
@@ -24,12 +24,13 @@ def upsert_movie(movie_id: str) -> None:
     if "richtext" not in movie:
         raise KeyError(f"Movie {movie.get('id', movie_id)} is missing richtext. Run richtext.py first.")
     embedding = embed_text(movie["richtext"])
-    get_or_create_collection().upsert(
-        ids=[movie_id],
-        embeddings=[embedding],
-        documents=[movie["richtext"]],
-        metadatas=[{"title": movie["title"], "movie_poster": movie.get("poster_path") or ""}]
-    )
+    vector_upsert_batch([{
+        "id": str(movie_id),
+        "values": embedding,
+        "title": movie["title"],
+        "movie_poster": movie.get("poster_path") or "",
+        "document": movie["richtext"],
+    }])
 
 
 def load_all_richtexts() -> tuple[list[str], list[str], list[dict]]:
@@ -49,8 +50,17 @@ def load_all_richtexts() -> tuple[list[str], list[str], list[dict]]:
 def initialize_all_embeddings() -> int:
     ids, docs, metadatas = load_all_richtexts()
     embeddings = embed_texts(docs)
-    get_or_create_collection().upsert(ids=ids, embeddings=embeddings, documents=docs, metadatas=metadatas)
-    logger.info(f"Ingested {len(ids)} movies into ChromaDB.")
+    vector_upsert_batch([
+        {
+            "id": id_,
+            "values": emb,
+            "title": meta["title"],
+            "movie_poster": meta["movie_poster"],
+            "document": doc,
+        }
+        for id_, emb, doc, meta in zip(ids, embeddings, docs, metadatas)
+    ])
+    logger.info(f"Ingested {len(ids)} movies into vector store.")
     return len(ids)
 
 
