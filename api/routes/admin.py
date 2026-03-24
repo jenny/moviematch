@@ -10,7 +10,7 @@ from pydantic import BaseModel
 logger = logging.getLogger(__name__)
 
 from pipeline import initialize_all
-from db import get_or_create_collection
+from db import vector_count
 from config import DATA_DIR
 
 router = APIRouter()
@@ -69,7 +69,7 @@ def status():
         if os.path.basename(f) != "index.json"
     ]
     try:
-        chroma_count = get_or_create_collection().count()
+        chroma_count = vector_count()
     except Exception:
         chroma_count = 0
     return StatusResponse(
