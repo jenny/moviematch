@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -19,9 +20,10 @@ async def lifespan(app: FastAPI):
     global _app_html, _admin_html
     from db import get_model
     get_model()
-    with open("app.html") as f:
+    _root = os.path.dirname(os.path.dirname(__file__))
+    with open(os.path.join(_root, "app.html")) as f:
         _app_html = f.read()
-    with open("admin.html") as f:
+    with open(os.path.join(_root, "admin.html")) as f:
         _admin_html = f.read()
     yield
 
