@@ -5,7 +5,7 @@ import threading
 from anthropic import Anthropic, RateLimitError, InternalServerError, APIConnectionError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 
-from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_FAST_MODEL, AGENT_MAX_TOOL_ROUNDS
+from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_FAST_MODEL, AGENT_MAX_TOOL_ROUNDS, FILMOGRAPHY_INGEST_LIMIT
 from tmdb import search_person, get_filmography
 
 logger = logging.getLogger(__name__)
@@ -114,13 +114,25 @@ When you have enough information, use return_results with your final recommendat
 Only include movies that are genuinely relevant."""
 
 
+_ingesting_ids: set[int] = set()
+_ingesting_lock = threading.Lock()
+
+
 def _ingest_filmography_background(movies: list[dict]) -> None:
     from pipeline import ingest_single
-    for movie in movies:
+    for movie in movies[:FILMOGRAPHY_INGEST_LIMIT]:
+        movie_id = movie["id"]
+        with _ingesting_lock:
+            if movie_id in _ingesting_ids:
+                continue
+            _ingesting_ids.add(movie_id)
         try:
-            ingest_single(movie["id"], movie.get("vote_average", 0), movie.get("vote_count", 0))
+            ingest_single(movie_id, movie.get("vote_average", 0), movie.get("vote_count", 0))
         except Exception as e:
-            logger.warning(f"Background ingestion failed for {movie.get('title', movie['id'])}: {e}")
+            logger.warning(f"Background ingestion failed for {movie.get('title', movie_id)}: {e}")
+        finally:
+            with _ingesting_lock:
+                _ingesting_ids.discard(movie_id)
 
 
 def execute_tool(name: str, tool_input: dict) -> dict:
