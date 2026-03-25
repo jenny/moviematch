@@ -292,13 +292,24 @@ def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
 
 
 def _extract_result_objects(partial_json: str) -> list[str]:
-    """Extract complete depth-2 {...} objects from partially-streamed JSON.
-    These are the individual result objects inside {"results": [...]}."""
+    """Extract complete {...} objects from the results array in partially-streamed JSON.
+
+    Finds the 'results' key, locates its array, then extracts depth-1 objects
+    within that array. This is robust to extra top-level keys being added to
+    the return_results tool schema in the future.
+    """
+    results_key = partial_json.find('"results"')
+    if results_key == -1:
+        return []
+    array_start = partial_json.find('[', results_key)
+    if array_start == -1:
+        return []
+
     objects = []
     depth = 0
     start = -1
     in_string = False
-    i = 0
+    i = array_start + 1  # start scanning inside the array
     while i < len(partial_json):
         ch = partial_json[i]
         if in_string:
@@ -317,13 +328,15 @@ def _extract_result_objects(partial_json: str) -> list[str]:
                 in_string = True
             elif ch == "{":
                 depth += 1
-                if depth == 2:
+                if depth == 1:
                     start = i
             elif ch == "}":
-                if depth == 2 and start != -1:
+                if depth == 1 and start != -1:
                     objects.append(partial_json[start:i + 1])
                     start = -1
                 depth -= 1
+            elif ch == "]" and depth == 0:
+                break  # end of results array
         i += 1
     return objects
 
