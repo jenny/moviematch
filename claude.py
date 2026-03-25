@@ -94,6 +94,26 @@ RETURN_RESULTS_TOOL = {
 TOOLS = [SEARCH_PERSON_TOOL, GET_FILMOGRAPHY_TOOL, RETURN_RESULTS_TOOL]
 
 
+def _build_rerank_prompt(query: str, candidate_text: str) -> str:
+    return f"""You are a movie recommendation assistant. A user searched for:
+<query>{query}</query>
+
+Here are candidate movies retrieved by semantic search:
+
+{candidate_text}
+
+If the query mentions a specific director, actor, or filmmaker by name, use search_person \
+to find them, then get_filmography to see their work — this ensures you can recommend their \
+films even if they're not in the candidate list above.
+
+When you have enough information, use return_results with your final recommendations:
+1. Filter out candidates that don't match the query
+2. Rerank from most to least relevant, including any relevant films from a filmography lookup
+3. Write a brief explanation for each result
+
+Only include movies that are genuinely relevant."""
+
+
 def _ingest_filmography_background(movies: list[dict]) -> None:
     from pipeline import ingest_single
     for movie in movies:
@@ -156,23 +176,7 @@ def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = f"""You are a movie recommendation assistant. A user searched for:
-<query>{query}</query>
-
-Here are candidate movies retrieved by semantic search:
-
-{candidate_text}
-
-If the query mentions a specific director, actor, or filmmaker by name, use search_person \
-to find them, then get_filmography to see their work — this ensures you can recommend their \
-films even if they're not in the candidate list above.
-
-When you have enough information, use return_results with your final recommendations:
-1. Filter out candidates that don't match the query
-2. Rerank from most to least relevant, including any relevant films from a filmography lookup
-3. Write a brief explanation for each result
-
-Only include movies that are genuinely relevant."""
+    prompt = _build_rerank_prompt(query, candidate_text)
 
     messages = [{"role": "user", "content": prompt}]
     total_input_tokens = 0
@@ -319,23 +323,7 @@ def rerank_stream(query: str, candidates: list[dict]):
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = f"""You are a movie recommendation assistant. A user searched for:
-<query>{query}</query>
-
-Here are candidate movies retrieved by semantic search:
-
-{candidate_text}
-
-If the query mentions a specific director, actor, or filmmaker by name, use search_person \
-to find them, then get_filmography to see their work — this ensures you can recommend their \
-films even if they're not in the candidate list above.
-
-When you have enough information, use return_results with your final recommendations:
-1. Filter out candidates that don't match the query
-2. Rerank from most to least relevant, including any relevant films from a filmography lookup
-3. Write a brief explanation for each result
-
-Only include movies that are genuinely relevant."""
+    prompt = _build_rerank_prompt(query, candidate_text)
 
     messages = [{"role": "user", "content": prompt}]
     total_input_tokens = 0
