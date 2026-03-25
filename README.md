@@ -79,44 +79,43 @@ Then open `app.html` in a browser.
 
 ### POST /recommend
 
-```json
+Returns a [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) stream. Each event is a JSON object on a `data:` line.
+
+```
 // Request
+POST /recommend
 { "query": "a feel-good coming of age story" }
 
-// Response
-{
-  "query": "a feel-good coming of age story",
-  "results": [
-    {
-      "title": "Stand by Me",
-      "explanation": "A nostalgic and heartfelt coming of age story...",
-      "movie_poster": "/eze1b4v9GSnwNLpSaO4gqJ7FaBT.jpg"
-    }
-  ],
-  "usage": {
-    "input_tokens": 1843,
-    "output_tokens": 312,
-    "rounds": 1,
-    "tools_called": []
-  }
-}
+// Stream events
+data: {"type": "result", "title": "Stand by Me", "explanation": "A nostalgic and heartfelt coming of age story...", "movie_poster": "/eze1b4v9GSnwNLpSaO4gqJ7FaBT.jpg"}
+
+data: {"type": "done", "result_count": 5}
+
+// On no matches
+data: {"type": "done", "result_count": 0, "message": "No relevant matches found."}
+
+// On error
+data: {"type": "error", "message": "Could not connect to the AI service. Please try again."}
 ```
 
 ## Project structure
 
 ```
 api/
-  app.py               # FastAPI app
+  app.py               # FastAPI app factory, CORS, lifespan
+  limiter.py           # Rate limiter (slowapi)
   routes/
-    search.py          # POST /recommend endpoint
-    admin.py           # POST /admin/initialize, GET /admin/status endpoints
+    search.py          # POST /recommend — SSE streaming endpoint
+    admin.py           # POST /admin/initialize, GET /admin/status, GET /admin/logs
 app.html               # Frontend UI
 pipeline.py            # Initialization pipeline (ingest → embed → store); lazy single-movie ingestion
 main.py                # Core search logic (embed query → retrieve → rerank)
 claude.py              # Claude agentic loop: tool use (person search, filmography) + result reranking
-embeddings.py          # Embedding generation and ChromaDB upsert
+embeddings.py          # Embedding generation and batch upsert
 tmdb.py                # TMDB API integration
 richtext.py            # Movie metadata → text for embedding
 db.py                  # ChromaDB/Pinecone and Sentence Transformer singletons
 config.py              # Configuration constants (dataset size, scoring weights, rate limits, quality thresholds, model selection)
+logger.py              # JSON request logging; rotating file locally, stdout on Railway
+migrate_to_pinecone.py # One-off script: copies all vectors from Chroma to Pinecone
 ```
