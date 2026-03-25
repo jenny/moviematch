@@ -4,22 +4,19 @@ import os
 import sys
 from logging.handlers import RotatingFileHandler
 
+from config import LOG_DIR
+
 _ON_RAILWAY = bool(os.getenv("RAILWAY_ENVIRONMENT"))
 
 _logger = logging.getLogger("moviematch.search")
 _logger.setLevel(logging.INFO)
 _logger.propagate = False
 
-if _ON_RAILWAY:
-    _handler = logging.StreamHandler(sys.stdout)
-    _handler.setFormatter(logging.Formatter("%(message)s"))
-else:
-    LOG_DIR = "logs"
-    os.makedirs(LOG_DIR, exist_ok=True)
-    _handler = RotatingFileHandler(
-        os.path.join(LOG_DIR, "search.log"), maxBytes=10 * 1024 * 1024, backupCount=5
-    )
-    _handler.setFormatter(logging.Formatter("%(message)s"))
+os.makedirs(LOG_DIR, exist_ok=True)
+_handler = RotatingFileHandler(
+    os.path.join(LOG_DIR, "search.log"), maxBytes=10 * 1024 * 1024, backupCount=5
+)
+_handler.setFormatter(logging.Formatter("%(message)s"))
 
 _logger.addHandler(_handler)
 

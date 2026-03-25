@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 from pipeline import initialize_all
 from db import vector_count
-from config import DATA_DIR
+from config import DATA_DIR, LOG_DIR
 
 router = APIRouter()
 
@@ -83,7 +83,7 @@ def status():
 @router.get("/logs")
 def logs():
     entries = []
-    log_path = "logs/search.log"
+    log_path = os.path.join(LOG_DIR, "search.log")
     if os.path.exists(log_path):
         with open(log_path) as f:
             for line in f:

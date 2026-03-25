@@ -24,6 +24,7 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 # Paths
 DATA_DIR = "data"
+LOG_DIR = os.getenv("LOG_DIR", "logs")
 
 # Vector DB backend: "chroma" for local, "pinecone" for production
 # Auto-detects Railway via RAILWAY_ENVIRONMENT; can always be overridden with VECTOR_DB
