@@ -20,7 +20,9 @@ _admin_html: str = ""
 async def lifespan(app: FastAPI):
     global _app_html, _admin_html
     from db import get_model
+    from claude import get_client
     get_model()
+    get_client()  # validates ANTHROPIC_API_KEY early; raises ValueError if missing
     _root = os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(_root, "app.html")) as f:
         _app_html = f.read()
