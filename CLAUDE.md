@@ -19,7 +19,8 @@
 | `api/app.py` | FastAPI app factory, CORS, lifespan |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
 | `api/routes/admin.py` | `/initialize`, `/status`, `/logs` |
-| `logger.py` | JSON request logging |
+| `logger.py` | JSON request logging; writes to rotating file locally, stdout on Railway |
+| `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
 
 ## Anthropic Integration
 - **Round 1**: Always Haiku (`CLAUDE_FAST_MODEL`) — cheap, handles tool-free queries
@@ -47,7 +48,7 @@ Run with: `pytest` from project root.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
-Optional: `VECTOR_DB` (default `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`
+Optional: `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
 
 ## Key Decisions
 - Haiku-first strategy: most queries resolve in round 1 without Opus

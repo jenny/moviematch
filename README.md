@@ -6,7 +6,7 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 
 1. Movie metadata (plot, keywords, cast, crew) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint across three sort criteria (rating, popularity, revenue), ranked by a composite Bayesian score, and stored as local JSON files
 2. A richtext string is compiled for each movie and embedded using a local [Sentence Transformers](https://www.sbert.net/) model (`all-mpnet-base-v2`)
-3. Embeddings are stored in a local [ChromaDB](https://www.trychroma.com/) vector database
+3. Embeddings are stored in a vector database — [ChromaDB](https://www.trychroma.com/) locally or [Pinecone](https://www.pinecone.io/) in production
 4. At search time, the query is embedded and matched against the database using cosine similarity; [Claude](https://www.anthropic.com/claude) then uses an agentic loop to optionally look up director or actor filmographies from TMDB before returning ranked results
 
 ## Setup
@@ -23,6 +23,9 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 python -m venv venv
 source venv/bin/activate
 pip install requests python-dotenv anthropic sentence-transformers chromadb fastapi uvicorn
+
+# For Pinecone (production):
+pip install pinecone
 ```
 
 ### Environment variables
@@ -32,6 +35,14 @@ Create a `.env` file in the project root:
 ```
 TMDB_READ_ACCESS_TOKEN=your_tmdb_token_here
 ANTHROPIC_API_KEY=your_anthropic_key_here
+```
+
+To use Pinecone instead of ChromaDB, add:
+
+```
+VECTOR_DB=pinecone
+PINECONE_API_KEY=your_pinecone_key_here
+PINECONE_INDEX_NAME=your_index_name
 ```
 
 ## Initialization
@@ -62,6 +73,7 @@ Then open `app.html` in a browser.
 | `GET` | `/health` | Health check |
 | `POST` | `/admin/initialize` | Trigger pipeline initialization |
 | `GET` | `/admin/status` | Get database stats and initialization status |
+| `GET` | `/admin/logs` | Retrieve recent search logs |
 
 ### POST /recommend
 
@@ -103,6 +115,6 @@ claude.py              # Claude agentic loop: tool use (person search, filmograp
 embeddings.py          # Embedding generation and ChromaDB upsert
 tmdb.py                # TMDB API integration
 richtext.py            # Movie metadata → text for embedding
-db.py                  # ChromaDB and Sentence Transformer singletons
+db.py                  # ChromaDB/Pinecone and Sentence Transformer singletons
 config.py              # Configuration constants (dataset size, scoring weights, rate limits, quality thresholds, model selection)
 ```
