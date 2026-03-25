@@ -1,3 +1,4 @@
+import logger  # noqa: F401 — configures logging (stdout + file) before other modules
 import os
 from contextlib import asynccontextmanager
 

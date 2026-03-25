@@ -1,10 +1,14 @@
 import json
+import logging
 import time
+import traceback
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 from api.limiter import limiter
 from config import HAIKU_INPUT_PRICE, HAIKU_OUTPUT_PRICE, OPUS_INPUT_PRICE, OPUS_OUTPUT_PRICE
@@ -79,11 +83,14 @@ def search_endpoint(request: Request, body: SearchRequest):
 
         except Exception as e:
             total_ms = round((time.perf_counter() - t0) * 1000)
+            tb = traceback.format_exc()
+            logger.error("Unhandled exception in search_endpoint:\n%s", tb)
             log_request({
                 "timestamp": timestamp,
                 "query": body.query,
                 "status": "error",
                 "error": str(e),
+                "traceback": tb,
                 "total_ms": total_ms,
             })
             yield f"data: {json.dumps({'type': 'error', 'message': 'An error occurred. Please try again.'})}\n\n"
