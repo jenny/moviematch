@@ -271,7 +271,7 @@ Only include movies that are genuinely relevant."""
         "rounds": len(models_used),
         "tools_called": tools_called,
     }
-    logger.info(f"Claude usage: agent loop ended ({exit_reason}) after {len(models_used)} rounds, models={model_log}")
+    logger.warning(f"Claude agent loop ended ({exit_reason}) after {len(models_used)} rounds without return_results — returning no results. models={model_log}")
     return [], usage
 
 
@@ -457,7 +457,7 @@ Only include movies that are genuinely relevant."""
         messages.append({"role": "user", "content": tool_results})
 
     model_log = "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
-    logger.info(f"Claude usage (stream): agent loop exhausted after {len(models_used)} rounds, models={model_log}")
+    logger.warning(f"Claude agent loop exhausted after {len(models_used)} rounds without return_results — returning no results. models={model_log}")
     yield {"__usage": {
         "input_tokens": total_input_tokens,
         "output_tokens": total_output_tokens,
