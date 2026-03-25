@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import time
@@ -18,6 +19,8 @@ from main import search_stream
 
 router = APIRouter()
 
+_STREAM_SENTINEL = object()
+
 
 class SearchRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=500)
@@ -25,14 +28,19 @@ class SearchRequest(BaseModel):
 
 @router.post("/recommend")
 @limiter.limit(RATE_LIMIT)
-def search_endpoint(request: Request, body: SearchRequest):
+async def search_endpoint(request: Request, body: SearchRequest):
     timestamp = datetime.now(timezone.utc).isoformat()
     t0 = time.perf_counter()
 
-    def generate():
+    async def generate():
+        loop = asyncio.get_running_loop()
+        stream = search_stream(body.query)
         result_count = 0
         try:
-            for item in search_stream(body.query):
+            while True:
+                item = await loop.run_in_executor(None, lambda: next(stream, _STREAM_SENTINEL))
+                if item is _STREAM_SENTINEL:
+                    break
                 if "__meta" in item:
                     meta = item["__meta"]
                     usage = meta.get("usage")
