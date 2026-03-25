@@ -381,6 +381,10 @@ def rerank_stream(query: str, candidates: list[dict]):
                                     if result["title"] in valid_titles:
                                         yield result
                                         results_yielded += 1
+                                    else:
+                                        logger.warning(
+                                            f"rerank_stream: rejected fabricated title during streaming: {result['title']!r}"
+                                        )
                             except json.JSONDecodeError:
                                 pass
                 final = stream.get_final_message()
