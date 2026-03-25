@@ -175,7 +175,7 @@ def _call_claude(model: str, messages: list, max_tokens: int = 1024) -> object:
 
 
 def _format_model_log(models_used: list) -> str:
-    return _format_model_log(models_used)
+    return "→".join("haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used)
 
 
 def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
@@ -237,9 +237,7 @@ def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
                 # Only record tools that were actually executed (non-terminal tools
                 # from prior rounds); non_terminal tools in this round are not executed
                 # since we're returning immediately
-                model_log = "→".join(
-                    "haiku" if m == CLAUDE_FAST_MODEL else "opus" for m in models_used
-                )
+                model_log = _format_model_log(models_used)
                 usage = {
                     "input_tokens": total_input_tokens,
                     "output_tokens": total_output_tokens,
