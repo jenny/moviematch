@@ -4,20 +4,6 @@ Issues identified during code review that are deferred for later.
 
 ---
 
-## Issue 8 — `app.py` naming collision (architectural)
-
-**Files:** `app.py` (root), `api/app.py`
-
-Having two `app.py` modules at different levels is fragile. Today it works because:
-- `conftest.py` explicitly inserts the project root into `sys.path` for tests
-- uvicorn run from the project root puts `.` on `sys.path` automatically
-
-If uvicorn is ever run from a different working directory, or any tool resolves imports differently, `from app import search_stream` in `api/routes/search.py` will import the wrong module or fail.
-
-**Fix:** Rename root-level `app.py` to something unambiguous (e.g., `search_engine.py`). Update all imports and references (including `CLAUDE.md` architecture table, which still lists `search.py` — the pre-rename name).
-
----
-
 ## Issue 9 — `search_endpoint` blocks the uvicorn thread pool (architectural)
 
 **File:** `api/routes/search.py:28`
@@ -33,5 +19,3 @@ Under concurrent load, this exhausts uvicorn's default threadpool (40 threads), 
 ## Minor
 
 - **`model_log` computed twice on exhausted-loop path** (`claude.py`): `"→".join(...)` is built once before the `usage` dict and then implicitly again in the log message. Trivial to deduplicate but no functional impact.
-
-- **`CLAUDE.md` architecture table still lists `search.py`** as the search orchestrator. That file was renamed to `app.py` in an earlier commit. Should be updated when Issue 8 is resolved (renaming will require a docs update anyway).

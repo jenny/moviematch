@@ -14,7 +14,7 @@ from api.limiter import limiter
 from config import HAIKU_INPUT_PRICE, HAIKU_OUTPUT_PRICE, OPUS_INPUT_PRICE, OPUS_OUTPUT_PRICE
 from config import RATE_LIMIT
 from logger import log_request
-from app import search_stream
+from main import search_stream
 
 router = APIRouter()
 

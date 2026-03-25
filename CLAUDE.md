@@ -10,7 +10,7 @@
 |------|------|
 | `config.py` | All constants: models, thresholds, pricing, env vars |
 | `claude.py` | Anthropic integration: `rerank()`, `rerank_stream()`, tool definitions |
-| `search.py` | Orchestrates embedding → vector query → Claude rerank |
+| `main.py` | Orchestrates embedding → vector query → Claude rerank |
 | `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
 | `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography` |
