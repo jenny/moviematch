@@ -10,14 +10,17 @@ from tmdb import search_person, get_filmography
 
 logger = logging.getLogger(__name__)
 _client = None
+_client_lock = threading.Lock()
 
 
 def get_client() -> Anthropic:
     global _client
     if _client is None:
-        if not ANTHROPIC_API_KEY:
-            raise ValueError("ANTHROPIC_API_KEY is not set. Check your .env file.")
-        _client = Anthropic(api_key=ANTHROPIC_API_KEY)
+        with _client_lock:
+            if _client is None:
+                if not ANTHROPIC_API_KEY:
+                    raise ValueError("ANTHROPIC_API_KEY is not set. Check your .env file.")
+                _client = Anthropic(api_key=ANTHROPIC_API_KEY)
     return _client
 
 
