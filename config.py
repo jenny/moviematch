@@ -70,5 +70,5 @@ RATE_LIMIT = "10/minute"
 
 # CORS — comma-separated list of allowed origins; restrict in production
 CORS_ORIGINS = [o.strip() for o in os.getenv(
-    "CORS_ORIGINS", "https://moviematch-production-f65d.up.railway.app,http://localhost:8000,http://127.0.0.1:8000"
+    "CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000"
 ).split(",")]
