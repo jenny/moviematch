@@ -75,6 +75,43 @@ def fetch_movie_detail(movie_id: int) -> dict:
     return response.json()
 
 
+def search_movie_by_title(title: str, year: str = "") -> int | None:
+    """Search TMDB for a movie by title, return TMDB movie ID or None."""
+    _require_tmdb_key()
+    params: dict = {"query": title, "language": "en-US", "include_adult": "false"}
+    if year:
+        params["year"] = year
+    try:
+        response = requests.get(
+            TMDB_BASE_URL + "/search/movie",
+            params=params,
+            headers=TMDB_HEADERS,
+            timeout=10,
+        )
+        response.raise_for_status()
+        results = response.json().get("results", [])
+        return results[0]["id"] if results else None
+    except Exception:
+        return None
+
+
+def fetch_watch_providers(movie_id: int, country: str = "US") -> list[dict]:
+    """Fetch streaming/watch providers for a movie from TMDB. Returns flatrate providers."""
+    _require_tmdb_key()
+    try:
+        response = requests.get(
+            TMDB_BASE_URL + f"/movie/{movie_id}/watch/providers",
+            headers=TMDB_HEADERS,
+            timeout=10,
+        )
+        response.raise_for_status()
+        country_data = response.json().get("results", {}).get(country, {})
+        providers = country_data.get("flatrate", [])
+        return [{"name": p["provider_name"], "logo": p["logo_path"]} for p in providers]
+    except Exception:
+        return []
+
+
 def filter_cast(movie_json: dict) -> dict:
     movie_json["credits"]["cast"] = movie_json["credits"]["cast"][:CAST_LIMIT]
     return movie_json

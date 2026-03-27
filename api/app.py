@@ -9,7 +9,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from api.limiter import limiter
-from api.routes import search, admin
+from api.routes import search, admin, streaming
 from config import CORS_ORIGINS
 
 _app_html: str = ""
@@ -48,6 +48,7 @@ app.add_middleware(
 
 app.include_router(search.router)
 app.include_router(admin.router, prefix="/admin")
+app.include_router(streaming.router)
 
 
 @app.get("/")
