@@ -62,7 +62,7 @@ Optional: `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set
 ## Forbidden Directories
 Do not read or modify files in these directories:
 - `venv/` — Python environment
-- `embeddings/` — ChromaDB binary data files
 - `data/` — raw TMDB JSON dumps
-- `local/archive` — older scratch notes and design proposals (already digested into this file)
+- `embeddings/` — ChromaDB binary data files
+- `local/archive/` — older scratch notes and design proposals (already digested into this file)
 - `.git/` — use `git` CLI commands instead
