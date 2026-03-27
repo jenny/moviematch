@@ -433,6 +433,67 @@
       font-size: 0.85rem;
       color: #555;
     }
+
+    /* ── Mobile ──────────────────────────────────────────────────── */
+
+    @keyframes overlaySlideUp {
+      from { transform: translateY(100%); opacity: 1; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 32px 16px;
+      }
+
+      header h1 {
+        font-size: 2rem;
+        margin-bottom: 16px;
+      }
+
+      header h4 {
+        font-size: 1.2rem;
+      }
+
+      .search-form {
+        margin-bottom: 32px;
+      }
+
+      .card {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .overlay-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 88vh;
+        border-radius: 20px 20px 0 0;
+        padding: 20px 16px 28px;
+        animation: overlaySlideUp 0.25s ease both;
+      }
+
+      .overlay-close {
+        top: 12px;
+        right: 12px;
+      }
+
+      .overlay-poster {
+        width: 80px;
+      }
+
+      .overlay-title {
+        font-size: 1.1rem;
+      }
+
+      .overlay-nav-btn {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+    }
   </style>
 </head>
 
@@ -723,6 +784,21 @@
       if (e.key === "ArrowLeft" && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
       if (e.key === "ArrowRight" && overlayIndex < allResults.length - 1) { overlayIndex++; renderOverlay(); }
     });
+
+    // Touch swipe for carousel
+    let touchStartX = 0;
+    const overlayPanel = document.getElementById("overlayPanel");
+
+    overlayPanel.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    overlayPanel.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) < 50) return;
+      if (dx < 0 && overlayIndex < allResults.length - 1) { overlayIndex++; renderOverlay(); }
+      if (dx > 0 && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
+    }, { passive: true });
 
     // ── Utilities ───────────────────────────────────────────────────
 
