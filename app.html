@@ -248,10 +248,17 @@
       border: 1px solid #2a2a2a;
       border-radius: 16px;
       width: min(640px, calc(100vw - 32px));
-      max-height: calc(100vh - 64px);
-      overflow-y: auto;
-      padding: 32px;
+      height: min(520px, calc(100vh - 64px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       animation: overlayIn 0.2s ease both;
+    }
+
+    .overlay-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 32px 24px;
     }
 
     @keyframes overlayIn {
@@ -400,8 +407,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 24px;
-      padding-top: 20px;
+      flex-shrink: 0;
+      padding: 16px 32px 20px;
       border-top: 1px solid #2a2a2a;
     }
 
@@ -470,10 +477,17 @@
         left: 0;
         right: 0;
         width: 100%;
-        max-height: 88vh;
+        height: 88vh;
         border-radius: 20px 20px 0 0;
-        padding: 20px 16px 28px;
         animation: overlaySlideUp 0.25s ease both;
+      }
+
+      .overlay-scroll {
+        padding: 20px 16px 16px;
+      }
+
+      .overlay-nav {
+        padding: 12px 16px 24px;
       }
 
       .overlay-close {
@@ -519,7 +533,9 @@
   <div class="overlay-backdrop" id="overlayBackdrop" role="dialog" aria-modal="true">
     <div class="overlay-panel" id="overlayPanel">
       <button class="overlay-close" id="overlayClose" aria-label="Close">&times;</button>
-      <div class="overlay-content" id="overlayContent"></div>
+      <div class="overlay-scroll">
+        <div class="overlay-content" id="overlayContent"></div>
+      </div>
       <div class="overlay-nav">
         <button class="overlay-nav-btn" id="overlayPrev">&#8592; Prev</button>
         <span class="overlay-nav-counter" id="overlayCounter"></span>
