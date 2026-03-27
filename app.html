@@ -129,6 +129,13 @@
       gap: 16px;
       align-items: flex-start;
       animation: fadeIn 0.3s ease both;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .card:hover {
+      border-color: #444;
+      background: #1f1f1f;
     }
 
     .card-poster {
@@ -178,6 +185,23 @@
       margin-bottom: 6px;
     }
 
+    .card-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .card-title-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .card-year {
+      font-weight: 400;
+      color: #666;
+      margin-left: 6px;
+      font-size: 0.95rem;
+    }
+
     .card-explanation {
       font-size: 0.9rem;
       color: #888;
@@ -200,6 +224,215 @@
         transform: rotate(360deg);
       }
     }
+
+    /* ── Overlay ─────────────────────────────────────────────────── */
+
+    .overlay-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 100;
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .overlay-backdrop.open {
+      display: flex;
+    }
+
+    .overlay-panel {
+      position: relative;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      width: min(640px, calc(100vw - 32px));
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+      padding: 32px;
+      animation: overlayIn 0.2s ease both;
+    }
+
+    @keyframes overlayIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .overlay-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .overlay-close:hover {
+      color: #e8e8e8;
+      background: #2a2a2a;
+    }
+
+    .overlay-content {
+      display: flex;
+      gap: 24px;
+    }
+
+    .overlay-poster {
+      flex-shrink: 0;
+      width: 120px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #2a2a2a;
+      aspect-ratio: 2/3;
+      align-self: flex-start;
+    }
+
+    .overlay-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay-poster-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 2rem;
+    }
+
+    .overlay-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .overlay-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .overlay-title-year {
+      font-weight: 400;
+      color: #666;
+      font-size: 1.1rem;
+      margin-left: 8px;
+    }
+
+    .overlay-section {
+      margin-bottom: 14px;
+    }
+
+    .overlay-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .overlay-text {
+      font-size: 0.9rem;
+      color: #b0b0b0;
+      line-height: 1.55;
+    }
+
+    .overlay-streaming {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .overlay-provider {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #242424;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      color: #ccc;
+    }
+
+    .overlay-provider img {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .overlay-streaming-loading {
+      font-size: 0.85rem;
+      color: #555;
+      font-style: italic;
+    }
+
+    .overlay-streaming-none {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    /* ── Carousel nav ────────────────────────────────────────────── */
+
+    .overlay-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    .overlay-nav-btn {
+      background: #242424;
+      border: 1px solid #333;
+      color: #ccc;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .overlay-nav-btn:hover:not(:disabled) {
+      background: #2e2e2e;
+      color: #fff;
+    }
+
+    .overlay-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .overlay-nav-counter {
+      font-size: 0.85rem;
+      color: #555;
+    }
   </style>
 </head>
 
@@ -221,6 +454,19 @@
   <div class="spinner" id="spinner"></div>
   <div class="results" id="results"></div>
 
+  <!-- Detail overlay -->
+  <div class="overlay-backdrop" id="overlayBackdrop" role="dialog" aria-modal="true">
+    <div class="overlay-panel" id="overlayPanel">
+      <button class="overlay-close" id="overlayClose" aria-label="Close">&times;</button>
+      <div class="overlay-content" id="overlayContent"></div>
+      <div class="overlay-nav">
+        <button class="overlay-nav-btn" id="overlayPrev">&#8592; Prev</button>
+        <span class="overlay-nav-counter" id="overlayCounter"></span>
+        <button class="overlay-nav-btn" id="overlayNext">Next &#8594;</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_URL = "/recommend";
 
@@ -230,6 +476,17 @@
     const statusEl = document.getElementById("status");
     const spinner = document.getElementById("spinner");
     const resultsEl = document.getElementById("results");
+    const backdrop = document.getElementById("overlayBackdrop");
+    const overlayContent = document.getElementById("overlayContent");
+    const overlayClose = document.getElementById("overlayClose");
+    const overlayPrev = document.getElementById("overlayPrev");
+    const overlayNext = document.getElementById("overlayNext");
+    const overlayCounter = document.getElementById("overlayCounter");
+
+    let allResults = [];
+    let overlayIndex = 0;
+
+    // ── Search ──────────────────────────────────────────────────────
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -294,6 +551,181 @@
       }
     });
 
+    // ── Card rendering ──────────────────────────────────────────────
+
+    function appendResult(result, i) {
+      allResults.push(result);
+      const idx = i;
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+
+      const posterHtml = result.movie_poster
+        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
+        : "";
+
+      const yearHtml = result.year
+        ? `<span class="card-year">(${escapeHtml(result.year)})</span>`
+        : "";
+
+      card.innerHTML = `
+        <div class="card-rank">${idx + 1}</div>
+        ${posterHtml}
+        <div class="card-body">
+          <div class="card-title">
+            <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}
+          </div>
+          <div class="card-explanation">${escapeHtml(result.explanation)}</div>
+        </div>
+      `;
+
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        openOverlay(idx);
+      });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openOverlay(idx);
+        }
+      });
+
+      resultsEl.appendChild(card);
+    }
+
+    // ── Overlay ─────────────────────────────────────────────────────
+
+    function openOverlay(index) {
+      overlayIndex = index;
+      renderOverlay();
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+      overlayClose.focus();
+    }
+
+    function closeOverlay() {
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function renderOverlay() {
+      const result = allResults[overlayIndex];
+      if (!result) return;
+
+      const posterHtml = result.movie_poster
+        ? `<img src="https://image.tmdb.org/t/p/w300${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" />`
+        : `<div class="overlay-poster-placeholder">&#127909;</div>`;
+
+      const yearDisplay = result.year ? `<span class="overlay-title-year">(${escapeHtml(result.year)})</span>` : "";
+
+      const directorHtml = result.director
+        ? `<div class="overlay-section">
+            <div class="overlay-label">Director</div>
+            <div class="overlay-text">${escapeHtml(result.director)}</div>
+           </div>`
+        : "";
+
+      const castHtml = result.cast && result.cast.length
+        ? `<div class="overlay-section">
+            <div class="overlay-label">Cast</div>
+            <div class="overlay-text">${result.cast.map(escapeHtml).join(", ")}</div>
+           </div>`
+        : "";
+
+      const overviewHtml = result.overview
+        ? `<div class="overlay-section">
+            <div class="overlay-label">Overview</div>
+            <div class="overlay-text">${escapeHtml(result.overview)}</div>
+           </div>`
+        : "";
+
+      overlayContent.innerHTML = `
+        <div class="overlay-poster">${posterHtml}</div>
+        <div class="overlay-info">
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}</div>
+          ${overviewHtml}
+          ${directorHtml}
+          ${castHtml}
+          <div class="overlay-section">
+            <div class="overlay-label">Streaming</div>
+            <div class="overlay-streaming" id="streamingProviders">
+              <span class="overlay-streaming-loading">Loading…</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Update nav
+      overlayPrev.disabled = overlayIndex === 0;
+      overlayNext.disabled = overlayIndex === allResults.length - 1;
+      overlayCounter.textContent = `${overlayIndex + 1} / ${allResults.length}`;
+
+      // Fetch streaming providers asynchronously
+      fetchStreamingProviders(result.title, result.year || "");
+    }
+
+    async function fetchStreamingProviders(title, year) {
+      const container = document.getElementById("streamingProviders");
+      if (!container) return;
+      try {
+        const params = new URLSearchParams({ title });
+        if (year) params.set("year", year);
+        const res = await fetch(`/streaming?${params}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (!container.isConnected) return; // user navigated away
+
+        if (!data.providers || data.providers.length === 0) {
+          container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in the US</span>`;
+          return;
+        }
+        container.innerHTML = data.providers.map(p => {
+          const logoHtml = p.logo
+            ? `<img src="https://image.tmdb.org/t/p/w45${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" />`
+            : "";
+          return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
+        }).join("");
+      } catch {
+        if (container.isConnected) {
+          container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable</span>`;
+        }
+      }
+    }
+
+    // ── Overlay event handlers ───────────────────────────────────────
+
+    overlayClose.addEventListener("click", closeOverlay);
+
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) closeOverlay();
+    });
+
+    overlayPrev.addEventListener("click", () => {
+      if (overlayIndex > 0) {
+        overlayIndex--;
+        renderOverlay();
+      }
+    });
+
+    overlayNext.addEventListener("click", () => {
+      if (overlayIndex < allResults.length - 1) {
+        overlayIndex++;
+        renderOverlay();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!backdrop.classList.contains("open")) return;
+      if (e.key === "Escape") closeOverlay();
+      if (e.key === "ArrowLeft" && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
+      if (e.key === "ArrowRight" && overlayIndex < allResults.length - 1) { overlayIndex++; renderOverlay(); }
+    });
+
+    // ── Utilities ───────────────────────────────────────────────────
+
     function setLoading(loading) {
       btn.disabled = loading;
       spinner.style.display = loading ? "block" : "none";
@@ -306,27 +738,12 @@
 
     function clearResults() {
       resultsEl.innerHTML = "";
-    }
-
-    function appendResult(result, i) {
-      const card = document.createElement("div");
-      card.className = "card";
-      const posterHtml = result.movie_poster
-        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
-        : "";
-      card.innerHTML = `
-        <div class="card-rank">${i + 1}</div>
-        ${posterHtml}
-        <div class="card-body">
-          <div class="card-title">${escapeHtml(result.title)}</div>
-          <div class="card-explanation">${escapeHtml(result.explanation)}</div>
-        </div>
-      `;
-      resultsEl.appendChild(card);
+      allResults = [];
     }
 
     function escapeHtml(str) {
-      return str
+      if (!str) return "";
+      return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
