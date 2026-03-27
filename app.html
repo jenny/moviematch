@@ -403,42 +403,85 @@
 
     /* ── Carousel nav ────────────────────────────────────────────── */
 
+    .overlay-frame {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: min(640px, calc(100vw - 32px));
+    }
+
     .overlay-nav {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       flex-shrink: 0;
-      padding: 16px 32px 20px;
+      padding: 14px 32px 18px;
       border-top: 1px solid #2a2a2a;
     }
 
-    .overlay-nav-btn {
-      background: #242424;
-      border: 1px solid #333;
-      color: #ccc;
-      font-size: 0.9rem;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+    .overlay-dots {
       display: flex;
+      gap: 7px;
       align-items: center;
-      gap: 6px;
     }
 
-    .overlay-nav-btn:hover:not(:disabled) {
-      background: #2e2e2e;
-      color: #fff;
+    .overlay-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: none;
+      background: #3a3a3a;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.15s, transform 0.15s;
     }
 
-    .overlay-nav-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
+    .overlay-dot.active {
+      background: #ccc;
+      transform: scale(1.25);
     }
 
-    .overlay-nav-counter {
-      font-size: 0.85rem;
-      color: #555;
+    .overlay-dot:hover:not(.active) {
+      background: #666;
+    }
+
+    .overlay-arrow {
+      display: none;
+    }
+
+    @media (min-width: 521px) {
+      .overlay-arrow {
+        display: flex;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        align-items: center;
+        justify-content: center;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 50%;
+        color: #aaa;
+        font-size: 1.5rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s, opacity 0.15s;
+        padding: 0;
+      }
+
+      .overlay-arrow:hover {
+        background: #2e2e2e;
+        color: #fff;
+      }
+
+      .overlay-arrow[hidden] {
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .overlay-arrow-prev { right: calc(100% + 12px); }
+      .overlay-arrow-next { left: calc(100% + 12px); }
     }
 
     /* ── Mobile ──────────────────────────────────────────────────── */
@@ -487,7 +530,7 @@
       }
 
       .overlay-nav {
-        padding: 12px 16px 24px;
+        padding: 10px 16px 20px;
       }
 
       .overlay-close {
@@ -531,16 +574,18 @@
 
   <!-- Detail overlay -->
   <div class="overlay-backdrop" id="overlayBackdrop" role="dialog" aria-modal="true">
-    <div class="overlay-panel" id="overlayPanel">
-      <button class="overlay-close" id="overlayClose" aria-label="Close">&times;</button>
-      <div class="overlay-scroll">
-        <div class="overlay-content" id="overlayContent"></div>
+    <div class="overlay-frame">
+      <button class="overlay-arrow overlay-arrow-prev" id="overlayPrev" aria-label="Previous">&#8249;</button>
+      <div class="overlay-panel" id="overlayPanel">
+        <button class="overlay-close" id="overlayClose" aria-label="Close">&times;</button>
+        <div class="overlay-scroll">
+          <div class="overlay-content" id="overlayContent"></div>
+        </div>
+        <div class="overlay-nav">
+          <div class="overlay-dots" id="overlayDots"></div>
+        </div>
       </div>
-      <div class="overlay-nav">
-        <button class="overlay-nav-btn" id="overlayPrev">&#8592; Prev</button>
-        <span class="overlay-nav-counter" id="overlayCounter"></span>
-        <button class="overlay-nav-btn" id="overlayNext">Next &#8594;</button>
-      </div>
+      <button class="overlay-arrow overlay-arrow-next" id="overlayNext" aria-label="Next">&#8250;</button>
     </div>
   </div>
 
@@ -558,7 +603,7 @@
     const overlayClose = document.getElementById("overlayClose");
     const overlayPrev = document.getElementById("overlayPrev");
     const overlayNext = document.getElementById("overlayNext");
-    const overlayCounter = document.getElementById("overlayCounter");
+    const overlayDots = document.getElementById("overlayDots");
 
     let allResults = [];
     let overlayIndex = 0;
@@ -735,10 +780,17 @@
         </div>
       `;
 
-      // Update nav
-      overlayPrev.disabled = overlayIndex === 0;
-      overlayNext.disabled = overlayIndex === allResults.length - 1;
-      overlayCounter.textContent = `${overlayIndex + 1} / ${allResults.length}`;
+      // Update dots
+      overlayDots.innerHTML = allResults.map((_, i) =>
+        `<button class="overlay-dot${i === overlayIndex ? " active" : ""}" data-i="${i}" aria-label="Result ${i + 1}"></button>`
+      ).join("");
+      overlayDots.querySelectorAll(".overlay-dot").forEach(dot => {
+        dot.addEventListener("click", () => { overlayIndex = +dot.dataset.i; renderOverlay(); });
+      });
+
+      // Update arrows (desktop)
+      overlayPrev.hidden = overlayIndex === 0;
+      overlayNext.hidden = overlayIndex === allResults.length - 1;
 
       // Fetch streaming providers asynchronously
       fetchStreamingProviders(result.title, result.year || "");
@@ -780,19 +832,8 @@
       if (e.target === backdrop) closeOverlay();
     });
 
-    overlayPrev.addEventListener("click", () => {
-      if (overlayIndex > 0) {
-        overlayIndex--;
-        renderOverlay();
-      }
-    });
-
-    overlayNext.addEventListener("click", () => {
-      if (overlayIndex < allResults.length - 1) {
-        overlayIndex++;
-        renderOverlay();
-      }
-    });
+    overlayPrev.addEventListener("click", () => { overlayIndex--; renderOverlay(); });
+    overlayNext.addEventListener("click", () => { overlayIndex++; renderOverlay(); });
 
     document.addEventListener("keydown", (e) => {
       if (!backdrop.classList.contains("open")) return;
