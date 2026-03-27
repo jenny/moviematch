@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 
 from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
@@ -6,6 +7,33 @@ from db import get_model, vector_count, vector_query
 from claude import rerank, rerank_stream
 
 logger = logging.getLogger(__name__)
+
+
+def _parse_document(doc: str) -> dict:
+    """Extract structured fields from a richtext document string."""
+    result = {"year": "", "overview": "", "director": "", "cast": []}
+
+    if "Plot: " in doc:
+        start = doc.index("Plot: ") + 6
+        end = doc.find("\n\n", start)
+        result["overview"] = doc[start:end].strip() if end != -1 else doc[start:].strip()
+
+    if "Director: " in doc:
+        start = doc.index("Director: ") + 10
+        end = doc.find("\n", start)
+        result["director"] = doc[start:end].strip() if end != -1 else doc[start:].strip()
+
+    if "Top Cast: " in doc:
+        start = doc.index("Top Cast: ") + 10
+        end = doc.find("\n\n", start)
+        cast_str = doc[start:end].strip() if end != -1 else doc[start:].strip()
+        result["cast"] = [c.strip() for c in cast_str.split(",") if c.strip()]
+
+    year_match = re.search(r'\((\d{4})\)', doc)
+    if year_match:
+        result["year"] = year_match.group(1)
+
+    return result
 
 
 def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
@@ -32,10 +60,16 @@ def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
         if not title:
             logger.warning("Missing title in vector result, skipping.")
             continue
+        full_doc = match.get("document", "")
+        parsed = _parse_document(full_doc)
         candidates.append({
             "title": title,
             "movie_poster": match.get("movie_poster") or "",
-            "document": match.get("document", "")[:SEARCH_DOC_TRUNCATE],
+            "document": full_doc[:SEARCH_DOC_TRUNCATE],
+            "year": parsed["year"],
+            "overview": parsed["overview"],
+            "director": parsed["director"],
+            "cast": parsed["cast"],
         })
 
     return candidates, embedding_ms, chroma_ms
@@ -69,6 +103,10 @@ def search_stream(query: str):
         return
 
     poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+    year_by_title = {c["title"]: c["year"] for c in candidates}
+    overview_by_title = {c["title"]: c["overview"] for c in candidates}
+    director_by_title = {c["title"]: c["director"] for c in candidates}
+    cast_by_title = {c["title"]: c["cast"] for c in candidates}
 
     t0 = time.perf_counter()
     usage = None
@@ -78,7 +116,12 @@ def search_stream(query: str):
             usage = item["__usage"]
             error = usage.pop("error", None)
         else:
-            item["movie_poster"] = poster_by_title.get(item.get("title", ""), "")
+            t = item.get("title", "")
+            item["movie_poster"] = poster_by_title.get(t, "")
+            item["year"] = year_by_title.get(t, "")
+            item["overview"] = overview_by_title.get(t, "")
+            item["director"] = director_by_title.get(t, "")
+            item["cast"] = cast_by_title.get(t, [])
             yield item
 
     claude_ms = round((time.perf_counter() - t0) * 1000)
