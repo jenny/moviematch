@@ -1,6 +1,7 @@
 import math
 import pytest
-from tmdb import _composite_score, select_top_n, filter_cast, filter_crew
+from unittest.mock import patch, MagicMock
+from tmdb import _composite_score, select_top_n, filter_cast, filter_crew, search_movie_by_title, fetch_watch_providers
 from config import (
     TMDB_MIN_VOTE_COUNT,
     SCORE_WEIGHT_RATING,
@@ -173,3 +174,81 @@ class TestFilterCrew:
         movie = {"credits": {"crew": []}}
         result = filter_crew(movie)
         assert result["credits"]["crew"] == []
+
+
+class TestSearchMovieByTitle:
+    # _require_tmdb_key() is patched to avoid needing a real key in CI
+    def test_returns_id_of_first_result(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": [{"id": 238, "title": "The Godfather"}]}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
+            result = search_movie_by_title("The Godfather", "1972")
+        assert result == 238
+
+    def test_returns_none_when_no_results(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": []}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
+            result = search_movie_by_title("Unknown Movie XYZ")
+        assert result is None
+
+    def test_returns_none_on_request_exception(self):
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", side_effect=Exception("timeout")):
+            result = search_movie_by_title("The Godfather")
+        assert result is None
+
+    def test_year_omitted_when_empty(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": [{"id": 1}]}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp) as mock_get:
+            search_movie_by_title("Some Movie", "")
+        params = mock_get.call_args.kwargs["params"]
+        assert "year" not in params
+
+    def test_year_included_when_provided(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": [{"id": 1}]}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp) as mock_get:
+            search_movie_by_title("Some Movie", "1994")
+        params = mock_get.call_args.kwargs["params"]
+        assert params["year"] == "1994"
+
+
+class TestFetchWatchProviders:
+    def test_returns_flatrate_providers_for_us(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {
+            "results": {
+                "US": {
+                    "flatrate": [
+                        {"provider_name": "Netflix", "logo_path": "/netflix.jpg"},
+                        {"provider_name": "Max", "logo_path": "/max.jpg"},
+                    ]
+                }
+            }
+        }
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
+            result = fetch_watch_providers(238)
+        assert result == [
+            {"name": "Netflix", "logo": "/netflix.jpg"},
+            {"name": "Max", "logo": "/max.jpg"},
+        ]
+
+    def test_returns_empty_list_when_no_us_entry(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": {"GB": {"flatrate": [{"provider_name": "BFI", "logo_path": "/bfi.jpg"}]}}}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
+            result = fetch_watch_providers(238)
+        assert result == []
+
+    def test_returns_empty_list_when_no_flatrate(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"results": {"US": {"rent": []}}}
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
+            result = fetch_watch_providers(238)
+        assert result == []
+
+    def test_returns_empty_list_on_request_exception(self):
+        with patch("tmdb._require_tmdb_key"), patch("requests.get", side_effect=Exception("timeout")):
+            result = fetch_watch_providers(238)
+        assert result == []

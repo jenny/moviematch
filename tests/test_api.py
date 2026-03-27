@@ -127,6 +127,35 @@ class TestSearchEndpoint:
         assert response.status_code == 422
 
 
+class TestStreamingEndpoint:
+    def test_returns_providers_when_movie_found(self, client):
+        with patch("api.routes.streaming.search_movie_by_title", return_value=238), \
+             patch("api.routes.streaming.fetch_watch_providers", return_value=[
+                 {"name": "Netflix", "logo": "/netflix.jpg"}
+             ]):
+            response = client.get("/streaming?title=The+Godfather&year=1972")
+
+        assert response.status_code == 200
+        assert response.json() == {"providers": [{"name": "Netflix", "logo": "/netflix.jpg"}]}
+
+    def test_returns_empty_providers_when_movie_not_found(self, client):
+        with patch("api.routes.streaming.search_movie_by_title", return_value=None):
+            response = client.get("/streaming?title=Unknown+Movie+XYZ")
+
+        assert response.status_code == 200
+        assert response.json() == {"providers": []}
+
+    def test_year_param_is_optional(self, client):
+        with patch("api.routes.streaming.search_movie_by_title", return_value=None):
+            response = client.get("/streaming?title=Some+Movie")
+
+        assert response.status_code == 200
+
+    def test_missing_title_returns_422(self, client):
+        response = client.get("/streaming")
+        assert response.status_code == 422
+
+
 class TestAdminStatus:
     def test_returns_expected_shape(self, client):
         with patch("api.routes.admin.vector_count", return_value=42):
