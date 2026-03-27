@@ -13,12 +13,13 @@
 | `main.py` | Orchestrates embedding → vector query → Claude rerank |
 | `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
-| `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography` |
+| `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers` |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
 | `api/app.py` | FastAPI app factory, CORS, lifespan |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
 | `api/routes/admin.py` | `/initialize`, `/status`, `/logs` |
+| `api/routes/streaming.py` | `GET /streaming` — on-demand TMDB watch provider lookup |
 | `logger.py` | JSON request logging; writes to rotating file locally, stdout on Railway |
 | `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
 
@@ -40,11 +41,12 @@ Run with: `pytest` from project root.
 | Test file | What it covers |
 |-----------|---------------|
 | `tests/test_claude.py` | Pure functions: `_filter_results`, `_extract_result_objects` |
-| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model` |
-| `tests/test_tmdb.py` | Pure scoring functions: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew` |
+| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers` |
+| `tests/test_main.py` | `_parse_document()` — richtext field extraction |
+| `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
 
-**No test touches the real Anthropic or TMDB APIs.** API-level tests mock `search_stream` at the route layer.
+**No test touches the real Anthropic or TMDB APIs.** All external calls are mocked at the module level.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
