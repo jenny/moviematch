@@ -197,7 +197,7 @@
 
     .card-year {
       font-weight: 400;
-      color: #666;
+      color: #fff;
       margin-left: 6px;
       font-size: 0.95rem;
     }
@@ -266,6 +266,7 @@
         opacity: 0;
         transform: scale(0.96) translateY(8px);
       }
+
       to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -340,7 +341,7 @@
 
     .overlay-title-year {
       font-weight: 400;
-      color: #666;
+      color: #fff;
       font-size: 1.1rem;
       margin-left: 8px;
     }
@@ -480,15 +481,27 @@
         pointer-events: none;
       }
 
-      .overlay-arrow-prev { right: calc(100% + 12px); }
-      .overlay-arrow-next { left: calc(100% + 12px); }
+      .overlay-arrow-prev {
+        right: calc(100% + 12px);
+      }
+
+      .overlay-arrow-next {
+        left: calc(100% + 12px);
+      }
     }
 
     /* ── Mobile ──────────────────────────────────────────────────── */
 
     @keyframes overlaySlideUp {
-      from { transform: translateY(100%); opacity: 1; }
-      to   { transform: translateY(0);    opacity: 1; }
+      from {
+        transform: translateY(100%);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     @media (max-width: 520px) {
