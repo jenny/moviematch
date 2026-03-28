@@ -1,10 +1,11 @@
 import logger  # noqa: F401 — configures logging (stdout + file) before other modules
+import json
 import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -14,11 +15,12 @@ from config import CORS_ORIGINS
 
 _app_html: str = ""
 _admin_html: str = ""
+_hints: list = []
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _app_html, _admin_html
+    global _app_html, _admin_html, _hints
     from db import get_model
     from claude import get_client
     get_model()
@@ -28,6 +30,10 @@ async def lifespan(app: FastAPI):
         _app_html = f.read()
     with open(os.path.join(_root, "admin.html")) as f:
         _admin_html = f.read()
+    hints_path = os.path.join(_root, "hints.json")
+    if os.path.exists(hints_path):
+        with open(hints_path) as f:
+            _hints = json.load(f)
     yield
 
 
@@ -68,6 +74,11 @@ def root():
 @app.get("/admin.html")
 def admin_ui():
     return HTMLResponse(_admin_html)
+
+
+@app.get("/hints.json")
+def hints():
+    return JSONResponse(_hints)
 
 
 @app.get("/health")

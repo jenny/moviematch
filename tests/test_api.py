@@ -156,6 +156,16 @@ class TestStreamingEndpoint:
         assert response.status_code == 422
 
 
+class TestHints:
+    def test_returns_list_of_strings(self, client):
+        response = client.get("/hints.json")
+        assert response.status_code == 200
+        hints = response.json()
+        assert isinstance(hints, list)
+        assert len(hints) > 0
+        assert all(isinstance(h, str) for h in hints)
+
+
 class TestAdminStatus:
     def test_returns_expected_shape(self, client):
         with patch("api.routes.admin.vector_count", return_value=42):
