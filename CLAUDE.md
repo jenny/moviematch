@@ -36,7 +36,7 @@ Key config values:
 - `AGENT_MAX_TOOL_ROUNDS = 4`
 
 ## Tests
-Run with: `pytest` from project root.
+Run in venv with: `pytest` from project root.
 
 | Test file | What it covers |
 |-----------|---------------|
