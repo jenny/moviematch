@@ -576,7 +576,7 @@
   </header>
 
   <form class="search-form" id="searchForm">
-    <input type="text" id="queryInput" placeholder="e.g., a gangster movie that is also a little bit funny"
+    <input type="text" id="queryInput" placeholder="Describe what you're in the mood for…"
       autocomplete="off" autofocus />
     <button type="submit" id="submitBtn">Search</button>
   </form>
@@ -620,6 +620,21 @@
 
     let allResults = [];
     let overlayIndex = 0;
+
+    // ── Rotating placeholder ─────────────────────────────────────────
+
+    fetch("hints.json")
+      .then((r) => r.json())
+      .then((hints) => {
+        if (!hints.length) return;
+        let i = Math.floor(Math.random() * hints.length);
+        input.placeholder = hints[i];
+        setInterval(() => {
+          i = (i + 1) % hints.length;
+          input.placeholder = hints[i];
+        }, 4000);
+      })
+      .catch(() => {}); // silently keep the hardcoded fallback placeholder
 
     // ── Search ──────────────────────────────────────────────────────
 
