@@ -2,9 +2,9 @@ import logger  # noqa: F401 — configures logging (stdout + file) before other 
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -45,6 +45,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def redirect_www(request: Request, call_next):
+    host = request.headers.get("host", "")
+    if host.startswith("www."):
+        url = request.url.replace(netloc=host[4:])
+        return RedirectResponse(url=str(url), status_code=301)
+    return await call_next(request)
 
 app.include_router(search.router)
 app.include_router(admin.router, prefix="/admin")
