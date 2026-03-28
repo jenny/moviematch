@@ -71,4 +71,9 @@ RATE_LIMIT = "10/minute"
 # CORS — comma-separated list of allowed origins; restrict in production
 CORS_ORIGINS = [o.strip() for o in os.getenv(
     "CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000"
-).split(",")]
+).split(",") if o.strip()]
+
+# Richtext field prefixes — shared between richtext.py (writer) and main.py (parser)
+RICHTEXT_PREFIX_PLOT = "Plot: "
+RICHTEXT_PREFIX_DIRECTOR = "Director: "
+RICHTEXT_PREFIX_CAST = "Top Cast: "

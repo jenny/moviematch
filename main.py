@@ -2,7 +2,7 @@ import logging
 import re
 import time
 
-from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE
+from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_PLOT
 from db import get_model, vector_count, vector_query
 from claude import rerank, rerank_stream
 
@@ -13,18 +13,18 @@ def _parse_document(doc: str) -> dict:
     """Extract structured fields from a richtext document string."""
     result = {"year": "", "overview": "", "director": "", "cast": []}
 
-    if "Plot: " in doc:
-        start = doc.index("Plot: ") + 6
+    if RICHTEXT_PREFIX_PLOT in doc:
+        start = doc.index(RICHTEXT_PREFIX_PLOT) + len(RICHTEXT_PREFIX_PLOT)
         end = doc.find("\n\n", start)
         result["overview"] = doc[start:end].strip() if end != -1 else doc[start:].strip()
 
-    if "Director: " in doc:
-        start = doc.index("Director: ") + 10
+    if RICHTEXT_PREFIX_DIRECTOR in doc:
+        start = doc.index(RICHTEXT_PREFIX_DIRECTOR) + len(RICHTEXT_PREFIX_DIRECTOR)
         end = doc.find("\n", start)
         result["director"] = doc[start:end].strip() if end != -1 else doc[start:].strip()
 
-    if "Top Cast: " in doc:
-        start = doc.index("Top Cast: ") + 10
+    if RICHTEXT_PREFIX_CAST in doc:
+        start = doc.index(RICHTEXT_PREFIX_CAST) + len(RICHTEXT_PREFIX_CAST)
         end = doc.find("\n\n", start)
         cast_str = doc[start:end].strip() if end != -1 else doc[start:].strip()
         result["cast"] = [c.strip() for c in cast_str.split(",") if c.strip()]

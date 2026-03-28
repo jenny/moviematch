@@ -3,13 +3,13 @@ import os
 import json
 import glob
 
-from config import DATA_DIR, RICHTEXT_CAST_LIMIT
+from config import DATA_DIR, RICHTEXT_CAST_LIMIT, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_PLOT
 
 logger = logging.getLogger(__name__)
 
 
 def build_richtext(movie_json: dict) -> str:
-    rich_text = "Plot: " + movie_json.get("overview", "") + "\n\n"
+    rich_text = RICHTEXT_PREFIX_PLOT + movie_json.get("overview", "") + "\n\n"
     rich_text += "Themes and Keywords: "
     rich_text += ', '.join(k["name"] for k in movie_json.get("keywords", {}).get("keywords", []))
     rich_text += "\n\n"
@@ -18,8 +18,8 @@ def build_richtext(movie_json: dict) -> str:
     rich_text += "\n\n"
     for crew in movie_json.get("credits", {}).get("crew", []):
         if crew["job"] == "Director":
-            rich_text += "Director: " + crew["name"] + "\n\n"
-    rich_text += "Top Cast: "
+            rich_text += RICHTEXT_PREFIX_DIRECTOR + crew["name"] + "\n\n"
+    rich_text += RICHTEXT_PREFIX_CAST
     rich_text += ', '.join(c["name"] for c in movie_json.get("credits", {}).get("cast", [])[:RICHTEXT_CAST_LIMIT])
     rich_text += "\n\n"
     release_year = movie_json.get("release_date", "")[:4] or "Unknown"

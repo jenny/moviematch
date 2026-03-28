@@ -156,6 +156,8 @@ def _composite_score(movie: dict, mean_rating: float, log_max_pop: float) -> flo
 def select_top_n(candidates: dict[int, dict], n: int) -> list[int]:
     """Rank candidates by composite score and return top n IDs."""
     movies = list(candidates.values())
+    if not movies:
+        return []
     mean_rating = sum(m.get("vote_average", 0) for m in movies) / len(movies)
     log_max_pop = math.log1p(max((m.get("popularity", 0) for m in movies), default=0))
     ranked = sorted(movies, key=lambda m: _composite_score(m, mean_rating, log_max_pop), reverse=True)
