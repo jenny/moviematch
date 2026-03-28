@@ -61,6 +61,11 @@ Optional: `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set
 ## Model Use
 - Use default model for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research
 
+## Coding Hygiene
+- Clear inline documentation for future collaborators
+- Add and update tests and documentation as you go
+- Atomic commits
+
 ## Forbidden Directories
 Do not read or modify files in these directories:
 - `venv/` — Python environment
