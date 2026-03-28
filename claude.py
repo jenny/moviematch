@@ -179,9 +179,17 @@ def _format_model_log(models_used: list) -> str:
 
 
 def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
-    """Drop any return_results entries whose title wasn't in the candidate or filmography set."""
-    filtered = [r for r in results if r.get("title") in valid_titles]
-    rejected = [r["title"] for r in results if r.get("title") not in valid_titles]
+    """Drop fabricated titles and deduplicate, preserving order."""
+    filtered = []
+    seen: set[str] = set()
+    rejected = []
+    for r in results:
+        title = r.get("title")
+        if title not in valid_titles:
+            rejected.append(title)
+        elif title not in seen:
+            filtered.append(r)
+            seen.add(title)
     if rejected:
         logger.warning(f"return_results validation: rejected fabricated title(s): {rejected}")
     return filtered
@@ -369,6 +377,7 @@ def rerank_stream(query: str, candidates: list[dict]):
         return_results_block_idx = None
         return_results_json = ""
         results_yielded = 0
+        yielded_titles: set[str] = set()
 
         try:
             with get_client().messages.stream(
@@ -393,13 +402,15 @@ def rerank_stream(query: str, candidates: list[dict]):
                             try:
                                 result = json.loads(obj_str)
                                 if "title" in result and "explanation" in result:
-                                    if result["title"] in valid_titles:
-                                        yield result
-                                        results_yielded += 1
-                                    else:
+                                    title = result["title"]
+                                    if title not in valid_titles:
                                         logger.warning(
-                                            f"rerank_stream: rejected fabricated title during streaming: {result['title']!r}"
+                                            f"rerank_stream: rejected fabricated title during streaming: {title!r}"
                                         )
+                                    elif title not in yielded_titles:
+                                        yield result
+                                        yielded_titles.add(title)
+                                results_yielded += 1
                             except json.JSONDecodeError:
                                 pass
                 final = stream.get_final_message()
@@ -434,8 +445,9 @@ def rerank_stream(query: str, candidates: list[dict]):
 
         if return_results_call:
             # Safety net: yield any valid results the streaming parser missed
-            for r in _filter_results(return_results_call.input.get("results", []), valid_titles)[results_yielded:]:
-                yield r
+            for r in _filter_results(return_results_call.input.get("results", []), valid_titles):
+                if r["title"] not in yielded_titles:
+                    yield r
             model_log = _format_model_log(models_used)
             usage = {
                 "input_tokens": total_input_tokens,

@@ -55,11 +55,16 @@ def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
         raise RuntimeError(f"Error querying vector store: {e}")
 
     candidates = []
+    seen_titles: set[str] = set()
     for match in matches:
         title = match.get("title")
         if not title:
             logger.warning("Missing title in vector result, skipping.")
             continue
+        if title in seen_titles:
+            logger.warning(f"Duplicate title in vector results, skipping: {title!r}")
+            continue
+        seen_titles.add(title)
         full_doc = match.get("document", "")
         parsed = _parse_document(full_doc)
         candidates.append({

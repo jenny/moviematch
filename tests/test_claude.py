@@ -44,6 +44,33 @@ class TestFilterResults:
         valid = {"A", "B"}
         assert _filter_results(results, valid) == results
 
+    def test_duplicate_title_returns_first_occurrence(self):
+        first = {"title": "Inception", "explanation": "First mention"}
+        second = {"title": "Inception", "explanation": "Repeated mention"}
+        result = _filter_results([first, second], {"Inception"})
+        assert result == [first]
+
+    def test_all_same_title_returns_single_entry(self):
+        results = [{"title": "A", "explanation": str(i)} for i in range(3)]
+        assert _filter_results(results, {"A"}) == [results[0]]
+
+    def test_duplicate_interspersed_with_other_titles(self):
+        # [A, B, A] → [A, B]; second A is dropped
+        a1 = {"title": "A", "explanation": "first"}
+        b = {"title": "B", "explanation": "only"}
+        a2 = {"title": "A", "explanation": "duplicate"}
+        result = _filter_results([a1, b, a2], {"A", "B"})
+        assert result == [a1, b]
+
+    def test_duplicate_invalid_title_not_counted_toward_dedup(self):
+        # Two entries for a fabricated title should both be rejected, not keep the first
+        results = [
+            {"title": "Fake", "explanation": "one"},
+            {"title": "Fake", "explanation": "two"},
+            {"title": "Real", "explanation": "valid"},
+        ]
+        assert _filter_results(results, {"Real"}) == [{"title": "Real", "explanation": "valid"}]
+
 
 class TestExtractResultObjects:
     def test_single_complete_object(self):
