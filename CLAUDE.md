@@ -14,13 +14,14 @@
 | `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
 | `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers` |
+| `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
 | `api/app.py` | FastAPI app factory, CORS, lifespan |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
 | `api/routes/admin.py` | `/initialize`, `/status`, `/logs` |
-| `api/routes/streaming.py` | `GET /streaming` — on-demand TMDB watch provider lookup |
-| `logger.py` | JSON request logging; writes to rotating file locally, stdout on Railway |
+| `api/routes/streaming.py` | `GET /streaming` — streaming provider lookup via Watchmode (primary) or TMDB (fallback) |
+| `logger.py` | JSON request logging; DEBUG level locally, INFO on Railway; writes to rotating file locally, stdout on Railway |
 | `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
 
 ## Anthropic Integration
@@ -41,16 +42,17 @@ Run in venv with: `pytest` from project root.
 | Test file | What it covers |
 |-----------|---------------|
 | `tests/test_claude.py` | Pure functions: `_filter_results`, `_extract_result_objects` |
-| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers` |
+| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode` |
 | `tests/test_main.py` | `_parse_document()` — richtext field extraction |
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
+| `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache) |
 
-**No test touches the real Anthropic or TMDB APIs.** All external calls are mocked at the module level.
+**No test touches the real Anthropic, TMDB, or Watchmode APIs.** All external calls are mocked at the module level.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
-Optional: `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
+Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
 
 ## Key Decisions
 - Haiku-first strategy: most queries resolve in round 1 without Opus
