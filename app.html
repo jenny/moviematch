@@ -399,7 +399,7 @@
 
     .overlay-streaming-none {
       font-size: 0.85rem;
-      color: #555;
+      color: #b0b0b0;
     }
 
     .overlay-streaming-attribution {
@@ -592,8 +592,8 @@
   </header>
 
   <form class="search-form" id="searchForm">
-    <input type="text" id="queryInput" placeholder="Describe what you're in the mood for…"
-      autocomplete="off" autofocus />
+    <input type="text" id="queryInput" placeholder="Describe what you're in the mood for…" autocomplete="off"
+      autofocus />
     <button type="submit" id="submitBtn">Search</button>
   </form>
 
@@ -650,7 +650,7 @@
           input.placeholder = hints[i];
         }, 4000);
       })
-      .catch(() => {}); // silently keep the hardcoded fallback placeholder
+      .catch(() => { }); // silently keep the hardcoded fallback placeholder
 
     // ── Search ──────────────────────────────────────────────────────
 
@@ -857,7 +857,7 @@
           return;
         }
         const streamable = data.providers.filter(p => p.type === "sub" || p.type === "free");
-        const rentable  = data.providers.filter(p => p.type === "rent" || p.type === "buy");
+        const rentable = data.providers.filter(p => p.type === "rent" || p.type === "buy");
         if (streamable.length > 0) {
           container.innerHTML = streamable.map(p => {
             const logoHtml = p.logo
@@ -867,11 +867,11 @@
           }).join("");
         } else {
           const names = [...new Set(rentable.map(p => p.name))].join(", ");
-          container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}</span>`;
+          container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}.</span>`;
         }
       } catch {
         if (container.isConnected) {
-          container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable</span>`;
+          container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable.</span>`;
         }
       }
     }
