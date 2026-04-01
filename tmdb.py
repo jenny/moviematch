@@ -90,13 +90,21 @@ def search_movie_by_title(title: str, year: str = "") -> int | None:
         )
         response.raise_for_status()
         results = response.json().get("results", [])
-        return results[0]["id"] if results else None
-    except Exception:
+        movie_id = results[0]["id"] if results else None
+        logger.debug(f"TMDB search '{title}' ({year}): {'id=' + str(movie_id) if movie_id else 'not found'}")
+        return movie_id
+    except Exception as e:
+        logger.warning(f"TMDB search failed for '{title}': {e}")
         return None
 
 
 def fetch_watch_providers(movie_id: int, country: str = "US") -> list[dict]:
-    """Fetch streaming/watch providers for a movie from TMDB. Returns flatrate providers."""
+    """Fetch streaming/watch providers for a movie from TMDB.
+
+    Returns flatrate (subscription) providers only, with full logo URLs.
+    NOTE: TMDB's watch provider coverage is sourced from JustWatch and may be
+    incomplete — use Watchmode as the primary source when WATCHMODE_API_KEY is set.
+    """
     _require_tmdb_key()
     try:
         response = requests.get(
@@ -107,8 +115,18 @@ def fetch_watch_providers(movie_id: int, country: str = "US") -> list[dict]:
         response.raise_for_status()
         country_data = response.json().get("results", {}).get(country, {})
         providers = country_data.get("flatrate", [])
-        return [{"name": p["provider_name"], "logo": p["logo_path"]} for p in providers]
-    except Exception:
+        result = [
+            {
+                "name": p["provider_name"],
+                "type": "sub",
+                "logo": f"https://image.tmdb.org/t/p/w45{p['logo_path']}" if p.get("logo_path") else None,
+            }
+            for p in providers
+        ]
+        logger.debug(f"TMDB watch providers for movie {movie_id} ({country}): {[p['name'] for p in result] or 'none'}")
+        return result
+    except Exception as e:
+        logger.warning(f"TMDB watch providers failed for movie {movie_id}: {e}")
         return []
 
 

@@ -402,6 +402,22 @@
       color: #555;
     }
 
+    .overlay-streaming-attribution {
+      width: 100%;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: #555;
+    }
+
+    .overlay-streaming-attribution a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .overlay-streaming-attribution a:hover {
+      text-decoration: underline;
+    }
+
     /* ── Carousel nav ────────────────────────────────────────────── */
 
     .overlay-frame {
@@ -804,6 +820,7 @@
             <div class="overlay-streaming" id="streamingProviders">
               <span class="overlay-streaming-loading">Loading…</span>
             </div>
+            <div class="overlay-streaming-attribution">Streaming data powered by <a href="https://watchmode.com" target="_blank" rel="noopener">Watchmode.com</a></div>
           </div>
         </div>
       `;
@@ -839,12 +856,19 @@
           container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in the US</span>`;
           return;
         }
-        container.innerHTML = data.providers.map(p => {
-          const logoHtml = p.logo
-            ? `<img src="https://image.tmdb.org/t/p/w45${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" />`
-            : "";
-          return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
-        }).join("");
+        const streamable = data.providers.filter(p => p.type === "sub" || p.type === "free");
+        const rentable  = data.providers.filter(p => p.type === "rent" || p.type === "buy");
+        if (streamable.length > 0) {
+          container.innerHTML = streamable.map(p => {
+            const logoHtml = p.logo
+              ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" />`
+              : "";
+            return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
+          }).join("");
+        } else {
+          const names = [...new Set(rentable.map(p => p.name))].join(", ");
+          container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}</span>`;
+        }
       } catch {
         if (container.isConnected) {
           container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable</span>`;

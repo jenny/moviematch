@@ -230,8 +230,8 @@ class TestFetchWatchProviders:
         with patch("tmdb._require_tmdb_key"), patch("requests.get", return_value=mock_resp):
             result = fetch_watch_providers(238)
         assert result == [
-            {"name": "Netflix", "logo": "/netflix.jpg"},
-            {"name": "Max", "logo": "/max.jpg"},
+            {"name": "Netflix", "type": "sub", "logo": "https://image.tmdb.org/t/p/w45/netflix.jpg"},
+            {"name": "Max", "type": "sub", "logo": "https://image.tmdb.org/t/p/w45/max.jpg"},
         ]
 
     def test_returns_empty_list_when_no_us_entry(self):

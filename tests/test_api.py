@@ -128,25 +128,65 @@ class TestSearchEndpoint:
 
 
 class TestStreamingEndpoint:
-    def test_returns_providers_when_movie_found(self, client):
-        with patch("api.routes.streaming.search_movie_by_title", return_value=238), \
+    def test_returns_providers_via_watchmode_when_key_set(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[
+                 {"name": "Paramount+", "type": "sub", "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg"}
+             ]):
+            response = client.get("/streaming?title=Million+Dollar+Baby&year=2004")
+
+        assert response.status_code == 200
+        assert response.json() == {"providers": [
+            {"name": "Paramount+", "type": "sub", "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg"}
+        ]}
+
+    def test_returns_rent_providers_when_no_subscription(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[
+                 {"name": "Amazon", "type": "rent", "logo": None},
+                 {"name": "VUDU", "type": "buy", "logo": None},
+             ]):
+            response = client.get("/streaming?title=The+Royal+Tenenbaums&year=2001")
+
+        assert response.status_code == 200
+        providers = response.json()["providers"]
+        assert len(providers) == 2
+        assert all(p["type"] in ("rent", "buy") for p in providers)
+
+    def test_returns_empty_when_watchmode_finds_no_title(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=None):
+            response = client.get("/streaming?title=Unknown+Movie+XYZ")
+
+        assert response.status_code == 200
+        assert response.json() == {"providers": []}
+
+    def test_falls_back_to_tmdb_when_no_watchmode_key(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=238), \
              patch("api.routes.streaming.fetch_watch_providers", return_value=[
-                 {"name": "Netflix", "logo": "/netflix.jpg"}
+                 {"name": "Netflix", "type": "sub", "logo": "https://image.tmdb.org/t/p/w45/netflix.jpg"}
              ]):
             response = client.get("/streaming?title=The+Godfather&year=1972")
 
         assert response.status_code == 200
-        assert response.json() == {"providers": [{"name": "Netflix", "logo": "/netflix.jpg"}]}
+        assert response.json() == {"providers": [
+            {"name": "Netflix", "type": "sub", "logo": "https://image.tmdb.org/t/p/w45/netflix.jpg"}
+        ]}
 
-    def test_returns_empty_providers_when_movie_not_found(self, client):
-        with patch("api.routes.streaming.search_movie_by_title", return_value=None):
+    def test_tmdb_fallback_returns_empty_when_movie_not_found(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=None):
             response = client.get("/streaming?title=Unknown+Movie+XYZ")
 
         assert response.status_code == 200
         assert response.json() == {"providers": []}
 
     def test_year_param_is_optional(self, client):
-        with patch("api.routes.streaming.search_movie_by_title", return_value=None):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=None):
             response = client.get("/streaming?title=Some+Movie")
 
         assert response.status_code == 200
