@@ -5,6 +5,9 @@ load_dotenv()
 
 # TMDB
 TMDB_KEY = os.getenv("TMDB_READ_ACCESS_TOKEN")
+
+# Watchmode — primary source for streaming availability (watchmode.com, free tier: 1,000 req/month)
+WATCHMODE_API_KEY = os.getenv("WATCHMODE_API_KEY")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
 TMDB_HEADERS = {
     "accept": "application/json",
