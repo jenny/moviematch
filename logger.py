@@ -20,9 +20,12 @@ _handler.setFormatter(logging.Formatter("%(message)s"))
 
 _logger.addHandler(_handler)
 
+# DEBUG locally, INFO in production — keeps Railway logs clean while making local dev verbose
+_log_level = logging.INFO if _ON_RAILWAY else logging.DEBUG
+
 # Configure root logger so module loggers (app.py, db.py, etc.) surface to the same destination
 logging.basicConfig(
-    level=logging.INFO,
+    level=_log_level,
     format="%(asctime)s %(name)s %(levelname)s %(message)s",
     stream=sys.stdout if _ON_RAILWAY else None,  # None → defaults to stderr (standard local behavior)
 )
