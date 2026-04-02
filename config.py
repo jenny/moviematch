@@ -71,6 +71,12 @@ SEARCH_DOC_TRUNCATE = 200
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"
 
+# Admin auth — set all three in .env to enable the admin panel
+# ADMIN_SECRET_KEY should be a random 32-byte hex string (e.g. from `openssl rand -hex 32`)
+ADMIN_USERNAME  = os.getenv("ADMIN_USERNAME", "")
+ADMIN_PASSWORD  = os.getenv("ADMIN_PASSWORD", "")
+ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "")
+
 # CORS — comma-separated list of allowed origins; restrict in production
 CORS_ORIGINS = [o.strip() for o in os.getenv(
     "CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000"

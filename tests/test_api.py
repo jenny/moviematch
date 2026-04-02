@@ -208,11 +208,21 @@ class TestHints:
 
 class TestAdminStatus:
     def test_returns_expected_shape(self, client):
-        with patch("api.routes.admin.vector_count", return_value=42):
-            response = client.get("/admin/status")
+        from api.auth import require_admin
+        from api.app import app
+        app.dependency_overrides[require_admin] = lambda: None
+        try:
+            with patch("api.routes.admin.vector_count", return_value=42):
+                response = client.get("/admin/status")
+        finally:
+            app.dependency_overrides.clear()
 
         assert response.status_code == 200
         data = response.json()
         assert data["chroma_count"] == 42
         assert "movie_count" in data
         assert "initializing" in data
+
+    def test_unauthenticated_returns_401(self, client):
+        response = client.get("/admin/status")
+        assert response.status_code == 401

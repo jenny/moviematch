@@ -395,6 +395,7 @@
     <div class="header-right">
       <span id="last-updated"></span>
       <button class="refresh-btn" id="refreshBtn" onclick="load()">Refresh</button>
+      <a href="/admin/logout" style="font-size:0.82rem;color:#555;">Sign out</a>
     </div>
   </header>
 
@@ -456,6 +457,7 @@
 
       try {
         const res = await fetch(API_LOGS);
+        if (res.status === 401) { window.location.href = "/admin/login"; return; }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         renderStats(data.stats);

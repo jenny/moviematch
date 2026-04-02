@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieMatch Admin — Sign in</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: #e8e8e8;
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #444;
+    }
+
+    .error {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #3a1a1a;
+      color: #e05c5c;
+      margin-bottom: 20px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #242424;
+      color: #e8e8e8;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    button[type="submit"]:hover {
+      background: #2e2e2e;
+      border-color: #444;
+    }
+
+    button[type="submit"]:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>MovieMatch</h1>
+    <p class="subtitle">Admin sign-in</p>
+    <div id="error" class="error" hidden></div>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="username" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required />
+      <button type="submit" id="submitBtn">Sign in</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("submitBtn");
+      const err = document.getElementById("error");
+      btn.disabled = true;
+      err.hidden = true;
+
+      try {
+        const res = await fetch("/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+          }),
+        });
+
+        if (res.ok) {
+          window.location.href = "/admin.html";
+        } else {
+          err.textContent = "Invalid credentials.";
+          err.hidden = false;
+          btn.disabled = false;
+        }
+      } catch {
+        err.textContent = "Connection error. Please try again.";
+        err.hidden = false;
+        btn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+
+</html>

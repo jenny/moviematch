@@ -4,7 +4,9 @@ import os
 import glob
 import threading
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+
+from api.auth import require_admin
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -47,7 +49,7 @@ def _run_pipeline(n: int):
             _init_status["running"] = False
 
 
-@router.post("/initialize", status_code=202)
+@router.post("/initialize", status_code=202, dependencies=[Depends(require_admin)])
 def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
     with _init_lock:
         if _init_status["running"]:
@@ -62,7 +64,7 @@ def initialize(request: InitializeRequest, background_tasks: BackgroundTasks):
     return {"message": "Initialization started", "n": request.n}
 
 
-@router.get("/status", response_model=StatusResponse)
+@router.get("/status", response_model=StatusResponse, dependencies=[Depends(require_admin)])
 def status():
     movie_files = [
         f for f in glob.glob(os.path.join(DATA_DIR, "*.json"))
@@ -80,7 +82,7 @@ def status():
     )
 
 
-@router.get("/logs")
+@router.get("/logs", dependencies=[Depends(require_admin)])
 def logs():
     entries = []
     log_path = os.path.join(LOG_DIR, "search.log")
