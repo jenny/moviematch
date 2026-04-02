@@ -17,9 +17,11 @@
 | `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
-| `api/app.py` | FastAPI app factory, CORS, lifespan |
+| `api/app.py` | FastAPI app factory, CORS, lifespan; login/logout routes |
+| `api/auth.py` | HMAC-SHA256 session cookie signing; `require_admin` FastAPI dependency |
+| `login.html` | Admin login page (dark theme, JSON POST via fetch) |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
-| `api/routes/admin.py` | `/initialize`, `/status`, `/logs` |
+| `api/routes/admin.py` | `/initialize`, `/status`, `/logs` — all require admin auth |
 | `api/routes/streaming.py` | `GET /streaming` — streaming provider lookup via Watchmode (primary) or TMDB (fallback) |
 | `logger.py` | JSON request logging; DEBUG level locally, INFO on Railway; writes to rotating file locally, stdout on Railway |
 | `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
@@ -47,12 +49,15 @@ Run in venv with: `pytest` from project root.
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
 | `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache) |
+| `tests/test_auth.py` | Cookie signing: valid tokens, expiry, tampered signatures, missing secret |
 
 **No test touches the real Anthropic, TMDB, or Watchmode APIs.** All external calls are mocked at the module level.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
 Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
+
+Admin auth (all three required to enable the admin panel; fails closed if any is unset): `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SECRET_KEY` (random 32-byte hex string — generate with `openssl rand -hex 32`)
 
 ## Key Decisions
 - Haiku-first strategy: most queries resolve in round 1 without Opus
