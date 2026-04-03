@@ -637,6 +637,11 @@
     let allResults = [];
     let overlayIndex = 0;
 
+    // Keyed by "title|year" → Promise<data>. Storing promises means an in-flight
+    // prefetch and a direct fetch triggered by opening the overlay share the same
+    // request — no duplicate network calls.
+    const streamingCache = new Map();
+
     // ── Rotating placeholder ─────────────────────────────────────────
 
     fetch("hints.json")
@@ -703,6 +708,8 @@
                 setStatus(event.message || "No relevant matches found. Try a different query.");
               } else {
                 setStatus(`${resultCount} match${resultCount !== 1 ? "es" : ""} for "${query}"`);
+                // Batch-fetch all streaming providers now that we have the full result set.
+                batchPrefetchStreamingProviders(allResults);
               }
             } else if (event.type === "error") {
               throw new Error(event.message);
@@ -841,15 +848,56 @@
       fetchStreamingProviders(result.title, result.year || "");
     }
 
+    // Raw network fetch — returns parsed JSON. Callers store the returned Promise
+    // in streamingCache so the same request is never duplicated.
+    async function fetchStreamingData(title, year) {
+      const params = new URLSearchParams({ title });
+      if (year) params.set("year", year);
+      const res = await fetch(`/streaming?${params}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    // Fired once after the SSE stream completes. Sends a single batch request for all
+    // result titles and populates streamingCache so overlay opens are instant.
+    async function batchPrefetchStreamingProviders(results) {
+      if (!results.length) return;
+      try {
+        const titles = results.map(r => ({ title: r.title, year: r.year || "" }));
+        const res = await fetch("/streaming/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ titles }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        for (const item of data.results) {
+          const key = `${item.title}|${item.year || ""}`;
+          // Don't overwrite an in-flight or already-resolved entry (e.g., user opened
+          // an overlay before the batch completed and a direct fetch is underway).
+          if (!streamingCache.has(key)) {
+            streamingCache.set(key, Promise.resolve({ providers: item.providers }));
+          }
+        }
+      } catch {
+        // Silently fail — fetchStreamingProviders will fall back to direct per-movie fetch
+      }
+    }
+
+    // Renders streaming providers into the overlay. Uses the cache when available
+    // so the overlay shows icons instantly if the prefetch already resolved.
     async function fetchStreamingProviders(title, year) {
       const container = document.getElementById("streamingProviders");
       if (!container) return;
+
+      const key = `${title}|${year || ""}`;
+      // Re-use an existing Promise (resolved or in-flight) or start a new fetch.
+      if (!streamingCache.has(key)) {
+        streamingCache.set(key, fetchStreamingData(title, year));
+      }
+
       try {
-        const params = new URLSearchParams({ title });
-        if (year) params.set("year", year);
-        const res = await fetch(`/streaming?${params}`);
-        if (!res.ok) throw new Error();
-        const data = await res.json();
+        const data = await streamingCache.get(key);
         if (!container.isConnected) return; // user navigated away
 
         if (!data.providers || data.providers.length === 0) {
@@ -870,6 +918,8 @@
           container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}.</span>`;
         }
       } catch {
+        // Clear the failed entry so a later open can retry.
+        streamingCache.delete(key);
         if (container.isConnected) {
           container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable.</span>`;
         }
