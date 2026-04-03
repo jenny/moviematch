@@ -33,7 +33,8 @@ def make_meta(usage=None, error=None):
 
 @pytest.fixture(scope="module")
 def client():
-    with patch("db.get_model", return_value=MagicMock()):
+    with patch("db.get_model", return_value=MagicMock()), \
+         patch("api.routes.search.log_request"):  # prevent test runs from writing to search.log
         with TestClient(app) as c:
             yield c
 
@@ -194,6 +195,75 @@ class TestStreamingEndpoint:
     def test_missing_title_returns_422(self, client):
         response = client.get("/streaming")
         assert response.status_code == 422
+
+
+class TestStreamingBatchEndpoint:
+    def test_returns_providers_for_multiple_titles(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", side_effect=[111, 222]), \
+             patch("api.routes.streaming.watchmode.fetch_providers", side_effect=[
+                 [{"name": "Netflix", "type": "sub", "logo": None}],
+                 [{"name": "Hulu", "type": "sub", "logo": None}],
+             ]):
+            response = client.post("/streaming/batch", json={
+                "titles": [
+                    {"title": "Inception", "year": "2010"},
+                    {"title": "The Matrix", "year": "1999"},
+                ]
+            })
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["results"]) == 2
+        assert data["results"][0]["title"] == "Inception"
+        assert data["results"][0]["providers"] == [{"name": "Netflix", "type": "sub", "logo": None}]
+        assert data["results"][1]["title"] == "The Matrix"
+        assert data["results"][1]["providers"] == [{"name": "Hulu", "type": "sub", "logo": None}]
+
+    def test_exceeding_ten_titles_returns_422(self, client):
+        response = client.post("/streaming/batch", json={
+            "titles": [{"title": f"Movie {i}", "year": "2020"} for i in range(11)]
+        })
+        assert response.status_code == 422
+
+    def test_empty_titles_returns_empty_results(self, client):
+        response = client.post("/streaming/batch", json={"titles": []})
+        assert response.status_code == 200
+        assert response.json() == {"results": []}
+
+    def test_watchmode_not_found_returns_empty_providers(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=None):
+            response = client.post("/streaming/batch", json={
+                "titles": [{"title": "Unknown Movie XYZ", "year": ""}]
+            })
+        assert response.status_code == 200
+        assert response.json()["results"][0]["providers"] == []
+
+    def test_falls_back_to_tmdb_when_no_watchmode_key(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=238), \
+             patch("api.routes.streaming.fetch_watch_providers", return_value=[
+                 {"name": "Netflix", "type": "sub", "logo": None}
+             ]):
+            response = client.post("/streaming/batch", json={
+                "titles": [{"title": "The Godfather", "year": "1972"}]
+            })
+        assert response.status_code == 200
+        assert response.json()["results"][0]["providers"] == [{"name": "Netflix", "type": "sub", "logo": None}]
+
+    def test_missing_titles_field_returns_422(self, client):
+        response = client.post("/streaming/batch", json={})
+        assert response.status_code == 422
+
+    def test_year_is_optional_in_batch(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=999), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[]):
+            response = client.post("/streaming/batch", json={
+                "titles": [{"title": "Some Movie"}]
+            })
+        assert response.status_code == 200
+        assert response.json()["results"][0]["year"] == ""
 
 
 class TestHints:
