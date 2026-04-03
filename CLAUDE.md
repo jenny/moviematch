@@ -72,7 +72,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - Add clear inline comments for future collaborators
 - Add and update tests and documentation, including CLAUDE.md, with each change
 - Run the entire test suite and confirm all tests pass before making commits
-- Follow best practices for atomic commits
+- Each commit should represent one logical change: a feature, a fix, or a refactor — not a mix. Group the implementation, its tests, and any doc updates together in the same commit. A commit should be independently reviewable and leave the codebase in a working state.
 
 ## Forbidden Directories
 Do not read or modify files in these directories:
