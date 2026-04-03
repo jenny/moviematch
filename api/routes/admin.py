@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 from pipeline import initialize_all
 from db import vector_count
 from config import DATA_DIR, LOG_DIR
+import watchmode as watchmode_module
 
 router = APIRouter()
 
@@ -80,6 +81,15 @@ def status():
         initializing=_init_status["running"],
         last_init_result=_init_status["last_result"]
     )
+
+
+@router.get("/watchmode", dependencies=[Depends(require_admin)])
+def watchmode_stats():
+    """Return Watchmode API usage stats for the admin panel.
+
+    Counters are session-lifetime (reset on process restart / Railway deploy).
+    """
+    return watchmode_module.get_stats()
 
 
 @router.get("/logs", dependencies=[Depends(require_admin)])

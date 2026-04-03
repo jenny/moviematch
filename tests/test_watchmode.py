@@ -1,9 +1,13 @@
+import time
 from unittest.mock import patch, MagicMock
 
 import watchmode
 
 
 class TestSearchTitle:
+    def setup_method(self):
+        watchmode._cache.clear()
+
     def test_returns_id_for_first_result(self):
         mock_resp = MagicMock()
         mock_resp.json.return_value = {"title_results": [{"id": 99, "year": 2004}, {"id": 100, "year": 2005}]}
@@ -34,6 +38,9 @@ class TestSearchTitle:
 
 
 class TestFetchProviders:
+    def setup_method(self):
+        watchmode._cache.clear()
+
     def test_includes_sub_rent_buy_free_sources(self):
         sources = [
             {"source_id": 203, "name": "Netflix", "type": "sub"},
@@ -85,3 +92,65 @@ class TestFetchProviders:
              patch("watchmode._source_logos_loaded", True):
             result = watchmode.fetch_providers(12345)
         assert result == []
+
+
+class TestTTLCache:
+    def setup_method(self):
+        watchmode._cache.clear()
+
+    def test_search_title_returns_cached_result_on_second_call(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"title_results": [{"id": 99, "year": 2010}]}
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("requests.get", return_value=mock_resp) as mock_get:
+            result1 = watchmode.search_title("Inception", "2010")
+            result2 = watchmode.search_title("Inception", "2010")  # cache hit
+        assert result1 == 99
+        assert result2 == 99
+        assert mock_get.call_count == 1  # only one real API call
+
+    def test_search_title_caches_not_found(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"title_results": []}
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("requests.get", return_value=mock_resp) as mock_get:
+            result1 = watchmode.search_title("Unknown Movie XYZ", "")
+            result2 = watchmode.search_title("Unknown Movie XYZ", "")  # cache hit (None)
+        assert result1 is None
+        assert result2 is None
+        assert mock_get.call_count == 1
+
+    def test_search_title_does_not_cache_on_exception(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"title_results": [{"id": 99, "year": 2010}]}
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("requests.get", side_effect=[Exception("timeout"), mock_resp]) as mock_get:
+            result1 = watchmode.search_title("Inception", "2010")  # fails, not cached
+            result2 = watchmode.search_title("Inception", "2010")  # retry hits API
+        assert result1 is None
+        assert result2 == 99
+        assert mock_get.call_count == 2
+
+    def test_search_title_refetches_after_ttl_expires(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"title_results": [{"id": 99, "year": 2010}]}
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("requests.get", return_value=mock_resp) as mock_get:
+            with patch("watchmode.time.time", return_value=0.0):
+                watchmode.search_title("Inception", "2010")
+            with patch("watchmode.time.time", return_value=float(watchmode._CACHE_TTL + 1)):
+                result = watchmode.search_title("Inception", "2010")  # TTL expired
+        assert result == 99
+        assert mock_get.call_count == 2
+
+    def test_fetch_providers_returns_cached_result_on_second_call(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = [{"source_id": 203, "name": "Netflix", "type": "sub"}]
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("requests.get", return_value=mock_resp) as mock_get, \
+             patch("watchmode._source_logos", {203: "https://cdn.example.com/netflix.jpg"}), \
+             patch("watchmode._source_logos_loaded", True):
+            result1 = watchmode.fetch_providers(12345)
+            result2 = watchmode.fetch_providers(12345)  # cache hit
+        assert result1 == result2
+        assert mock_get.call_count == 1
