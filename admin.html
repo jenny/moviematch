@@ -195,7 +195,9 @@
 
     .latency-table td.p50,
     .latency-table td.p90,
-    .latency-table td.p99 { color: #e8e8e8; }
+    .latency-table td.p99 {
+      color: #e8e8e8;
+    }
 
     .no-data {
       font-size: 0.9rem;
@@ -425,9 +427,17 @@
       transition: width 0.4s ease;
     }
 
-    .budget-bar-fill.green  { background: #4adf86; }
-    .budget-bar-fill.yellow { background: #ff9f4a; }
-    .budget-bar-fill.red    { background: #e05c5c; }
+    .budget-bar-fill.green {
+      background: #4adf86;
+    }
+
+    .budget-bar-fill.yellow {
+      background: #ff9f4a;
+    }
+
+    .budget-bar-fill.red {
+      background: #e05c5c;
+    }
 
     .budget-bar-label {
       display: flex;
@@ -553,21 +563,22 @@
 
     function renderWatchmode(wm) {
       const container = document.getElementById("watchmodeContent");
-      const calls = wm.api_calls_session ?? 0;
+      const callsMonth = wm.api_calls_month ?? 0;
+      const callsSession = wm.api_calls_session ?? 0;
       const hits = wm.cache_hits_session ?? 0;
       const cacheSize = wm.cache_size ?? 0;
       const limit = wm.monthly_limit ?? 1000;
-      const total = calls + hits;
+      const total = callsMonth + hits;
       const hitRate = total > 0 ? Math.round(hits / total * 100) : null;
-      const pct = Math.min(calls / limit * 100, 100);
+      const pct = Math.min(callsMonth / limit * 100, 100);
       const barClass = pct >= 80 ? "red" : pct >= 50 ? "yellow" : "green";
 
       container.innerHTML = `
         <div class="watchmode-grid">
           <div class="card">
-            <div class="card-label">API calls (session)</div>
-            <div class="card-value ${calls === 0 ? "muted" : ""}">${calls.toLocaleString()}</div>
-            <div class="card-sub">of ${limit.toLocaleString()} / month free tier</div>
+            <div class="card-label">API calls (this month)</div>
+            <div class="card-value ${callsMonth === 0 ? "muted" : ""}">${callsMonth.toLocaleString()}</div>
+            <div class="card-sub">${callsSession.toLocaleString()} this session · ${limit.toLocaleString()} / month free tier</div>
           </div>
           <div class="card">
             <div class="card-label">Cache hits (session)</div>
@@ -585,11 +596,11 @@
             <div class="budget-bar-fill ${barClass}" style="width: ${pct.toFixed(1)}%"></div>
           </div>
           <div class="budget-bar-label">
-            <span>${calls.toLocaleString()} calls this session</span>
+            <span>${callsMonth.toLocaleString()} calls this month</span>
             <span>${limit.toLocaleString()} / month limit</span>
           </div>
         </div>
-        <div class="watchmode-note">Session counters reset on process restart. Use Railway logs and grep for <code>[watchmode_api_call]</code> for accurate monthly totals.</div>
+        <div class="watchmode-note">Monthly counter resets on the 1st of each month.</div>
       `;
     }
 
@@ -638,10 +649,10 @@
       }
 
       const rows = [
-        { label: "Total",     avg: s.avg_total_ms,     p50: s.p50_total_ms,     p90: s.p90_total_ms,     p99: s.p99_total_ms },
-        { label: "Claude",    avg: s.avg_claude_ms,    p50: s.p50_claude_ms,    p90: s.p90_claude_ms,    p99: s.p99_claude_ms },
+        { label: "Total", avg: s.avg_total_ms, p50: s.p50_total_ms, p90: s.p90_total_ms, p99: s.p99_total_ms },
+        { label: "Claude", avg: s.avg_claude_ms, p50: s.p50_claude_ms, p90: s.p90_claude_ms, p99: s.p99_claude_ms },
         { label: "Embedding", avg: s.avg_embedding_ms, p50: s.p50_embedding_ms, p90: s.p90_embedding_ms, p99: s.p99_embedding_ms },
-        { label: "Chroma",    avg: s.avg_chroma_ms,    p50: s.p50_chroma_ms,    p90: s.p90_chroma_ms,    p99: s.p99_chroma_ms },
+        { label: "Chroma", avg: s.avg_chroma_ms, p50: s.p50_chroma_ms, p90: s.p90_chroma_ms, p99: s.p99_chroma_ms },
       ];
 
       container.innerHTML = `

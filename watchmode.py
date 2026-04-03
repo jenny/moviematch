@@ -9,16 +9,22 @@ Free tier: 1,000 requests/month. Each /streaming call uses 2 requests (search + 
 plus one shared request for the source logo catalog (cached in memory for the process lifetime).
 Every non-cached Watchmode API call is logged with the tag [watchmode_api_call] for grep-based
 monitoring of monthly budget consumption.
+
+The monthly API call count is persisted to LOG_DIR/watchmode_calls.json so it survives
+process restarts and Railway deploys. It resets automatically when the calendar month changes.
 """
 
+import datetime
+import json
 import logging
+import os
 import threading
 import time
 from typing import Any
 
 import requests
 
-from config import WATCHMODE_API_KEY
+from config import LOG_DIR, WATCHMODE_API_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +44,58 @@ _CACHE_TTL = 86400  # seconds
 
 # Session-lifetime API usage counters (reset on process restart / Railway deploy).
 # Used by the admin panel to show budget consumption at a glance.
-_api_calls = 0    # real Watchmode HTTP requests made (cache misses + logo catalog)
+_api_calls = 0    # real Watchmode HTTP requests made this session
 _cache_hits = 0   # lookups served from cache (API calls saved)
+
+# Persistent monthly counter — survives process restarts and Railway deploys.
+# Backed by LOG_DIR/watchmode_calls.json (same volume as search.log in production).
+_COUNTER_FILE = os.path.join(LOG_DIR, "watchmode_calls.json")
+_counter_lock = threading.Lock()
+_api_calls_month = 0  # loaded from file on startup; resets when calendar month changes
+
+
+def _get_current_month() -> str:
+    return datetime.datetime.utcnow().strftime("%Y-%m")
+
+
+def _load_persistent_counter() -> None:
+    """Load the monthly API call count from disk, ignoring it if the month has changed."""
+    global _api_calls_month
+    try:
+        with open(_COUNTER_FILE) as f:
+            data = json.load(f)
+        if data.get("month") == _get_current_month():
+            _api_calls_month = int(data.get("count", 0))
+        # Different month — leave at 0; file will be overwritten on next API call
+    except (FileNotFoundError, ValueError, KeyError):
+        pass  # no file yet or corrupt data — start from 0
+
+
+def _persist_counter() -> None:
+    """Write the current monthly API call count to disk.
+
+    Called under _counter_lock after each real API request. Fails silently so a
+    read-only filesystem (e.g. no volume mounted) doesn't break the app.
+    """
+    try:
+        os.makedirs(os.path.dirname(_COUNTER_FILE) or ".", exist_ok=True)
+        with open(_COUNTER_FILE, "w") as f:
+            json.dump({"month": _get_current_month(), "count": _api_calls_month}, f)
+    except Exception as e:
+        logger.warning(f"Watchmode: failed to persist monthly counter: {e}")
+
+
+def _increment_api_calls() -> None:
+    """Increment session and monthly counters, then persist the monthly count to disk."""
+    global _api_calls, _api_calls_month
+    with _counter_lock:
+        _api_calls += 1
+        _api_calls_month += 1
+        _persist_counter()
+
+
+# Load persistent counter once at module import time.
+_load_persistent_counter()
 
 
 def _cache_get(key: str) -> tuple[bool, Any]:
@@ -66,8 +122,12 @@ def get_stats() -> dict:
     """Return current Watchmode API usage stats for the admin panel."""
     with _cache_lock:
         cache_size = len(_cache)
+    with _counter_lock:
+        calls_month = _api_calls_month
+        calls_session = _api_calls
     return {
-        "api_calls_session": _api_calls,
+        "api_calls_month": calls_month,    # persists across deploys (primary budget metric)
+        "api_calls_session": calls_session, # resets on process restart (useful for debugging)
         "cache_hits_session": _cache_hits,
         "cache_size": cache_size,
         "monthly_limit": 1000,
@@ -85,8 +145,7 @@ def _load_source_logos() -> None:
         if _source_logos_loaded:
             return
         try:
-            global _api_calls
-            _api_calls += 1
+            _increment_api_calls()
             logger.info("[watchmode_api_call] sources catalog")
             response = requests.get(
                 WATCHMODE_BASE_URL + "/sources/",
@@ -116,10 +175,7 @@ def search_title(title: str, year: str = "") -> int | None:
     if hit:
         return cached  # may be None (title not found on Watchmode)
 
-    # Increment under _cache_lock so all counter mutations are serialized by one lock.
-    with _cache_lock:
-        global _api_calls
-        _api_calls += 1
+    _increment_api_calls()
     logger.info(f"[watchmode_api_call] search title='{title}' year='{year}'")
     try:
         response = requests.get(
@@ -170,10 +226,7 @@ def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
         return cached
 
     _load_source_logos()
-    # Increment under _cache_lock so all counter mutations are serialized by one lock.
-    with _cache_lock:
-        global _api_calls
-        _api_calls += 1
+    _increment_api_calls()
     logger.info(f"[watchmode_api_call] providers title_id={title_id}")
     try:
         response = requests.get(
