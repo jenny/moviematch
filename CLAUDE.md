@@ -65,14 +65,14 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - Background thread ingests filmography discoveries into vector DB for future queries
 - `rerank` and `rerank_stream` share the same prompt/logic; `rerank` is kept for non-streaming use
 
-## Model Use
-- Use default model for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research
+## Model Use During Development
+- Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
 
 ## Coding Hygiene
-- Add clear inline comments for future collaborators
-- Add and update tests and documentation, including CLAUDE.md, with each change
-- Run the entire test suite and confirm all tests pass before making commits
-- Each commit should represent one logical change: a feature, a fix, or a refactor — not a mix. Group the implementation, its tests, and any doc updates together in the same commit. A commit should be independently reviewable and leave the codebase in a working state.
+- Add clear inline comments for future collaborators.
+- Add and update tests and documentation, including CLAUDE.md, with each change.
+- Run the entire test suite and confirm all tests pass before making commits. You do not need to ask for approval to run tests.
+- Each commit should contain one logical change —- a feature, a fix, or a refactor -— not a mix. Group the implementation, its tests, and any doc updates together in the same commit. A commit should be independently reviewable and leave the codebase in a working state.
 
 ## Forbidden Directories
 Do not read or modify files in these directories:
