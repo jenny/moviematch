@@ -69,6 +69,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
 
 ## Coding Hygiene
+- Each session should implement changes in a short-lived feature branch that is deleted after code is merged to main.
 - Add clear inline comments for future collaborators.
 - Add and update tests and documentation, including CLAUDE.md, with each change.
 - Run the entire test suite and confirm all tests pass before making commits. You do not need to ask for approval to run tests.
