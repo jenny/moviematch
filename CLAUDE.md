@@ -69,9 +69,10 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - Use default model for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research
 
 ## Coding Hygiene
-- Clear inline documentation for future collaborators
-- Add and update tests and documentation as you go
-- Atomic commits
+- Add clear inline comments for future collaborators
+- Add and update tests and documentation, including CLAUDE.md, with each change
+- Run the entire test suite and confirm all tests pass before making commits
+- Follow best practices for atomic commits
 
 ## Forbidden Directories
 Do not read or modify files in these directories:

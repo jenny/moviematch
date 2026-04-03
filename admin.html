@@ -385,6 +385,63 @@
       color: #333;
       flex-shrink: 0;
     }
+
+    /* ── Watchmode API section ── */
+
+    .watchmode-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .watchmode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    /* Cards nested inside a section need a lighter background to stand out. */
+    .watchmode-grid .card {
+      background: #222;
+      border-color: #333;
+    }
+
+    .budget-bar-wrap {
+      margin-top: 4px;
+    }
+
+    .budget-bar-track {
+      height: 6px;
+      background: #2a2a2a;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .budget-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .budget-bar-fill.green  { background: #4adf86; }
+    .budget-bar-fill.yellow { background: #ff9f4a; }
+    .budget-bar-fill.red    { background: #e05c5c; }
+
+    .budget-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    .watchmode-note {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: #444;
+    }
   </style>
 </head>
 
@@ -438,6 +495,13 @@
       <div class="table-footer" id="tableFooter"></div>
     </div>
 
+    <div class="watchmode-section">
+      <div class="section-title">Watchmode API</div>
+      <div id="watchmodeContent">
+        <div class="no-data">Loading…</div>
+      </div>
+    </div>
+
     <div class="projector-section">
       <div class="section-title">Cost projector</div>
       <div id="projectorContent">
@@ -449,11 +513,16 @@
 
   <script>
     const API_LOGS = "/admin/logs";
+    const API_WATCHMODE = "/admin/watchmode";
     const QUERY_TRUNCATE = 60;
 
     async function load() {
       const btn = document.getElementById("refreshBtn");
       btn.disabled = true;
+
+      // Start the watchmode request immediately so it runs in parallel,
+      // but don't let it block the main panel from rendering.
+      const wmFetch = fetch(API_WATCHMODE);
 
       try {
         const res = await fetch(API_LOGS);
@@ -471,6 +540,57 @@
       } finally {
         btn.disabled = false;
       }
+
+      // Render the watchmode section independently — a failure here
+      // never affects the main panel.
+      try {
+        const wmRes = await wmFetch;
+        if (wmRes.ok) renderWatchmode(await wmRes.json());
+      } catch {
+        // Silently fail — watchmode content stays as "Loading…"
+      }
+    }
+
+    function renderWatchmode(wm) {
+      const container = document.getElementById("watchmodeContent");
+      const calls = wm.api_calls_session ?? 0;
+      const hits = wm.cache_hits_session ?? 0;
+      const cacheSize = wm.cache_size ?? 0;
+      const limit = wm.monthly_limit ?? 1000;
+      const total = calls + hits;
+      const hitRate = total > 0 ? Math.round(hits / total * 100) : null;
+      const pct = Math.min(calls / limit * 100, 100);
+      const barClass = pct >= 80 ? "red" : pct >= 50 ? "yellow" : "green";
+
+      container.innerHTML = `
+        <div class="watchmode-grid">
+          <div class="card">
+            <div class="card-label">API calls (session)</div>
+            <div class="card-value ${calls === 0 ? "muted" : ""}">${calls.toLocaleString()}</div>
+            <div class="card-sub">of ${limit.toLocaleString()} / month free tier</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Cache hits (session)</div>
+            <div class="card-value ${hits === 0 ? "muted" : ""}">${hits.toLocaleString()}</div>
+            <div class="card-sub">${hitRate !== null ? hitRate + "% hit rate" : "no lookups yet"}</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Cache entries</div>
+            <div class="card-value ${cacheSize === 0 ? "muted" : ""}">${cacheSize.toLocaleString()}</div>
+            <div class="card-sub">24 h TTL</div>
+          </div>
+        </div>
+        <div class="budget-bar-wrap">
+          <div class="budget-bar-track">
+            <div class="budget-bar-fill ${barClass}" style="width: ${pct.toFixed(1)}%"></div>
+          </div>
+          <div class="budget-bar-label">
+            <span>${calls.toLocaleString()} calls this session</span>
+            <span>${limit.toLocaleString()} / month limit</span>
+          </div>
+        </div>
+        <div class="watchmode-note">Session counters reset on process restart. Use Railway logs and grep for <code>[watchmode_api_call]</code> for accurate monthly totals.</div>
+      `;
     }
 
     function fmt(val, suffix = "") {
@@ -512,7 +632,7 @@
 
     function renderLatencyBar(s) {
       const container = document.getElementById("latencyContent");
-      if (!s.p50_total_ms) {
+      if (s.p50_total_ms == null) {
         container.innerHTML = '<div class="no-data">No data yet.</div>';
         return;
       }
