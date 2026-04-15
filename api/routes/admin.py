@@ -1,9 +1,11 @@
+import ipaddress
 import json
 import logging
 import os
 import glob
 import threading
 
+import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 
 from api.auth import require_admin
@@ -17,6 +19,56 @@ from config import DATA_DIR, LOG_DIR
 import watchmode as watchmode_module
 
 router = APIRouter()
+
+# Keyed by IP string; values are the most specific location string resolved.
+# Survives for the process lifetime so each unique IP is only looked up once.
+_ip_location_cache: dict[str, str | None] = {}
+
+
+def _resolve_location(ip: str) -> str | None:
+    """Return the most specific location string available for a public IP.
+
+    Resolution order (most → least specific):
+      postal code → city → region (state) → country code
+
+    Returns None for private/loopback addresses or when the lookup fails.
+    Uses ipinfo.io free tier (no key required, 50k requests/month).
+    """
+    if ip in _ip_location_cache:
+        return _ip_location_cache[ip]
+
+    # Skip private / loopback addresses without making a network call.
+    try:
+        addr = ipaddress.ip_address(ip)
+        if addr.is_private or addr.is_loopback or addr.is_link_local:
+            _ip_location_cache[ip] = None
+            return None
+    except ValueError:
+        _ip_location_cache[ip] = None
+        return None
+
+    try:
+        resp = httpx.get(f"https://ipinfo.io/{ip}/json", timeout=2.0)
+        if resp.status_code == 200:
+            data = resp.json()
+            # Pick the most specific non-empty field available.
+            location = (
+                data.get("postal")
+                or data.get("city")
+                or data.get("region")
+                or data.get("country")
+                or None
+            )
+            # Only cache successful resolutions; transient failures (network
+            # errors, non-200 responses) are left uncached so the next admin
+            # refresh can retry.
+            _ip_location_cache[ip] = location
+            return location
+    except Exception:
+        pass
+
+    return None
+
 
 _init_lock = threading.Lock()
 _init_status = {"running": False, "last_result": None}
@@ -156,4 +208,13 @@ def logs():
         "recent_query_count": len(recent_costs),
     }
 
-    return {"entries": list(reversed(entries[-50:])), "stats": stats}
+    # Resolve unique IPs to location strings (postal → city → region → country).
+    # Deduplicate first so N entries with the same IP only cost one lookup.
+    recent = list(reversed(entries[-50:]))
+    unique_ips = {e["client_ip"] for e in recent if e.get("client_ip")}
+    ip_to_location = {ip: _resolve_location(ip) for ip in unique_ips}
+    for entry in recent:
+        if ip := entry.get("client_ip"):
+            entry["location"] = ip_to_location.get(ip)
+
+    return {"entries": recent, "stats": stats}

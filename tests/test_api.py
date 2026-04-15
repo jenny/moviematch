@@ -1,4 +1,7 @@
 import json
+import os
+import tempfile
+
 import pytest
 from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
@@ -274,6 +277,134 @@ class TestHints:
         assert isinstance(hints, list)
         assert len(hints) > 0
         assert all(isinstance(h, str) for h in hints)
+
+
+class TestAdminLogs:
+    def test_location_resolved_from_client_ip(self, client):
+        from api.auth import require_admin
+        app.dependency_overrides[require_admin] = lambda: None
+        log_entry = json.dumps({
+            "timestamp": "2026-04-15T12:00:00+00:00",
+            "query": "sci-fi thriller",
+            "client_ip": "1.2.3.4",
+            "status": "ok",
+            "result_count": 3,
+            "total_ms": 800,
+        })
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".log", delete=False, dir="/tmp"
+            ) as f:
+                f.write(log_entry + "\n")
+                tmp_path = f.name
+
+            with patch("api.routes.admin.LOG_DIR", os.path.dirname(tmp_path)), \
+                 patch("api.routes.admin._resolve_location", return_value="94103") as mock_resolve:
+                # Patch the log filename to match the temp file name.
+                with patch("os.path.join", side_effect=lambda *a: tmp_path if a[-1] == "search.log" else os.path.join(*a)):
+                    response = client.get("/admin/logs")
+        finally:
+            os.unlink(tmp_path)
+            app.dependency_overrides.clear()
+
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["entries"]) == 1
+        assert data["entries"][0]["location"] == "94103"
+        mock_resolve.assert_called_once_with("1.2.3.4")
+
+    def test_missing_client_ip_omits_location(self, client):
+        from api.auth import require_admin
+        app.dependency_overrides[require_admin] = lambda: None
+        log_entry = json.dumps({
+            "timestamp": "2026-04-15T12:00:00+00:00",
+            "query": "drama",
+            "status": "ok",
+            "result_count": 2,
+            "total_ms": 500,
+        })
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".log", delete=False, dir="/tmp"
+            ) as f:
+                f.write(log_entry + "\n")
+                tmp_path = f.name
+
+            with patch("api.routes.admin.LOG_DIR", os.path.dirname(tmp_path)), \
+                 patch("api.routes.admin._resolve_location") as mock_resolve:
+                with patch("os.path.join", side_effect=lambda *a: tmp_path if a[-1] == "search.log" else os.path.join(*a)):
+                    response = client.get("/admin/logs")
+        finally:
+            os.unlink(tmp_path)
+            app.dependency_overrides.clear()
+
+        assert response.status_code == 200
+        mock_resolve.assert_not_called()
+
+
+class TestResolveLocation:
+    def test_returns_postal_code_when_available(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "94103", "city": "San Francisco", "region": "California", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp):
+            assert _resolve_location("1.2.3.4") == "94103"
+
+    def test_falls_back_to_city_when_no_postal(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "", "city": "San Francisco", "region": "California", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp):
+            assert _resolve_location("1.2.3.4") == "San Francisco"
+
+    def test_falls_back_to_region_when_no_city(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "", "city": "", "region": "California", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp):
+            assert _resolve_location("1.2.3.4") == "California"
+
+    def test_falls_back_to_country_as_last_resort(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "", "city": "", "region": "", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp):
+            assert _resolve_location("1.2.3.4") == "US"
+
+    def test_returns_none_for_private_ip(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        with patch("api.routes.admin.httpx.get") as mock_get:
+            result = _resolve_location("127.0.0.1")
+        assert result is None
+        mock_get.assert_not_called()
+
+    def test_returns_none_on_network_failure(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        with patch("api.routes.admin.httpx.get", side_effect=Exception("timeout")):
+            assert _resolve_location("1.2.3.4") is None
+        # Transient failures must not be cached so the next call can retry.
+        assert "1.2.3.4" not in _ip_location_cache
+
+    def test_caches_result_on_repeated_calls(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "10001", "city": "New York", "region": "New York", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp) as mock_get:
+            _resolve_location("5.6.7.8")
+            _resolve_location("5.6.7.8")
+        mock_get.assert_called_once()  # second call hit cache
 
 
 class TestAdminStatus:
