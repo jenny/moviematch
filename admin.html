@@ -747,7 +747,15 @@
         const badge = e.status === "ok"
           ? '<span class="badge badge-ok">ok</span>'
           : '<span class="badge badge-error">error</span>';
-        const location = e.location ? escapeHtml(e.location) : '<span style="color:#444">N/A</span>';
+        let location;
+        if (e.location) {
+          location = escapeHtml(e.location);
+          if (e.location_detail) {
+            location += `<br><span style="color:#555;font-size:0.72rem">(${escapeHtml(e.location_detail)})</span>`;
+          }
+        } else {
+          location = '<span style="color:#444">N/A</span>';
+        }
         const results = e.status === "ok" ? fmt(e.result_count) : "—";
         const totalMs = fmt(e.total_ms);
         const tokens = (e.input_tokens != null && e.output_tokens != null)

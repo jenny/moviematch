@@ -299,7 +299,7 @@ class TestAdminLogs:
                 tmp_path = f.name
 
             with patch("api.routes.admin.LOG_DIR", os.path.dirname(tmp_path)), \
-                 patch("api.routes.admin._resolve_location", return_value="94103") as mock_resolve:
+                 patch("api.routes.admin._resolve_location", return_value=("94103", "San Francisco, California")) as mock_resolve:
                 # Patch the log filename to match the temp file name.
                 with patch("os.path.join", side_effect=lambda *a: tmp_path if a[-1] == "search.log" else os.path.join(*a)):
                     response = client.get("/admin/logs")
@@ -311,6 +311,7 @@ class TestAdminLogs:
         data = response.json()
         assert len(data["entries"]) == 1
         assert data["entries"][0]["location"] == "94103"
+        assert data["entries"][0]["location_detail"] == "San Francisco, California"
         mock_resolve.assert_called_once_with("1.2.3.4")
 
     def test_missing_client_ip_omits_location(self, client):
@@ -343,14 +344,27 @@ class TestAdminLogs:
 
 
 class TestResolveLocation:
-    def test_returns_postal_code_when_available(self):
+    def test_returns_postal_with_detail_when_available(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
         _ip_location_cache.clear()
         mock_resp = MagicMock()
         mock_resp.status_code = 200
         mock_resp.json.return_value = {"postal": "94103", "city": "San Francisco", "region": "California", "country": "US"}
         with patch("api.routes.admin.httpx.get", return_value=mock_resp):
-            assert _resolve_location("1.2.3.4") == "94103"
+            primary, detail = _resolve_location("1.2.3.4")
+        assert primary == "94103"
+        assert detail == "San Francisco, California"
+
+    def test_postal_detail_omits_missing_city(self):
+        from api.routes.admin import _resolve_location, _ip_location_cache
+        _ip_location_cache.clear()
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {"postal": "94103", "city": "", "region": "California", "country": "US"}
+        with patch("api.routes.admin.httpx.get", return_value=mock_resp):
+            primary, detail = _resolve_location("1.2.3.4")
+        assert primary == "94103"
+        assert detail == "California"
 
     def test_falls_back_to_city_when_no_postal(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
@@ -359,7 +373,9 @@ class TestResolveLocation:
         mock_resp.status_code = 200
         mock_resp.json.return_value = {"postal": "", "city": "San Francisco", "region": "California", "country": "US"}
         with patch("api.routes.admin.httpx.get", return_value=mock_resp):
-            assert _resolve_location("1.2.3.4") == "San Francisco"
+            primary, detail = _resolve_location("1.2.3.4")
+        assert primary == "San Francisco"
+        assert detail is None  # no extra line for city-level resolution
 
     def test_falls_back_to_region_when_no_city(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
@@ -368,7 +384,9 @@ class TestResolveLocation:
         mock_resp.status_code = 200
         mock_resp.json.return_value = {"postal": "", "city": "", "region": "California", "country": "US"}
         with patch("api.routes.admin.httpx.get", return_value=mock_resp):
-            assert _resolve_location("1.2.3.4") == "California"
+            primary, detail = _resolve_location("1.2.3.4")
+        assert primary == "California"
+        assert detail is None
 
     def test_falls_back_to_country_as_last_resort(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
@@ -377,21 +395,23 @@ class TestResolveLocation:
         mock_resp.status_code = 200
         mock_resp.json.return_value = {"postal": "", "city": "", "region": "", "country": "US"}
         with patch("api.routes.admin.httpx.get", return_value=mock_resp):
-            assert _resolve_location("1.2.3.4") == "US"
+            primary, detail = _resolve_location("1.2.3.4")
+        assert primary == "US"
+        assert detail is None
 
-    def test_returns_none_for_private_ip(self):
+    def test_returns_none_tuple_for_private_ip(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
         _ip_location_cache.clear()
         with patch("api.routes.admin.httpx.get") as mock_get:
             result = _resolve_location("127.0.0.1")
-        assert result is None
+        assert result == (None, None)
         mock_get.assert_not_called()
 
-    def test_returns_none_on_network_failure(self):
+    def test_returns_none_tuple_on_network_failure(self):
         from api.routes.admin import _resolve_location, _ip_location_cache
         _ip_location_cache.clear()
         with patch("api.routes.admin.httpx.get", side_effect=Exception("timeout")):
-            assert _resolve_location("1.2.3.4") is None
+            assert _resolve_location("1.2.3.4") == (None, None)
         # Transient failures must not be cached so the next call can retry.
         assert "1.2.3.4" not in _ip_location_cache
 

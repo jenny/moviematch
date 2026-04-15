@@ -20,18 +20,21 @@ import watchmode as watchmode_module
 
 router = APIRouter()
 
-# Keyed by IP string; values are the most specific location string resolved.
+# Keyed by IP string; values are (primary, detail) tuples where primary is
+# the most specific location string and detail is a supplementary "City, Region"
+# line shown beneath a postal code. Both are None for unresolvable IPs.
 # Survives for the process lifetime so each unique IP is only looked up once.
-_ip_location_cache: dict[str, str | None] = {}
+_ip_location_cache: dict[str, tuple[str | None, str | None]] = {}
 
 
-def _resolve_location(ip: str) -> str | None:
-    """Return the most specific location string available for a public IP.
+def _resolve_location(ip: str) -> tuple[str | None, str | None]:
+    """Return (primary, detail) for a public IP.
 
-    Resolution order (most → least specific):
-      postal code → city → region (state) → country code
+    primary: most specific location available (postal → city → region → country)
+    detail:  "City, Region" supplementary line, set only when primary is a
+             postal code and city/region data is available; None otherwise.
 
-    Returns None for private/loopback addresses or when the lookup fails.
+    Returns (None, None) for private/loopback addresses or lookup failures.
     Uses ipinfo.io free tier (no key required, 50k requests/month).
     """
     if ip in _ip_location_cache:
@@ -41,33 +44,39 @@ def _resolve_location(ip: str) -> str | None:
     try:
         addr = ipaddress.ip_address(ip)
         if addr.is_private or addr.is_loopback or addr.is_link_local:
-            _ip_location_cache[ip] = None
-            return None
+            _ip_location_cache[ip] = (None, None)
+            return (None, None)
     except ValueError:
-        _ip_location_cache[ip] = None
-        return None
+        _ip_location_cache[ip] = (None, None)
+        return (None, None)
 
     try:
         resp = httpx.get(f"https://ipinfo.io/{ip}/json", timeout=2.0)
         if resp.status_code == 200:
             data = resp.json()
-            # Pick the most specific non-empty field available.
-            location = (
-                data.get("postal")
-                or data.get("city")
-                or data.get("region")
-                or data.get("country")
-                or None
-            )
-            # Only cache successful resolutions; transient failures (network
-            # errors, non-200 responses) are left uncached so the next admin
-            # refresh can retry.
-            _ip_location_cache[ip] = location
-            return location
+            postal  = data.get("postal") or None
+            city    = data.get("city")   or None
+            region  = data.get("region") or None
+            country = data.get("country") or None
+
+            if postal:
+                # Build a "City, Region" detail line to display beneath the zip.
+                detail_parts = [p for p in (city, region) if p]
+                detail = ", ".join(detail_parts) if detail_parts else None
+                result = (postal, detail)
+            else:
+                # For coarser resolutions there's nothing more specific to add.
+                primary = city or region or country or None
+                result = (primary, None)
+
+            # Only cache successful resolutions; transient failures are left
+            # uncached so the next admin refresh can retry.
+            _ip_location_cache[ip] = result
+            return result
     except Exception:
         pass
 
-    return None
+    return (None, None)
 
 
 _init_lock = threading.Lock()
@@ -208,13 +217,16 @@ def logs():
         "recent_query_count": len(recent_costs),
     }
 
-    # Resolve unique IPs to location strings (postal → city → region → country).
+    # Resolve unique IPs to (primary, detail) tuples.
     # Deduplicate first so N entries with the same IP only cost one lookup.
     recent = list(reversed(entries[-50:]))
     unique_ips = {e["client_ip"] for e in recent if e.get("client_ip")}
     ip_to_location = {ip: _resolve_location(ip) for ip in unique_ips}
     for entry in recent:
         if ip := entry.get("client_ip"):
-            entry["location"] = ip_to_location.get(ip)
+            primary, detail = ip_to_location.get(ip, (None, None))
+            entry["location"] = primary
+            if detail:
+                entry["location_detail"] = detail
 
     return {"entries": recent, "stats": stats}
