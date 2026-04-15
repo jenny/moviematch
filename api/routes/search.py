@@ -26,10 +26,23 @@ class SearchRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=500)
 
 
+def _get_client_ip(request: Request) -> str | None:
+    """Extract the real client IP from the request.
+
+    Railway (and most reverse proxies) set X-Forwarded-For; fall back to the
+    direct connection address for local development.
+    """
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else None
+
+
 @router.post("/recommend")
 @limiter.limit(RATE_LIMIT)
 async def search_endpoint(request: Request, body: SearchRequest):
     timestamp = datetime.now(timezone.utc).isoformat()
+    client_ip = _get_client_ip(request)
     t0 = time.perf_counter()
 
     async def generate():
@@ -60,6 +73,7 @@ async def search_endpoint(request: Request, body: SearchRequest):
                     log_request({
                         "timestamp": timestamp,
                         "query": body.query,
+                        "client_ip": client_ip,
                         "status": "error" if error else "ok",
                         "result_count": result_count,
                         "embedding_ms": meta.get("embedding_ms"),
@@ -96,6 +110,7 @@ async def search_endpoint(request: Request, body: SearchRequest):
             log_request({
                 "timestamp": timestamp,
                 "query": body.query,
+                "client_ip": client_ip,
                 "status": "error",
                 "error": str(e),
                 "traceback": tb,

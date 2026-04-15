@@ -306,6 +306,12 @@
       white-space: nowrap;
     }
 
+    td.location-cell {
+      font-size: 0.8rem;
+      color: #aaa;
+      white-space: nowrap;
+    }
+
     td.tools {
       font-size: 0.78rem;
       color: #ff9f4a;
@@ -489,6 +495,7 @@
             <th>Time</th>
             <th>Query</th>
             <th>Status</th>
+            <th>Location</th>
             <th style="text-align:right">Results</th>
             <th style="text-align:right">Total ms</th>
             <th style="text-align:right">Tokens in / out</th>
@@ -498,7 +505,7 @@
         </thead>
         <tbody id="queryTableBody">
           <tr class="empty-row">
-            <td colspan="8">Loading…</td>
+            <td colspan="9">Loading…</td>
           </tr>
         </tbody>
       </table>
@@ -730,7 +737,7 @@
     function _renderTableRows() {
       const tbody = document.getElementById("queryTableBody");
       if (_tableEntries.length === 0) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No requests logged yet.</td></tr>';
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="9">No requests logged yet.</td></tr>';
         return;
       }
       const visible = _tableExpanded ? _tableEntries : _tableEntries.slice(0, TABLE_PREVIEW);
@@ -740,6 +747,7 @@
         const badge = e.status === "ok"
           ? '<span class="badge badge-ok">ok</span>'
           : '<span class="badge badge-error">error</span>';
+        const location = e.location ? escapeHtml(e.location) : '<span style="color:#444">N/A</span>';
         const results = e.status === "ok" ? fmt(e.result_count) : "—";
         const totalMs = fmt(e.total_ms);
         const tokens = (e.input_tokens != null && e.output_tokens != null)
@@ -754,6 +762,7 @@
             <td class="time">${time}</td>
             <td class="query-cell">${query}</td>
             <td>${badge}</td>
+            <td class="location-cell">${location}</td>
             <td class="num">${results}</td>
             <td class="num">${totalMs}</td>
             <td class="num">${tokens}</td>
