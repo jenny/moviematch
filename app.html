@@ -796,7 +796,7 @@
         : "";
 
       const ratingHtml = result.certification
-        ? `<span class="card-rating" id="card-rating-${idx}">${escapeHtml(result.certification)}</span>`
+        ? `<span class="card-rating" id="card-rating-${idx}" title="${escapeHtml(ratingTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
         : `<span class="card-rating" id="card-rating-${idx}"></span>`;
 
       card.innerHTML = `
@@ -879,11 +879,12 @@
         : "";
 
       const overlayRatingContent = result.certification ? escapeHtml(result.certification) : "";
+      const overlayRatingTitle = result.certification ? ` title="${escapeHtml(ratingTitle(result.certification))}"` : "";
 
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating">${overlayRatingContent}</span></div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating"${overlayRatingTitle}>${overlayRatingContent}</span></div>
           ${overviewHtml}
           ${genresHtml}
           ${directorHtml}
@@ -979,7 +980,10 @@
         // Populate rating badge in the overlay and on the corresponding card.
         const rating = data.certification || "NR";
         const overlayRating = document.getElementById("overlay-rating");
-        if (overlayRating) overlayRating.textContent = rating;
+        if (overlayRating) {
+          overlayRating.textContent = rating;
+          overlayRating.title = ratingTitle(rating);
+        }
         const idx = allResults.findIndex(r => r.title === title && (r.year || "") === (year || ""));
         if (idx !== -1) updateCardRating(idx, rating);
 
@@ -1059,9 +1063,25 @@
       allResults = [];
     }
 
+    const RATING_LABELS = {
+      "G":     "Rated G: General Audiences",
+      "PG":    "Rated PG: Parental Guidance Suggested",
+      "PG-13": "Rated PG-13: Parents Strongly Cautioned",
+      "R":     "Rated R: Restricted",
+      "NC-17": "Rated NC-17: Adults Only",
+      "NR":    "Not Rated",
+    };
+
+    function ratingTitle(certification) {
+      return RATING_LABELS[certification] || "Not Rated";
+    }
+
     function updateCardRating(idx, certification) {
       const el = document.getElementById(`card-rating-${idx}`);
-      if (el && certification) el.textContent = certification;
+      if (el && certification) {
+        el.textContent = certification;
+        el.title = ratingTitle(certification);
+      }
     }
 
     function escapeHtml(str) {
