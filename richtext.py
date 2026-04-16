@@ -3,7 +3,7 @@ import os
 import json
 import glob
 
-from config import DATA_DIR, RICHTEXT_CAST_LIMIT, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_PLOT
+from config import DATA_DIR, RICHTEXT_CAST_LIMIT, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ def build_richtext(movie_json: dict) -> str:
     rich_text += "Themes and Keywords: "
     rich_text += ', '.join(k["name"] for k in movie_json.get("keywords", {}).get("keywords", []))
     rich_text += "\n\n"
-    rich_text += "Genres: "
+    rich_text += RICHTEXT_PREFIX_GENRES
     rich_text += ', '.join(g["name"] for g in movie_json.get("genres", []))
     rich_text += "\n\n"
     for crew in movie_json.get("credits", {}).get("crew", []):

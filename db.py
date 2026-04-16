@@ -106,6 +106,7 @@ def vector_query(vector: list[float], top_k: int) -> list[dict]:
             {
                 "title": m.metadata.get("title", ""),
                 "movie_poster": m.metadata.get("movie_poster", ""),
+                "certification": m.metadata.get("certification", ""),
                 "document": m.metadata.get("document", ""),
             }
             for m in results.matches
@@ -116,6 +117,7 @@ def vector_query(vector: list[float], top_k: int) -> list[dict]:
         {
             "title": meta.get("title", ""),
             "movie_poster": meta.get("movie_poster", ""),
+            "certification": meta.get("certification", ""),
             "document": doc,
         }
         for meta, doc in zip(results["metadatas"][0], results["documents"][0])
@@ -138,6 +140,7 @@ def vector_upsert_batch(vectors: list[dict]) -> None:
                 "metadata": {
                     "title": v["title"],
                     "movie_poster": v["movie_poster"],
+                    "certification": v.get("certification", ""),
                     "document": v["document"],
                 },
             }
@@ -150,5 +153,5 @@ def vector_upsert_batch(vectors: list[dict]) -> None:
             ids=[v["id"] for v in vectors],
             embeddings=[v["values"] for v in vectors],
             documents=[v["document"] for v in vectors],
-            metadatas=[{"title": v["title"], "movie_poster": v["movie_poster"]} for v in vectors],
+            metadatas=[{"title": v["title"], "movie_poster": v["movie_poster"], "certification": v.get("certification", "")} for v in vectors],
         )

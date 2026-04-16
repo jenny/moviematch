@@ -51,9 +51,18 @@ class TestParseDocument:
         result = _parse_document(doc)
         assert result["year"] == ""
 
+    def test_extracts_genres(self):
+        result = _parse_document(FULL_DOC)
+        assert result["genres"] == ["Crime", "Drama"]
+
+    def test_missing_genres_returns_empty_list(self):
+        doc = FULL_DOC.replace("Genres: Crime, Drama\n\n", "")
+        result = _parse_document(doc)
+        assert result["genres"] == []
+
     def test_empty_document_returns_all_defaults(self):
         result = _parse_document("")
-        assert result == {"year": "", "overview": "", "director": "", "cast": []}
+        assert result == {"year": "", "overview": "", "genres": [], "director": "", "cast": []}
 
     def test_cast_strips_surrounding_whitespace(self):
         doc = FULL_DOC.replace(

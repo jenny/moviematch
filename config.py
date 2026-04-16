@@ -84,5 +84,6 @@ CORS_ORIGINS = [o.strip() for o in os.getenv(
 
 # Richtext field prefixes — shared between richtext.py (writer) and main.py (parser)
 RICHTEXT_PREFIX_PLOT = "Plot: "
+RICHTEXT_PREFIX_GENRES = "Genres: "
 RICHTEXT_PREFIX_DIRECTOR = "Director: "
 RICHTEXT_PREFIX_CAST = "Top Cast: "

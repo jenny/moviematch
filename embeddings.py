@@ -7,6 +7,7 @@ from config import DATA_DIR, EMBEDDING_BATCH_SIZE
 
 logger = logging.getLogger(__name__)
 from db import get_model, vector_upsert_batch
+from tmdb import extract_certification
 
 
 def embed_text(text: str) -> list[float]:
@@ -29,6 +30,7 @@ def upsert_movie(movie_id: str) -> None:
         "values": embedding,
         "title": movie["title"],
         "movie_poster": movie.get("poster_path") or "",
+        "certification": extract_certification(movie),
         "document": movie["richtext"],
     }])
 
@@ -43,7 +45,11 @@ def load_all_richtexts() -> tuple[list[str], list[str], list[dict]]:
                 raise KeyError(f"Movie {movie.get('id', '?')} is missing richtext. Please run richtext.py before embeddings.py.")
             ids.append(str(movie["id"]))
             texts.append(movie["richtext"])
-            metadatas.append({"title": movie["title"], "movie_poster": movie.get("poster_path") or ""})
+            metadatas.append({
+                "title": movie["title"],
+                "movie_poster": movie.get("poster_path") or "",
+                "certification": extract_certification(movie),
+            })
     return ids, texts, metadatas
 
 
@@ -56,6 +62,7 @@ def initialize_all_embeddings() -> int:
             "values": emb,
             "title": meta["title"],
             "movie_poster": meta["movie_poster"],
+            "certification": meta["certification"],
             "document": doc,
         }
         for id_, emb, doc, meta in zip(ids, embeddings, docs, metadatas)

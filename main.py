@@ -2,7 +2,7 @@ import logging
 import re
 import time
 
-from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_PLOT
+from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT
 from db import get_model, vector_count, vector_query
 from claude import rerank, rerank_stream
 
@@ -11,12 +11,18 @@ logger = logging.getLogger(__name__)
 
 def _parse_document(doc: str) -> dict:
     """Extract structured fields from a richtext document string."""
-    result = {"year": "", "overview": "", "director": "", "cast": []}
+    result = {"year": "", "overview": "", "genres": [], "director": "", "cast": []}
 
     if RICHTEXT_PREFIX_PLOT in doc:
         start = doc.index(RICHTEXT_PREFIX_PLOT) + len(RICHTEXT_PREFIX_PLOT)
         end = doc.find("\n\n", start)
         result["overview"] = doc[start:end].strip() if end != -1 else doc[start:].strip()
+
+    if RICHTEXT_PREFIX_GENRES in doc:
+        start = doc.index(RICHTEXT_PREFIX_GENRES) + len(RICHTEXT_PREFIX_GENRES)
+        end = doc.find("\n", start)
+        genres_str = doc[start:end].strip() if end != -1 else doc[start:].strip()
+        result["genres"] = [g.strip() for g in genres_str.split(",") if g.strip()]
 
     if RICHTEXT_PREFIX_DIRECTOR in doc:
         start = doc.index(RICHTEXT_PREFIX_DIRECTOR) + len(RICHTEXT_PREFIX_DIRECTOR)
@@ -70,9 +76,11 @@ def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
         candidates.append({
             "title": title,
             "movie_poster": match.get("movie_poster") or "",
+            "certification": match.get("certification", ""),
             "document": full_doc[:SEARCH_DOC_TRUNCATE],
             "year": parsed["year"],
             "overview": parsed["overview"],
+            "genres": parsed["genres"],
             "director": parsed["director"],
             "cast": parsed["cast"],
         })
@@ -88,6 +96,7 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
         return [], None, timing
 
     poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+    certification_by_title = {c["title"]: c["certification"] for c in candidates}
 
     t0 = time.perf_counter()
     reranked, usage = rerank(query, candidates)
@@ -95,6 +104,7 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
 
     for result in reranked:
         result["movie_poster"] = poster_by_title.get(result["title"], "")
+        result["certification"] = certification_by_title.get(result["title"], "")
     return reranked, usage, timing
 
 
@@ -108,8 +118,10 @@ def search_stream(query: str):
         return
 
     poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
+    certification_by_title = {c["title"]: c["certification"] for c in candidates}
     year_by_title = {c["title"]: c["year"] for c in candidates}
     overview_by_title = {c["title"]: c["overview"] for c in candidates}
+    genres_by_title = {c["title"]: c["genres"] for c in candidates}
     director_by_title = {c["title"]: c["director"] for c in candidates}
     cast_by_title = {c["title"]: c["cast"] for c in candidates}
 
@@ -123,8 +135,10 @@ def search_stream(query: str):
         else:
             t = item.get("title", "")
             item["movie_poster"] = poster_by_title.get(t, "")
+            item["certification"] = certification_by_title.get(t, "")
             item["year"] = year_by_title.get(t, "")
             item["overview"] = overview_by_title.get(t, "")
+            item["genres"] = genres_by_title.get(t, [])
             item["director"] = director_by_title.get(t, "")
             item["cast"] = cast_by_title.get(t, [])
             yield item

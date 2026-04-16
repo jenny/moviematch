@@ -65,7 +65,7 @@ def fetch_discover_page(page: int, sort_by: str = "vote_average.desc") -> list[d
 def fetch_movie_detail(movie_id: int) -> dict:
     _require_tmdb_key()
     response = requests.get(
-        TMDB_BASE_URL + f"/movie/{movie_id}?append_to_response=keywords,credits",
+        TMDB_BASE_URL + f"/movie/{movie_id}?append_to_response=keywords,credits,release_dates",
         headers=TMDB_HEADERS,
         timeout=10,
     )
@@ -128,6 +128,57 @@ def fetch_watch_providers(movie_id: int, country: str = "US") -> list[dict]:
     except Exception as e:
         logger.warning(f"TMDB watch providers failed for movie {movie_id}: {e}")
         return []
+
+
+def extract_certification(movie_json: dict, country: str = "US") -> str:
+    """Extract MPAA certification from a movie JSON that includes the release_dates append.
+
+    When fetch_movie_detail() is called with append_to_response=release_dates, the
+    result is nested as movie_json["release_dates"]["results"]. Prefers theatrical
+    (type 3) certifications; falls back to any non-empty cert for the given country.
+    """
+    for entry in movie_json.get("release_dates", {}).get("results", []):
+        if entry.get("iso_3166_1") != country:
+            continue
+        for rd in entry.get("release_dates", []):
+            if rd.get("type") == 3 and rd.get("certification"):
+                return rd["certification"]
+        for rd in entry.get("release_dates", []):
+            if rd.get("certification"):
+                return rd["certification"]
+    return ""
+
+
+def fetch_certification(movie_id: int, country: str = "US") -> str:
+    """Fetch MPAA content rating for a movie (e.g. 'PG-13', 'R'). Returns '' on failure.
+
+    Used as a runtime fallback for movies ingested before certification was stored
+    in the vector DB. Calls the standalone /release_dates endpoint directly.
+    Prefers theatrical (type 3) certifications; falls back to any non-empty cert.
+    """
+    _require_tmdb_key()
+    try:
+        response = requests.get(
+            TMDB_BASE_URL + f"/movie/{movie_id}/release_dates",
+            headers=TMDB_HEADERS,
+            timeout=10,
+        )
+        response.raise_for_status()
+        for entry in response.json().get("results", []):
+            if entry.get("iso_3166_1") != country:
+                continue
+            # Prefer theatrical (type 3) release certification
+            for rd in entry.get("release_dates", []):
+                if rd.get("type") == 3 and rd.get("certification"):
+                    return rd["certification"]
+            # Fall back to any non-empty certification for this country
+            for rd in entry.get("release_dates", []):
+                if rd.get("certification"):
+                    return rd["certification"]
+        return ""
+    except Exception as e:
+        logger.warning(f"TMDB certification failed for movie {movie_id}: {e}")
+        return ""
 
 
 def filter_cast(movie_json: dict) -> dict:

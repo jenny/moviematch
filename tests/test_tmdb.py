@@ -1,7 +1,7 @@
 import math
 import pytest
 from unittest.mock import patch, MagicMock
-from tmdb import _composite_score, select_top_n, filter_cast, filter_crew, search_movie_by_title, fetch_watch_providers
+from tmdb import _composite_score, extract_certification, select_top_n, filter_cast, filter_crew, search_movie_by_title, fetch_watch_providers
 from config import (
     TMDB_MIN_VOTE_COUNT,
     SCORE_WEIGHT_RATING,
@@ -19,6 +19,41 @@ def make_movie(id=1, title="Test Movie", vote_count=1000, vote_average=7.5, popu
         "vote_average": vote_average,
         "popularity": popularity,
     }
+
+
+class TestExtractCertification:
+    def _movie(self, releases):
+        return {"release_dates": {"results": [{"iso_3166_1": "US", "release_dates": releases}]}}
+
+    def test_returns_theatrical_certification(self):
+        movie = self._movie([
+            {"type": 3, "certification": "PG-13", "release_date": "2010-07-16"},
+        ])
+        assert extract_certification(movie) == "PG-13"
+
+    def test_prefers_theatrical_over_other_types(self):
+        movie = self._movie([
+            {"type": 4, "certification": "R", "release_date": "2010-01-01"},  # digital
+            {"type": 3, "certification": "PG-13", "release_date": "2010-07-16"},  # theatrical
+        ])
+        assert extract_certification(movie) == "PG-13"
+
+    def test_falls_back_to_any_cert_when_no_theatrical(self):
+        movie = self._movie([
+            {"type": 5, "certification": "R", "release_date": "2010-01-01"},  # physical
+        ])
+        assert extract_certification(movie) == "R"
+
+    def test_returns_empty_when_no_us_entry(self):
+        movie = {"release_dates": {"results": [{"iso_3166_1": "GB", "release_dates": [{"type": 3, "certification": "15"}]}]}}
+        assert extract_certification(movie) == ""
+
+    def test_returns_empty_when_all_certs_are_blank(self):
+        movie = self._movie([{"type": 3, "certification": "", "release_date": "2010-07-16"}])
+        assert extract_certification(movie) == ""
+
+    def test_returns_empty_when_release_dates_key_absent(self):
+        assert extract_certification({}) == ""
 
 
 class TestCompositeScore:

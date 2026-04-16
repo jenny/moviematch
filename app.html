@@ -196,10 +196,27 @@
     }
 
     .card-year {
-      font-weight: 400;
+      font-weight: 600;
       color: #fff;
       margin-left: 6px;
       font-size: 0.95rem;
+    }
+
+    .card-rating {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #888;
+      border: 1px solid #3a3a3a;
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 7px;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+
+    .card-rating:empty {
+      display: none;
     }
 
     .card-explanation {
@@ -340,10 +357,27 @@
     }
 
     .overlay-title-year {
-      font-weight: 400;
+      font-weight: 700;
       color: #fff;
       font-size: 1.1rem;
       margin-left: 8px;
+    }
+
+    .overlay-rating {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #888;
+      border: 1px solid #3a3a3a;
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 8px;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+
+    .overlay-rating:empty {
+      display: none;
     }
 
     .overlay-section {
@@ -761,12 +795,16 @@
         ? `<span class="card-year">(${escapeHtml(result.year)})</span>`
         : "";
 
+      const ratingHtml = result.certification
+        ? `<span class="card-rating" id="card-rating-${idx}">${escapeHtml(result.certification)}</span>`
+        : `<span class="card-rating" id="card-rating-${idx}"></span>`;
+
       card.innerHTML = `
         <div class="card-rank">${idx + 1}</div>
         ${posterHtml}
         <div class="card-body">
           <div class="card-title">
-            <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}
+            <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}${ratingHtml}
           </div>
           <div class="card-explanation">${escapeHtml(result.explanation)}</div>
         </div>
@@ -833,11 +871,21 @@
            </div>`
         : "";
 
+      const genresHtml = result.genres && result.genres.length
+        ? `<div class="overlay-section">
+            <div class="overlay-label">Genres</div>
+            <div class="overlay-text">${result.genres.map(escapeHtml).join(", ")}</div>
+           </div>`
+        : "";
+
+      const overlayRatingContent = result.certification ? escapeHtml(result.certification) : "";
+
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}</div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating">${overlayRatingContent}</span></div>
           ${overviewHtml}
+          ${genresHtml}
           ${directorHtml}
           ${castHtml}
           <div class="overlay-section">
@@ -894,7 +942,17 @@
           // Don't overwrite an in-flight or already-resolved entry (e.g., user opened
           // an overlay before the batch completed and a direct fetch is underway).
           if (!streamingCache.has(key)) {
-            streamingCache.set(key, Promise.resolve({ providers: item.providers }));
+            streamingCache.set(key, Promise.resolve({
+              providers: item.providers,
+              certification: item.certification || "",
+            }));
+          }
+        }
+        // Update card rating badges now that certification data is available.
+        for (const item of data.results) {
+          const idx = allResults.findIndex(r => r.title === item.title);
+          if (idx !== -1) {
+            updateCardRating(idx, item.certification || "NR");
           }
         }
       } catch {
@@ -917,6 +975,13 @@
       try {
         const data = await streamingCache.get(key);
         if (!container.isConnected) return; // user navigated away
+
+        // Populate rating badge in the overlay and on the corresponding card.
+        const rating = data.certification || "NR";
+        const overlayRating = document.getElementById("overlay-rating");
+        if (overlayRating) overlayRating.textContent = rating;
+        const idx = allResults.findIndex(r => r.title === title && (r.year || "") === (year || ""));
+        if (idx !== -1) updateCardRating(idx, rating);
 
         if (!data.providers || data.providers.length === 0) {
           container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in the US</span>`;
@@ -992,6 +1057,11 @@
     function clearResults() {
       resultsEl.innerHTML = "";
       allResults = [];
+    }
+
+    function updateCardRating(idx, certification) {
+      const el = document.getElementById(`card-rating-${idx}`);
+      if (el && certification) el.textContent = certification;
     }
 
     function escapeHtml(str) {
