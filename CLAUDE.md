@@ -49,7 +49,7 @@ Run in venv with: `pytest` from project root.
 | `tests/test_main.py` | `_parse_document()` — richtext field extraction |
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers`; certification: `extract_certification`, `fetch_certification`, `get_certification_for_title` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
-| `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache) |
+| `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache); `_load_source_logos` (null URL rejection) |
 | `tests/test_auth.py` | Cookie signing: valid tokens, expiry, tampered signatures, missing secret |
 
 **No test touches the real Anthropic, TMDB, or Watchmode APIs.** All external calls are mocked at the module level.
