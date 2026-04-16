@@ -65,17 +65,15 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - `tool_choice={"type": "any"}` forces Claude to always call a tool (prevents prose responses)
 - Background thread ingests filmography discoveries into vector DB for future queries
 - `rerank` and `rerank_stream` share the same prompt/logic; `rerank` is kept for non-streaming use
-- Certification is stored in vector DB metadata at ingest time for immediate display; the async `/streaming` fetch acts as fallback and is the authoritative source of `"NR"` for unrated titles
+- Certification is stored in vector DB metadata at ingest time and displayed immediately from search results; the vector DB is the sole source of truth for ratings — the `/streaming` endpoint handles providers only
 
 ## Model Use During Development
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
 
 ## Coding Hygiene
-- Each session should implement changes in a short-lived feature branch that is deleted after code is merged to main.
-- Add clear inline comments for future collaborators.
-- Add and update tests and documentation, including CLAUDE.md, with each change.
-- Run the entire test suite and confirm all tests pass before making commits. You do not need to ask for approval to run tests.
-- Each commit should contain one logical change —- a feature, a fix, or a refactor -— not a mix. Group the implementation, its tests, and any doc updates together in the same commit. A commit should be independently reviewable and leave the codebase in a working state.
+- Discuss and get approval for the technical approach first. Do not proceed with code changes until the technical approach is agreed upon.
+- Code changes should be implemented in a short-lived feature branch that is deleted only after all code changes are committed and merged to main.
+- Code changes should include clear inline comments for future collaborators.
 
 ## Forbidden Directories
 Do not read or modify files in these directories:

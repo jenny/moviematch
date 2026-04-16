@@ -945,15 +945,7 @@
           if (!streamingCache.has(key)) {
             streamingCache.set(key, Promise.resolve({
               providers: item.providers,
-              certification: item.certification || "",
             }));
-          }
-        }
-        // Update card rating badges now that certification data is available.
-        for (const item of data.results) {
-          const idx = allResults.findIndex(r => r.title === item.title);
-          if (idx !== -1) {
-            updateCardRating(idx, item.certification || "NR");
           }
         }
       } catch {
@@ -976,16 +968,6 @@
       try {
         const data = await streamingCache.get(key);
         if (!container.isConnected) return; // user navigated away
-
-        // Populate rating badge in the overlay and on the corresponding card.
-        const rating = data.certification || "NR";
-        const overlayRating = document.getElementById("overlay-rating");
-        if (overlayRating) {
-          overlayRating.textContent = rating;
-          overlayRating.title = ratingTitle(rating);
-        }
-        const idx = allResults.findIndex(r => r.title === title && (r.year || "") === (year || ""));
-        if (idx !== -1) updateCardRating(idx, rating);
 
         if (!data.providers || data.providers.length === 0) {
           container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in the US</span>`;

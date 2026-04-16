@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, field_validator
 
 from config import WATCHMODE_API_KEY
-from tmdb import fetch_certification, fetch_watch_providers, search_movie_by_title
+from tmdb import fetch_watch_providers, search_movie_by_title
 import watchmode
 
 logger = logging.getLogger(__name__)
@@ -41,21 +41,10 @@ def get_providers_for_title(title: str, year: str) -> list[dict]:
     return fetch_watch_providers(movie_id)
 
 
-def get_certification_for_title(title: str, year: str) -> str:
-    """Return MPAA certification (e.g. 'PG-13') for a movie, or '' if unavailable."""
-    movie_id = search_movie_by_title(title, year)
-    if movie_id is None:
-        return ""
-    return fetch_certification(movie_id)
-
-
 @router.get("/streaming")
 def streaming_providers(title: str, year: str = ""):
-    """Return US streaming providers and content rating for a movie."""
-    return {
-        "providers": get_providers_for_title(title, year),
-        "certification": get_certification_for_title(title, year),
-    }
+    """Return US streaming providers for a movie."""
+    return {"providers": get_providers_for_title(title, year)}
 
 
 class TitleRequest(BaseModel):
@@ -86,15 +75,7 @@ async def streaming_providers_batch(request: BatchRequest):
             providers = await asyncio.to_thread(
                 get_providers_for_title, item.title, item.year
             )
-            certification = await asyncio.to_thread(
-                get_certification_for_title, item.title, item.year
-            )
-        return {
-            "title": item.title,
-            "year": item.year,
-            "providers": providers,
-            "certification": certification,
-        }
+        return {"title": item.title, "year": item.year, "providers": providers}
 
     results = await asyncio.gather(*[lookup(item) for item in request.titles])
     return {"results": results}
