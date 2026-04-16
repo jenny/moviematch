@@ -12,6 +12,50 @@ def _reset_counters():
     watchmode._cache_hits = 0
 
 
+class TestLoadSourceLogos:
+    def setup_method(self):
+        watchmode._source_logos.clear()
+        watchmode._source_logos_loaded = False
+        _reset_counters()
+
+    def test_stores_valid_logo_urls(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = [
+            {"id": 203, "logo_100px": "https://cdn.watchmode.com/provider_logos/netflix_100px.jpg"},
+        ]
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("watchmode._persist_counter"), \
+             patch("requests.get", return_value=mock_resp):
+            watchmode._load_source_logos()
+        assert 203 in watchmode._source_logos
+        assert watchmode._source_logos[203].endswith("netflix_100px.jpg")
+
+    def test_rejects_null_filename_logo_urls(self):
+        """Watchmode sometimes returns '.../provider_logos/null' for missing logos."""
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = [
+            {"id": 1, "logo_100px": "https://cdn.watchmode.com/provider_logos/null"},
+            {"id": 2, "logo_100px": "https://cdn.watchmode.com/provider_logos/null/"},
+        ]
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("watchmode._persist_counter"), \
+             patch("requests.get", return_value=mock_resp):
+            watchmode._load_source_logos()
+        assert 1 not in watchmode._source_logos
+        assert 2 not in watchmode._source_logos
+
+    def test_skips_sources_with_no_logo(self):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = [
+            {"id": 99, "logo_100px": None},
+        ]
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("watchmode._persist_counter"), \
+             patch("requests.get", return_value=mock_resp):
+            watchmode._load_source_logos()
+        assert 99 not in watchmode._source_logos
+
+
 class TestSearchTitle:
     def setup_method(self):
         watchmode._cache.clear()
