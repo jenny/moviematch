@@ -996,7 +996,7 @@
         if (streamable.length > 0) {
           container.innerHTML = streamable.map(p => {
             const logoHtml = p.logo
-              ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'" />`
+              ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" />`
               : "";
             return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
           }).join("");

@@ -131,45 +131,6 @@ class TestSearchEndpoint:
         assert response.status_code == 422
 
 
-class TestLogoProxy:
-    def test_proxies_image_from_allowed_cdn(self, client):
-        mock_resp = MagicMock()
-        mock_resp.content = b"\x89PNG\r\n"
-        mock_resp.headers = {"Content-Type": "image/png"}
-        with patch("api.routes.streaming.requests.get", return_value=mock_resp):
-            response = client.get("/logo-proxy?url=https%3A%2F%2Fcdn.watchmode.com%2Fprovider_logos%2Fnetflix.png")
-        assert response.status_code == 200
-        assert response.content == b"\x89PNG\r\n"
-        assert response.headers["content-type"] == "image/png"
-        assert "max-age=2592000" in response.headers["cache-control"]
-
-    def test_serves_from_cache_on_second_request(self, client):
-        # Clear the image cache so we start fresh
-        import api.routes.streaming as streaming_mod
-        with streaming_mod._logo_image_cache_lock:
-            streaming_mod._logo_image_cache.clear()
-
-        mock_resp = MagicMock()
-        mock_resp.content = b"JPEG"
-        mock_resp.headers = {"Content-Type": "image/jpeg"}
-        url = "https://cdn.watchmode.com/provider_logos/hulu.jpg"
-        encoded = "https%3A%2F%2Fcdn.watchmode.com%2Fprovider_logos%2Fhulu.jpg"
-        with patch("api.routes.streaming.requests.get", return_value=mock_resp) as mock_get:
-            client.get(f"/logo-proxy?url={encoded}")
-            client.get(f"/logo-proxy?url={encoded}")
-        # CDN should only be contacted once; second request served from cache
-        assert mock_get.call_count == 1
-
-    def test_rejects_disallowed_host(self, client):
-        response = client.get("/logo-proxy?url=https%3A%2F%2Fevil.example.com%2Flogo.png")
-        assert response.status_code == 400
-
-    def test_returns_502_when_cdn_fetch_fails(self, client):
-        with patch("api.routes.streaming.requests.get", side_effect=Exception("timeout")):
-            response = client.get("/logo-proxy?url=https%3A%2F%2Fcdn.watchmode.com%2Fprovider_logos%2Ffail.png")
-        assert response.status_code == 502
-
-
 class TestStreamingEndpoint:
     def test_returns_providers_via_watchmode_when_key_set(self, client):
         with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
@@ -183,7 +144,7 @@ class TestStreamingEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["providers"] == [
-            {"name": "Paramount+", "type": "sub", "logo": "/logo-proxy?url=https%3A%2F%2Fcdn.watchmode.com%2Fprovider_logos%2Fparamountplus_100px.jpg"}
+            {"name": "Paramount+", "type": "sub", "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg"}
         ]
         assert "certification" in data
 
@@ -225,7 +186,7 @@ class TestStreamingEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["providers"] == [
-            {"name": "Netflix", "type": "sub", "logo": "/logo-proxy?url=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Fw45%2Fnetflix.jpg"}
+            {"name": "Netflix", "type": "sub", "logo": "https://image.tmdb.org/t/p/w45/netflix.jpg"}
         ]
         assert data["certification"] == "R"
 
