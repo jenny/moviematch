@@ -5,8 +5,8 @@ and updates the metadata in-place — no re-embedding required.
 
 Usage:
     source venv/bin/activate
-    python backfill_certifications.py           # live run
-    python backfill_certifications.py --dry-run # preview without writing
+    PINECONE_API_KEY=<your-key> RAILWAY_ENVIRONMENT=production python backfill_certifications.py --dry-run # preview without writing
+    PINECONE_API_KEY=<your-key> RAILWAY_ENVIRONMENT=production python backfill_certifications.py           # live run
 
 Notes:
     - Works with both ChromaDB (local) and Pinecone (production) backends.
@@ -62,29 +62,26 @@ def _backfill_pinecone(dry_run: bool = False) -> tuple[int, int]:
     index = _get_pinecone_index()
     updated = skipped = 0
 
-    # list() paginates automatically and yields vector IDs
-    for vector_id in index.list():
-        fetch_result = index.fetch(ids=[vector_id])
-        vector = fetch_result.vectors.get(vector_id)
-        if vector is None:
-            continue
+    # list() paginates automatically and yields pages (lists) of vector IDs
+    for id_batch in index.list():
+        fetch_result = index.fetch(ids=id_batch)
+        for vector_id, vector in fetch_result.vectors.items():
+            existing_cert = (vector.metadata or {}).get("certification", "")
+            if existing_cert:
+                skipped += 1
+                continue
 
-        existing_cert = (vector.metadata or {}).get("certification", "")
-        if existing_cert:
-            skipped += 1
-            continue
+            title = (vector.metadata or {}).get("title", vector_id)
+            if dry_run:
+                logger.info(f"[dry-run] Would fetch cert for {title!r} (id={vector_id})")
+                updated += 1
+                continue
 
-        title = (vector.metadata or {}).get("title", vector_id)
-        if dry_run:
-            logger.info(f"[dry-run] Would fetch cert for {title!r} (id={vector_id})")
+            cert = fetch_certification(int(vector_id))
+            index.update(id=vector_id, set_metadata={"certification": cert})
+            logger.info(f"Updated {title!r}: {cert or '(none)'}")
             updated += 1
-            continue
-
-        cert = fetch_certification(int(vector_id))
-        index.update(id=vector_id, set_metadata={"certification": cert})
-        logger.info(f"Updated {title!r}: {cert or '(none)'}")
-        updated += 1
-        time.sleep(_TMDB_REQUEST_DELAY)
+            time.sleep(_TMDB_REQUEST_DELAY)
 
     return updated, skipped
 
