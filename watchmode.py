@@ -155,7 +155,10 @@ def _load_source_logos() -> None:
             response.raise_for_status()
             for source in response.json():
                 logo = source.get("logo_100px")
-                if logo:
+                # Watchmode sometimes returns a URL whose filename is the
+                # literal string "null" (e.g. ".../provider_logos/null") when
+                # a logo is missing. Reject those alongside Python None.
+                if logo and not logo.rstrip("/").endswith("null"):
                     _source_logos[source["id"]] = logo
             _source_logos_loaded = True
             logger.info(f"Watchmode: cached {len(_source_logos)} source logos")
