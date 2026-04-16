@@ -13,7 +13,7 @@
 | `main.py` | Orchestrates embedding → vector query → Claude rerank |
 | `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
-| `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers` |
+| `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers`, `extract_certification`, `fetch_certification`, `get_certification_for_title` |
 | `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
@@ -22,9 +22,10 @@
 | `login.html` | Admin login page (dark theme, JSON POST via fetch) |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
 | `api/routes/admin.py` | `/initialize`, `/status`, `/logs` — all require admin auth |
-| `api/routes/streaming.py` | `GET /streaming` — streaming provider lookup via Watchmode (primary) or TMDB (fallback) |
+| `api/routes/streaming.py` | `GET /streaming` — streaming provider lookup via Watchmode (primary) or TMDB (fallback); also returns MPAA certification |
 | `logger.py` | JSON request logging; DEBUG level locally, INFO on Railway; writes to rotating file locally, stdout on Railway |
 | `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
+| `backfill_certifications.py` | One-off script: patches MPAA certification into existing Pinecone vector metadata without re-embedding (supports `--dry-run`; idempotent) |
 
 ## Anthropic Integration
 - **Round 1**: Always Haiku (`CLAUDE_FAST_MODEL`) — cheap, handles tool-free queries
@@ -46,7 +47,7 @@ Run in venv with: `pytest` from project root.
 | `tests/test_claude.py` | Pure functions: `_filter_results`, `_extract_result_objects` |
 | `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode` |
 | `tests/test_main.py` | `_parse_document()` — richtext field extraction |
-| `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers` |
+| `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers`; certification: `extract_certification`, `fetch_certification`, `get_certification_for_title` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
 | `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache) |
 | `tests/test_auth.py` | Cookie signing: valid tokens, expiry, tampered signatures, missing secret |
@@ -64,6 +65,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - `tool_choice={"type": "any"}` forces Claude to always call a tool (prevents prose responses)
 - Background thread ingests filmography discoveries into vector DB for future queries
 - `rerank` and `rerank_stream` share the same prompt/logic; `rerank` is kept for non-streaming use
+- Certification is stored in vector DB metadata at ingest time for immediate display; the async `/streaming` fetch acts as fallback and is the authoritative source of `"NR"` for unrated titles
 
 ## Model Use During Development
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
