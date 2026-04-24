@@ -332,7 +332,9 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
                     "poster_path": m.get("poster_path", ""),
                 })
     else:
-        # Cap cast credits at 30 highest-rated to avoid overwhelming Claude
+        # Cap cast credits at 30 highest-rated to avoid overwhelming Claude.
+        # Sort here (not at the return) since the directing branch builds an
+        # already-ordered list; a second sort there would be redundant.
         movies = sorted(
             [
                 {
@@ -349,6 +351,7 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
             key=lambda m: m["vote_average"],
             reverse=True,
         )[:30]
+        return movies
     return sorted(movies, key=lambda m: m["vote_average"], reverse=True)
 
 

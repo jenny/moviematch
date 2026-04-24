@@ -127,16 +127,18 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
     if not candidates:
         return [], None, timing
 
-    poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
-    certification_by_title = {c["title"]: c["certification"] for c in candidates}
+    # Keyed lowercase to match search_stream and _filter_results casing behaviour.
+    poster_by_title = {c["title"].lower(): c["movie_poster"] for c in candidates}
+    certification_by_title = {c["title"].lower(): c["certification"] for c in candidates}
 
     t0 = time.perf_counter()
     reranked, usage = rerank(query, candidates, parsed=parsed)
     timing["claude_ms"] = round((time.perf_counter() - t0) * 1000)
 
     for result in reranked:
-        result["movie_poster"] = poster_by_title.get(result["title"], "")
-        result["certification"] = certification_by_title.get(result["title"], "")
+        t = (result.get("title") or "").lower()
+        result["movie_poster"] = poster_by_title.get(t, "")
+        result["certification"] = certification_by_title.get(t, "")
     return reranked, usage, timing
 
 

@@ -310,7 +310,7 @@ def parse_query(raw_query: str) -> ParsedQuery:
     # "in 1994" → exact year, only if no other year constraint set
     if (m := _YEAR_IN_PATTERN.search(q)) and parsed.year_min is None and parsed.year_max is None:
         year = int(m.group(1))
-        if 1900 <= year <= 2030:
+        if 1900 <= year <= datetime.date.today().year + 10:
             parsed.year_min = year
             parsed.year_max = year
 
@@ -373,10 +373,10 @@ def parse_query(raw_query: str) -> ParsedQuery:
             if name not in seen_names:
                 seen_names.add(name)
                 parsed.person_names.append(name)
-                # First explicit department (directing/cast) wins; "auto" is a fallback
+                # First explicit department (directing/cast) wins; "auto" is a fallback.
+                # Only update when still at the default — do not let a later person
+                # overwrite a department already set by an earlier one.
                 if parsed.person_department == "auto" and department != "auto":
-                    parsed.person_department = department
-                elif department != "auto":
                     parsed.person_department = department
 
     # --- Title references ---

@@ -78,6 +78,20 @@ class TestParseQueryYears:
         assert p.year_min == 1994
         assert p.year_max == 1994
 
+    def test_in_future_year_within_decade_window_accepted(self):
+        import datetime
+        future_year = datetime.date.today().year + 5
+        p = parse_query(f"in {future_year}")
+        assert p.year_min == future_year
+        assert p.year_max == future_year
+
+    def test_in_far_future_year_rejected(self):
+        import datetime
+        far_future = datetime.date.today().year + 15
+        p = parse_query(f"in {far_future}")
+        assert p.year_min is None
+        assert p.year_max is None
+
     def test_decade_takes_precedence_over_from(self):
         # "from 2010s" — decade fires first, from should not override
         p = parse_query("from the 2010s")
@@ -257,6 +271,14 @@ class TestParseQueryPersons:
     def test_department_not_overridden_by_auto(self):
         # Explicit directing context should win over auto
         p = parse_query("directed by Christopher Nolan movies")
+        assert p.person_department == "directing"
+
+    def test_first_explicit_department_wins_over_second(self):
+        # When two people appear with different explicit departments, the first
+        # one should set the department and the second should not overwrite it.
+        p = parse_query("directed by Greta Gerwig starring Margot Robbie")
+        assert "Greta Gerwig" in p.person_names
+        assert "Margot Robbie" in p.person_names
         assert p.person_department == "directing"
 
 
