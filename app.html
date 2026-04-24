@@ -225,6 +225,38 @@
       line-height: 1.5;
     }
 
+    /* "More like this" button shown beneath each result card's explanation */
+    .card-more-btn {
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 4px 0 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .card-more-btn:hover {
+      color: #999;
+    }
+
+    /* Clickable director / cast names inside the detail overlay */
+    .more-link {
+      background: none;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .more-link:hover {
+      color: #ddd;
+    }
+
     .spinner {
       display: none;
       width: 20px;
@@ -694,6 +726,15 @@
     // request — no duplicate network calls.
     const streamingCache = new Map();
 
+    // ── Pivot search ────────────────────────────────────────────────
+    // Pre-fills the search box with a generated query and auto-submits it.
+    // Used by "More like this", director, and cast links.
+    function triggerSearch(query) {
+      closeOverlay();
+      input.value = query;
+      form.requestSubmit();
+    }
+
     // ── Rotating placeholder ─────────────────────────────────────────
 
     fetch("hints.json")
@@ -807,8 +848,17 @@
             <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}${ratingHtml}
           </div>
           <div class="card-explanation">${escapeHtml(result.explanation)}</div>
+          <button class="card-more-btn">More like this</button>
         </div>
       `;
+
+      // Wire "More like this" before the card-level click handler so
+      // stopPropagation() prevents the overlay from opening.
+      card.querySelector(".card-more-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const yearPart = result.year ? ` (${result.year})` : "";
+        triggerSearch(`More movies like ${result.title}${yearPart}`);
+      });
 
       card.addEventListener("click", (e) => {
         e.preventDefault();
@@ -853,14 +903,18 @@
       const directorHtml = result.director
         ? `<div class="overlay-section">
             <div class="overlay-label">Director</div>
-            <div class="overlay-text">${escapeHtml(result.director)}</div>
+            <div class="overlay-text">
+              <button class="more-link" data-query="Movies directed by ${escapeHtml(result.director)}">${escapeHtml(result.director)}</button>
+            </div>
            </div>`
         : "";
 
       const castHtml = result.cast && result.cast.length
         ? `<div class="overlay-section">
             <div class="overlay-label">Cast</div>
-            <div class="overlay-text">${result.cast.map(escapeHtml).join(", ")}</div>
+            <div class="overlay-text">
+              ${result.cast.map(a => `<button class="more-link" data-query="Movies starring ${escapeHtml(a)}">${escapeHtml(a)}</button>`).join(", ")}
+            </div>
            </div>`
         : "";
 
@@ -898,6 +952,11 @@
           </div>
         </div>
       `;
+
+      // Wire director and cast pivot links
+      overlayContent.querySelectorAll(".more-link").forEach(btn => {
+        btn.addEventListener("click", () => triggerSearch(btn.dataset.query));
+      });
 
       // Update dots
       overlayDots.innerHTML = allResults.map((_, i) =>

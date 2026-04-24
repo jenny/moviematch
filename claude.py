@@ -136,6 +136,18 @@ def _build_rerank_prompt(query: str, candidate_text: str, parsed=None) -> str:
     if constraint_lines:
         constraints_block = "<constraints>\n" + "\n".join(constraint_lines) + "\n</constraints>\n\n"
 
+    # Build reference films block when the user is looking for movies similar to
+    # specific titles (e.g. "More movies like Inception"). This makes the anchor
+    # explicit for Claude rather than leaving it buried in the query text.
+    reference_films_block = ""
+    if parsed and parsed.reference_titles:
+        titles_str = ", ".join(_sanitize(t) for t in parsed.reference_titles)
+        reference_films_block = (
+            f"<reference_films>\n"
+            f"The user wants movies similar to: {titles_str}\n"
+            f"</reference_films>\n\n"
+        )
+
     # Build filmography block for pre-resolved persons. Cap at 30 titles per person
     # to keep token cost bounded (prolific directors can have 50+ credits).
     filmography_block = ""
@@ -185,6 +197,7 @@ def _build_rerank_prompt(query: str, candidate_text: str, parsed=None) -> str:
         f"You are a movie recommendation assistant. A user searched for:\n"
         f"<query>{_sanitize(query)}</query>\n\n"
         f"{constraints_block}"
+        f"{reference_films_block}"
         f"{filmography_block}"
         f"{suppress_instruction}"
         f"Here are candidate movies retrieved by semantic search:\n\n"

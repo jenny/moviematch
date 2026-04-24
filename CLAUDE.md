@@ -36,14 +36,14 @@ Every query runs through `parse_query()` in `query_parser.py` before embedding. 
 - **Genres**: "no documentaries" → `excluded_genres=["Documentary"]`; "sci-fi" → `required_genres=["Science Fiction"]`; "animated" / "animation" → `required_genres=["Animation"]`; "live action" / "live-action" → `excluded_genres=["Animation"]` (special-cased via `_LIVE_ACTION_PATTERN` since "live action" is not a TMDB genre)
 - **Certifications**: "family friendly" / "kids movie" / "children's film" / "for children" etc. → `excluded_certifications=["NC-17"]` + `certification_caveats` (soft Claude guidance to prefer G/PG/PG-13, surface R only as last resort with explicit note); "no R-rated" → `excluded_certifications=["R"]`
 - **Person names**: "directed by Bong Joon-ho" → `person_names=["Bong Joon-ho"], person_department="directing"`; also handles film slang ("Spike Lee joint")
-- **Title references**: "something like Inception" → `reference_titles=["Inception"]`; "in the style of Wes Anderson" → also adds to `person_names`
+- **Title references**: "something like Inception" / "similar to The Godfather" / "more like Parasite" / "more movies like Parasite (2019)" → `reference_titles=["Parasite"]`; "in the style of Wes Anderson" → also adds to `person_names`; reference titles are injected into the Claude prompt as a `<reference_films>` block
 - **Relative date hints**: "older", "classic", "more recent" → `relative_date_hints` (soft guidance injected into Claude's prompt)
 
 **Person lookup — concurrent with embedding**: when `person_names` is non-empty, `resolve_persons()` is submitted to a `ThreadPoolExecutor` at the same time `_fetch_candidates()` starts. The TMDB round-trip (~500ms) overlaps with embedding+vector search (~220ms), then the result is awaited with a 1.5s timeout before calling Claude.
 
 **Hard filtering**: `apply_hard_filters()` drops vector candidates that violate year, genre, or certification constraints before they reach Claude. Candidates with missing metadata are kept conservatively.
 
-**Prompt injection**: resolved filmographies and extracted constraints are injected into Claude's prompt. All user-derived strings are sanitized with `_sanitize()` (strips `<`, `>`, `&`) before injection. When all requested persons are pre-resolved, person-lookup tools are removed from the tools list entirely (hard guarantee, not a prompt-only instruction).
+**Prompt injection**: resolved filmographies, extracted constraints, and reference titles are injected into Claude's prompt as structured XML blocks (`<constraints>`, `<reference_films>`, `<filmography>`). All user-derived strings are sanitized with `_sanitize()` (strips `<`, `>`, `&`) before injection. When all requested persons are pre-resolved, person-lookup tools are removed from the tools list entirely (hard guarantee, not a prompt-only instruction).
 
 **Background ingestion**: after a successful person pre-fetch, `_ingest_filmography_background` is triggered in a daemon thread — same as when Claude calls `get_filmography` directly.
 
@@ -68,8 +68,8 @@ Run in venv with: `pytest` from project root.
 
 | Test file | What it covers |
 |-----------|---------------|
-| `tests/test_query_parser.py` | `parse_query`: year/decade normalization, genre/cert/person extraction, slang triggers, "in the style of" dual-purpose, relative date hints; `apply_hard_filters`: year, genre, cert filtering, conservative empty-metadata handling; `resolve_persons`: TMDB mocked, success/failure/timeout paths |
-| `tests/test_claude.py` | Pure functions: `_filter_results` (case-insensitive), `_extract_result_objects`, `_sanitize`, `_build_rerank_prompt` (constraint injection, filmography cap, suppression instruction, XSS sanitization) |
+| `tests/test_query_parser.py` | `parse_query`: year/decade normalization, genre/cert/person extraction, slang triggers, "in the style of" dual-purpose, "more like X" title refs, relative date hints; `apply_hard_filters`: year, genre, cert filtering, conservative empty-metadata handling; `resolve_persons`: TMDB mocked, success/failure/timeout paths |
+| `tests/test_claude.py` | Pure functions: `_filter_results` (case-insensitive), `_extract_result_objects`, `_sanitize`, `_build_rerank_prompt` (constraint injection, reference_films block, filmography cap, suppression instruction, XSS sanitization) |
 | `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode` |
 | `tests/test_main.py` | `_parse_document()` richtext extraction; `search_stream` pre-parse integration: year filter reduces candidates, person timeout degrades gracefully, successful pre-fetch triggers background ingestion |
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers`; certification: `extract_certification`, `fetch_certification`, `get_certification_for_title` |
@@ -94,6 +94,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - Background thread ingests filmography discoveries into vector DB for future queries (triggered both when Claude calls `get_filmography` directly and when pre-fetch succeeds)
 - `rerank` and `rerank_stream` share the same prompt/logic; `rerank` is kept for non-streaming use
 - Certification is stored in vector DB metadata at ingest time and displayed immediately from search results; the vector DB is the sole source of truth for ratings — the `/streaming` endpoint handles providers only
+- **"More like this" pivot**: result cards expose a "More like this" button; the detail overlay makes director and cast names clickable. All three call `triggerSearch()` which pre-fills the input and auto-submits via `form.requestSubmit()`. Query formats: `"More movies like [Title] ([Year])"` (hits the `more like X` regex), `"Movies directed by [X]"` (hits person/directing regex), `"Movies starring [X]"` (hits person regex). No original query is appended — the pivot is intentionally standalone.
 
 ## Model Use During Development
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
