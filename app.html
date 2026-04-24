@@ -225,36 +225,31 @@
       line-height: 1.5;
     }
 
-    /* "More like this" button shown beneath each result card's explanation */
-    .card-more-btn {
-      background: none;
-      border: none;
-      color: #555;
-      font-size: 0.75rem;
-      cursor: pointer;
-      padding: 4px 0 0;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .card-more-btn:hover {
-      color: #999;
-    }
-
     /* Clickable director / cast names inside the detail overlay */
     .more-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       background: none;
       border: none;
       color: inherit;
       font: inherit;
       cursor: pointer;
       padding: 0;
-      text-decoration: underline;
-      text-underline-offset: 2px;
     }
 
     .more-link:hover {
       color: #ddd;
+    }
+
+    /* Pivot icon shared by card button and overlay links */
+    .pivot-icon {
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .more-link:hover .pivot-icon {
+      opacity: 1;
     }
 
     .spinner {
@@ -378,6 +373,11 @@
     .overlay-info {
       flex: 1;
       min-width: 0;
+    }
+
+    .overlay-title-pivot {
+      margin-left: 6px;
+      vertical-align: middle;
     }
 
     .overlay-title {
@@ -665,6 +665,23 @@
 
 <body>
 
+  <!-- Reusable SVG symbols — hidden, referenced via <use> throughout the page -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+    <!--
+      "More like this" pivot icon: a horizontal stem that forks into two
+      arrowheads, suggesting "branch from here into related content."
+    -->
+    <symbol id="icon-pivot" viewBox="0 0 14 12" fill="none" stroke="currentColor"
+            stroke-linecap="butt" stroke-linejoin="miter">
+      <!-- Stem + two diverging branches (Y-fork pointing right) -->
+      <path d="M 1,6 L 6,6 L 12,2 M 6,6 L 12,10" stroke-width="1.5"/>
+      <!-- Arrowhead on upper branch (wings perpendicular to arm direction) -->
+      <polyline points="8.4,2.0 12,2 10.6,5.3" stroke-width="2"/>
+      <!-- Arrowhead on lower branch (wings perpendicular to arm direction) -->
+      <polyline points="8.4,10.0 12,10 10.6,6.7" stroke-width="2"/>
+    </symbol>
+  </svg>
+
   <header>
     <h1>MovieMatch</h1>
     <h4>What would you like to watch today?</h4>
@@ -721,6 +738,71 @@
     let allResults = [];
     let overlayIndex = 0;
 
+    // ── Mock data ────────────────────────────────────────────────────
+    // Type "__mock__" as the query to bypass the backend entirely and
+    // render fake results through the same code path as real searches.
+    // Useful for front-end-only changes (styling, layout, icons, etc.)
+    // without needing a running server.
+    const MOCK_QUERY = "__mock__";
+
+    const MOCK_RESULTS = [
+      {
+        title: "Inception",
+        year: "2010",
+        certification: "PG-13",
+        explanation: "A thief who steals corporate secrets through dream-sharing is given the inverse task of planting an idea — layered, kinetic, and endlessly rewatchable.",
+        movie_poster: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+        overview: "Dom Cobb is a skilled thief, the absolute best in the dangerous art of extraction: stealing valuable secrets from deep within the subconscious during the dream state.",
+        genres: ["Action", "Science Fiction", "Adventure"],
+        director: "Christopher Nolan",
+        cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page", "Tom Hardy", "Ken Watanabe"],
+      },
+      {
+        title: "Parasite",
+        year: "2019",
+        certification: "R",
+        explanation: "A darkly comic masterpiece about class inequality that pivots, without warning, into something far more sinister.",
+        movie_poster: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+        overview: "All unemployed, Ki-taek's family takes a peculiar interest in the wealthy Park family and starts to infiltrate their household by posing as unrelated, highly qualified individuals.",
+        genres: ["Comedy", "Thriller", "Drama"],
+        director: "Bong Joon-ho",
+        cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik", "Park So-dam"],
+      },
+      {
+        title: "Everything Everywhere All at Once",
+        year: "2022",
+        certification: "R",
+        explanation: "A wildly inventive multiverse adventure grounded in the emotional core of an immigrant mother-daughter relationship.",
+        movie_poster: "/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg",
+        overview: "An aging Chinese immigrant is swept up in an insane adventure where she alone can save the world by exploring other universes and the lives she could have led.",
+        genres: ["Action", "Adventure", "Science Fiction"],
+        director: "Daniel Kwan",
+        cast: ["Michelle Yeoh", "Stephanie Hsu", "Ke Huy Quan", "Jamie Lee Curtis"],
+      },
+      {
+        title: "The Favourite",
+        year: "2018",
+        certification: "R",
+        explanation: "A vicious, wickedly funny period drama about power, manipulation, and the cruelty dressed up as loyalty.",
+        movie_poster: "/9PqD3wSIjntyJDBzMNuxuKHwpUD.jpg",
+        overview: "In early 18th century England, a frail Queen Anne occupies the throne and her close friend Lady Sarah governs the country in her stead. When a new servant, Abigail, arrives, her charm endears her to Sarah.",
+        genres: ["Drama", "History", "Comedy"],
+        director: "Yorgos Lanthimos",
+        cast: ["Olivia Colman", "Emma Stone", "Rachel Weisz", "Nicholas Hoult"],
+      },
+      {
+        title: "Stalker",
+        year: "1979",
+        certification: "NR",
+        explanation: "Tarkovsky's hypnotic meditation on faith, desire, and the unknowable — cinema as a slow-burning spiritual experience.",
+        movie_poster: null,
+        overview: "A guide leads two men — a writer and a professor — through a hazardous forbidden zone to find a room rumoured to grant one's innermost desires.",
+        genres: ["Drama", "Science Fiction"],
+        director: "Andrei Tarkovsky",
+        cast: ["Aleksandr Kajdanovsky", "Anatoliy Solonitsyn", "Nikolay Grinko"],
+      },
+    ];
+
     // Keyed by "title|year" → Promise<data>. Storing promises means an in-flight
     // prefetch and a direct fetch triggered by opening the overlay share the same
     // request — no duplicate network calls.
@@ -750,6 +832,19 @@
       })
       .catch(() => { }); // silently keep the hardcoded fallback placeholder
 
+    // Simulates a real search response using MOCK_RESULTS, emitting one
+    // result at a time through the same appendResult() path used by live
+    // searches so all rendering and interaction code is exercised identically.
+    async function runMockSearch() {
+      for (let i = 0; i < MOCK_RESULTS.length; i++) {
+        await new Promise(r => setTimeout(r, 180));
+        if (i === 0) setLoading(false);
+        appendResult(MOCK_RESULTS[i], i);
+      }
+      setStatus(`${MOCK_RESULTS.length} matches for "${MOCK_QUERY}" (mock)`);
+      batchPrefetchStreamingProviders(allResults);
+    }
+
     // ── Search ──────────────────────────────────────────────────────
 
     form.addEventListener("submit", async (e) => {
@@ -764,6 +859,11 @@
       let resultCount = 0;
 
       try {
+        if (query === MOCK_QUERY) {
+          await runMockSearch();
+          return;
+        }
+
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -829,7 +929,7 @@
       card.setAttribute("tabindex", "0");
 
       const posterHtml = result.movie_poster
-        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" /></div>`
+        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" onerror="this.closest('.card-poster').remove()" /></div>`
         : "";
 
       const yearHtml = result.year
@@ -848,17 +948,8 @@
             <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}${ratingHtml}
           </div>
           <div class="card-explanation">${escapeHtml(result.explanation)}</div>
-          <button class="card-more-btn">More like this</button>
         </div>
       `;
-
-      // Wire "More like this" before the card-level click handler so
-      // stopPropagation() prevents the overlay from opening.
-      card.querySelector(".card-more-btn").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const yearPart = result.year ? ` (${result.year})` : "";
-        triggerSearch(`More movies like ${result.title}${yearPart}`);
-      });
 
       card.addEventListener("click", (e) => {
         e.preventDefault();
@@ -900,11 +991,16 @@
 
       const yearDisplay = result.year ? `<span class="overlay-title-year">(${escapeHtml(result.year)})</span>` : "";
 
+      const pivotIcon = `<svg class="pivot-icon" width="16" height="13" aria-hidden="true"><use href="#icon-pivot"/></svg>`;
+
+      const yearPart = result.year ? ` (${result.year})` : "";
+      const titlePivotQuery = `More movies like ${escapeHtml(result.title)}${escapeHtml(yearPart)}`;
+
       const directorHtml = result.director
         ? `<div class="overlay-section">
             <div class="overlay-label">Director</div>
             <div class="overlay-text">
-              <button class="more-link" data-query="Movies directed by ${escapeHtml(result.director)}">${escapeHtml(result.director)}</button>
+              <button class="more-link" title="More from this director" data-query="Movies directed by ${escapeHtml(result.director)}">${escapeHtml(result.director)}${pivotIcon}</button>
             </div>
            </div>`
         : "";
@@ -913,7 +1009,7 @@
         ? `<div class="overlay-section">
             <div class="overlay-label">Cast</div>
             <div class="overlay-text">
-              ${result.cast.map(a => `<button class="more-link" data-query="Movies starring ${escapeHtml(a)}">${escapeHtml(a)}</button>`).join(", ")}
+              ${result.cast.map(a => `<button class="more-link" title="More with ${escapeHtml(a)}" data-query="Movies starring ${escapeHtml(a)}">${escapeHtml(a)}${pivotIcon}</button>`).join(", ")}
             </div>
            </div>`
         : "";
@@ -938,7 +1034,7 @@
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating"${overlayRatingTitle}>${overlayRatingContent}</span></div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating"${overlayRatingTitle}>${overlayRatingContent}</span><button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
           ${overviewHtml}
           ${genresHtml}
           ${directorHtml}
@@ -953,7 +1049,7 @@
         </div>
       `;
 
-      // Wire director and cast pivot links
+      // Wire title, director, and cast pivot links
       overlayContent.querySelectorAll(".more-link").forEach(btn => {
         btn.addEventListener("click", () => triggerSearch(btn.dataset.query));
       });
