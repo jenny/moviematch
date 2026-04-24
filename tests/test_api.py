@@ -444,6 +444,58 @@ class TestResolveLocation:
         mock_get.assert_called_once()  # second call hit cache
 
 
+class TestSecurityHeaders:
+    def test_security_headers_on_simple_endpoint(self, client):
+        response = client.get("/health")
+        assert response.headers["x-content-type-options"] == "nosniff"
+        assert response.headers["x-frame-options"] == "DENY"
+        assert response.headers["referrer-policy"] == "strict-origin-when-cross-origin"
+
+    def test_security_headers_on_streaming_response(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=None):
+            response = client.get("/streaming?title=Some+Movie")
+        assert response.headers["x-content-type-options"] == "nosniff"
+        assert response.headers["x-frame-options"] == "DENY"
+        assert response.headers["referrer-policy"] == "strict-origin-when-cross-origin"
+
+
+class TestSearchLogsUserAgent:
+    def test_user_agent_captured_in_log_entry(self):
+        stream = iter([
+            {"title": "Inception", "explanation": "Great", "movie_poster": ""},
+            make_meta(),
+        ])
+        log_calls = []
+
+        with patch("db.get_model", return_value=MagicMock()), \
+             patch("api.routes.search.log_request", side_effect=lambda e: log_calls.append(e)), \
+             patch("api.routes.search.search_stream", return_value=stream):
+            with TestClient(app) as c:
+                c.post(
+                    "/recommend",
+                    json={"query": "mind-bending"},
+                    headers={"User-Agent": "TestBot/1.0"},
+                )
+
+        assert len(log_calls) == 1
+        assert log_calls[0]["user_agent"] == "TestBot/1.0"
+
+    def test_user_agent_key_always_present_in_log(self):
+        """user_agent field is present in the log payload even when the header is absent."""
+        stream = iter([make_meta()])
+        log_calls = []
+
+        with patch("db.get_model", return_value=MagicMock()), \
+             patch("api.routes.search.log_request", side_effect=lambda e: log_calls.append(e)), \
+             patch("api.routes.search.search_stream", return_value=stream):
+            with TestClient(app) as c:
+                c.post("/recommend", json={"query": "test"})
+
+        assert len(log_calls) == 1
+        assert "user_agent" in log_calls[0]
+
+
 class TestAdminStatus:
     def test_returns_expected_shape(self, client):
         from api.auth import require_admin

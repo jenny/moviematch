@@ -1,10 +1,11 @@
 import asyncio
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel, field_validator
 
-from config import WATCHMODE_API_KEY
+from api.limiter import limiter
+from config import STREAMING_RATE_LIMIT, WATCHMODE_API_KEY
 from tmdb import fetch_watch_providers, search_movie_by_title
 import watchmode
 
@@ -42,7 +43,8 @@ def get_providers_for_title(title: str, year: str) -> list[dict]:
 
 
 @router.get("/streaming")
-def streaming_providers(title: str, year: str = ""):
+@limiter.limit(STREAMING_RATE_LIMIT)
+def streaming_providers(request: Request, title: str, year: str = ""):
     """Return US streaming providers for a movie."""
     return {"providers": get_providers_for_title(title, year)}
 
@@ -64,7 +66,8 @@ class BatchRequest(BaseModel):
 
 
 @router.post("/streaming/batch")
-async def streaming_providers_batch(request: BatchRequest):
+@limiter.limit(STREAMING_RATE_LIMIT)
+async def streaming_providers_batch(request: Request, body: BatchRequest):
     """Batch lookup of streaming providers for multiple movies.
 
     Runs lookups concurrently (capped at 3 simultaneous Watchmode calls) to
@@ -77,5 +80,5 @@ async def streaming_providers_batch(request: BatchRequest):
             )
         return {"title": item.title, "year": item.year, "providers": providers}
 
-    results = await asyncio.gather(*[lookup(item) for item in request.titles])
+    results = await asyncio.gather(*[lookup(item) for item in body.titles])
     return {"results": results}
