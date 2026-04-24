@@ -45,11 +45,12 @@ def main():
 
         vectors = [
             {
-                "id":          ids[i],
-                "values":      embeddings[i],
-                "title":       metadatas[i].get("title", ""),
+                "id":           ids[i],
+                "values":       embeddings[i],
+                "title":        metadatas[i].get("title", ""),
                 "movie_poster": metadatas[i].get("movie_poster", ""),
-                "document":    documents[i],
+                "certification": metadatas[i].get("certification", ""),
+                "document":     documents[i],
             }
             for i in range(len(ids))
         ]
