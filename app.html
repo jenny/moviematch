@@ -811,8 +811,10 @@
     // ── Pivot search ────────────────────────────────────────────────
     // Pre-fills the search box with a generated query and auto-submits it.
     // Used by "More like this", director, and cast links.
+    // Does NOT call closeOverlay() — the form submit handler closes the overlay
+    // UI directly (without history.back()) to avoid a race between history.back()
+    // and the subsequent history.pushState() for the new search.
     function triggerSearch(query) {
-      closeOverlay();
       input.value = query;
       form.requestSubmit();
     }
@@ -864,6 +866,10 @@
         appendResult(MOCK_RESULTS[i], i);
       }
       setStatus(`${MOCK_RESULTS.length} matches for "${MOCK_QUERY}" (mock)`);
+      history.replaceState(
+        { type: "search", query: MOCK_QUERY, results: allResults.slice(), scrollY: 0 },
+        "", location.href
+      );
       batchPrefetchStreamingProviders(allResults);
     }
 
@@ -873,6 +879,15 @@
       e.preventDefault();
       const query = input.value.trim();
       if (!query) return;
+
+      // Close overlay DOM without touching history — handles pivot-from-overlay.
+      closeOverlayUI();
+
+      // New history entry for this search; results backfilled on "done".
+      history.pushState(
+        { type: "search", query, results: [], scrollY: window.scrollY },
+        "", "?q=" + encodeURIComponent(query)
+      );
 
       setLoading(true);
       clearResults();
@@ -923,6 +938,11 @@
                 setStatus(event.message || "No relevant matches found. Try a different query.");
               } else {
                 setStatus(`${resultCount} match${resultCount !== 1 ? "es" : ""} for "${query}"`);
+                // Cache results in history so back navigation can restore them instantly.
+                history.replaceState(
+                  { type: "search", query, results: allResults.slice(), scrollY: 0 },
+                  "", location.href
+                );
                 // Batch-fetch all streaming providers now that we have the full result set.
                 batchPrefetchStreamingProviders(allResults);
               }
@@ -996,11 +1016,34 @@
       backdrop.classList.add("open");
       document.body.style.overflow = "hidden";
       overlayClose.focus();
+
+      const cur = history.state || {};
+      // Snapshot scroll into the current search entry before pushing overlay on top,
+      // so back-from-overlay restores the exact scroll position.
+      if (cur.type === "search") {
+        history.replaceState({ ...cur, scrollY: window.scrollY }, "", location.href);
+      }
+      history.pushState(
+        { type: "overlay", query: cur.query || "", results: allResults.slice(), overlayIndex: index, scrollY: window.scrollY },
+        "", "?q=" + encodeURIComponent(cur.query || "") + "&detail=" + index
+      );
     }
 
-    function closeOverlay() {
+    // DOM-only close — does not touch history. Used by form submit and popstate.
+    function closeOverlayUI() {
       backdrop.classList.remove("open");
       document.body.style.overflow = "";
+    }
+
+    // Public close — used by the ✕ button, ESC, and backdrop click.
+    // Consumes the overlay history entry via history.back() so the browser
+    // stack stays consistent with the URL.
+    function closeOverlay() {
+      if (history.state && history.state.type === "overlay") {
+        history.back();
+      } else {
+        closeOverlayUI();
+      }
     }
 
     function renderOverlay() {
@@ -1206,6 +1249,41 @@
       if (dx > 0 && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
     }, { passive: true });
 
+    // ── Back/forward navigation (History API) ────────────────────────
+
+    window.addEventListener("popstate", (e) => {
+      const state = e.state;
+
+      if (!state || state.type === "empty") {
+        closeOverlayUI();
+        clearResults();
+        input.value = "";
+        setStatus("");
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      if (state.type === "overlay") {
+        // Restore results if we've navigated away to a different search
+        if (state.query !== input.value || allResults.length === 0) {
+          restoreResults(state.results, state.query);
+        }
+        overlayIndex = state.overlayIndex;
+        renderOverlay();
+        backdrop.classList.add("open");
+        document.body.style.overflow = "hidden";
+        return;
+      }
+
+      if (state.type === "search") {
+        closeOverlayUI();
+        if (state.query !== input.value || allResults.length === 0) {
+          restoreResults(state.results, state.query);
+        }
+        window.scrollTo(0, state.scrollY || 0);
+      }
+    });
+
     // ── Utilities ───────────────────────────────────────────────────
 
     function setLoading(loading) {
@@ -1221,6 +1299,17 @@
     function clearResults() {
       resultsEl.innerHTML = "";
       allResults = [];
+    }
+
+    function restoreResults(results, query) {
+      clearResults();
+      input.value = query || "";
+      results.forEach((r, i) => appendResult(r, i));
+      if (results.length) {
+        setStatus(`${results.length} match${results.length !== 1 ? "es" : ""} for "${query}"`);
+      } else {
+        setStatus("");
+      }
     }
 
     const RATING_LABELS = {
@@ -1252,6 +1341,20 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
+
+    // ── History init ─────────────────────────────────────────────────
+    // Let popstate manage scroll; disable the browser's automatic restoration.
+    history.scrollRestoration = "manual";
+    // Stamp the initial entry so back from the first search lands on a clean blank page.
+    history.replaceState({ type: "empty" }, "", location.href);
+    // Auto-run a search for ?q= deep links and page refreshes.
+    (function () {
+      const q = new URLSearchParams(location.search).get("q");
+      if (q) {
+        input.value = q;
+        form.requestSubmit();
+      }
+    })();
   </script>
 
 </body>
