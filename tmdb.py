@@ -4,6 +4,7 @@ import json
 import time
 import math
 import threading
+from functools import lru_cache
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
@@ -29,7 +30,7 @@ def _is_rate_limit_or_server_error(exc: BaseException) -> bool:
     )
 
 
-def _require_tmdb_key():
+def _require_tmdb_key() -> None:
     if not TMDB_KEY:
         raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 
@@ -270,6 +271,7 @@ def ingest_index(n: int) -> list[int]:
     return ids
 
 
+@lru_cache(maxsize=256)
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=2, min=1, max=30),
@@ -298,6 +300,7 @@ def search_person(name: str) -> list[dict]:
     ]
 
 
+@lru_cache(maxsize=256)
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=2, min=1, max=30),

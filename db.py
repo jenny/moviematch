@@ -131,6 +131,14 @@ def vector_upsert_batch(vectors: list[dict]) -> None:
     Each dict must have: id (str), values (list[float]),
     title (str), movie_poster (str), document (str).
     """
+    if not vectors:
+        return
+    actual_dim = len(vectors[0]["values"])
+    if actual_dim != EMBEDDING_DIMENSION:
+        raise ValueError(
+            f"Embedding dimension mismatch: got {actual_dim}, expected {EMBEDDING_DIMENSION}. "
+            f"Check that MODEL_NAME in config.py matches the model currently in use."
+        )
     if VECTOR_DB == "pinecone":
         index = _get_pinecone_index()
         pinecone_vectors = [

@@ -34,8 +34,14 @@ def prompt_claude(message: str) -> str:
     return response.content[0].text
 
 
+# Tool name constants — used in schema dicts AND all name comparisons so a typo
+# in one place is caught rather than silently doing nothing at runtime.
+_TOOL_SEARCH_PERSON = "search_person"
+_TOOL_GET_FILMOGRAPHY = "get_filmography"
+_TOOL_RETURN_RESULTS = "return_results"
+
 SEARCH_PERSON_TOOL = {
-    "name": "search_person",
+    "name": _TOOL_SEARCH_PERSON,
     "description": (
         "Search TMDB for a person (director, actor, writer) by name. "
         "Returns their ID and known works. Use this when the user mentions a specific person by name."
@@ -50,7 +56,7 @@ SEARCH_PERSON_TOOL = {
 }
 
 GET_FILMOGRAPHY_TOOL = {
-    "name": "get_filmography",
+    "name": _TOOL_GET_FILMOGRAPHY,
     "description": (
         "Get movie credits for a person given their TMDB person ID. "
         "Use department='directing' for directors and department='cast' for actors."
@@ -70,7 +76,7 @@ GET_FILMOGRAPHY_TOOL = {
 }
 
 RETURN_RESULTS_TOOL = {
-    "name": "return_results",
+    "name": _TOOL_RETURN_RESULTS,
     "description": "Return the final reranked and filtered movie recommendations.",
     "input_schema": {
         "type": "object",
@@ -211,9 +217,9 @@ def execute_tool(name: str, tool_input: dict) -> dict:
     args_summary = ", ".join(f"{k}={v}" for k, v in tool_input.items())
     logger.debug(f"Tool call: {name}({args_summary})")
     try:
-        if name == "search_person":
+        if name == _TOOL_SEARCH_PERSON:
             return {"results": search_person(tool_input["name"])}
-        elif name == "get_filmography":
+        elif name == _TOOL_GET_FILMOGRAPHY:
             movies = get_filmography(tool_input["person_id"], tool_input.get("department", "directing"))
             threading.Thread(
                 target=_ingest_filmography_background,
@@ -270,6 +276,41 @@ def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
     if rejected:
         logger.warning(f"return_results validation: rejected fabricated title(s): {rejected}")
     return filtered
+
+
+def _execute_non_terminal_tools(
+    tool_uses: list,
+    assistant_content: list,
+    valid_titles: set[str],
+    tools_called: list[str],
+) -> list[dict]:
+    """Execute a round of non-terminal tool calls and build the next two conversation messages.
+
+    Mutates valid_titles (adds filmography titles discovered via get_filmography) and
+    tools_called (appends each tool name) in-place so callers don't need to handle these.
+    Returns [assistant_message, tool_results_message] ready to extend messages with.
+
+    Shared between rerank() and rerank_stream() to keep the tool-dispatch logic in one place.
+    """
+    tools_called.extend(t.name for t in tool_uses)
+    tool_results = []
+    for t in tool_uses:
+        result = execute_tool(t.name, t.input)
+        if t.name == _TOOL_GET_FILMOGRAPHY:
+            # Seed valid_titles with filmography discoveries so Claude can recommend
+            # films that weren't in the original vector search results.
+            for movie in result.get("movies", []):
+                if movie.get("title"):
+                    valid_titles.add(movie["title"])
+        tool_results.append({
+            "type": "tool_result",
+            "tool_use_id": t.id,
+            "content": json.dumps(result),
+        })
+    return [
+        {"role": "assistant", "content": assistant_content},
+        {"role": "user", "content": tool_results},
+    ]
 
 
 def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict], dict]:
@@ -330,10 +371,10 @@ def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict],
             exit_reason = "no_tool_uses"
             break
 
-        non_terminal = [t for t in tool_uses if t.name != "return_results"]
+        non_terminal = [t for t in tool_uses if t.name != _TOOL_RETURN_RESULTS]
 
         for tool_use in tool_uses:
-            if tool_use.name == "return_results":
+            if tool_use.name == _TOOL_RETURN_RESULTS:
                 # Only record tools that were actually executed (non-terminal tools
                 # from prior rounds); non_terminal tools in this round are not executed
                 # since we're returning immediately
@@ -359,24 +400,12 @@ def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict],
                 results = _filter_results(raw, valid_titles)
                 return results, usage
 
-        # No return_results this round — execute non-terminal tools and continue
-        tools_called.extend(t.name for t in non_terminal)
+        # No return_results this round — execute non-terminal tools and continue.
+        # _execute_non_terminal_tools mutates valid_titles and tools_called in-place.
         current_model = CLAUDE_MODEL
-
-        messages.append({"role": "assistant", "content": response.content})
-        tool_results = []
-        for t in non_terminal:
-            result = execute_tool(t.name, t.input)
-            if t.name == "get_filmography":
-                for movie in result.get("movies", []):
-                    if movie.get("title"):
-                        valid_titles.add(movie["title"])
-            tool_results.append({
-                "type": "tool_result",
-                "tool_use_id": t.id,
-                "content": json.dumps(result),
-            })
-        messages.append({"role": "user", "content": tool_results})
+        messages.extend(
+            _execute_non_terminal_tools(non_terminal, response.content, valid_titles, tools_called)
+        )
 
     model_log = _format_model_log(models_used)
     usage = {
@@ -498,7 +527,7 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
                     if (event.type == "content_block_start"
                             and hasattr(event, "content_block")
                             and event.content_block.type == "tool_use"
-                            and event.content_block.name == "return_results"):
+                            and event.content_block.name == _TOOL_RETURN_RESULTS):
                         return_results_block_idx = event.index
                     elif (event.type == "content_block_delta"
                             and hasattr(event, "delta")
@@ -548,7 +577,7 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
             opus_output_tokens += out_toks
 
         tool_uses = [b for b in final.content if b.type == "tool_use"]
-        return_results_call = next((t for t in tool_uses if t.name == "return_results"), None)
+        return_results_call = next((t for t in tool_uses if t.name == _TOOL_RETURN_RESULTS), None)
 
         if return_results_call:
             # Safety net: yield any valid results the streaming parser missed
@@ -575,24 +604,12 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
             yield {"__usage": usage}
             return
 
-        non_terminal = [t for t in tool_uses if t.name != "return_results"]
-        tools_called.extend(t.name for t in non_terminal)
+        non_terminal = [t for t in tool_uses if t.name != _TOOL_RETURN_RESULTS]
+        # _execute_non_terminal_tools mutates valid_titles and tools_called in-place.
         current_model = CLAUDE_MODEL
-
-        messages.append({"role": "assistant", "content": final.content})
-        tool_results = []
-        for t in non_terminal:
-            result = execute_tool(t.name, t.input)
-            if t.name == "get_filmography":
-                for movie in result.get("movies", []):
-                    if movie.get("title"):
-                        valid_titles.add(movie["title"])
-            tool_results.append({
-                "type": "tool_result",
-                "tool_use_id": t.id,
-                "content": json.dumps(result),
-            })
-        messages.append({"role": "user", "content": tool_results})
+        messages.extend(
+            _execute_non_terminal_tools(non_terminal, final.content, valid_titles, tools_called)
+        )
 
     model_log = _format_model_log(models_used)
     logger.warning(f"Claude agent loop exhausted after {len(models_used)} rounds without return_results — returning no results. models={model_log}")

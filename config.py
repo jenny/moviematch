@@ -92,3 +92,22 @@ RICHTEXT_PREFIX_PLOT = "Plot: "
 RICHTEXT_PREFIX_GENRES = "Genres: "
 RICHTEXT_PREFIX_DIRECTOR = "Director: "
 RICHTEXT_PREFIX_CAST = "Top Cast: "
+
+
+def validate_config() -> None:
+    """Fail fast at startup if required environment variables are missing.
+
+    Called from the FastAPI lifespan before serving traffic. Pinecone keys are
+    intentionally excluded — they're only required when VECTOR_DB=pinecone and
+    are validated lazily by _get_pinecone_index() with a clear error message.
+    """
+    missing = []
+    if not ANTHROPIC_API_KEY:
+        missing.append("ANTHROPIC_API_KEY")
+    if not TMDB_KEY:
+        missing.append("TMDB_READ_ACCESS_TOKEN")
+    if missing:
+        raise ValueError(
+            f"Missing required environment variable(s): {', '.join(missing)}. "
+            "Check your .env file."
+        )

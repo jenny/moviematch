@@ -14,7 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from api.auth import SESSION_COOKIE, _cookie_kwargs, set_session_cookie, verify_session_cookie
 from api.limiter import limiter
 from api.routes import search, admin, streaming
-from config import ADMIN_PASSWORD, ADMIN_SECRET_KEY, ADMIN_USERNAME, CORS_ORIGINS
+from config import ADMIN_PASSWORD, ADMIN_SECRET_KEY, ADMIN_USERNAME, CORS_ORIGINS, validate_config
 
 _app_html: str = ""
 _admin_html: str = ""
@@ -27,8 +27,9 @@ async def lifespan(app: FastAPI):
     global _app_html, _admin_html, _login_html, _hints
     from db import get_model
     from claude import get_client
+    validate_config()  # raises ValueError early if ANTHROPIC_API_KEY or TMDB_READ_ACCESS_TOKEN are unset
     get_model()
-    get_client()  # validates ANTHROPIC_API_KEY early; raises ValueError if missing
+    get_client()
     _root = os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(_root, "app.html")) as f:
         _app_html = f.read()

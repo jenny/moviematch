@@ -101,7 +101,13 @@ async def search_endpoint(request: Request, body: SearchRequest):
                         yield f"data: {json.dumps(done)}\n\n"
                 else:
                     result_count += 1
-                    yield f"data: {json.dumps({'type': 'result', **item})}\n\n"
+                    try:
+                        yield f"data: {json.dumps({'type': 'result', **item})}\n\n"
+                    except (TypeError, ValueError) as e:
+                        # Defensive: result metadata from Claude should always be
+                        # JSON-serializable, but guard against unexpected types.
+                        logger.error("JSON serialization failed for result item: %s", e)
+                        yield f"data: {json.dumps({'type': 'error', 'message': 'An error occurred processing a result.'})}\n\n"
 
         except Exception as e:
             total_ms = round((time.perf_counter() - t0) * 1000)
