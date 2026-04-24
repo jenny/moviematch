@@ -33,7 +33,7 @@
 Every query runs through `parse_query()` in `query_parser.py` before embedding. This is a pure regex pass (<1ms, no I/O) that extracts structured tokens into a `ParsedQuery` dataclass:
 
 - **Year/decade**: "90s" → `year_min=1990, year_max=1999`; "early 2000s", "after 1985", "last 10 years", etc.
-- **Genres**: "no documentaries" → `excluded_genres=["Documentary"]`; "sci-fi" → `required_genres=["Science Fiction"]`
+- **Genres**: "no documentaries" → `excluded_genres=["Documentary"]`; "sci-fi" → `required_genres=["Science Fiction"]`; "animated" / "animation" → `required_genres=["Animation"]`; "live action" / "live-action" → `excluded_genres=["Animation"]` (special-cased via `_LIVE_ACTION_PATTERN` since "live action" is not a TMDB genre)
 - **Certifications**: "family friendly" / "kids movie" / "children's film" / "for children" etc. → `excluded_certifications=["NC-17"]` + `certification_caveats` (soft Claude guidance to prefer G/PG/PG-13, surface R only as last resort with explicit note); "no R-rated" → `excluded_certifications=["R"]`
 - **Person names**: "directed by Bong Joon-ho" → `person_names=["Bong Joon-ho"], person_department="directing"`; also handles film slang ("Spike Lee joint")
 - **Title references**: "something like Inception" → `reference_titles=["Inception"]`; "in the style of Wes Anderson" → also adds to `person_names`

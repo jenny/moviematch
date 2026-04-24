@@ -118,6 +118,34 @@ class TestParseQueryGenres:
         p = parse_query("COMEDY films")
         assert "Comedy" in p.required_genres
 
+    def test_animated_required(self):
+        p = parse_query("animated movies")
+        assert "Animation" in p.required_genres
+        assert not p.excluded_genres
+
+    def test_animation_keyword_required(self):
+        p = parse_query("animation films from the 90s")
+        assert "Animation" in p.required_genres
+
+    def test_no_animation_excluded(self):
+        p = parse_query("no animation please")
+        assert "Animation" in p.excluded_genres
+        assert "Animation" not in p.required_genres
+
+    def test_live_action_excludes_animation(self):
+        p = parse_query("live action thriller")
+        assert "Animation" in p.excluded_genres
+        assert "Animation" not in p.required_genres
+
+    def test_live_action_hyphenated(self):
+        p = parse_query("live-action superhero film")
+        assert "Animation" in p.excluded_genres
+
+    def test_negated_live_action_requires_animation(self):
+        p = parse_query("not live action")
+        assert "Animation" in p.required_genres
+        assert "Animation" not in p.excluded_genres
+
 
 # ---------------------------------------------------------------------------
 # parse_query — certifications

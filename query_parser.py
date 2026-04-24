@@ -109,6 +109,10 @@ _FAMILY_FRIENDLY_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# "live action" / "live-action" — not a TMDB genre; signals exclusion of Animation.
+# Negated ("not live action") inversely requires Animation.
+_LIVE_ACTION_PATTERN = re.compile(r"\blive[- ]action\b", re.IGNORECASE)
+
 
 # ---------------------------------------------------------------------------
 # Person name patterns
@@ -314,6 +318,17 @@ def parse_query(raw_query: str) -> ParsedQuery:
         else:
             if genre_name not in parsed.required_genres:
                 parsed.required_genres.append(genre_name)
+
+    # "live action" is not a TMDB genre — treat it as "exclude Animation".
+    # Negated ("not live action") is treated as "require Animation".
+    for m in _LIVE_ACTION_PATTERN.finditer(q):
+        before = q[max(0, m.start() - 40) : m.start()]
+        if _NEGATION_BEFORE.search(before):
+            if "Animation" not in parsed.required_genres:
+                parsed.required_genres.append("Animation")
+        else:
+            if "Animation" not in parsed.excluded_genres:
+                parsed.excluded_genres.append("Animation")
 
     # --- Certifications ---
     if _FAMILY_FRIENDLY_PATTERN.search(q):
