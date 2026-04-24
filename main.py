@@ -174,13 +174,34 @@ def search_stream(query: str):
         yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
         return
 
-    poster_by_title = {c["title"]: c["movie_poster"] for c in candidates}
-    certification_by_title = {c["title"]: c["certification"] for c in candidates}
-    year_by_title = {c["title"]: c["year"] for c in candidates}
-    overview_by_title = {c["title"]: c["overview"] for c in candidates}
-    genres_by_title = {c["title"]: c["genres"] for c in candidates}
-    director_by_title = {c["title"]: c["director"] for c in candidates}
-    cast_by_title = {c["title"]: c["cast"] for c in candidates}
+    # Keyed by lowercased title to match _filter_results' case-insensitive behaviour.
+    # Claude sees exact candidate titles in the prompt but may use slightly different
+    # casing, and filmography-sourced titles may differ from vector DB titles.
+    poster_by_title = {c["title"].lower(): c["movie_poster"] for c in candidates}
+    certification_by_title = {c["title"].lower(): c["certification"] for c in candidates}
+    year_by_title = {c["title"].lower(): c["year"] for c in candidates}
+    overview_by_title = {c["title"].lower(): c["overview"] for c in candidates}
+    genres_by_title = {c["title"].lower(): c["genres"] for c in candidates}
+    director_by_title = {c["title"].lower(): c["director"] for c in candidates}
+    cast_by_title = {c["title"].lower(): c["cast"] for c in candidates}
+
+    # Seed with filmography metadata for titles not already covered by vector candidates.
+    # Filmography movies from TMDB carry poster_path and release_date but not the richer
+    # fields (overview, genres, cast) that only exist in the vector DB document.
+    if parsed and parsed.person_filmographies:
+        for pf in parsed.person_filmographies:
+            for movie in pf.get("movies", []):
+                title_lower = (movie.get("title") or "").lower()
+                if not title_lower or title_lower in poster_by_title:
+                    continue
+                raw_date = movie.get("release_date", "")
+                poster_by_title[title_lower] = movie.get("poster_path", "")
+                year_by_title[title_lower] = raw_date[:4] if raw_date else ""
+                certification_by_title[title_lower] = ""
+                overview_by_title[title_lower] = ""
+                genres_by_title[title_lower] = []
+                director_by_title[title_lower] = ""
+                cast_by_title[title_lower] = []
 
     t0 = time.perf_counter()
     usage = None
@@ -190,7 +211,7 @@ def search_stream(query: str):
             usage = item["__usage"]
             error = usage.pop("error", None)
         else:
-            t = item.get("title", "")
+            t = (item.get("title") or "").lower()
             item["movie_poster"] = poster_by_title.get(t, "")
             item["certification"] = certification_by_title.get(t, "")
             item["year"] = year_by_title.get(t, "")

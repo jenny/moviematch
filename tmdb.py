@@ -329,6 +329,7 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
                     "vote_average": m.get("vote_average", 0),
                     "vote_count": m.get("vote_count", 0),
                     "release_date": m.get("release_date", ""),
+                    "poster_path": m.get("poster_path", ""),
                 })
     else:
         # Cap cast credits at 30 highest-rated to avoid overwhelming Claude
@@ -340,6 +341,7 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
                     "vote_average": m.get("vote_average", 0),
                     "vote_count": m.get("vote_count", 0),
                     "release_date": m.get("release_date", ""),
+                    "poster_path": m.get("poster_path", ""),
                     "character": m.get("character", ""),
                 }
                 for m in data.get("cast", [])

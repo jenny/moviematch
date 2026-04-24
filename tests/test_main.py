@@ -262,3 +262,119 @@ class TestSearchStreamPreParse:
         mock_thread.assert_called_once()
         thread_kwargs = mock_thread.call_args
         assert thread_kwargs[1].get("daemon") is True
+
+    def test_metadata_lookup_is_case_insensitive(self):
+        """If Claude returns a title with different casing than the vector candidate,
+        metadata (year, poster, etc.) should still be attached correctly."""
+        candidates = [_make_candidate("Inception", year="2010")]
+        candidates[0]["movie_poster"] = "/poster.jpg"
+        candidates[0]["overview"] = "A dream heist."
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"):
+            from query_parser import ParsedQuery
+            mock_parse.return_value = ParsedQuery()
+
+            # Claude returns lowercase title — different casing from the candidate
+            with patch("main.rerank_stream") as mock_rerank:
+                mock_rerank.return_value = iter([
+                    {"title": "inception", "explanation": "A classic."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 1, "tools_called": []}},
+                ])
+
+                from main import search_stream
+                results = [r for r in search_stream("dream heist") if "__meta" not in r]
+
+        assert len(results) == 1
+        assert results[0]["year"] == "2010"
+        assert results[0]["movie_poster"] == "/poster.jpg"
+        assert results[0]["overview"] == "A dream heist."
+
+    def test_filmography_only_title_gets_poster_and_year(self):
+        """A title from the filmography that is NOT among the vector candidates
+        should still receive poster_path and release year from the TMDB movie dict."""
+        candidates = [_make_candidate("Memento", year="2000")]
+
+        filmography_movies = [
+            {
+                "id": 999,
+                "title": "Following",
+                "vote_average": 7.5,
+                "vote_count": 500,
+                "release_date": "1998-09-11",
+                "poster_path": "/following.jpg",
+            }
+        ]
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"):
+            from query_parser import ParsedQuery
+            mock_parsed = ParsedQuery()
+            mock_parsed.person_names = ["Christopher Nolan"]
+            mock_parsed.person_filmographies = [
+                {"name": "Christopher Nolan", "person_id": 525,
+                 "department": "directing", "titles": ["Memento", "Following"],
+                 "movies": filmography_movies}
+            ]
+            mock_parse.return_value = mock_parsed
+
+            with patch("main.rerank_stream") as mock_rerank:
+                # Claude recommends the filmography-only title "Following"
+                mock_rerank.return_value = iter([
+                    {"title": "Following", "explanation": "Nolan's debut."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 1, "tools_called": []}},
+                ])
+
+                from main import search_stream
+                results = [r for r in search_stream("Nolan films") if "__meta" not in r]
+
+        assert len(results) == 1
+        assert results[0]["title"] == "Following"
+        assert results[0]["movie_poster"] == "/following.jpg"
+        assert results[0]["year"] == "1998"
+
+    def test_filmography_seed_does_not_overwrite_candidate_metadata(self):
+        """If a title appears in both candidates and filmography, the richer
+        vector DB metadata (from the candidate) should take precedence."""
+        candidates = [_make_candidate("Memento", year="2000")]
+        candidates[0]["movie_poster"] = "/memento_vector.jpg"
+        candidates[0]["overview"] = "A man with no short-term memory."
+
+        filmography_movies = [
+            {
+                "id": 1,
+                "title": "Memento",          # same title as candidate
+                "vote_average": 8.4,
+                "vote_count": 1500,
+                "release_date": "1999-09-05",
+                "poster_path": "/memento_tmdb.jpg",  # different poster — should NOT win
+            }
+        ]
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"):
+            from query_parser import ParsedQuery
+            mock_parsed = ParsedQuery()
+            mock_parsed.person_filmographies = [
+                {"name": "Christopher Nolan", "person_id": 525,
+                 "department": "directing", "titles": ["Memento"],
+                 "movies": filmography_movies}
+            ]
+            mock_parse.return_value = mock_parsed
+
+            with patch("main.rerank_stream") as mock_rerank:
+                mock_rerank.return_value = iter([
+                    {"title": "Memento", "explanation": "Memory loss thriller."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 1, "tools_called": []}},
+                ])
+
+                from main import search_stream
+                results = [r for r in search_stream("Nolan films") if "__meta" not in r]
+
+        assert len(results) == 1
+        # Vector DB metadata wins over filmography TMDB metadata
+        assert results[0]["movie_poster"] == "/memento_vector.jpg"
+        assert results[0]["overview"] == "A man with no short-term memory."

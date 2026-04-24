@@ -1,7 +1,7 @@
 import math
 import pytest
 from unittest.mock import patch, MagicMock
-from tmdb import _composite_score, extract_certification, select_top_n, filter_cast, filter_crew, search_movie_by_title, fetch_watch_providers
+from tmdb import _composite_score, extract_certification, select_top_n, filter_cast, filter_crew, search_movie_by_title, fetch_watch_providers, get_filmography
 from config import (
     TMDB_MIN_VOTE_COUNT,
     SCORE_WEIGHT_RATING,
@@ -287,3 +287,47 @@ class TestFetchWatchProviders:
         with patch("tmdb._require_tmdb_key"), patch("requests.get", side_effect=Exception("timeout")):
             result = fetch_watch_providers(238)
         assert result == []
+
+
+class TestGetFilmography:
+    def _mock_response(self, crew=None, cast=None):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"crew": crew or [], "cast": cast or []}
+        return mock_resp
+
+    def _director_entry(self, id=1, title="Movie A", poster="/a.jpg", release="2010-01-01"):
+        return {"id": id, "title": title, "job": "Director",
+                "poster_path": poster, "release_date": release,
+                "vote_average": 7.5, "vote_count": 500}
+
+    def _cast_entry(self, id=1, title="Movie B", poster="/b.jpg", release="2012-05-20", character="Hero"):
+        return {"id": id, "title": title, "character": character,
+                "poster_path": poster, "release_date": release,
+                "vote_average": 7.0, "vote_count": 300}
+
+    def test_directing_includes_poster_path(self):
+        mock_resp = self._mock_response(crew=[self._director_entry()])
+        with patch("tmdb._require_tmdb_key"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("tmdb.time.sleep"):
+            movies = get_filmography(1, department="directing")
+        assert movies[0]["poster_path"] == "/a.jpg"
+
+    def test_cast_includes_poster_path(self):
+        mock_resp = self._mock_response(cast=[self._cast_entry()])
+        with patch("tmdb._require_tmdb_key"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("tmdb.time.sleep"):
+            movies = get_filmography(1, department="cast")
+        assert movies[0]["poster_path"] == "/b.jpg"
+
+    def test_missing_poster_path_defaults_to_empty_string(self):
+        # Build a TMDB crew entry that has no poster_path key at all
+        entry = {"id": 99, "title": "No Poster Film", "job": "Director",
+                 "release_date": "2005-03-01", "vote_average": 6.5, "vote_count": 200}
+        mock_resp = self._mock_response(crew=[entry])
+        with patch("tmdb._require_tmdb_key"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("tmdb.time.sleep"):
+            movies = get_filmography(99, department="directing")
+        assert movies[0]["poster_path"] == ""
