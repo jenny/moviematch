@@ -101,8 +101,11 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 
 ## Coding Hygiene
 - Discuss and get approval for the technical approach first. Do not proceed with code changes until the technical approach is agreed upon.
-- Code changes should be implemented in a short-lived feature branch that is deleted only after all code changes are committed and merged to main.
+- Code changes should be implemented in a short-lived feature branch.
 - Code changes should include clear inline comments for future collaborators.
+- Do not invoke /commit or create any git commits without explicit user sign-off that they have tested locally and are ready to commit.
+- The feature branch should be deleted only after all code changes are committed and merged to main.
+
 
 ## Forbidden Directories
 Do not read or modify files in these directories:
