@@ -97,7 +97,7 @@ async def search_endpoint(request: Request, body: SearchRequest):
                     else:
                         done = {"type": "done", "result_count": result_count}
                         if not result_count:
-                            done["message"] = "No relevant matches found."
+                            done["message"] = "No relevant matches found. Try a different query."
                         yield f"data: {json.dumps(done)}\n\n"
                 else:
                     result_count += 1
