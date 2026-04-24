@@ -43,6 +43,7 @@ def _get_client_ip(request: Request) -> str | None:
 async def search_endpoint(request: Request, body: SearchRequest):
     timestamp = datetime.now(timezone.utc).isoformat()
     client_ip = _get_client_ip(request)
+    user_agent = request.headers.get("user-agent")
     t0 = time.perf_counter()
 
     async def generate():
@@ -74,6 +75,7 @@ async def search_endpoint(request: Request, body: SearchRequest):
                         "timestamp": timestamp,
                         "query": body.query,
                         "client_ip": client_ip,
+                        "user_agent": user_agent,
                         "status": "error" if error else "ok",
                         "result_count": result_count,
                         "embedding_ms": meta.get("embedding_ms"),
@@ -117,6 +119,7 @@ async def search_endpoint(request: Request, body: SearchRequest):
                 "timestamp": timestamp,
                 "query": body.query,
                 "client_ip": client_ip,
+                "user_agent": user_agent,
                 "status": "error",
                 "error": str(e),
                 "traceback": tb,

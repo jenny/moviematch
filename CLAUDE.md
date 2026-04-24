@@ -18,7 +18,7 @@
 | `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
-| `api/app.py` | FastAPI app factory, CORS, lifespan; login/logout routes |
+| `api/app.py` | FastAPI app factory, CORS (GET+POST, Content-Type only), security-header middleware, lifespan; login/logout routes |
 | `api/auth.py` | HMAC-SHA256 session cookie signing; `require_admin` FastAPI dependency |
 | `login.html` | Admin login page (dark theme, JSON POST via fetch) |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
@@ -70,7 +70,7 @@ Run in venv with: `pytest` from project root.
 |-----------|---------------|
 | `tests/test_query_parser.py` | `parse_query`: year/decade normalization, genre/cert/person extraction, slang triggers, "in the style of" dual-purpose, "more like X" title refs, relative date hints; `apply_hard_filters`: year, genre, cert filtering, conservative empty-metadata handling; `resolve_persons`: TMDB mocked, success/failure/timeout paths |
 | `tests/test_claude.py` | Pure functions: `_filter_results` (case-insensitive), `_extract_result_objects`, `_sanitize`, `_build_rerank_prompt` (constraint injection, reference_films block, filmography cap, suppression instruction, XSS sanitization) |
-| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode` |
+| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode`; security headers; user-agent log capture |
 | `tests/test_main.py` | `_parse_document()` richtext extraction; `search_stream` pre-parse integration: year filter reduces candidates, person timeout degrades gracefully, successful pre-fetch triggers background ingestion, case-insensitive metadata lookup, filmography-only title seeding |
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers`; certification: `extract_certification`, `fetch_certification`, `get_certification_for_title`; filmography: `get_filmography` includes `poster_path` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
@@ -81,7 +81,7 @@ Run in venv with: `pytest` from project root.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
-Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
+Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT` (default `10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (default `30/minute` on `/streaming` endpoints), `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
 
 Admin auth (all three required to enable the admin panel; fails closed if any is unset): `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SECRET_KEY` (random 32-byte hex string — generate with `openssl rand -hex 32`)
 
@@ -98,6 +98,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - **Filmography metadata seeding**: the metadata lookup dicts in `search_stream` (`main.py`) are keyed by lowercased title. For filmography movies not in the top-N vector candidates, `search_stream` does a batch `vector_fetch_by_ids` call using the TMDB IDs carried in the filmography payload — this retrieves the full document (overview, genres, director, cast) for any film already in the vector DB regardless of its similarity rank. Films not yet ingested fall back to the sparse poster+year from the TMDB filmography response.
 - **Card poster resilience**: the result card `<img>` has an `onerror` handler that removes the `.card-poster` div on a 404, preventing broken image placeholders.
 - **Mock search**: typing `__mock__` as the query bypasses the backend entirely and renders five hardcoded results through the same `appendResult()` path as live searches. Useful for frontend-only development without a running server.
+- **Bot/scraper resilience**: rate limiting via `slowapi` on all public endpoints (`RATE_LIMIT` on `/recommend`, `STREAMING_RATE_LIMIT` on `/streaming` and `/streaming/batch`); security headers (`X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy`) added to all responses via middleware; CORS restricted to `GET`/`POST` and `Content-Type` header only; `user_agent` field logged on every `/recommend` request.
 
 ## Model Use During Development
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
