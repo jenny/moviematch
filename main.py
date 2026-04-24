@@ -1,10 +1,21 @@
 import logging
 import re
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
-from config import SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE, RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT
+from config import (
+    SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE,
+    RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT,
+    PERSON_LOOKUP_TIMEOUT_S, PREPARSE_EXECUTOR_WORKERS,
+)
 from db import get_model, vector_count, vector_query
-from claude import rerank, rerank_stream
+from claude import rerank, rerank_stream, _ingest_filmography_background
+from query_parser import parse_query, apply_hard_filters, resolve_persons
+
+# Module-level executor for concurrent person TMDB pre-fetches.
+# Shared across requests; each request submits its own future.
+_person_fetch_executor = ThreadPoolExecutor(max_workers=PREPARSE_EXECUTOR_WORKERS)
 
 logger = logging.getLogger(__name__)
 
@@ -89,8 +100,29 @@ def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
 
 
 def search(query: str) -> tuple[list[dict], dict | None, dict]:
+    # Pre-parse and concurrent person lookup (same as search_stream).
+    parsed = parse_query(query)
+    person_future = None
+    if parsed.person_names:
+        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
+
     candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
     timing = {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0}
+
+    if person_future is not None:
+        try:
+            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
+            for pf in parsed.person_filmographies:
+                if pf.get("movies"):
+                    threading.Thread(
+                        target=_ingest_filmography_background,
+                        args=(pf["movies"],),
+                        daemon=True,
+                    ).start()
+        except Exception:
+            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
+
+    candidates = apply_hard_filters(candidates, parsed)
 
     if not candidates:
         return [], None, timing
@@ -99,7 +131,7 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
     certification_by_title = {c["title"]: c["certification"] for c in candidates}
 
     t0 = time.perf_counter()
-    reranked, usage = rerank(query, candidates)
+    reranked, usage = rerank(query, candidates, parsed=parsed)
     timing["claude_ms"] = round((time.perf_counter() - t0) * 1000)
 
     for result in reranked:
@@ -111,7 +143,32 @@ def search(query: str) -> tuple[list[dict], dict | None, dict]:
 def search_stream(query: str):
     """Generator that yields result dicts (with movie_poster) as they stream from Claude,
     then yields {"__meta": {"embedding_ms": ..., "chroma_ms": ..., "claude_ms": ..., "usage": ...}}."""
+    # Pre-parse the query for structured tokens (year, genre, cert, person names).
+    # If person names are found, submit a TMDB lookup concurrently with embedding
+    # so the round-trip latency is absorbed rather than added.
+    parsed = parse_query(query)
+    person_future = None
+    if parsed.person_names:
+        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
+
     candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
+
+    if person_future is not None:
+        try:
+            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
+            # Trigger background ingestion for pre-fetched filmography films,
+            # mirroring the ingestion that fires when Claude calls get_filmography directly.
+            for pf in parsed.person_filmographies:
+                if pf.get("movies"):
+                    threading.Thread(
+                        target=_ingest_filmography_background,
+                        args=(pf["movies"],),
+                        daemon=True,
+                    ).start()
+        except Exception:
+            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
+
+    candidates = apply_hard_filters(candidates, parsed)
 
     if not candidates:
         yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
@@ -128,7 +185,7 @@ def search_stream(query: str):
     t0 = time.perf_counter()
     usage = None
     error = None
-    for item in rerank_stream(query, candidates):
+    for item in rerank_stream(query, candidates, parsed=parsed):
         if "__usage" in item:
             usage = item["__usage"]
             error = usage.pop("error", None)

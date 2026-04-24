@@ -94,24 +94,96 @@ RETURN_RESULTS_TOOL = {
 TOOLS = [SEARCH_PERSON_TOOL, GET_FILMOGRAPHY_TOOL, RETURN_RESULTS_TOOL]
 
 
-def _build_rerank_prompt(query: str, candidate_text: str) -> str:
-    return f"""You are a movie recommendation assistant. A user searched for:
-<query>{query}</query>
+def _sanitize(s: str) -> str:
+    """Strip XML-significant characters from user-derived strings before prompt injection.
+    Prevents prompt injection via crafted queries containing XML tags."""
+    return s.replace("<", "").replace(">", "").replace("&", "and")
 
-Here are candidate movies retrieved by semantic search:
 
-{candidate_text}
+def _build_rerank_prompt(query: str, candidate_text: str, parsed=None) -> str:
+    # Build optional constraint and filmography blocks from pre-parsed tokens.
+    constraint_lines = []
+    if parsed:
+        if parsed.year_min is not None and parsed.year_max is not None:
+            constraint_lines.append(f"- Year range: {parsed.year_min}–{parsed.year_max} only")
+        elif parsed.year_min is not None:
+            constraint_lines.append(f"- Released {parsed.year_min} or later")
+        elif parsed.year_max is not None:
+            constraint_lines.append(f"- Released {parsed.year_max} or earlier")
+        if parsed.required_genres:
+            constraint_lines.append(f"- Required genres: {', '.join(_sanitize(g) for g in parsed.required_genres)}")
+        if parsed.excluded_genres:
+            constraint_lines.append(f"- Exclude genres: {', '.join(_sanitize(g) for g in parsed.excluded_genres)}")
+        if parsed.allowed_certifications:
+            constraint_lines.append(f"- Certifications allowed: {', '.join(_sanitize(c) for c in parsed.allowed_certifications)}")
+        if parsed.excluded_certifications:
+            constraint_lines.append(f"- Exclude certifications: {', '.join(_sanitize(c) for c in parsed.excluded_certifications)}")
+        for hint in parsed.relative_date_hints:
+            if hint == "older":
+                constraint_lines.append("- Prefer older/classic films")
+            elif hint == "newer":
+                constraint_lines.append("- Prefer newer/recent films")
 
-If the query mentions a specific director, actor, or filmmaker by name, use search_person \
-to find them, then get_filmography to see their work — this ensures you can recommend their \
-films even if they're not in the candidate list above.
+    constraints_block = ""
+    if constraint_lines:
+        constraints_block = "<constraints>\n" + "\n".join(constraint_lines) + "\n</constraints>\n\n"
 
-When you have enough information, use return_results with your final recommendations:
-1. Filter out candidates that don't match the query
-2. Rerank from most to least relevant, including any relevant films from a filmography lookup
-3. Write a brief explanation for each result
+    # Build filmography block for pre-resolved persons. Cap at 30 titles per person
+    # to keep token cost bounded (prolific directors can have 50+ credits).
+    filmography_block = ""
+    suppress_instruction = ""
+    if parsed and parsed.person_filmographies:
+        lines = []
+        resolved_names = []
+        for pf in parsed.person_filmographies:
+            name = _sanitize(pf["name"])
+            dept = pf["department"]
+            titles = [_sanitize(t) for t in pf["titles"][:30]]
+            lines.append(f"{name} ({dept}): {', '.join(titles)}")
+            resolved_names.append(name)
+        filmography_block = "<filmography>\n" + "\n".join(lines) + "\n</filmography>\n\n"
+        resolved_str = ", ".join(resolved_names)
+        suppress_instruction = (
+            f"The following people's filmographies have already been retrieved: {resolved_str}. "
+            f"Do NOT call search_person or get_filmography for them. "
+            f"For any other person mentioned in the query, you may still use search_person.\n\n"
+        )
 
-Only include movies that are genuinely relevant."""
+    # Determine tool-call instruction based on whether all persons were pre-resolved.
+    all_resolved = (
+        parsed is not None
+        and bool(parsed.person_names)
+        and len(parsed.person_filmographies) == len(parsed.person_names)
+    )
+    if all_resolved:
+        tool_instruction = (
+            "When you have enough information, use return_results with your final recommendations:\n"
+            "1. Filter out candidates that don't match the query\n"
+            "2. Rerank from most to least relevant, including any relevant films from the filmography above\n"
+            "3. Write a brief explanation for each result"
+        )
+    else:
+        tool_instruction = (
+            "If the query mentions a specific director, actor, or filmmaker by name, use search_person "
+            "to find them, then get_filmography to see their work — this ensures you can recommend their "
+            "films even if they're not in the candidate list above.\n\n"
+            "When you have enough information, use return_results with your final recommendations:\n"
+            "1. Filter out candidates that don't match the query\n"
+            "2. Rerank from most to least relevant, including any relevant films from a filmography lookup\n"
+            "3. Write a brief explanation for each result"
+        )
+
+    return (
+        f"You are a movie recommendation assistant. A user searched for:\n"
+        f"<query>{_sanitize(query)}</query>\n\n"
+        f"{constraints_block}"
+        f"{filmography_block}"
+        f"{suppress_instruction}"
+        f"Here are candidate movies retrieved by semantic search:\n\n"
+        f"{candidate_text}\n\n"
+        f"{tool_instruction}\n\n"
+        f"Only include movies that are genuinely relevant."
+    )
 
 
 _ingesting_ids: set[int] = set()
@@ -164,11 +236,11 @@ def _is_transient_claude_error(exc: BaseException) -> bool:
     wait=wait_exponential(multiplier=1, min=1, max=10),
     retry=retry_if_exception(_is_transient_claude_error),
 )
-def _call_claude(model: str, messages: list, max_tokens: int = 1024) -> object:
+def _call_claude(model: str, messages: list, max_tokens: int = 1024, tools: list = TOOLS) -> object:
     return get_client().messages.create(
         model=model,
         max_tokens=max_tokens,
-        tools=TOOLS,
+        tools=tools,
         tool_choice={"type": "any"},
         messages=messages,
     )
@@ -179,13 +251,18 @@ def _format_model_log(models_used: list) -> str:
 
 
 def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
-    """Drop fabricated titles and deduplicate, preserving order."""
+    """Drop fabricated titles and deduplicate, preserving order.
+
+    Uses case-insensitive matching to handle minor casing differences between
+    TMDB filmography titles and the strings stored in the vector DB.
+    """
+    valid_lower = {t.lower() for t in valid_titles}
     filtered = []
     seen: set[str] = set()
     rejected = []
     for r in results:
-        title = r.get("title")
-        if title not in valid_titles:
+        title = r.get("title") or ""
+        if title.lower() not in valid_lower:
             rejected.append(title)
         elif title not in seen:
             filtered.append(r)
@@ -195,12 +272,12 @@ def _filter_results(results: list[dict], valid_titles: set[str]) -> list[dict]:
     return filtered
 
 
-def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
+def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict], dict]:
     candidate_text = "\n\n".join(
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = _build_rerank_prompt(query, candidate_text)
+    prompt = _build_rerank_prompt(query, candidate_text, parsed=parsed)
 
     messages = [{"role": "user", "content": prompt}]
     total_input_tokens = 0
@@ -215,9 +292,24 @@ def rerank(query: str, candidates: list[dict]) -> tuple[list[dict], dict]:
     exit_reason = "exhausted"
     valid_titles = {c["title"] for c in candidates}
 
+    # Seed valid_titles with pre-fetched filmography titles so Claude can recommend
+    # films discovered via pre-fetch that weren't in the vector search results.
+    if parsed and parsed.person_filmographies:
+        for pf in parsed.person_filmographies:
+            valid_titles.update(pf["titles"])
+
+    # If all requested persons were resolved, remove person-lookup tools entirely —
+    # a hard guarantee that Claude won't trigger redundant TMDB calls.
+    all_resolved = (
+        parsed is not None
+        and bool(parsed.person_names)
+        and len(parsed.person_filmographies) == len(parsed.person_names)
+    )
+    active_tools = [RETURN_RESULTS_TOOL] if all_resolved else TOOLS
+
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
-        response = _call_claude(current_model, messages, max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048)
+        response = _call_claude(current_model, messages, max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048, tools=active_tools)
 
         in_toks = response.usage.input_tokens
         out_toks = response.usage.output_tokens
@@ -351,14 +443,14 @@ def _extract_result_objects(partial_json: str) -> list[str]:
     return objects
 
 
-def rerank_stream(query: str, candidates: list[dict]):
+def rerank_stream(query: str, candidates: list[dict], parsed=None):
     """Streaming version of rerank(). Yields result dicts one by one as they
     complete in Claude's return_results tool call, then yields {"__usage": {...}}."""
     candidate_text = "\n\n".join(
         f"Title: {r['title']}\n{r['document']}"
         for r in candidates
     )
-    prompt = _build_rerank_prompt(query, candidate_text)
+    prompt = _build_rerank_prompt(query, candidate_text, parsed=parsed)
 
     messages = [{"role": "user", "content": prompt}]
     total_input_tokens = 0
@@ -372,6 +464,21 @@ def rerank_stream(query: str, candidates: list[dict]):
     current_model = CLAUDE_FAST_MODEL
     valid_titles = {c["title"] for c in candidates}
 
+    # Seed valid_titles with pre-fetched filmography titles.
+    if parsed and parsed.person_filmographies:
+        for pf in parsed.person_filmographies:
+            valid_titles.update(pf["titles"])
+
+    # Hard-remove person-lookup tools when all persons were pre-resolved.
+    all_resolved = (
+        parsed is not None
+        and bool(parsed.person_names)
+        and len(parsed.person_filmographies) == len(parsed.person_names)
+    )
+    active_tools = [RETURN_RESULTS_TOOL] if all_resolved else TOOLS
+    # Case-insensitive lookup for the inline streaming filter and the final safety-net filter.
+    valid_lower = {t.lower() for t in valid_titles}
+
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
         return_results_block_idx = None
@@ -383,7 +490,7 @@ def rerank_stream(query: str, candidates: list[dict]):
             with get_client().messages.stream(
                 model=current_model,
                 max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048,
-                tools=TOOLS,
+                tools=active_tools,
                 tool_choice={"type": "any"},
                 messages=messages,
             ) as stream:
@@ -403,7 +510,7 @@ def rerank_stream(query: str, candidates: list[dict]):
                                 result = json.loads(obj_str)
                                 if "title" in result and "explanation" in result:
                                     title = result["title"]
-                                    if title not in valid_titles:
+                                    if title.lower() not in valid_lower:
                                         logger.warning(
                                             f"rerank_stream: rejected fabricated title during streaming: {title!r}"
                                         )

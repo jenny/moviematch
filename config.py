@@ -68,6 +68,11 @@ CREW_JOBS = {"Director", "Executive Producer", "Producer"}
 SEARCH_CANDIDATES = 15
 SEARCH_DOC_TRUNCATE = 200
 
+# Query pre-parsing
+PERSON_LOOKUP_TIMEOUT_S = 1.5   # max seconds to wait for concurrent person TMDB pre-fetch;
+                                 # tight on purpose — TMDB p50 ~500ms, p95 ~1s; limits worst-case streaming block
+PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent person lookups
+
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"
 

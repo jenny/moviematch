@@ -96,7 +96,24 @@ class TestSearchEndpoint:
         events = parse_sse(response.text)
         done_events = [e for e in events if e["type"] == "done"]
         assert done_events[0]["result_count"] == 0
-        assert done_events[0]["message"] == "No relevant matches found."
+        assert done_events[0]["message"] == "No relevant matches found. Try a different query."
+
+    def test_kid_friendly_thrillers_returns_no_results_message(self, client):
+        """Genre hard filter removes all family candidates (no TMDB 'Thriller' tag);
+        Claude has nothing to return. Verify the user sees an encouraging message."""
+        stream = iter([make_meta(usage={
+            "input_tokens": 50, "output_tokens": 20,
+            "haiku_input_tokens": 50, "haiku_output_tokens": 20,
+            "opus_input_tokens": 0, "opus_output_tokens": 0,
+            "rounds": 1, "tools_called": [],
+        })])
+        with patch("api.routes.search.search_stream", return_value=stream):
+            response = client.post("/recommend", json={"query": "kid friendly thrillers"})
+
+        events = parse_sse(response.text)
+        done_events = [e for e in events if e["type"] == "done"]
+        assert done_events[0]["result_count"] == 0
+        assert "Try a different query" in done_events[0]["message"]
 
     def test_claude_error_emits_error_event(self, client):
         stream = iter([make_meta(usage=None, error="rate limit exceeded")])
