@@ -1,4 +1,6 @@
+import json
 import pytest
+from unittest.mock import MagicMock, patch
 from claude import _filter_results, _extract_result_objects, _sanitize, _build_rerank_prompt, TOOLS, RETURN_RESULTS_TOOL
 from query_parser import ParsedQuery
 
@@ -318,3 +320,130 @@ class TestBuildRerankPrompt:
         prompt = _build_rerank_prompt("style films", self._candidates_text(), parsed=parsed)
         assert "<injected>" not in prompt
         assert "</filmography>" not in prompt or prompt.count("</filmography>") == 1
+
+
+# ---------------------------------------------------------------------------
+# rerank_stream — valid_lower staleness regression
+# ---------------------------------------------------------------------------
+
+class TestRerankStreamValidLower:
+    """Regression: valid_lower must be rebuilt after each non-terminal tool round.
+
+    Before the fix, valid_lower was built once from the initial valid_titles set
+    and never updated. Titles added to valid_titles by get_filmography were
+    therefore absent from valid_lower, causing the streaming filter to log a
+    spurious "rejected fabricated title" warning and skip the results — they were
+    only rescued later by the safety-net filter.
+
+    After the fix, valid_lower is rebuilt whenever valid_titles is mutated, so
+    filmography titles pass the streaming filter without any warning.
+    """
+
+    def _make_tool_use_block(self, name, input_dict, block_id="tu_1"):
+        block = MagicMock()
+        block.type = "tool_use"
+        block.name = name
+        block.id = block_id
+        block.input = input_dict
+        return block
+
+    def _make_stream_ctx(self, events, tool_use_blocks):
+        """Return a mock context manager that yields events and a final message."""
+        final = MagicMock()
+        final.content = tool_use_blocks
+        final.usage.input_tokens = 10
+        final.usage.output_tokens = 10
+
+        ctx = MagicMock()
+        ctx.__enter__ = MagicMock(return_value=ctx)
+        ctx.__exit__ = MagicMock(return_value=False)
+        ctx.__iter__ = MagicMock(return_value=iter(events))
+        ctx.get_final_message = MagicMock(return_value=final)
+        return ctx
+
+    def test_filmography_title_yielded_without_spurious_warning(self, caplog):
+        """A title added to valid_titles via get_filmography must be streamed through
+        without triggering the 'rejected fabricated title' warning."""
+        import logging
+        from claude import rerank_stream
+
+        candidates = [{"title": "Generic Movie", "document": "A generic film."}]
+        filmography_title = "Juno"  # discovered via get_filmography, not in candidates
+
+        # Round 1: Claude calls get_filmography (non-terminal). No return_results events.
+        round1_ctx = self._make_stream_ctx(
+            events=[],
+            tool_use_blocks=[
+                self._make_tool_use_block(
+                    "get_filmography",
+                    {"person_id": 525, "department": "directing"},
+                    block_id="tu_1",
+                )
+            ],
+        )
+
+        # Round 2: Claude calls return_results with the filmography title.
+        # Stream events deliver the full JSON so _extract_result_objects can parse it.
+        rr_json = json.dumps({
+            "results": [{"title": filmography_title, "explanation": "Charming indie."}]
+        })
+
+        cb_start = MagicMock()
+        cb_start.type = "content_block_start"
+        cb_start.index = 0
+        cb_start.content_block = MagicMock()
+        cb_start.content_block.type = "tool_use"
+        cb_start.content_block.name = "return_results"
+
+        cb_delta = MagicMock()
+        cb_delta.type = "content_block_delta"
+        cb_delta.index = 0
+        cb_delta.delta = MagicMock()
+        cb_delta.delta.partial_json = rr_json
+
+        round2_ctx = self._make_stream_ctx(
+            events=[cb_start, cb_delta],
+            tool_use_blocks=[
+                self._make_tool_use_block(
+                    "return_results",
+                    {"results": [{"title": filmography_title, "explanation": "Charming indie."}]},
+                    block_id="tu_2",
+                )
+            ],
+        )
+
+        call_count = 0
+
+        def mock_stream(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            return round1_ctx if call_count == 1 else round2_ctx
+
+        with patch("claude.get_client") as mock_client, \
+             patch("claude.execute_tool") as mock_execute_tool, \
+             caplog.at_level(logging.WARNING, logger="claude"):
+            mock_client.return_value.messages.stream.side_effect = mock_stream
+            # execute_tool returns the filmography title — this triggers valid_titles.add()
+            mock_execute_tool.return_value = {
+                "movies": [{"title": filmography_title, "id": 1}]
+            }
+
+            results = list(rerank_stream("Jason Reitman movies", candidates))
+
+        result_items = [r for r in results if "__usage" not in r]
+        titles = [r["title"] for r in result_items]
+
+        # The filmography title must appear in the output
+        assert filmography_title in titles, (
+            f"Expected '{filmography_title}' in results but got: {titles}"
+        )
+
+        # No spurious rejection warning — the streaming filter should NOT have flagged it
+        spurious = [
+            r for r in caplog.records
+            if "rejected fabricated title" in r.message and filmography_title in r.message
+        ]
+        assert not spurious, (
+            f"Streaming filter incorrectly rejected '{filmography_title}': "
+            f"{[r.message for r in spurious]}"
+        )

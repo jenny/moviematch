@@ -625,6 +625,9 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
         messages.extend(
             _execute_non_terminal_tools(non_terminal, final.content, valid_titles, tools_called)
         )
+        # Rebuild valid_lower so the streaming filter in the next round reflects
+        # any filmography titles added to valid_titles by get_filmography above.
+        valid_lower = {t.lower() for t in valid_titles}
 
     model_log = _format_model_log(models_used)
     logger.warning(f"Claude agent loop exhausted after {len(models_used)} rounds without return_results — returning no results. models={model_log}")
