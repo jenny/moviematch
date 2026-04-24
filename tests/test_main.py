@@ -235,7 +235,8 @@ class TestSearchStreamPreParse:
              patch("main.rerank_stream") as mock_rerank, \
              patch("main.parse_query") as mock_parse, \
              patch("main._person_fetch_executor") as mock_executor, \
-             patch("main.threading.Thread") as mock_thread:
+             patch("main.threading.Thread") as mock_thread, \
+             patch("main.vector_fetch_by_ids", return_value=[]):
             from query_parser import ParsedQuery
             mock_parsed = ParsedQuery()
             mock_parsed.person_names = ["Christopher Nolan"]
@@ -292,7 +293,7 @@ class TestSearchStreamPreParse:
         assert results[0]["overview"] == "A dream heist."
 
     def test_filmography_only_title_gets_poster_and_year(self):
-        """A title from the filmography that is NOT among the vector candidates
+        """A filmography title NOT in the vector DB (vector_fetch_by_ids returns empty)
         should still receive poster_path and release year from the TMDB movie dict."""
         candidates = [_make_candidate("Memento", year="2000")]
 
@@ -309,7 +310,8 @@ class TestSearchStreamPreParse:
 
         with self._mock_fetch_candidates(candidates), \
              patch("main.parse_query") as mock_parse, \
-             patch("main._person_fetch_executor"):
+             patch("main._person_fetch_executor"), \
+             patch("main.vector_fetch_by_ids", return_value=[]):
             from query_parser import ParsedQuery
             mock_parsed = ParsedQuery()
             mock_parsed.person_names = ["Christopher Nolan"]
@@ -335,6 +337,71 @@ class TestSearchStreamPreParse:
         assert results[0]["movie_poster"] == "/following.jpg"
         assert results[0]["year"] == "1998"
 
+    def test_filmography_title_in_vector_db_gets_full_metadata(self):
+        """A filmography title not in the top-N candidates but present in the vector DB
+        should receive full rich metadata (overview, genres, director, cast) via the
+        vector_fetch_by_ids batch lookup, not just the sparse poster+year from TMDB."""
+        candidates = [_make_candidate("Memento", year="2000")]
+
+        filmography_movies = [
+            {
+                "id": 999,
+                "title": "Following",
+                "vote_average": 7.5,
+                "vote_count": 500,
+                "release_date": "1998-09-11",
+                "poster_path": "/following_tmdb.jpg",  # sparse TMDB poster — should lose
+            }
+        ]
+
+        full_doc = (
+            "Plot: A young writer follows strangers.\n\n"
+            "Genres: Thriller\n\n"
+            "Director: Christopher Nolan\n\n"
+            "Top Cast: Jeremy Theobald\n\n"
+            "Title: Following (1998)\n\n"
+        )
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"), \
+             patch("main.vector_fetch_by_ids") as mock_fetch_by_ids:
+            from query_parser import ParsedQuery
+            mock_parsed = ParsedQuery()
+            mock_parsed.person_names = ["Christopher Nolan"]
+            mock_parsed.person_filmographies = [
+                {"name": "Christopher Nolan", "person_id": 525,
+                 "department": "directing", "titles": ["Memento", "Following"],
+                 "movies": filmography_movies}
+            ]
+            mock_parse.return_value = mock_parsed
+
+            mock_fetch_by_ids.return_value = [{
+                "title": "Following",
+                "movie_poster": "/following_db.jpg",
+                "certification": "R",
+                "document": full_doc,
+            }]
+
+            with patch("main.rerank_stream") as mock_rerank:
+                mock_rerank.return_value = iter([
+                    {"title": "Following", "explanation": "Nolan's debut."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 1, "tools_called": []}},
+                ])
+
+                from main import search_stream
+                results = [r for r in search_stream("Nolan films") if "__meta" not in r]
+
+        assert len(results) == 1
+        assert results[0]["title"] == "Following"
+        assert results[0]["overview"] == "A young writer follows strangers."
+        assert results[0]["genres"] == ["Thriller"]
+        assert results[0]["director"] == "Christopher Nolan"
+        assert results[0]["cast"] == ["Jeremy Theobald"]
+        assert results[0]["certification"] == "R"
+        assert results[0]["movie_poster"] == "/following_db.jpg"
+        mock_fetch_by_ids.assert_called_once_with(["999"])
+
     def test_filmography_seed_does_not_overwrite_candidate_metadata(self):
         """If a title appears in both candidates and filmography, the richer
         vector DB metadata (from the candidate) should take precedence."""
@@ -355,7 +422,8 @@ class TestSearchStreamPreParse:
 
         with self._mock_fetch_candidates(candidates), \
              patch("main.parse_query") as mock_parse, \
-             patch("main._person_fetch_executor"):
+             patch("main._person_fetch_executor"), \
+             patch("main.vector_fetch_by_ids", return_value=[]):
             from query_parser import ParsedQuery
             mock_parsed = ParsedQuery()
             mock_parsed.person_filmographies = [

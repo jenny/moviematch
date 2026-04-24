@@ -9,7 +9,7 @@ from config import (
     RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT,
     PERSON_LOOKUP_TIMEOUT_S, PREPARSE_EXECUTOR_WORKERS,
 )
-from db import get_model, vector_count, vector_query
+from db import get_model, vector_count, vector_query, vector_fetch_by_ids
 from claude import rerank, rerank_stream, _ingest_filmography_background
 from query_parser import parse_query, apply_hard_filters, resolve_persons
 
@@ -185,23 +185,56 @@ def search_stream(query: str):
     director_by_title = {c["title"].lower(): c["director"] for c in candidates}
     cast_by_title = {c["title"].lower(): c["cast"] for c in candidates}
 
-    # Seed with filmography metadata for titles not already covered by vector candidates.
-    # Filmography movies from TMDB carry poster_path and release_date but not the richer
-    # fields (overview, genres, cast) that only exist in the vector DB document.
+    # Seed metadata for filmography movies not in the top-N vector candidates.
+    # First, try a batch vector DB fetch by TMDB ID — this gives full rich metadata
+    # (overview, genres, director, cast) for films already ingested. Then fall back
+    # to the sparse poster+year from the TMDB filmography payload for the rest.
     if parsed and parsed.person_filmographies:
-        for pf in parsed.person_filmographies:
-            for movie in pf.get("movies", []):
-                title_lower = (movie.get("title") or "").lower()
-                if not title_lower or title_lower in poster_by_title:
-                    continue
-                raw_date = movie.get("release_date", "")
-                poster_by_title[title_lower] = movie.get("poster_path", "")
-                year_by_title[title_lower] = raw_date[:4] if raw_date else ""
-                certification_by_title[title_lower] = ""
-                overview_by_title[title_lower] = ""
-                genres_by_title[title_lower] = []
-                director_by_title[title_lower] = ""
-                cast_by_title[title_lower] = []
+        candidate_titles_lower = {c["title"].lower() for c in candidates}
+        outside_candidates = [
+            movie
+            for pf in parsed.person_filmographies
+            for movie in pf.get("movies", [])
+            if (movie.get("title") or "").lower() not in candidate_titles_lower
+        ]
+
+        # Batch-fetch by TMDB ID — direct lookup, no embedding needed.
+        id_to_filmography_movie = {
+            str(movie["id"]): movie
+            for movie in outside_candidates
+            if movie.get("id")
+        }
+        fetched = vector_fetch_by_ids(list(id_to_filmography_movie.keys()))
+
+        # Seed full rich metadata for films found in the vector DB.
+        fetched_titles_lower: set[str] = set()
+        for fetched_movie in fetched:
+            t = (fetched_movie.get("title") or "").lower()
+            if not t:
+                continue
+            parsed_doc = _parse_document(fetched_movie["document"])
+            poster_by_title[t] = fetched_movie["movie_poster"]
+            certification_by_title[t] = fetched_movie["certification"]
+            year_by_title[t] = parsed_doc["year"]
+            overview_by_title[t] = parsed_doc["overview"]
+            genres_by_title[t] = parsed_doc["genres"]
+            director_by_title[t] = parsed_doc["director"]
+            cast_by_title[t] = parsed_doc["cast"]
+            fetched_titles_lower.add(t)
+
+        # Fall back to sparse poster+year for films not yet ingested in the vector DB.
+        for movie in outside_candidates:
+            title_lower = (movie.get("title") or "").lower()
+            if not title_lower or title_lower in fetched_titles_lower:
+                continue
+            raw_date = movie.get("release_date", "")
+            poster_by_title[title_lower] = movie.get("poster_path", "")
+            year_by_title[title_lower] = raw_date[:4] if raw_date else ""
+            certification_by_title[title_lower] = ""
+            overview_by_title[title_lower] = ""
+            genres_by_title[title_lower] = []
+            director_by_title[title_lower] = ""
+            cast_by_title[title_lower] = []
 
     t0 = time.perf_counter()
     usage = None

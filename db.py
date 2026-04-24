@@ -125,6 +125,39 @@ def vector_query(vector: list[float], top_k: int) -> list[dict]:
     ]
 
 
+def vector_fetch_by_ids(ids: list[str]) -> list[dict]:
+    """Fetch records by ID without a similarity query.
+
+    Returns [{title, movie_poster, certification, document}, ...].
+    IDs not found in the store are silently omitted.
+    """
+    if not ids:
+        return []
+    if VECTOR_DB == "pinecone":
+        result = _get_pinecone_index().fetch(ids=ids)
+        return [
+            {
+                "title": v.metadata.get("title", ""),
+                "movie_poster": v.metadata.get("movie_poster", ""),
+                "certification": v.metadata.get("certification", ""),
+                "document": v.metadata.get("document", ""),
+            }
+            for v in result.vectors.values()
+            if v.metadata and v.metadata.get("title")
+        ]
+    result = _get_chroma_collection().get(ids=ids, include=["metadatas", "documents"])
+    return [
+        {
+            "title": meta.get("title", ""),
+            "movie_poster": meta.get("movie_poster", ""),
+            "certification": meta.get("certification", ""),
+            "document": doc or "",
+        }
+        for meta, doc in zip(result["metadatas"], result["documents"])
+        if meta and meta.get("title")
+    ]
+
+
 def vector_upsert_batch(vectors: list[dict]) -> None:
     """Upsert vectors into the configured backend.
 

@@ -12,7 +12,7 @@
 | `query_parser.py` | Rule-based pre-parser: `parse_query()`, `apply_hard_filters()`, `resolve_persons()` |
 | `claude.py` | Anthropic integration: `rerank()`, `rerank_stream()`, tool definitions |
 | `main.py` | Orchestrates pre-parse → embedding → vector query → hard filter → Claude rerank |
-| `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_upsert_batch`, `vector_count`) |
+| `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_fetch_by_ids`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
 | `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers`, `extract_certification`, `fetch_certification`, `get_certification_for_title` |
 | `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
@@ -95,7 +95,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - `rerank` and `rerank_stream` share the same prompt/logic; `rerank` is kept for non-streaming use
 - Certification is stored in vector DB metadata at ingest time and displayed immediately from search results; the vector DB is the sole source of truth for ratings — the `/streaming` endpoint handles providers only
 - **"More like this" pivot**: the detail overlay exposes a forked-arrow pivot icon (inline SVG `<symbol>`) next to the title, director, and each cast member. All three call `triggerSearch()` which pre-fills the input and auto-submits via `form.requestSubmit()`. Query formats: `"More movies like [Title] ([Year])"` (hits the `more like X` regex), `"Movies directed by [X]"` (hits person/directing regex), `"Movies starring [X]"` (hits person regex). No original query is appended — the pivot is intentionally standalone.
-- **Filmography metadata seeding**: the metadata lookup dicts in `search_stream` (`main.py`) are keyed by lowercased title (matching `_filter_results` case-insensitive behaviour) and seeded from `parsed.person_filmographies` for titles not in the vector candidate set. This gives filmography-expansion results at least a poster and year; richer fields (overview, genres, cast, director) are only available once the film is ingested into the vector DB.
+- **Filmography metadata seeding**: the metadata lookup dicts in `search_stream` (`main.py`) are keyed by lowercased title. For filmography movies not in the top-N vector candidates, `search_stream` does a batch `vector_fetch_by_ids` call using the TMDB IDs carried in the filmography payload — this retrieves the full document (overview, genres, director, cast) for any film already in the vector DB regardless of its similarity rank. Films not yet ingested fall back to the sparse poster+year from the TMDB filmography response.
 - **Card poster resilience**: the result card `<img>` has an `onerror` handler that removes the `.card-poster` div on a 404, preventing broken image placeholders.
 - **Mock search**: typing `__mock__` as the query bypasses the backend entirely and renders five hardcoded results through the same `appendResult()` path as live searches. Useful for frontend-only development without a running server.
 
