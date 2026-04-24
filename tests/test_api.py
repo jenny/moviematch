@@ -148,6 +148,28 @@ class TestSearchEndpoint:
         assert response.status_code == 422
 
 
+class TestRegionEndpoint:
+    def test_returns_country_for_public_ip(self, client):
+        with patch("api.routes.streaming.get_client_ip", return_value="8.8.8.8"), \
+             patch("api.routes.streaming.resolve_country", return_value="GB"):
+            response = client.get("/region")
+        assert response.status_code == 200
+        assert response.json() == {"country": "GB"}
+
+    def test_returns_us_when_no_client_ip(self, client):
+        with patch("api.routes.streaming.get_client_ip", return_value=None):
+            response = client.get("/region")
+        assert response.status_code == 200
+        assert response.json() == {"country": "US"}
+
+    def test_returns_us_on_lookup_failure(self, client):
+        with patch("api.routes.streaming.get_client_ip", return_value="8.8.8.8"), \
+             patch("api.routes.streaming.resolve_country", return_value="US"):
+            response = client.get("/region")
+        assert response.status_code == 200
+        assert response.json()["country"] == "US"
+
+
 class TestStreamingEndpoint:
     def test_returns_providers_via_watchmode_when_key_set(self, client):
         with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
@@ -215,6 +237,27 @@ class TestStreamingEndpoint:
     def test_missing_title_returns_422(self, client):
         response = client.get("/streaming")
         assert response.status_code == 422
+
+    def test_country_param_passed_to_watchmode(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345) as mock_search, \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[]) as mock_fetch:
+            client.get("/streaming?title=Inception&year=2010&country=GB")
+        mock_fetch.assert_called_once_with(12345, "GB")
+
+    def test_country_param_passed_to_tmdb_fallback(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", None), \
+             patch("api.routes.streaming.search_movie_by_title", return_value=27205), \
+             patch("api.routes.streaming.fetch_watch_providers", return_value=[]) as mock_fetch:
+            client.get("/streaming?title=Inception&year=2010&country=CA")
+        mock_fetch.assert_called_once_with(27205, "CA")
+
+    def test_country_defaults_to_us(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[]) as mock_fetch:
+            client.get("/streaming?title=Inception&year=2010")
+        mock_fetch.assert_called_once_with(12345, "US")
 
 
 class TestStreamingBatchEndpoint:
@@ -284,6 +327,25 @@ class TestStreamingBatchEndpoint:
             })
         assert response.status_code == 200
         assert response.json()["results"][0]["year"] == ""
+
+    def test_batch_country_param_passed_to_providers(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[]) as mock_fetch:
+            client.post("/streaming/batch", json={
+                "titles": [{"title": "Parasite", "year": "2019"}],
+                "country": "KR",
+            })
+        mock_fetch.assert_called_once_with(12345, "KR")
+
+    def test_batch_country_defaults_to_us(self, client):
+        with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
+             patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
+             patch("api.routes.streaming.watchmode.fetch_providers", return_value=[]) as mock_fetch:
+            client.post("/streaming/batch", json={
+                "titles": [{"title": "Parasite", "year": "2019"}],
+            })
+        mock_fetch.assert_called_once_with(12345, "US")
 
 
 class TestHints:

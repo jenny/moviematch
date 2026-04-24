@@ -161,6 +161,30 @@ class TestFetchProviders:
             result = watchmode.fetch_providers(12345)
         assert result == []
 
+    def test_cache_key_isolated_by_country(self):
+        """US and GB lookups for the same title_id must not share a cache entry."""
+        us_sources = [{"source_id": 203, "name": "Netflix US", "type": "sub"}]
+        gb_sources = [{"source_id": 999, "name": "MUBI", "type": "sub"}]
+
+        def fake_get(url, **kwargs):
+            resp = MagicMock()
+            if "regions=US" in url or kwargs.get("params", {}).get("regions") == "US":
+                resp.json.return_value = us_sources
+            else:
+                resp.json.return_value = gb_sources
+            return resp
+
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("watchmode._persist_counter"), \
+             patch("requests.get", side_effect=fake_get), \
+             patch("watchmode._source_logos", {}), \
+             patch("watchmode._source_logos_loaded", True):
+            us_result = watchmode.fetch_providers(12345, "US")
+            gb_result = watchmode.fetch_providers(12345, "GB")
+
+        assert us_result[0]["name"] == "Netflix US"
+        assert gb_result[0]["name"] == "MUBI"
+
 
 class TestTTLCache:
     def setup_method(self):

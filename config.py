@@ -77,6 +77,9 @@ PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent pe
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
 STREAMING_RATE_LIMIT = "30/minute" # /streaming endpoints — Watchmode/TMDB only
 
+# Streaming region — ISO 3166-1 alpha-2 country code used when no region is detected
+DEFAULT_STREAMING_REGION = "US"
+
 # Admin auth — set all three in .env to enable the admin panel
 # ADMIN_SECRET_KEY should be a random 32-byte hex string (e.g. from `openssl rand -hex 32`)
 ADMIN_USERNAME  = os.getenv("ADMIN_USERNAME", "")

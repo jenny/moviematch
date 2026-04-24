@@ -15,15 +15,16 @@
 | `db.py` | Singletons for embedding model + vector DB (`get_model`, `vector_query`, `vector_fetch_by_ids`, `vector_upsert_batch`, `vector_count`) |
 | `embeddings.py` | Text embedding pipeline, batch upsert |
 | `tmdb.py` | TMDB API: fetch, score, ingest movies; `search_person`, `get_filmography`, `search_movie_by_title`, `fetch_watch_providers`, `extract_certification`, `fetch_certification`, `get_certification_for_title` |
-| `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint |
+| `watchmode.py` | Watchmode API: streaming provider lookup (`search_title`, `fetch_providers`); primary source for `/streaming` endpoint; cache keyed by `title_id:country` |
 | `richtext.py` | Builds `document` string for each movie (what gets embedded) |
 | `pipeline.py` | Full init pipeline + single-movie ingestion |
 | `api/app.py` | FastAPI app factory, CORS (GET+POST, Content-Type only), security-header middleware, lifespan; login/logout routes |
 | `api/auth.py` | HMAC-SHA256 session cookie signing; `require_admin` FastAPI dependency |
+| `api/geo.py` | `get_client_ip()`, `resolve_country()` — IP → ISO country code via ipinfo.io (free tier, 50k/mo); process-lifetime cache; private/loopback fast-path |
 | `login.html` | Admin login page (dark theme, JSON POST via fetch) |
 | `api/routes/search.py` | `POST /recommend` — SSE streaming endpoint |
 | `api/routes/admin.py` | `/initialize`, `/status`, `/logs` — all require admin auth |
-| `api/routes/streaming.py` | `GET /streaming` — streaming provider lookup via Watchmode (primary) or TMDB (fallback); also returns MPAA certification |
+| `api/routes/streaming.py` | `GET /region` — IP-based country detection (called once on page load); `GET /streaming` and `POST /streaming/batch` — region-aware provider lookup via Watchmode (primary) or TMDB (fallback); `country` param defaults to `US` |
 | `logger.py` | JSON request logging; DEBUG level locally, INFO on Railway; writes to rotating file locally, stdout on Railway |
 | `migrate_to_pinecone.py` | One-off script: copies all vectors from Chroma to Pinecone |
 | `backfill_certifications.py` | One-off script: patches MPAA certification into existing Pinecone vector metadata without re-embedding (supports `--dry-run`; idempotent) |
@@ -70,11 +71,11 @@ Run in venv with: `pytest` from project root.
 |-----------|---------------|
 | `tests/test_query_parser.py` | `parse_query`: year/decade normalization, genre/cert/person extraction, slang triggers, "in the style of" dual-purpose, "more like X" title refs, relative date hints; `apply_hard_filters`: year, genre, cert filtering, conservative empty-metadata handling; `resolve_persons`: TMDB mocked, success/failure/timeout paths |
 | `tests/test_claude.py` | Pure functions: `_filter_results` (case-insensitive), `_extract_result_objects`, `_sanitize`, `_build_rerank_prompt` (constraint injection, reference_films block, filmography cap, suppression instruction, XSS sanitization); `rerank_stream`: valid_lower staleness regression (filmography titles discovered via tool calls are streamed through without spurious rejection) |
-| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode`; security headers; user-agent log capture |
+| `tests/test_api.py` | FastAPI endpoints via TestClient; mocks `search_stream`, `vector_count`, `get_model`, `search_movie_by_title`, `fetch_watch_providers`, `watchmode`; security headers; user-agent log capture; `/region` endpoint (IP → country, no-IP fallback); `country` param threading through `/streaming` and `/streaming/batch` |
 | `tests/test_main.py` | `_parse_document()` richtext extraction; `search_stream` pre-parse integration: year filter reduces candidates, person timeout degrades gracefully, successful pre-fetch triggers background ingestion, case-insensitive metadata lookup, filmography-only title seeding |
 | `tests/test_tmdb.py` | Scoring: `_composite_score`, `select_top_n`, `filter_cast`, `filter_crew`; TMDB lookup: `search_movie_by_title`, `fetch_watch_providers`; certification: `extract_certification`, `fetch_certification`, `get_certification_for_title`; filmography: `get_filmography` includes `poster_path` |
 | `tests/test_richtext.py` | `build_richtext()` edge cases |
-| `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache); `_load_source_logos` (null URL rejection) |
+| `tests/test_watchmode.py` | Watchmode lookup: `search_title` (year matching, not-found), `fetch_providers` (type filtering, deduplication, logo cache, cache key isolation by country); `_load_source_logos` (null URL rejection) |
 | `tests/test_auth.py` | Cookie signing: valid tokens, expiry, tampered signatures, missing secret |
 
 **No test touches the real Anthropic, TMDB, or Watchmode APIs.** All external calls are mocked at the module level.
@@ -99,6 +100,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 - **Card poster resilience**: the result card `<img>` has an `onerror` handler that removes the `.card-poster` div on a 404, preventing broken image placeholders.
 - **Mock search**: typing `__mock__` as the query bypasses the backend entirely and renders five hardcoded results through the same `appendResult()` path as live searches. Useful for frontend-only development without a running server.
 - **Bot/scraper resilience**: rate limiting via `slowapi` on all public endpoints (`RATE_LIMIT` on `/recommend`, `STREAMING_RATE_LIMIT` on `/streaming` and `/streaming/batch`); security headers (`X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy`) added to all responses via middleware; CORS restricted to `GET`/`POST` and `Content-Type` header only; `user_agent` field logged on every `/recommend` request.
+- **Location-aware streaming**: `GET /region` resolves the client IP to an ISO 3166-1 alpha-2 country code via ipinfo.io (free tier, process-lifetime cache in `api/geo.py`). The frontend calls it once on page load — before the user types their first query — and stores the result in `userCountry`. All subsequent `/streaming` and `/streaming/batch` calls pass `country=XX` so Watchmode/TMDB return region-specific providers. URL param `?country=XX` overrides detection for testing and VPN workarounds. Watchmode cache key fixed to `providers:{title_id}:{country}` so US and non-US results don't share entries. Watchmode returns 400 (not empty array) when a title has no sources in a region; this is caught separately and logged at DEBUG, not WARNING.
 
 ## Model Use During Development
 - Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
@@ -106,7 +108,7 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 ## Coding Hygiene
 - Discuss and get approval for the technical approach first. Do not proceed with code changes until the technical approach is agreed upon.
 - Code changes should be implemented in a short-lived feature branch.
-- Code changes should include clear inline comments for future collaborators.
+- Code changes should include clear inline comments for future collaborators and robust logging to help with debugging.
 - Do not invoke /commit or create any git commits without explicit user sign-off that they have tested locally and are ready to commit.
 - The feature branch should be deleted only after all code changes are committed and merged to main.
 

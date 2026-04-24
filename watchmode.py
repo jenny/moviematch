@@ -223,7 +223,7 @@ def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
     When a provider appears under multiple types, the best type wins: sub > free > rent > buy.
     Results are cached for 24 hours to conserve the free-tier API budget.
     """
-    cache_key = f"providers:{title_id}"
+    cache_key = f"providers:{title_id}:{country}"
     hit, cached = _cache_get(cache_key)
     if hit:
         return cached
@@ -258,6 +258,18 @@ def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
         providers = list(best.values())
         _cache_set(cache_key, providers)
         return providers
+    except requests.exceptions.HTTPError as e:
+        if e.response is not None and e.response.status_code == 400:
+            # Watchmode returns 400 instead of an empty list when a title has no
+            # sources in the requested region, or when the region isn't enabled on
+            # the account. Either way it's an expected, handled outcome.
+            logger.debug(
+                "Watchmode: no sources for title_id=%d in region %s (400 — region not available for this title/account)",
+                title_id, country,
+            )
+        else:
+            logger.warning("Watchmode: sources failed for title %d: %s", title_id, e)
+        return []  # don't cache failures — allow retry
     except Exception as e:
-        logger.warning(f"Watchmode: sources failed for title {title_id}: {e}")
+        logger.warning("Watchmode: sources failed for title %d: %s", title_id, e)
         return []  # don't cache failures — allow retry

@@ -832,6 +832,28 @@
       })
       .catch(() => { }); // silently keep the hardcoded fallback placeholder
 
+    // ── Region detection ─────────────────────────────────────────────
+    // URL param (?country=GB) takes precedence — useful for testing and VPN workarounds.
+    // Otherwise, /region resolves the client IP to a country code on page load so the
+    // result is ready before the user finishes typing their first query.
+
+    const _urlCountry = new URLSearchParams(window.location.search).get("country");
+    let userCountry = _urlCountry || "US";
+
+    if (_urlCountry) {
+      console.debug("[region] source=url country=" + userCountry);
+    } else {
+      fetch("/region")
+        .then((r) => r.json())
+        .then((d) => {
+          userCountry = d.country || "US";
+          console.debug("[region] source=ip country=" + userCountry);
+        })
+        .catch(() => {
+          console.debug("[region] source=fallback country=US");
+        });
+    }
+
     // Simulates a real search response using MOCK_RESULTS, emitting one
     // result at a time through the same appendResult() path used by live
     // searches so all rendering and interaction code is exercised identically.
@@ -1073,7 +1095,7 @@
     // Raw network fetch — returns parsed JSON. Callers store the returned Promise
     // in streamingCache so the same request is never duplicated.
     async function fetchStreamingData(title, year) {
-      const params = new URLSearchParams({ title });
+      const params = new URLSearchParams({ title, country: userCountry });
       if (year) params.set("year", year);
       const res = await fetch(`/streaming?${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1089,12 +1111,12 @@
         const res = await fetch("/streaming/batch", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ titles }),
+          body: JSON.stringify({ titles, country: userCountry }),
         });
         if (!res.ok) return;
         const data = await res.json();
         for (const item of data.results) {
-          const key = `${item.title}|${item.year || ""}`;
+          const key = `${item.title}|${item.year || ""}|${userCountry}`;
           // Don't overwrite an in-flight or already-resolved entry (e.g., user opened
           // an overlay before the batch completed and a direct fetch is underway).
           if (!streamingCache.has(key)) {
@@ -1114,7 +1136,7 @@
       const container = document.getElementById("streamingProviders");
       if (!container) return;
 
-      const key = `${title}|${year || ""}`;
+      const key = `${title}|${year || ""}|${userCountry}`;
       // Re-use an existing Promise (resolved or in-flight) or start a new fetch.
       if (!streamingCache.has(key)) {
         streamingCache.set(key, fetchStreamingData(title, year));
@@ -1125,7 +1147,8 @@
         if (!container.isConnected) return; // user navigated away
 
         if (!data.providers || data.providers.length === 0) {
-          container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in the US</span>`;
+          const regionName = new Intl.DisplayNames(["en"], { type: "region" }).of(userCountry) || userCountry;
+          container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in ${escapeHtml(regionName)}</span>`;
           return;
         }
         const streamable = data.providers.filter(p => p.type === "sub" || p.type === "free");

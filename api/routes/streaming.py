@@ -4,8 +4,9 @@ import logging
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, field_validator
 
+from api.geo import get_client_ip, resolve_country
 from api.limiter import limiter
-from config import STREAMING_RATE_LIMIT, WATCHMODE_API_KEY
+from config import DEFAULT_STREAMING_REGION, STREAMING_RATE_LIMIT, WATCHMODE_API_KEY
 from tmdb import fetch_watch_providers, search_movie_by_title
 import watchmode
 
@@ -17,8 +18,8 @@ router = APIRouter()
 _batch_semaphore = asyncio.Semaphore(3)
 
 
-def get_providers_for_title(title: str, year: str) -> list[dict]:
-    """Return US streaming providers for one movie.
+def get_providers_for_title(title: str, year: str, country: str = DEFAULT_STREAMING_REGION) -> list[dict]:
+    """Return streaming providers for one movie in the given region.
 
     Uses Watchmode as the primary source when WATCHMODE_API_KEY is configured —
     it has significantly better coverage than TMDB's watch provider data.
@@ -30,23 +31,50 @@ def get_providers_for_title(title: str, year: str) -> list[dict]:
             logger.info(f"Watchmode: '{title}' ({year}) not found")
             return []
         logger.info(f"Watchmode: '{title}' ({year}) → title_id={title_id}")
-        providers = watchmode.fetch_providers(title_id)
+        providers = watchmode.fetch_providers(title_id, country)
+        logger.debug(
+            "[streaming] providers title=%r year=%r country=%s source=watchmode count=%d",
+            title, year, country, len(providers),
+        )
         logger.info(f"Watchmode: {len(providers)} provider(s) for '{title}': {[p['name'] for p in providers]}")
         return providers
 
     # Fallback: TMDB (incomplete coverage — set WATCHMODE_API_KEY for better results)
-    logger.debug(f"WATCHMODE_API_KEY not set, falling back to TMDB for '{title}'")
+    logger.debug(
+        "[streaming] providers title=%r year=%r country=%s source=tmdb",
+        title, year, country,
+    )
     movie_id = search_movie_by_title(title, year)
     if movie_id is None:
         return []
-    return fetch_watch_providers(movie_id)
+    return fetch_watch_providers(movie_id, country)
+
+
+@router.get("/region")
+@limiter.limit("10/minute")
+def user_region(request: Request) -> dict:
+    """Return the ISO 3166-1 alpha-2 country code inferred from the client IP.
+
+    Called once on page load so the frontend can pass the correct region to
+    all subsequent streaming provider requests without adding per-request latency.
+    Falls back to 'US' for private/loopback addresses or on lookup failure.
+    """
+    ip = get_client_ip(request)
+    country = resolve_country(ip) if ip else DEFAULT_STREAMING_REGION
+    logger.debug("[streaming] /region ip=%s country=%s", ip, country)
+    return {"country": country}
 
 
 @router.get("/streaming")
 @limiter.limit(STREAMING_RATE_LIMIT)
-def streaming_providers(request: Request, title: str, year: str = ""):
-    """Return US streaming providers for a movie."""
-    return {"providers": get_providers_for_title(title, year)}
+def streaming_providers(
+    request: Request,
+    title: str,
+    year: str = "",
+    country: str = DEFAULT_STREAMING_REGION,
+):
+    """Return streaming providers for a movie in the given region."""
+    return {"providers": get_providers_for_title(title, year, country)}
 
 
 class TitleRequest(BaseModel):
@@ -56,6 +84,7 @@ class TitleRequest(BaseModel):
 
 class BatchRequest(BaseModel):
     titles: list[TitleRequest]
+    country: str = DEFAULT_STREAMING_REGION
 
     @field_validator("titles")
     @classmethod
@@ -72,11 +101,12 @@ async def streaming_providers_batch(request: Request, body: BatchRequest):
 
     Runs lookups concurrently (capped at 3 simultaneous Watchmode calls) to
     avoid hammering the free-tier rate limit. Returns results in input order.
+    All titles in a batch share the same region (body.country).
     """
     async def lookup(item: TitleRequest) -> dict:
         async with _batch_semaphore:
             providers = await asyncio.to_thread(
-                get_providers_for_title, item.title, item.year
+                get_providers_for_title, item.title, item.year, body.country
             )
         return {"title": item.title, "year": item.year, "providers": providers}
 
