@@ -131,7 +131,40 @@ class TestParseQueryCertifications:
 
     def test_family_friendly(self):
         p = parse_query("family friendly films")
-        assert p.allowed_certifications == ["G", "PG"]
+        assert "NC-17" in p.excluded_certifications
+        assert not p.allowed_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_kids_movie(self):
+        p = parse_query("a kids movie about friendship")
+        assert "NC-17" in p.excluded_certifications
+        assert not p.allowed_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_kids_films(self):
+        p = parse_query("kids films from the 90s")
+        assert "NC-17" in p.excluded_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_movies_for_kids(self):
+        p = parse_query("movies for kids")
+        assert "NC-17" in p.excluded_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_films_for_children(self):
+        p = parse_query("films for children")
+        assert "NC-17" in p.excluded_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_childrens_movie(self):
+        p = parse_query("a children's movie about dinosaurs")
+        assert "NC-17" in p.excluded_certifications
+        assert len(p.certification_caveats) == 1
+
+    def test_kid_friendly(self):
+        p = parse_query("something kid-friendly")
+        assert "NC-17" in p.excluded_certifications
+        assert len(p.certification_caveats) == 1
 
     def test_pg13_only(self):
         p = parse_query("PG-13 only")

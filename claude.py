@@ -124,6 +124,8 @@ def _build_rerank_prompt(query: str, candidate_text: str, parsed=None) -> str:
             constraint_lines.append(f"- Certifications allowed: {', '.join(_sanitize(c) for c in parsed.allowed_certifications)}")
         if parsed.excluded_certifications:
             constraint_lines.append(f"- Exclude certifications: {', '.join(_sanitize(c) for c in parsed.excluded_certifications)}")
+        for caveat in parsed.certification_caveats:
+            constraint_lines.append(f"- {_sanitize(caveat)}")
         for hint in parsed.relative_date_hints:
             if hint == "older":
                 constraint_lines.append("- Prefer older/classic films")

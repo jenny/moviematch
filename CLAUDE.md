@@ -34,7 +34,7 @@ Every query runs through `parse_query()` in `query_parser.py` before embedding. 
 
 - **Year/decade**: "90s" → `year_min=1990, year_max=1999`; "early 2000s", "after 1985", "last 10 years", etc.
 - **Genres**: "no documentaries" → `excluded_genres=["Documentary"]`; "sci-fi" → `required_genres=["Science Fiction"]`
-- **Certifications**: "family friendly" → `allowed_certifications=["G","PG"]`; "no R-rated" → `excluded_certifications=["R"]`
+- **Certifications**: "family friendly" / "kids movie" / "children's film" / "for children" etc. → `excluded_certifications=["NC-17"]` + `certification_caveats` (soft Claude guidance to prefer G/PG/PG-13, surface R only as last resort with explicit note); "no R-rated" → `excluded_certifications=["R"]`
 - **Person names**: "directed by Bong Joon-ho" → `person_names=["Bong Joon-ho"], person_department="directing"`; also handles film slang ("Spike Lee joint")
 - **Title references**: "something like Inception" → `reference_titles=["Inception"]`; "in the style of Wes Anderson" → also adds to `person_names`
 - **Relative date hints**: "older", "classic", "more recent" → `relative_date_hints` (soft guidance injected into Claude's prompt)

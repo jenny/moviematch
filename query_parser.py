@@ -99,7 +99,13 @@ _CERT_PATTERN = re.compile(
     # Note: intentionally case-sensitive — "R" should not match "r" inside other words
 )
 _FAMILY_FRIENDLY_PATTERN = re.compile(
-    r"\b(family[- ]friendly|family[- ]film|for kids|kid[- ]friendly|all ages)\b",
+    r"\b("
+    r"family[- ]friendly|family[- ]film|for kids|kid[- ]friendly|all ages"
+    r"|kids?(?:'s?)?\s+(?:movies?|films?)"           # "kids movie", "kid's films"
+    r"|(?:movies?|films?)\s+for\s+(?:kids?|children)" # "movies for kids/children"
+    r"|children'?s?\s+(?:movies?|films?)"             # "children's movie"
+    r"|for\s+children"                                # "for children"
+    r")\b",
     re.IGNORECASE,
 )
 
@@ -210,6 +216,8 @@ class ParsedQuery:
     # MPAA certification filters
     allowed_certifications: list[str] = field(default_factory=list)   # empty = no restriction
     excluded_certifications: list[str] = field(default_factory=list)  # always blocked
+    # Soft guidance injected into Claude's prompt (not a hard filter)
+    certification_caveats: list[str] = field(default_factory=list)
 
     # Person extraction (resolved to filmographies by resolve_persons())
     person_names: list[str] = field(default_factory=list)
@@ -309,8 +317,15 @@ def parse_query(raw_query: str) -> ParsedQuery:
 
     # --- Certifications ---
     if _FAMILY_FRIENDLY_PATTERN.search(q):
-        # "family friendly" is an allowlist, not an exclusion
-        parsed.allowed_certifications = ["G", "PG"]
+        # Hard-exclude NC-17; all other ratings remain as candidates for Claude.
+        if "NC-17" not in parsed.excluded_certifications:
+            parsed.excluded_certifications.append("NC-17")
+        # Soft guidance: Claude prefers G/PG/PG-13 and only surfaces R as a last resort.
+        parsed.certification_caveats.append(
+            "Prefer G, PG, or PG-13 results. Only include an R-rated film if it is "
+            "clearly the best match and no suitable alternative exists; if you do, "
+            "note the rating explicitly in your explanation."
+        )
 
     for m in _CERT_PATTERN.finditer(q):
         cert = m.group(1)
