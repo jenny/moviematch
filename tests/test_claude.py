@@ -447,3 +447,113 @@ class TestRerankStreamValidLower:
             f"Streaming filter incorrectly rejected '{filmography_title}': "
             f"{[r.message for r in spurious]}"
         )
+
+
+class TestForceFastModel:
+    """FORCE_FAST_MODEL flag controls whether Haiku escalates to Opus after tool calls."""
+
+    def _make_tool_use_block(self, name, input_dict, block_id="tu_1"):
+        block = MagicMock()
+        block.type = "tool_use"
+        block.name = name
+        block.id = block_id
+        block.input = input_dict
+        return block
+
+    def _make_stream_ctx(self, events, tool_use_blocks, input_tokens=10, output_tokens=10):
+        final = MagicMock()
+        final.content = tool_use_blocks
+        final.usage.input_tokens = input_tokens
+        final.usage.output_tokens = output_tokens
+        ctx = MagicMock()
+        ctx.__enter__ = MagicMock(return_value=ctx)
+        ctx.__exit__ = MagicMock(return_value=False)
+        ctx.__iter__ = MagicMock(return_value=iter(events))
+        ctx.get_final_message = MagicMock(return_value=final)
+        return ctx
+
+    def _two_round_mock_stream(self):
+        """Round 1 calls get_filmography; round 2 calls return_results with that title."""
+        round1_ctx = self._make_stream_ctx(
+            events=[],
+            tool_use_blocks=[
+                self._make_tool_use_block(
+                    "get_filmography", {"person_id": 525, "department": "directing"},
+                    block_id="tu_1",
+                )
+            ],
+            input_tokens=500, output_tokens=100,
+        )
+
+        rr_json = json.dumps({"results": [{"title": "Juno", "explanation": "Charming indie."}]})
+        cb_start = MagicMock()
+        cb_start.type = "content_block_start"
+        cb_start.index = 0
+        cb_start.content_block = MagicMock()
+        cb_start.content_block.type = "tool_use"
+        cb_start.content_block.name = "return_results"
+        cb_delta = MagicMock()
+        cb_delta.type = "content_block_delta"
+        cb_delta.index = 0
+        cb_delta.delta = MagicMock()
+        cb_delta.delta.partial_json = rr_json
+
+        round2_ctx = self._make_stream_ctx(
+            events=[cb_start, cb_delta],
+            tool_use_blocks=[
+                self._make_tool_use_block(
+                    "return_results",
+                    {"results": [{"title": "Juno", "explanation": "Charming indie."}]},
+                    block_id="tu_2",
+                )
+            ],
+            input_tokens=800, output_tokens=200,
+        )
+
+        call_count = 0
+        def mock_stream(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            return round1_ctx if call_count == 1 else round2_ctx
+        return mock_stream
+
+    def test_rerank_stream_stays_haiku_when_force_fast_model_true(self):
+        from claude import rerank_stream, CLAUDE_FAST_MODEL
+        candidates = [{"title": "Generic Movie", "document": "A generic film."}]
+
+        with patch("claude.FORCE_FAST_MODEL", True), \
+             patch("claude.get_client") as mock_client, \
+             patch("claude.execute_tool") as mock_execute_tool:
+            mock_client.return_value.messages.stream.side_effect = self._two_round_mock_stream()
+            mock_execute_tool.return_value = {"movies": [{"title": "Juno", "id": 1}]}
+            items = list(rerank_stream("Jason Reitman movies", candidates))
+
+        calls = mock_client.return_value.messages.stream.call_args_list
+        assert len(calls) == 2
+        models_used = [c.kwargs["model"] for c in calls]
+        assert all(m == CLAUDE_FAST_MODEL for m in models_used), (
+            f"Expected all rounds on Haiku but got: {models_used}"
+        )
+        usage = next(i["__usage"] for i in items if "__usage" in i)
+        assert usage["opus_input_tokens"] == 0
+        assert usage["opus_output_tokens"] == 0
+
+    def test_rerank_stream_escalates_to_opus_when_force_fast_model_false(self):
+        from claude import rerank_stream, CLAUDE_FAST_MODEL, CLAUDE_MODEL
+        candidates = [{"title": "Generic Movie", "document": "A generic film."}]
+
+        with patch("claude.FORCE_FAST_MODEL", False), \
+             patch("claude.get_client") as mock_client, \
+             patch("claude.execute_tool") as mock_execute_tool:
+            mock_client.return_value.messages.stream.side_effect = self._two_round_mock_stream()
+            mock_execute_tool.return_value = {"movies": [{"title": "Juno", "id": 1}]}
+            items = list(rerank_stream("Jason Reitman movies", candidates))
+
+        calls = mock_client.return_value.messages.stream.call_args_list
+        assert len(calls) == 2
+        models_used = [c.kwargs["model"] for c in calls]
+        assert models_used[0] == CLAUDE_FAST_MODEL, f"Round 1 should be Haiku, got {models_used[0]}"
+        assert models_used[1] == CLAUDE_MODEL, f"Round 2 should escalate to Opus, got {models_used[1]}"
+        usage = next(i["__usage"] for i in items if "__usage" in i)
+        assert usage["opus_input_tokens"] > 0
+        assert usage["opus_output_tokens"] > 0

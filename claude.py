@@ -5,7 +5,7 @@ import threading
 from anthropic import Anthropic, RateLimitError, InternalServerError, APIConnectionError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 
-from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_FAST_MODEL, AGENT_MAX_TOOL_ROUNDS, FILMOGRAPHY_INGEST_LIMIT
+from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_FAST_MODEL, AGENT_MAX_TOOL_ROUNDS, FILMOGRAPHY_INGEST_LIMIT, FORCE_FAST_MODEL
 from tmdb import search_person, get_filmography
 
 logger = logging.getLogger(__name__)
@@ -417,7 +417,8 @@ def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict],
 
         # No return_results this round — execute non-terminal tools and continue.
         # _execute_non_terminal_tools mutates valid_titles and tools_called in-place.
-        current_model = CLAUDE_MODEL
+        if not FORCE_FAST_MODEL:
+            current_model = CLAUDE_MODEL
         messages.extend(
             _execute_non_terminal_tools(non_terminal, response.content, valid_titles, tools_called)
         )
@@ -621,7 +622,8 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
 
         non_terminal = [t for t in tool_uses if t.name != _TOOL_RETURN_RESULTS]
         # _execute_non_terminal_tools mutates valid_titles and tools_called in-place.
-        current_model = CLAUDE_MODEL
+        if not FORCE_FAST_MODEL:
+            current_model = CLAUDE_MODEL
         messages.extend(
             _execute_non_terminal_tools(non_terminal, final.content, valid_titles, tools_called)
         )

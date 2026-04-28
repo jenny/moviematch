@@ -54,7 +54,7 @@ Key config values:
 
 ## Anthropic Integration
 - **Round 1**: Always Haiku (`CLAUDE_FAST_MODEL`) — cheap, handles tool-free queries
-- **Round 2+**: Switches to Opus (`CLAUDE_MODEL`) only if non-terminal tools are invoked
+- **Round 2+**: Stays on Haiku by default; escalates to Opus (`CLAUDE_MODEL`) only if `FORCE_FAST_MODEL=false` is set and non-terminal tools are invoked
 - **Tools**: `search_person`, `get_filmography`, `return_results` (terminal); person-lookup tools removed from schema when filmography is pre-resolved
 - **Anti-hallucination**: `_filter_results()` validates returned titles against candidate + filmography sets using case-insensitive matching
 - **Streaming**: `rerank_stream()` uses `_extract_result_objects()` to yield results as JSON chunks arrive
@@ -63,6 +63,7 @@ Key config values:
 - `SEARCH_CANDIDATES = 15` — vector results passed to Claude
 - `SEARCH_DOC_TRUNCATE = 200` — chars of each movie doc sent in prompt
 - `AGENT_MAX_TOOL_ROUNDS = 4`
+- `FORCE_FAST_MODEL = true` — keeps Haiku for all rounds; set `FORCE_FAST_MODEL=false` in `.env` to re-enable Opus escalation
 
 ## Tests
 Run in venv with: `pytest` from project root.

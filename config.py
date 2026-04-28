@@ -49,9 +49,12 @@ EMBEDDING_DIMENSION = 768  # output dimension of all-mpnet-base-v2
 EMBEDDING_BATCH_SIZE = 64
 
 # Claude
-CLAUDE_MODEL = "claude-opus-4-6"          # used when tools are invoked
+CLAUDE_MODEL = "claude-opus-4-6"          # used when tools are invoked (if escalation enabled)
 CLAUDE_FAST_MODEL = "claude-haiku-4-5-20251001"  # used for round 1 and tool-free queries
 AGENT_MAX_TOOL_ROUNDS = 4  # search_person → get_filmography (×1-2) → return_results
+# When True, Haiku is used for all rounds — no Opus escalation after tool calls.
+# Set FORCE_FAST_MODEL=false in .env to re-enable Opus for tool-use rounds.
+FORCE_FAST_MODEL = os.getenv("FORCE_FAST_MODEL", "true").lower() == "true"
 FILMOGRAPHY_INGEST_LIMIT = 10  # max movies to lazily ingest per get_filmography call
 # Token pricing in USD/token — update if Anthropic changes prices
 HAIKU_INPUT_PRICE  = 0.80  / 1_000_000
