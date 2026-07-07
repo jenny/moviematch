@@ -245,11 +245,6 @@
     /* Pivot icon shared by card button and overlay links */
     .pivot-icon {
       flex-shrink: 0;
-      opacity: 0.6;
-    }
-
-    .more-link:hover .pivot-icon {
-      opacity: 1;
     }
 
     .spinner {
@@ -378,6 +373,14 @@
     .overlay-title-pivot {
       margin-left: 6px;
       vertical-align: middle;
+      /* Grey at rest, brighten on hover — reversed from the title's white
+         default so the icon doesn't compete with the title text. Comes after
+         .more-link:hover in source order, so it wins on equal specificity. */
+      color: #888;
+    }
+
+    .overlay-title-pivot:hover {
+      color: #fff;
     }
 
     .overlay-title {
@@ -668,17 +671,21 @@
   <!-- Reusable SVG symbols — hidden, referenced via <use> throughout the page -->
   <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
     <!--
-      "More like this" pivot icon: a horizontal stem that forks into two
-      arrowheads, suggesting "branch from here into related content."
+      "More like this" pivot icon: a four-point sparkle/compass star, slightly
+      rotated, with two-tone facets suggesting a gem or guiding star.
+      Uses currentColor so the icon inherits the surrounding link color (and
+      brightens with .more-link:hover). The inner facets render at 0.8
+      fill-opacity, so on the dark theme they blend slightly toward the
+      background and read as the darker of the two tones.
     -->
-    <symbol id="icon-pivot" viewBox="0 0 14 12" fill="none" stroke="currentColor"
-            stroke-linecap="butt" stroke-linejoin="miter">
-      <!-- Stem + two diverging branches (Y-fork pointing right) -->
-      <path d="M 1,6 L 6,6 L 12,2 M 6,6 L 12,10" stroke-width="1.5"/>
-      <!-- Arrowhead on upper branch (wings perpendicular to arm direction) -->
-      <polyline points="8.4,2.0 12,2 10.6,5.3" stroke-width="2"/>
-      <!-- Arrowhead on lower branch (wings perpendicular to arm direction) -->
-      <polyline points="8.4,10.0 12,10 10.6,6.7" stroke-width="2"/>
+    <symbol id="icon-pivot" viewBox="0 0 20 20" fill="currentColor">
+      <g transform="rotate(-10 10 10)">
+        <path d="M10,2.5 L11.6,8.4 L17.5,10 L11.6,11.6 L10,17.5 L8.4,11.6 L2.5,10 L8.4,8.4 Z"/>
+        <path d="M10,10 L10,2.5 L11.6,8.4 Z" fill-opacity="0.8"/>
+        <path d="M10,10 L17.5,10 L11.6,11.6 Z" fill-opacity="0.8"/>
+        <path d="M10,10 L10,17.5 L8.4,11.6 Z" fill-opacity="0.8"/>
+        <path d="M10,10 L2.5,10 L8.4,8.4 Z" fill-opacity="0.8"/>
+      </g>
     </symbol>
   </svg>
 
@@ -1056,7 +1063,7 @@
 
       const yearDisplay = result.year ? `<span class="overlay-title-year">(${escapeHtml(result.year)})</span>` : "";
 
-      const pivotIcon = `<svg class="pivot-icon" width="16" height="13" aria-hidden="true"><use href="#icon-pivot"/></svg>`;
+      const pivotIcon = `<svg class="pivot-icon" width="1.6em" height="1.6em" style="position:relative;top:-0.15em" aria-hidden="true"><use href="#icon-pivot"/></svg>`;
 
       const yearPart = result.year ? ` (${result.year})` : "";
       const titlePivotQuery = `More movies like ${escapeHtml(result.title)}${escapeHtml(yearPart)}`;
