@@ -331,3 +331,44 @@ class TestGetFilmography:
              patch("tmdb.time.sleep"):
             movies = get_filmography(99, department="directing")
         assert movies[0]["poster_path"] == ""
+
+    def test_cast_ranks_by_composite_not_raw_average(self):
+        # Regression: a single-vote 10.0 credit (e.g. a WWE special) must not
+        # outrank a genuinely popular film. Raw vote_average sorting put obscure
+        # one-vote titles at the top, burying real movies past the 30-item cap.
+        blockbuster = {"id": 1, "title": "Jumanji", "character": "Hero",
+                       "poster_path": "/j.jpg", "release_date": "2017-12-20",
+                       "vote_average": 6.8, "vote_count": 14570, "popularity": 120.0}
+        one_vote_ten = {"id": 2, "title": "Obscure WWE Special", "character": "Self",
+                        "poster_path": "/w.jpg", "release_date": "1998-01-01",
+                        "vote_average": 10.0, "vote_count": 1, "popularity": 0.3}
+        mock_resp = self._mock_response(cast=[one_vote_ten, blockbuster])
+        # Unique person_id — get_filmography is lru_cached, so reusing an id from
+        # another test would return that test's cached result instead of this mock.
+        with patch("tmdb._require_tmdb_key"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("tmdb.time.sleep"):
+            movies = get_filmography(70001, department="cast")
+        assert movies[0]["title"] == "Jumanji"
+
+    def test_cast_caps_at_30_keeping_top_ranked(self):
+        # With more than 30 credits, the cap must keep the highest composite-scored
+        # films. Build 35 popular films plus one single-vote 10.0 outlier; the
+        # outlier must be dropped, not retained at the expense of a real film.
+        cast = [
+            {"id": i, "title": f"Popular {i}", "character": "Role",
+             "poster_path": "", "release_date": "2015-01-01",
+             "vote_average": 7.0, "vote_count": 5000, "popularity": 80.0}
+            for i in range(35)
+        ]
+        cast.append({"id": 999, "title": "One Vote Wonder", "character": "Self",
+                     "poster_path": "", "release_date": "1990-01-01",
+                     "vote_average": 10.0, "vote_count": 1, "popularity": 0.1})
+        mock_resp = self._mock_response(cast=cast)
+        # Unique person_id to sidestep get_filmography's lru_cache (see above).
+        with patch("tmdb._require_tmdb_key"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("tmdb.time.sleep"):
+            movies = get_filmography(70002, department="cast")
+        assert len(movies) == 30
+        assert "One Vote Wonder" not in {m["title"] for m in movies}

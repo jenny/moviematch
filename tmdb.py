@@ -234,6 +234,24 @@ def select_top_n(candidates: dict[int, dict], n: int) -> list[int]:
     return [m["id"] for m in ranked[:n]]
 
 
+def _rank_credits_by_composite(entries: list[dict]) -> list[dict]:
+    """Rank raw TMDB credit entries by the same Bayesian-rating + log-popularity
+    score used for the main index (see select_top_n / _composite_score).
+
+    A naive vote_average sort is unsafe for filmographies: prolific actors accrue
+    many obscure credits (e.g. WWE specials in Dwayne Johnson's list) that carry a
+    perfect 10.0 average from a single vote. Those outrank blockbusters like Jumanji
+    (14k votes, 6.8 avg) and crowd out every real film from the top-N cap. The
+    Bayesian prior (TMDB_MIN_VOTE_COUNT) regresses low-vote titles toward the mean,
+    and the popularity term surfaces the films people actually search for.
+    """
+    if not entries:
+        return []
+    mean_rating = sum(m.get("vote_average", 0) for m in entries) / len(entries)
+    log_max_pop = math.log1p(max((m.get("popularity", 0) for m in entries), default=0))
+    return sorted(entries, key=lambda m: _composite_score(m, mean_rating, log_max_pop), reverse=True)
+
+
 def ingest_movie(movie_id: int) -> dict:
     _require_tmdb_key()
     file_path = os.path.join(DATA_DIR, f"{movie_id}.json")
@@ -317,42 +335,44 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
     response.raise_for_status()
     time.sleep(TMDB_RATE_LIMIT_SLEEP)
     data = response.json()
+    # Rank by composite score (Bayesian rating + popularity), NOT raw vote_average —
+    # otherwise single-vote 10.0 credits (WWE specials, obscure shorts) bury the
+    # films the user actually means. See _rank_credits_by_composite for details.
     if department == "directing":
         seen: set[int] = set()
-        movies = []
+        entries = []
         for m in data.get("crew", []):
             if m.get("job") == "Director" and m["id"] not in seen:
                 seen.add(m["id"])
-                movies.append({
-                    "id": m["id"],
-                    "title": m["title"],
-                    "vote_average": m.get("vote_average", 0),
-                    "vote_count": m.get("vote_count", 0),
-                    "release_date": m.get("release_date", ""),
-                    "poster_path": m.get("poster_path", ""),
-                })
+                entries.append(m)
+        ranked = _rank_credits_by_composite(entries)
+        return [
+            {
+                "id": m["id"],
+                "title": m["title"],
+                "vote_average": m.get("vote_average", 0),
+                "vote_count": m.get("vote_count", 0),
+                "release_date": m.get("release_date", ""),
+                "poster_path": m.get("poster_path", ""),
+            }
+            for m in ranked
+        ]
     else:
-        # Cap cast credits at 30 highest-rated to avoid overwhelming Claude.
-        # Sort here (not at the return) since the directing branch builds an
-        # already-ordered list; a second sort there would be redundant.
-        movies = sorted(
-            [
-                {
-                    "id": m["id"],
-                    "title": m["title"],
-                    "vote_average": m.get("vote_average", 0),
-                    "vote_count": m.get("vote_count", 0),
-                    "release_date": m.get("release_date", ""),
-                    "poster_path": m.get("poster_path", ""),
-                    "character": m.get("character", ""),
-                }
-                for m in data.get("cast", [])
-            ],
-            key=lambda m: m["vote_average"],
-            reverse=True,
-        )[:30]
-        return movies
-    return sorted(movies, key=lambda m: m["vote_average"], reverse=True)
+        # Cap cast credits at 30 to avoid overwhelming Claude — take the top 30 by
+        # composite score so the cap keeps popular films, not single-vote outliers.
+        ranked = _rank_credits_by_composite(data.get("cast", []))[:30]
+        return [
+            {
+                "id": m["id"],
+                "title": m["title"],
+                "vote_average": m.get("vote_average", 0),
+                "vote_count": m.get("vote_count", 0),
+                "release_date": m.get("release_date", ""),
+                "poster_path": m.get("poster_path", ""),
+                "character": m.get("character", ""),
+            }
+            for m in ranked
+        ]
 
 
 def update_index(movie_id: int, title: str) -> None:
