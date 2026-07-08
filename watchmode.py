@@ -55,7 +55,7 @@ _api_calls_month = 0  # loaded from file on startup; resets when calendar month 
 
 
 def _get_current_month() -> str:
-    return datetime.datetime.utcnow().strftime("%Y-%m")
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m")
 
 
 def _load_persistent_counter() -> None:
