@@ -6,7 +6,7 @@ from pydantic import BaseModel, field_validator
 
 from api.geo import get_client_ip, resolve_country
 from api.limiter import limiter
-from config import DEFAULT_STREAMING_REGION, STREAMING_RATE_LIMIT, WATCHMODE_API_KEY
+from config import DEFAULT_STREAMING_REGION, REGION_RATE_LIMIT, STREAMING_RATE_LIMIT, WATCHMODE_API_KEY
 from tmdb import fetch_watch_providers, search_movie_by_title
 import watchmode
 
@@ -51,7 +51,7 @@ def get_providers_for_title(title: str, year: str, country: str = DEFAULT_STREAM
 
 
 @router.get("/region")
-@limiter.limit("10/minute")
+@limiter.limit(REGION_RATE_LIMIT)
 def user_region(request: Request) -> dict:
     """Return the ISO 3166-1 alpha-2 country code inferred from the client IP.
 
