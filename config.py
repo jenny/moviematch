@@ -18,6 +18,12 @@ TMDB_RATE_LIMIT_SLEEP = 0.3  # seconds; keeps requests under TMDB's 40 req/10s l
 # Composite ranking weights (must sum to 1.0): Bayesian weighted rating vs. popularity
 SCORE_WEIGHT_RATING = 0.6
 SCORE_WEIGHT_POPULARITY = 0.4
+# Fail fast if the weights are misconfigured — _composite_score assumes they sum to 1.0.
+if abs((SCORE_WEIGHT_RATING + SCORE_WEIGHT_POPULARITY) - 1.0) > 1e-9:
+    raise ValueError(
+        f"SCORE_WEIGHT_RATING ({SCORE_WEIGHT_RATING}) + SCORE_WEIGHT_POPULARITY "
+        f"({SCORE_WEIGHT_POPULARITY}) must sum to 1.0."
+    )
 # Quality thresholds for lazy ingestion of tool-discovered movies
 MIN_INGEST_VOTE_AVERAGE = 6.0
 MIN_INGEST_VOTE_COUNT = 100
