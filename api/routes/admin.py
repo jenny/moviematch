@@ -4,6 +4,7 @@ import logging
 import os
 import glob
 import threading
+from collections import deque
 
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
@@ -19,6 +20,13 @@ from config import DATA_DIR, LOG_DIR
 import watchmode as watchmode_module
 
 router = APIRouter()
+
+# Cap how many log lines /admin/logs parses per call. The search log rotates at
+# 10 MB, so without a cap a single request would json.loads tens of thousands of
+# entries. Reading with a maxlen deque keeps only the most recent lines in memory,
+# bounding parse cost; stats are therefore computed over the most recent
+# MAX_LOG_ENTRIES requests rather than the entire current log segment.
+MAX_LOG_ENTRIES = 5000
 
 # Keyed by IP string; values are (primary, detail) tuples where primary is
 # the most specific location string and detail is a supplementary "City, Region"
@@ -159,13 +167,16 @@ def logs():
     log_path = os.path.join(LOG_DIR, "search.log")
     if os.path.exists(log_path):
         with open(log_path) as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    try:
-                        entries.append(json.loads(line))
-                    except json.JSONDecodeError:
-                        logger.warning(f"Malformed JSON in log file, skipping line: {line[:100]!r}")
+            # Retain only the most recent MAX_LOG_ENTRIES lines; the deque discards
+            # older lines as it reads, so we json.loads at most MAX_LOG_ENTRIES rows.
+            recent_lines = deque(f, maxlen=MAX_LOG_ENTRIES)
+        for line in recent_lines:
+            line = line.strip()
+            if line:
+                try:
+                    entries.append(json.loads(line))
+                except json.JSONDecodeError:
+                    logger.warning(f"Malformed JSON in log file, skipping line: {line[:100]!r}")
 
     ok = [e for e in entries if e.get("status") == "ok"]
 
