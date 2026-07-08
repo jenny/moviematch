@@ -172,7 +172,13 @@ def search_stream(query: str):
 
     candidates = apply_hard_filters(candidates, parsed)
 
-    if not candidates:
+    # Only bail out when there is genuinely nothing to recommend from. When a
+    # person filmography was pre-fetched we can still recommend from it even if
+    # hard filters removed every semantic candidate (e.g. "family-friendly films
+    # directed by X" where all 15 vector hits are R-rated) — those titles are
+    # seeded into valid_titles and the prompt below, so Claude can still return them.
+    has_filmography = bool(parsed and parsed.person_filmographies)
+    if not candidates and not has_filmography:
         yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
         return
 
