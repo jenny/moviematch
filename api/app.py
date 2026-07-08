@@ -14,7 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from api.auth import SESSION_COOKIE, _cookie_kwargs, set_session_cookie, verify_session_cookie
 from api.limiter import limiter
 from api.routes import search, admin, streaming
-from config import ADMIN_PASSWORD, ADMIN_SECRET_KEY, ADMIN_USERNAME, CORS_ORIGINS, validate_config
+from config import ADMIN_PASSWORD, ADMIN_SECRET_KEY, ADMIN_USERNAME, CORS_ORIGINS, LOGIN_RATE_LIMIT, validate_config
 
 _app_html: str = ""
 _admin_html: str = ""
@@ -110,11 +110,13 @@ def login_page(request: Request):
 
 
 @app.post("/admin/login")
-def login_submit(body: _LoginRequest, response: Response):
+@limiter.limit(LOGIN_RATE_LIMIT)
+def login_submit(request: Request, body: _LoginRequest, response: Response):
     """
     Validate credentials and issue a session cookie.
     Both comparisons always run to prevent timing-based username enumeration.
     Fails closed: if any credential env var is unset, access is denied.
+    Rate-limited (LOGIN_RATE_LIMIT) to throttle password brute-force attempts.
     """
     user_ok = secrets.compare_digest(body.username, ADMIN_USERNAME or "\x00")
     pass_ok = secrets.compare_digest(body.password, ADMIN_PASSWORD or "\x00")

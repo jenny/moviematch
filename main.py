@@ -99,86 +99,17 @@ def _fetch_candidates(query: str) -> tuple[list[dict], int, int]:
     return candidates, embedding_ms, chroma_ms
 
 
-def search(query: str) -> tuple[list[dict], dict | None, dict]:
-    # Pre-parse and concurrent person lookup (same as search_stream).
-    parsed = parse_query(query)
-    person_future = None
-    if parsed.person_names:
-        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
+def _build_metadata_lookups(candidates: list[dict], parsed=None) -> dict[str, dict]:
+    """Build title→field lookup dicts (lowercased keys) for the reranked results.
 
-    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
-    timing = {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0}
+    First indexes the vector candidates, then seeds metadata for filmography
+    movies that fell outside the top-N vector candidates: a batch vector_fetch
+    by TMDB ID yields full rich metadata for films already ingested, and the
+    rest fall back to the sparse poster+year from the TMDB filmography payload.
 
-    if person_future is not None:
-        try:
-            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
-            for pf in parsed.person_filmographies:
-                if pf.get("movies"):
-                    threading.Thread(
-                        target=_ingest_filmography_background,
-                        args=(pf["movies"],),
-                        daemon=True,
-                    ).start()
-        except Exception:
-            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
-
-    candidates = apply_hard_filters(candidates, parsed)
-
-    if not candidates:
-        return [], None, timing
-
-    # Keyed lowercase to match search_stream and _filter_results casing behaviour.
-    poster_by_title = {c["title"].lower(): c["movie_poster"] for c in candidates}
-    certification_by_title = {c["title"].lower(): c["certification"] for c in candidates}
-
-    t0 = time.perf_counter()
-    reranked, usage = rerank(query, candidates, parsed=parsed)
-    timing["claude_ms"] = round((time.perf_counter() - t0) * 1000)
-
-    for result in reranked:
-        t = (result.get("title") or "").lower()
-        result["movie_poster"] = poster_by_title.get(t, "")
-        result["certification"] = certification_by_title.get(t, "")
-    return reranked, usage, timing
-
-
-def search_stream(query: str):
-    """Generator that yields result dicts (with movie_poster) as they stream from Claude,
-    then yields {"__meta": {"embedding_ms": ..., "chroma_ms": ..., "claude_ms": ..., "usage": ...}}."""
-    # Pre-parse the query for structured tokens (year, genre, cert, person names).
-    # If person names are found, submit a TMDB lookup concurrently with embedding
-    # so the round-trip latency is absorbed rather than added.
-    parsed = parse_query(query)
-    person_future = None
-    if parsed.person_names:
-        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
-
-    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
-
-    if person_future is not None:
-        try:
-            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
-            # Trigger background ingestion for pre-fetched filmography films,
-            # mirroring the ingestion that fires when Claude calls get_filmography directly.
-            for pf in parsed.person_filmographies:
-                if pf.get("movies"):
-                    threading.Thread(
-                        target=_ingest_filmography_background,
-                        args=(pf["movies"],),
-                        daemon=True,
-                    ).start()
-        except Exception:
-            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
-
-    candidates = apply_hard_filters(candidates, parsed)
-
-    if not candidates:
-        yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
-        return
-
-    # Keyed by lowercased title to match _filter_results' case-insensitive behaviour.
-    # Claude sees exact candidate titles in the prompt but may use slightly different
-    # casing, and filmography-sourced titles may differ from vector DB titles.
+    Shared by search() and search_stream() so both apply identical casing and
+    filmography-seeding behaviour. Returns a dict of per-field lookup dicts.
+    """
     poster_by_title = {c["title"].lower(): c["movie_poster"] for c in candidates}
     certification_by_title = {c["title"].lower(): c["certification"] for c in candidates}
     year_by_title = {c["title"].lower(): c["year"] for c in candidates}
@@ -187,10 +118,6 @@ def search_stream(query: str):
     director_by_title = {c["title"].lower(): c["director"] for c in candidates}
     cast_by_title = {c["title"].lower(): c["cast"] for c in candidates}
 
-    # Seed metadata for filmography movies not in the top-N vector candidates.
-    # First, try a batch vector DB fetch by TMDB ID — this gives full rich metadata
-    # (overview, genres, director, cast) for films already ingested. Then fall back
-    # to the sparse poster+year from the TMDB filmography payload for the rest.
     if parsed and parsed.person_filmographies:
         candidate_titles_lower = {c["title"].lower() for c in candidates}
         outside_candidates = [
@@ -238,6 +165,108 @@ def search_stream(query: str):
             director_by_title[title_lower] = ""
             cast_by_title[title_lower] = []
 
+    return {
+        "movie_poster": poster_by_title,
+        "certification": certification_by_title,
+        "year": year_by_title,
+        "overview": overview_by_title,
+        "genres": genres_by_title,
+        "director": director_by_title,
+        "cast": cast_by_title,
+    }
+
+
+def search(query: str) -> tuple[list[dict], dict | None, dict]:
+    # Pre-parse and concurrent person lookup (same as search_stream).
+    parsed = parse_query(query)
+    person_future = None
+    if parsed.person_names:
+        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
+
+    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
+    timing = {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0}
+
+    if person_future is not None:
+        try:
+            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
+            for pf in parsed.person_filmographies:
+                if pf.get("movies"):
+                    threading.Thread(
+                        target=_ingest_filmography_background,
+                        args=(pf["movies"],),
+                        daemon=True,
+                    ).start()
+        except Exception:
+            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
+
+    candidates = apply_hard_filters(candidates, parsed)
+
+    # Mirror search_stream: only bail out when there are no candidates AND no
+    # pre-fetched filmography to recommend from.
+    has_filmography = bool(parsed and parsed.person_filmographies)
+    if not candidates and not has_filmography:
+        return [], None, timing
+
+    # Shared lowercased lookups (incl. filmography-outside seeding) — identical to search_stream.
+    lookups = _build_metadata_lookups(candidates, parsed)
+
+    t0 = time.perf_counter()
+    reranked, usage = rerank(query, candidates, parsed=parsed)
+    timing["claude_ms"] = round((time.perf_counter() - t0) * 1000)
+
+    for result in reranked:
+        t = (result.get("title") or "").lower()
+        result["movie_poster"] = lookups["movie_poster"].get(t, "")
+        result["certification"] = lookups["certification"].get(t, "")
+    return reranked, usage, timing
+
+
+def search_stream(query: str):
+    """Generator that yields result dicts (with movie_poster) as they stream from Claude,
+    then yields {"__meta": {"embedding_ms": ..., "chroma_ms": ..., "claude_ms": ..., "usage": ...}}."""
+    # Pre-parse the query for structured tokens (year, genre, cert, person names).
+    # If person names are found, submit a TMDB lookup concurrently with embedding
+    # so the round-trip latency is absorbed rather than added.
+    parsed = parse_query(query)
+    person_future = None
+    if parsed.person_names:
+        person_future = _person_fetch_executor.submit(resolve_persons, parsed)
+
+    candidates, embedding_ms, chroma_ms = _fetch_candidates(query)
+
+    if person_future is not None:
+        try:
+            person_future.result(timeout=PERSON_LOOKUP_TIMEOUT_S)
+            # Trigger background ingestion for pre-fetched filmography films,
+            # mirroring the ingestion that fires when Claude calls get_filmography directly.
+            for pf in parsed.person_filmographies:
+                if pf.get("movies"):
+                    threading.Thread(
+                        target=_ingest_filmography_background,
+                        args=(pf["movies"],),
+                        daemon=True,
+                    ).start()
+        except Exception:
+            logger.warning("Person pre-fetch failed or timed out; falling back to Claude tools")
+
+    candidates = apply_hard_filters(candidates, parsed)
+
+    # Only bail out when there is genuinely nothing to recommend from. When a
+    # person filmography was pre-fetched we can still recommend from it even if
+    # hard filters removed every semantic candidate (e.g. "family-friendly films
+    # directed by X" where all 15 vector hits are R-rated) — those titles are
+    # seeded into valid_titles and the prompt below, so Claude can still return them.
+    has_filmography = bool(parsed and parsed.person_filmographies)
+    if not candidates and not has_filmography:
+        yield {"__meta": {"embedding_ms": embedding_ms, "chroma_ms": chroma_ms, "claude_ms": 0, "usage": None}}
+        return
+
+    # Shared lowercased lookups keyed by title (incl. filmography-outside seeding).
+    # Lowercased to match _filter_results' case-insensitive behaviour: Claude sees
+    # exact candidate titles in the prompt but may use slightly different casing,
+    # and filmography-sourced titles may differ from vector DB titles.
+    lookups = _build_metadata_lookups(candidates, parsed)
+
     t0 = time.perf_counter()
     usage = None
     error = None
@@ -247,13 +276,13 @@ def search_stream(query: str):
             error = usage.pop("error", None)
         else:
             t = (item.get("title") or "").lower()
-            item["movie_poster"] = poster_by_title.get(t, "")
-            item["certification"] = certification_by_title.get(t, "")
-            item["year"] = year_by_title.get(t, "")
-            item["overview"] = overview_by_title.get(t, "")
-            item["genres"] = genres_by_title.get(t, [])
-            item["director"] = director_by_title.get(t, "")
-            item["cast"] = cast_by_title.get(t, [])
+            item["movie_poster"] = lookups["movie_poster"].get(t, "")
+            item["certification"] = lookups["certification"].get(t, "")
+            item["year"] = lookups["year"].get(t, "")
+            item["overview"] = lookups["overview"].get(t, "")
+            item["genres"] = lookups["genres"].get(t, [])
+            item["director"] = lookups["director"].get(t, "")
+            item["cast"] = lookups["cast"].get(t, [])
             yield item
 
     claude_ms = round((time.perf_counter() - t0) * 1000)

@@ -18,6 +18,12 @@ TMDB_RATE_LIMIT_SLEEP = 0.3  # seconds; keeps requests under TMDB's 40 req/10s l
 # Composite ranking weights (must sum to 1.0): Bayesian weighted rating vs. popularity
 SCORE_WEIGHT_RATING = 0.6
 SCORE_WEIGHT_POPULARITY = 0.4
+# Fail fast if the weights are misconfigured — _composite_score assumes they sum to 1.0.
+if abs((SCORE_WEIGHT_RATING + SCORE_WEIGHT_POPULARITY) - 1.0) > 1e-9:
+    raise ValueError(
+        f"SCORE_WEIGHT_RATING ({SCORE_WEIGHT_RATING}) + SCORE_WEIGHT_POPULARITY "
+        f"({SCORE_WEIGHT_POPULARITY}) must sum to 1.0."
+    )
 # Quality thresholds for lazy ingestion of tool-discovered movies
 MIN_INGEST_VOTE_AVERAGE = 6.0
 MIN_INGEST_VOTE_COUNT = 100
@@ -79,6 +85,8 @@ PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent pe
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
 STREAMING_RATE_LIMIT = "30/minute" # /streaming endpoints — Watchmode/TMDB only
+REGION_RATE_LIMIT = "10/minute"    # /region — triggers an external ipinfo lookup
+LOGIN_RATE_LIMIT = "5/minute"      # /admin/login — throttles password brute-force
 
 # Streaming region — ISO 3166-1 alpha-2 country code used when no region is detected
 DEFAULT_STREAMING_REGION = "US"
