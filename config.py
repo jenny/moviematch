@@ -79,6 +79,8 @@ PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent pe
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
 STREAMING_RATE_LIMIT = "30/minute" # /streaming endpoints — Watchmode/TMDB only
+REGION_RATE_LIMIT = "10/minute"    # /region — triggers an external ipinfo lookup
+LOGIN_RATE_LIMIT = "5/minute"      # /admin/login — throttles password brute-force
 
 # Streaming region — ISO 3166-1 alpha-2 country code used when no region is detected
 DEFAULT_STREAMING_REGION = "US"
