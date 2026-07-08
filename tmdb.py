@@ -295,8 +295,12 @@ def ingest_index(n: int) -> list[int]:
     wait=wait_exponential(multiplier=2, min=1, max=30),
     retry=retry_if_exception(_is_rate_limit_or_server_error),
 )
-def search_person(name: str) -> list[dict]:
-    """Search TMDB for a person by name. Returns top 3 results with id, name, department."""
+def _search_person_cached(name: str) -> list[dict]:
+    """Cached implementation of search_person. See the public wrapper below.
+
+    The returned list is stored by lru_cache and shared across callers, so it
+    must be treated as read-only here; search_person hands out fresh copies.
+    """
     _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + "/search/person",
@@ -318,14 +322,27 @@ def search_person(name: str) -> list[dict]:
     ]
 
 
+def search_person(name: str) -> list[dict]:
+    """Search TMDB for a person by name. Returns top 3 results with id, name, department.
+
+    Returns a fresh copy of the cached result (new list of new dicts) so a caller
+    that mutates the result can't corrupt the shared lru_cache entry.
+    """
+    return [dict(p) for p in _search_person_cached(name)]
+
+
 @lru_cache(maxsize=256)
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=2, min=1, max=30),
     retry=retry_if_exception(_is_rate_limit_or_server_error),
 )
-def get_filmography(person_id: int, department: str = "directing") -> list[dict]:
-    """Get movie credits for a person. department: 'directing' or 'cast'."""
+def _get_filmography_cached(person_id: int, department: str = "directing") -> list[dict]:
+    """Cached implementation of get_filmography. See the public wrapper below.
+
+    The returned list is stored by lru_cache and shared across callers, so it
+    must be treated as read-only here; get_filmography hands out fresh copies.
+    """
     _require_tmdb_key()
     response = requests.get(
         TMDB_BASE_URL + f"/person/{person_id}/movie_credits",
@@ -373,6 +390,15 @@ def get_filmography(person_id: int, department: str = "directing") -> list[dict]
             }
             for m in ranked
         ]
+
+
+def get_filmography(person_id: int, department: str = "directing") -> list[dict]:
+    """Get movie credits for a person. department: 'directing' or 'cast'.
+
+    Returns a fresh copy of the cached result (new list of new dicts) so a caller
+    that reorders/extends the result can't corrupt the shared lru_cache entry.
+    """
+    return [dict(m) for m in _get_filmography_cached(person_id, department)]
 
 
 def update_index(movie_id: int, title: str) -> None:
