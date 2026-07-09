@@ -674,17 +674,18 @@
       "More like this" pivot icon: a four-point sparkle/compass star, slightly
       rotated, with two-tone facets suggesting a gem or guiding star.
       Uses currentColor so the icon inherits the surrounding link color (and
-      brightens with .more-link:hover). The inner facets render at 0.8
-      fill-opacity, so on the dark theme they blend slightly toward the
-      background and read as the darker of the two tones.
+      brightens with .more-link:hover). The inner facets render in a fixed
+      gray (#666) rather than an opacity blend, so the two-tone contrast
+      stays constant regardless of what's behind the icon — dark enough to
+      read clearly against the #888 resting link color, not just on hover.
     -->
     <symbol id="icon-pivot" viewBox="0 0 20 20" fill="currentColor">
       <g transform="rotate(-10 10 10)">
         <path d="M10,2.5 L11.6,8.4 L17.5,10 L11.6,11.6 L10,17.5 L8.4,11.6 L2.5,10 L8.4,8.4 Z"/>
-        <path d="M10,10 L10,2.5 L11.6,8.4 Z" fill-opacity="0.8"/>
-        <path d="M10,10 L17.5,10 L11.6,11.6 Z" fill-opacity="0.8"/>
-        <path d="M10,10 L10,17.5 L8.4,11.6 Z" fill-opacity="0.8"/>
-        <path d="M10,10 L2.5,10 L8.4,8.4 Z" fill-opacity="0.8"/>
+        <path d="M10,10 L10,2.5 L11.6,8.4 Z" style="color:#666"/>
+        <path d="M10,10 L17.5,10 L11.6,11.6 Z" style="color:#666"/>
+        <path d="M10,10 L10,17.5 L8.4,11.6 Z" style="color:#666"/>
+        <path d="M10,10 L2.5,10 L8.4,8.4 Z" style="color:#666"/>
       </g>
     </symbol>
   </svg>
