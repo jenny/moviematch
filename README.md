@@ -10,6 +10,8 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 4. At search time, the query first runs through a rule-based pre-parser that extracts structured constraints (year/decade, genre, certification, director/actor names, "similar to X" title references); the query is then embedded and matched against the database using cosine similarity, candidates violating hard constraints are dropped, and [Claude](https://www.anthropic.com/claude) reranks the survivors via an agentic loop that can optionally look up director or actor filmographies from TMDB before returning ranked results
 5. The frontend separately fetches region-aware streaming availability for each result via [Watchmode](https://api.watchmode.com/) (primary) or TMDB (fallback), with the viewer's country inferred from their IP
 
+> **Streaming data is fetched at request time, never stored in the vector database.** Because streaming catalogs change frequently, provider lookups are served live and held only in a process-local in-memory cache (24-hour TTL, keyed by title and country) to conserve the Watchmode free-tier budget. The cache is volatile — it is lost on process restart. The vector database stores movie metadata and MPAA certifications only, not streaming availability.
+
 ## Setup
 
 ### Prerequisites
@@ -83,6 +85,18 @@ python pipeline.py
 ```
 
 You will be prompted for the number of movies to index (there is no default — enter a value at the prompt). A dataset of **5,000 movies** is recommended and takes approximately 50 minutes (mostly TMDB API calls). If the pipeline is interrupted, re-running it will skip already-ingested movies and resume from where it left off.
+
+### Incremental updates at runtime
+
+Beyond this one-time bulk initialization, the embeddings database grows **lazily at search time**. When a query names a director or actor, their filmography is looked up from TMDB (either by Claude calling the `get_filmography` tool, or by the concurrent person pre-fetch in the query parser). Any films in that filmography that aren't already indexed are ingested in a **background daemon thread**, so the current search returns without waiting — the newly added movies simply become searchable for subsequent queries.
+
+Each lazily discovered movie passes through the same steps as bulk ingestion (`ingest_single` in `pipeline.py`):
+
+1. A **quality gate** drops films below the `MIN_INGEST_VOTE_AVERAGE` / `MIN_INGEST_VOTE_COUNT` thresholds in `config.py`.
+2. Full metadata is fetched from TMDB, a richtext string is compiled, and it's embedded and upserted into the vector database.
+3. `index.json` is updated (writes are serialized by a lock, so concurrent background ingestions are safe).
+
+The process is **idempotent and de-duplicated**: movies already in the dataset are skipped, an in-flight set prevents the same movie from being ingested twice concurrently, and each filmography lookup is capped at `FILMOGRAPHY_INGEST_LIMIT` movies.
 
 ## Running the server
 
