@@ -86,7 +86,9 @@ Run in venv with: `pytest` from project root.
 
 ## Environment
 Required env vars: `ANTHROPIC_API_KEY`, `TMDB_READ_ACCESS_TOKEN`
-Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `RATE_LIMIT` (default `10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (default `30/minute` on `/streaming` endpoints), `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
+Optional: `WATCHMODE_API_KEY` (free tier at watchmode.com; enables reliable streaming availability data — falls back to TMDB without it), `VECTOR_DB` (auto-selects `pinecone` when `RAILWAY_ENVIRONMENT` is set, else `chroma`), `PINECONE_*` keys, `CORS_ORIGINS`, `LOG_DIR` (default `logs`; set to a Railway Volume path for log persistence)
+
+Rate limits are constants in `config.py`, not env vars: `RATE_LIMIT` (`10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (`30/minute` on `/streaming` endpoints), `REGION_RATE_LIMIT` (`10/minute` on `/region`), `LOGIN_RATE_LIMIT` (`5/minute` on `/admin/login`).
 
 Admin auth (all three required to enable the admin panel; fails closed if any is unset): `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SECRET_KEY` (random 32-byte hex string — generate with `openssl rand -hex 32`)
 

@@ -58,10 +58,10 @@ PINECONE_INDEX_NAME=your_index_name
 |----------|---------|
 | `WATCHMODE_API_KEY` | Enables [Watchmode](https://api.watchmode.com/) as the primary streaming-availability source (free tier). Falls back to TMDB when unset. |
 | `CORS_ORIGINS` | Comma-separated allowed origins (default `http://localhost:8000,http://127.0.0.1:8000`). |
-| `RATE_LIMIT` | slowapi limit on `/recommend` (default `10/minute`). |
-| `STREAMING_RATE_LIMIT` | slowapi limit on the `/streaming` endpoints (default `30/minute`). |
 | `LOG_DIR` | Directory for request logs (default `logs`; point at a persistent volume in production). |
 | `FORCE_FAST_MODEL` | When `true` (default) Claude uses Haiku for all rounds; set `false` to re-enable Opus escalation on tool use. |
+
+> Rate limits are compile-time constants in `config.py`, not environment variables: `RATE_LIMIT` (`10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (`30/minute` on the `/streaming` endpoints), `REGION_RATE_LIMIT` (`10/minute` on `/region`), and `LOGIN_RATE_LIMIT` (`5/minute` on `/admin/login`). Edit `config.py` to change them.
 
 ### Admin panel auth
 
@@ -82,7 +82,7 @@ source venv/bin/activate
 python pipeline.py
 ```
 
-You will be prompted for the number of movies to index. The default dataset is **5,000 movies**, which takes approximately 50 minutes (mostly TMDB API calls). If the pipeline is interrupted, re-running it will skip already-ingested movies and resume from where it left off.
+You will be prompted for the number of movies to index (there is no default — enter a value at the prompt). A dataset of **5,000 movies** is recommended and takes approximately 50 minutes (mostly TMDB API calls). If the pipeline is interrupted, re-running it will skip already-ingested movies and resume from where it left off.
 
 ## Running the server
 
@@ -91,7 +91,7 @@ source venv/bin/activate
 uvicorn api.app:app --reload
 ```
 
-Then open `app.html` in a browser.
+Then open <http://localhost:8000/> in a browser. The frontend (`app.html`) is served by the app's root route and uses relative API paths, so it must be loaded from the server — opening the `app.html` file directly (`file://`) will break all API calls.
 
 ## API
 
