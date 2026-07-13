@@ -175,3 +175,38 @@ def test_deep_link_auto_runs_search(page: Page, base_url: str):
     page.goto(f"{base_url}/?q=__mock__")
     page.locator(".card").nth(4).wait_for()
     assert page.locator(".card").count() == 5
+
+
+# ── Clear-query button ────────────────────────────────────────────────────────
+
+
+def test_clear_button_hidden_when_empty(page: Page, base_url: str):
+    """The clear × is hidden on load while the input is empty."""
+    page.goto(base_url)
+    expect(page.locator("#clearBtn")).to_be_hidden()
+
+
+def test_clear_button_appears_with_text(page: Page, base_url: str):
+    """Typing into the input reveals the clear ×."""
+    page.goto(base_url)
+    page.fill("#queryInput", "space movies")
+    expect(page.locator("#clearBtn")).to_be_visible()
+
+
+def test_clear_button_empties_and_refocuses_input(page: Page, base_url: str):
+    """Clicking the clear × empties the input, hides itself, and refocuses."""
+    page.goto(base_url)
+    page.fill("#queryInput", "space movies")
+    page.click("#clearBtn")
+    expect(page.locator("#queryInput")).to_have_value("")
+    expect(page.locator("#clearBtn")).to_be_hidden()
+    expect(page.locator("#queryInput")).to_be_focused()
+
+
+def test_clear_button_hidden_after_deep_link_back(page: Page, base_url: str):
+    """Back to the blank page (empty state) hides the clear × again."""
+    _run_mock(page, base_url)
+    expect(page.locator("#clearBtn")).to_be_visible()  # __mock__ populated the input
+    page.go_back()
+    expect(page.locator("#queryInput")).to_have_value("")
+    expect(page.locator("#clearBtn")).to_be_hidden()
