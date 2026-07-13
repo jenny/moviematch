@@ -531,22 +531,36 @@
   <script>
     const API_LOGS = "/admin/logs";
     const API_WATCHMODE = "/admin/watchmode";
+    const API_STATUS = "/admin/status";
     const QUERY_TRUNCATE = 60;
 
     async function load() {
       const btn = document.getElementById("refreshBtn");
       btn.disabled = true;
 
-      // Start the watchmode request immediately so it runs in parallel,
-      // but don't let it block the main panel from rendering.
+      // Kick off all three requests up front so they run in parallel — the
+      // status/watchmode calls must not delay the main logs panel.
       const wmFetch = fetch(API_WATCHMODE);
+      const statusFetch = fetch(API_STATUS);
+      const logsFetch = fetch(API_LOGS);
+
+      // Resolve the ingested-movie count from /admin/status. A failure here
+      // leaves the count as null so its card renders muted ("—") rather than
+      // blocking the rest of the panel.
+      let movieCount = null;
+      try {
+        const statusRes = await statusFetch;
+        if (statusRes.ok) movieCount = (await statusRes.json()).chroma_count ?? null;
+      } catch {
+        // Silently fall through — the card shows "—".
+      }
 
       try {
-        const res = await fetch(API_LOGS);
+        const res = await logsFetch;
         if (res.status === 401) { window.location.href = "/admin/login"; return; }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        renderStats(data.stats);
+        renderStats(data.stats, movieCount);
         renderLatencyBar(data.stats);
         renderProjector(data.stats);
         renderTable(data.entries);
@@ -616,15 +630,15 @@
       return val.toLocaleString() + suffix;
     }
 
-    function renderStats(s) {
+    function renderStats(s, movieCount = null) {
       const errorRate = s.total_requests > 0
         ? Math.round(s.error_count / s.total_requests * 100) + "%"
         : "—";
 
       const cards = [
+        { label: "Movies indexed", value: movieCount != null ? fmt(movieCount) : "—", sub: "in the vector DB" },
         { label: "Total requests", value: fmt(s.total_requests), sub: `${fmt(s.error_count)} errors (${errorRate})` },
         { label: "Avg total (ms)", value: fmt(s.avg_total_ms), sub: `p50: ${fmt(s.p50_total_ms)} ms` },
-        { label: "Avg Claude (ms)", value: fmt(s.avg_claude_ms), sub: "of avg total" },
         { label: "Avg embedding (ms)", value: fmt(s.avg_embedding_ms), sub: `Chroma: ${fmt(s.avg_chroma_ms)} ms` },
         {
           label: "Avg tokens", value: s.avg_input_tokens != null ? fmt(s.avg_input_tokens) : "—",
