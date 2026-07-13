@@ -59,9 +59,17 @@
       margin-bottom: 48px;
     }
 
-    .search-form input {
+    /* Wraps the input so the clear button can overlay its right edge. */
+    .input-wrap {
       flex: 1;
-      padding: 14px 18px;
+      position: relative;
+      display: flex;
+    }
+
+    .search-form input {
+      width: 100%;
+      /* Extra right padding leaves room for the clear button. */
+      padding: 14px 40px 14px 18px;
       font-size: 1rem;
       border-radius: 10px;
       border: 1px solid #2a2a2a;
@@ -69,6 +77,34 @@
       color: #e8e8e8;
       outline: none;
       transition: border-color 0.2s;
+    }
+
+    /* Small "x" pinned to the right end of the input; toggled via [hidden] in JS.
+       Scoped under .search-form to override the shared `.search-form button`
+       styling (which otherwise gives it a white box + padding). */
+    .search-form .clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      color: #444;
+      /* Sized so the × glyph fills ~40% of the input height. */
+      font-size: 1.6rem;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .search-form .clear-btn:hover {
+      background: none;
+      color: #999;
+    }
+
+    .search-form .clear-btn[hidden] {
+      display: none;
     }
 
     .search-form input::placeholder {
@@ -697,8 +733,12 @@
   </header>
 
   <form class="search-form" id="searchForm">
-    <input type="text" id="queryInput" placeholder="Describe what you're in the mood for…" autocomplete="off"
-      autofocus />
+    <div class="input-wrap">
+      <input type="text" id="queryInput" placeholder="Describe what you're in the mood for…" autocomplete="off"
+        autofocus />
+      <!-- Clears the query; shown only while the input is non-empty (toggled in JS). -->
+      <button type="button" id="clearBtn" class="clear-btn" aria-label="Clear query" hidden>&times;</button>
+    </div>
     <button type="submit" id="submitBtn">Search</button>
   </form>
 
@@ -732,6 +772,7 @@
 
     const form = document.getElementById("searchForm");
     const input = document.getElementById("queryInput");
+    const clearBtn = document.getElementById("clearBtn");
     const btn = document.getElementById("submitBtn");
     const statusEl = document.getElementById("status");
     const spinner = document.getElementById("spinner");
@@ -742,6 +783,20 @@
     const overlayPrev = document.getElementById("overlayPrev");
     const overlayNext = document.getElementById("overlayNext");
     const overlayDots = document.getElementById("overlayDots");
+
+    // Show the clear "x" only when the input has text. Call this anywhere
+    // input.value is changed programmatically so the button stays in sync.
+    function toggleClearBtn() {
+      clearBtn.hidden = input.value.length === 0;
+    }
+
+    // Live-toggle as the user types, and wire the clear action.
+    input.addEventListener("input", toggleClearBtn);
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      toggleClearBtn();
+      input.focus();
+    });
 
     let allResults = [];
     let overlayIndex = 0;
@@ -824,6 +879,7 @@
     // and the subsequent history.pushState() for the new search.
     function triggerSearch(query) {
       input.value = query;
+      toggleClearBtn();
       form.requestSubmit();
     }
 
@@ -1266,6 +1322,7 @@
         closeOverlayUI();
         clearResults();
         input.value = "";
+        toggleClearBtn();
         setStatus("");
         window.scrollTo(0, 0);
         return;
@@ -1312,6 +1369,7 @@
     function restoreResults(results, query) {
       clearResults();
       input.value = query || "";
+      toggleClearBtn();
       results.forEach((r, i) => appendResult(r, i));
       if (results.length) {
         setStatus(`${results.length} match${results.length !== 1 ? "es" : ""} for "${query}"`);
@@ -1360,6 +1418,7 @@
       const q = new URLSearchParams(location.search).get("q");
       if (q) {
         input.value = q;
+        toggleClearBtn();
         form.requestSubmit();
       }
     })();
