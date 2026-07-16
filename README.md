@@ -12,6 +12,59 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 
 > **Streaming data is fetched at request time, never stored in the vector database.** Because streaming catalogs change frequently, provider lookups are served live and held only in a process-local in-memory cache (24-hour TTL, keyed by title and country) to conserve the Watchmode free-tier budget. The cache is volatile — it is lost on process restart. The vector database stores movie metadata and MPAA certifications only, not streaming availability.
 
+## The agentic rerank loop
+
+Step 4 above is an agentic loop in `claude.py` (`rerank_stream`, with a non-streaming twin `rerank`). Rather than a single prompt, Claude runs a bounded tool-use conversation over the vector-search candidates, optionally pulling in a director's or actor's filmography before committing to a final ranked list.
+
+### Tools
+
+Three tools are exposed. `tool_choice={"type": "any"}` forces Claude to always call a tool, which prevents free-text prose replies and keeps output machine-parseable.
+
+| Tool | Terminal? | Purpose |
+|------|-----------|---------|
+| `search_person` | No | Look up a person (director/actor/writer) on TMDB by name → ID + known works |
+| `get_filmography` | No | Fetch a person's movie credits by TMDB ID (`department` = `directing` or `cast`) |
+| `return_results` | Yes | Emit the final reranked, filtered recommendations; ends the loop |
+
+A `get_filmography` call has a side effect: any of its films not already indexed are ingested into the vector DB in a background daemon thread (see [Incremental updates at runtime](#incremental-updates-at-runtime)), and their titles are added to the set of valid titles Claude is allowed to return.
+
+### The loop
+
+Each round, Claude either calls a non-terminal tool (whose result is fed back into the conversation for the next round) or calls `return_results` to finish. The loop is capped at `AGENT_MAX_TOOL_ROUNDS = 4` rounds — a typical person query resolves in `search_person → get_filmography → return_results`.
+
+```
+Round 1 ─ Haiku ─┬─ return_results ──────────────► done (most queries end here)
+                 └─ search_person / get_filmography
+                        │  (feed tool result back in)
+                        ▼
+Round 2 ─ Haiku* ─┬─ return_results ──────────────► done
+                  └─ another non-terminal tool → Round 3 …  (up to 4 rounds)
+```
+
+\* By default round 2+ also stays on Haiku — see model routing below.
+
+If all persons named in the query were already resolved by the concurrent pre-fetch in `query_parser.py`, the two person-lookup tools are **removed from the schema entirely** (only `return_results` remains). This is a hard guarantee — not a prompt instruction — that Claude won't burn a round on a redundant TMDB call.
+
+### When Haiku vs Opus is used
+
+Two models are configured in `config.py`:
+
+- `CLAUDE_FAST_MODEL = claude-haiku-4-5` — cheap, fast; used for **round 1 always** and, by default, every subsequent round.
+- `CLAUDE_MODEL = claude-opus-4-6` — used only when escalation is enabled *and* a non-terminal tool is invoked.
+
+Routing is governed by the `FORCE_FAST_MODEL` env var:
+
+| `FORCE_FAST_MODEL` | Round 1 | Round 2+ (after a non-terminal tool call) |
+|--------------------|---------|-------------------------------------------|
+| `true` (**default**) | Haiku | Haiku — never escalates |
+| `false` | Haiku | Opus |
+
+In other words: **round 1 is always Haiku**, and the vast majority of queries never leave Haiku. Opus is only reached when you opt in with `FORCE_FAST_MODEL=false` *and* the query is complex enough that Claude reaches for a person/filmography tool before returning results. Token usage is tracked per-model (`haiku_*` / `opus_*` counters) and the model path is logged per request (e.g. `models=haiku→haiku` or `haiku→opus`).
+
+### Anti-hallucination
+
+Claude may only return titles that exist in the candidate set or in a filmography it looked up. Every returned title is validated (case-insensitively) against that allowed set in `_filter_results`; fabricated titles are dropped and logged. In the streaming path this check runs on each result as it arrives, with the allowed set rebuilt after every `get_filmography` round so newly discovered films aren't rejected.
+
 ## Setup
 
 ### Prerequisites
