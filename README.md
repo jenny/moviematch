@@ -14,7 +14,7 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 
 ## The agentic rerank loop
 
-Step 4 above is an agentic loop in `claude.py` (`rerank_stream`, with a non-streaming twin `rerank`). Rather than a single prompt, Claude runs a bounded tool-use conversation over the vector-search candidates, optionally pulling in a director's or actor's filmography before committing to a final ranked list.
+Step 4 above is an agentic loop in `claude.py` that comes in two twins — `rerank_stream` (streaming) and `rerank` (non-streaming), described under [Streaming vs. non-streaming](#streaming-vs-non-streaming) below. Rather than a single prompt, Claude runs a bounded tool-use conversation over the vector-search candidates, optionally pulling in a director's or actor's filmography before committing to a final ranked list.
 
 ### Tools
 
@@ -64,6 +64,21 @@ In other words: **round 1 is always Haiku**, and the vast majority of queries ne
 ### Anti-hallucination
 
 Claude may only return titles that exist in the candidate set or in a filmography it looked up. Every returned title is validated (case-insensitively) against that allowed set in `_filter_results`; fabricated titles are dropped and logged. In the streaming path this check runs on each result as it arrives, with the allowed set rebuilt after every `get_filmography` round so newly discovered films aren't rejected.
+
+### Streaming vs. non-streaming
+
+The rerank loop exists as two twins that share the same prompt (`_build_rerank_prompt`), the same bounded loop, the same [Haiku/Opus routing](#when-haiku-vs-opus-is-used), the same [conditional tool schema](#the-loop), and the same `valid_titles` seeding. They differ only in how Claude's final answer is consumed:
+
+| | **Streaming** — `rerank_stream` | **Non-streaming** — `rerank` |
+|--|--|--|
+| **Used by** | `main.py:search_stream` → `POST /recommend` (production path) | `main.py:search` → the `python main.py` CLI |
+| **Claude call** | `messages.stream(...)` | blocking `messages.create` (via `_call_claude`) |
+| **Output shape** | a generator that yields result dicts one at a time, then a `{"__usage": {...}}` sentinel | a single `(results, usage)` tuple returned once the loop finishes |
+| **Result delivery** | `return_results`' tool JSON is parsed incrementally by `_extract_result_objects` and each complete result object is yielded the moment it's parseable, so the frontend renders cards progressively as they arrive | the entire `return_results` call is awaited, then filtered and returned in one shot |
+| **Anti-hallucination** | inline per-result check against `valid_lower` as each object streams in (rebuilt after every `get_filmography` round), **plus** an end-of-round `_filter_results` safety net that yields any valid result the incremental parser missed | a single `_filter_results` pass over the complete result list |
+| **Errors** | `RateLimitError` / `InternalServerError` / `APIConnectionError` are caught and surfaced as an `error` field on the usage sentinel (the SSE endpoint turns it into a `{"type": "error"}` event) rather than raising | propagate to the caller |
+
+The streaming twin is what the web app uses: `search_stream` enriches each streamed result with poster/certification/metadata from the lowercased lookup dicts and re-yields it, and the SSE endpoint (`api/routes/search.py`) drives the generator in a thread executor, emitting each result as a `data:` event and logging usage/cost from the final `__meta` payload. The non-streaming twin is kept as a simpler, easier-to-reason-about equivalent for the CLI and ad-hoc testing — no SSE, no partial-JSON parsing, no thread executor.
 
 ## Setup
 
