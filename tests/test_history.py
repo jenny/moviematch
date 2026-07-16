@@ -167,6 +167,52 @@ def test_carousel_does_not_add_history_entries(page: Page, base_url: str):
     expect(page.locator("#overlayBackdrop")).not_to_have_class(re.compile(r"open"))
 
 
+# ── Overlay scroll reset ──────────────────────────────────────────────────────
+
+
+def _open_and_scroll_to_bottom(page: Page, card_index: int):
+    """Open the overlay on a card and scroll its .overlay-scroll to the bottom.
+
+    Returns the .overlay-scroll locator. Asserts the content actually overflows
+    (scrollTop > 0) so the test fails loudly if the panel ever stops scrolling,
+    rather than passing vacuously.
+    """
+    page.locator(".card").nth(card_index).click()
+    page.wait_for_selector("#overlayBackdrop.open")
+    scroll = page.locator(".overlay-scroll")
+    scroll.evaluate("el => el.scrollTop = el.scrollHeight")
+    assert scroll.evaluate("el => el.scrollTop") > 0, "overlay content did not overflow"
+    return scroll
+
+
+def test_carousel_resets_overlay_scroll(page: Page, base_url: str):
+    """Navigating to another movie via the carousel resets the scroll to top.
+
+    Relies on cards 0 and 1 (Inception, Parasite) carrying long overviews so the
+    overlay panel overflows; the helper asserts scrollTop > 0 to catch regressions.
+    """
+    _run_mock(page, base_url)
+    scroll = _open_and_scroll_to_bottom(page, 0)
+    page.keyboard.press("ArrowRight")
+    assert scroll.evaluate("el => el.scrollTop") == 0
+
+
+def test_reopen_different_movie_resets_overlay_scroll(page: Page, base_url: str):
+    """Close a scrolled overlay, open a different movie → it opens at the top.
+
+    Regression for the display:none case: the reset in renderOverlay() is a
+    no-op while the backdrop is hidden, so openOverlay() must reset scrollTop
+    again after .open makes the panel visible.
+    """
+    _run_mock(page, base_url)
+    scroll = _open_and_scroll_to_bottom(page, 0)
+    page.keyboard.press("Escape")
+    expect(page.locator("#overlayBackdrop")).not_to_have_class(re.compile(r"open"))
+    page.locator(".card").nth(1).click()
+    page.wait_for_selector("#overlayBackdrop.open")
+    assert scroll.evaluate("el => el.scrollTop") == 0
+
+
 # ── Deep-link support ─────────────────────────────────────────────────────────
 
 
