@@ -815,7 +815,7 @@
         certification: "PG-13",
         explanation: "A thief who steals corporate secrets through dream-sharing is given the inverse task of planting an idea — layered, kinetic, and endlessly rewatchable.",
         movie_poster: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-        overview: "Dom Cobb is a skilled thief, the absolute best in the dangerous art of extraction: stealing valuable secrets from deep within the subconscious during the dream state.",
+        overview: "Dom Cobb is a skilled thief, the absolute best in the dangerous art of extraction: stealing valuable secrets from deep within the subconscious during the dream state, when the mind is at its most vulnerable. Cobb's rare ability has made him a coveted player in this treacherous new world of corporate espionage, but it has also made him an international fugitive and cost him everything he has ever loved. Now Cobb is being offered a chance at redemption — one last job that could give him his life back, but only if he can accomplish the impossible: inception, planting an idea into a target's mind rather than stealing one.",
         genres: ["Action", "Science Fiction", "Adventure"],
         director: "Christopher Nolan",
         cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page", "Tom Hardy", "Ken Watanabe"],
@@ -826,7 +826,7 @@
         certification: "R",
         explanation: "A darkly comic masterpiece about class inequality that pivots, without warning, into something far more sinister.",
         movie_poster: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
-        overview: "All unemployed, Ki-taek's family takes a peculiar interest in the wealthy Park family and starts to infiltrate their household by posing as unrelated, highly qualified individuals.",
+        overview: "All unemployed, Ki-taek's family takes a peculiar interest in the wealthy Park family, and starts to infiltrate their household one by one, each posing as an unrelated, highly qualified individual. Ki-woo lands a well-paid tutoring job through a friend's recommendation, then schemes to bring the rest of his family into the Parks' employ. Their symbiotic arrangement holds until a startling discovery hidden within the house threatens to unravel everything, pulling both families into a spiral of greed, deception, and violence from which there may be no return.",
         genres: ["Comedy", "Thriller", "Drama"],
         director: "Bong Joon-ho",
         cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik", "Park So-dam"],
@@ -1078,6 +1078,11 @@
       overlayIndex = index;
       renderOverlay();
       backdrop.classList.add("open");
+      // The scroll reset in renderOverlay() is a no-op while the backdrop is
+      // display:none (a hidden element has no scroll box, so scrollTop can't be
+      // set). Reset again now that .open has made it display:flex, otherwise a
+      // reopened modal restores the previous movie's scroll position.
+      overlayContent.parentElement.scrollTop = 0;
       document.body.style.overflow = "hidden";
       overlayClose.focus();
 
@@ -1177,6 +1182,12 @@
           </div>
         </div>
       `;
+
+      // Reset scroll to top whenever a new movie is rendered — the .overlay-scroll
+      // container persists its scrollTop across renders since we only swap a child's
+      // innerHTML, so without this a modal reopened (or carousel-navigated) onto
+      // another long-metadata movie stays pinned to the previous scroll position.
+      overlayContent.parentElement.scrollTop = 0;
 
       // Wire title, director, and cast pivot links
       overlayContent.querySelectorAll(".more-link").forEach(btn => {
