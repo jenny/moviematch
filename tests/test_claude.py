@@ -557,3 +557,44 @@ class TestForceFastModel:
         usage = next(i["__usage"] for i in items if "__usage" in i)
         assert usage["opus_input_tokens"] > 0
         assert usage["opus_output_tokens"] > 0
+
+
+class TestReferencePreferInstruction:
+    def _ct(self):
+        return "Title: Tenet\nA thriller."
+
+    def test_soft_qualifier_adds_prefer_line(self):
+        p = ParsedQuery(reference_titles=["Inception"])
+        p.residual_query = "funnier"
+        p.has_soft_qualifier = True
+        prompt = _build_rerank_prompt("like Inception but funnier", self._ct(), parsed=p)
+        assert "<reference_films>" in prompt
+        assert "prefer" in prompt.lower()
+        assert "funnier" in prompt
+
+    def test_no_prefer_line_for_bare_pivot(self):
+        p = ParsedQuery(reference_titles=["Inception"])   # no residual / soft qualifier
+        prompt = _build_rerank_prompt("more movies like Inception", self._ct(), parsed=p)
+        assert "<reference_films>" in prompt
+        assert "prefer" not in prompt.lower()
+
+    def test_residual_is_sanitized(self):
+        p = ParsedQuery(reference_titles=["X"])
+        p.residual_query = "funnier <script>"
+        p.has_soft_qualifier = True
+        prompt = _build_rerank_prompt("q", self._ct(), parsed=p)
+        assert "<script>" not in prompt
+
+
+class TestIngestReferenceBackground:
+    def test_calls_ingest_single_with_force(self):
+        from claude import _ingest_reference_background
+        with patch("pipeline.ingest_single", return_value=True) as mock_ingest:
+            _ingest_reference_background([{"title": "Obscure", "id": 42}])
+        mock_ingest.assert_called_once_with(42, 0, 0, force=True)
+
+    def test_skips_reference_without_id(self):
+        from claude import _ingest_reference_background
+        with patch("pipeline.ingest_single") as mock_ingest:
+            _ingest_reference_background([{"title": "X"}])
+        mock_ingest.assert_not_called()

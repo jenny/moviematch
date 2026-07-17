@@ -142,10 +142,16 @@ def _build_rerank_prompt(query: str, candidate_text: str, parsed=None) -> str:
     reference_films_block = ""
     if parsed and parsed.reference_titles:
         titles_str = ", ".join(_sanitize(t) for t in parsed.reference_titles)
+        reference_lines = [f"The user wants movies similar to: {titles_str}"]
+        # When a soft qualifier rode along ("like X but funnier"), the candidates were
+        # retrieved from the reference's neighborhood; instruct Claude to reorder WITHIN
+        # that neighborhood toward the qualifier rather than abandon the similarity.
+        if parsed.has_soft_qualifier:
+            reference_lines.append(
+                f"Among these similar films, prefer ones that are: {_sanitize(parsed.residual_query)}"
+            )
         reference_films_block = (
-            f"<reference_films>\n"
-            f"The user wants movies similar to: {titles_str}\n"
-            f"</reference_films>\n\n"
+            "<reference_films>\n" + "\n".join(reference_lines) + "\n</reference_films>\n\n"
         )
 
     # Build filmography block for pre-resolved persons. Cap at 30 titles per person
@@ -223,6 +229,34 @@ def _ingest_filmography_background(movies: list[dict]) -> None:
             ingest_single(movie_id, movie.get("vote_average", 0), movie.get("vote_count", 0))
         except Exception as e:
             logger.warning(f"Background ingestion failed for {movie.get('title', movie_id)}: {e}")
+        finally:
+            with _ingesting_lock:
+                _ingesting_ids.discard(movie_id)
+
+
+def _ingest_reference_background(references: list[dict]) -> None:
+    """Ingest user-referenced titles ("movies like X") in the background.
+
+    references: [{title, id}, ...] from parsed.reference_movie_ids. Ingestion is
+    force=True (quality gate bypassed) — the user named the film explicitly, so even
+    an obscure one should be anchorable next time. Films already ingested are a no-op
+    inside ingest_single. De-duplicated against in-flight ingests via _ingesting_ids.
+    """
+    from pipeline import ingest_single
+    for ref in references:
+        movie_id = ref.get("id")
+        if movie_id is None:
+            continue
+        with _ingesting_lock:
+            if movie_id in _ingesting_ids:
+                continue
+            _ingesting_ids.add(movie_id)
+        try:
+            # vote_average/vote_count unknown here (we only resolved the ID); force
+            # bypasses the gate, and ingest_single fetches full detail from TMDB.
+            ingest_single(movie_id, 0, 0, force=True)
+        except Exception as e:
+            logger.warning(f"Background reference ingestion failed for {ref.get('title', movie_id)}: {e}")
         finally:
             with _ingesting_lock:
                 _ingesting_ids.discard(movie_id)

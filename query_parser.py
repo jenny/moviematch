@@ -185,6 +185,21 @@ _TITLE_REF_PATTERNS: list[tuple[re.Pattern, bool]] = [
     ), False),
     # Quoted titles after "like": like "The Dark Knight"
     (re.compile(r"\blike\s+[\"']([^\"']{1,60})[\"']", re.IGNORECASE), False),
+    # Broad "like X" reference — default to treating "like <title>" as a reference:
+    # "movies like Krull", "like inception but funnier", "sci-fi like Die Hard".
+    # Titles need NOT be capitalized (lowercase is fine). The negative lookbehinds carve
+    # out the *verb* sense of "like" (subject-pronoun + like: "I like", "we like",
+    # "you'd like") — those are the exception, not the default. Genuinely ambiguous
+    # leftovers ("movies like the ones from the 80s") are intentionally allowed through:
+    # they either fail to resolve on TMDB or get filtered by retrieval + Claude, rather
+    # than being special-cased here. Keep this LAST so more-specific patterns (person
+    # "style of", quoted titles) run first; duplicate titles are de-duplicated by caller.
+    (re.compile(
+        r"(?<!\bi )(?<!\bwe )(?<!\byou )(?<!\bthey )(?<!\bhe )(?<!\bshe )(?<!\bit )(?<!\bwho )(?<!'d )"
+        r"\blike\s+[\"']?([A-Za-z0-9][A-Za-z0-9\s:!?'&,-]{0,60}?)[\"']?"
+        r"(?=\s+but\b|\s+only\b|\s+with\b|\s*[,.(]|$)",
+        re.IGNORECASE,
+    ), False),
 ]
 
 # Matches a name-shaped string: 2+ capitalized words (with optional "The" prefix).
@@ -206,6 +221,55 @@ _RELATIVE_DATE_SOFT = [
 _LAST_N_YEARS_PATTERN = re.compile(
     r"\b(?:from\s+the\s+)?last\s+(\d+)\s+years?\b", re.IGNORECASE
 )
+
+
+# ---------------------------------------------------------------------------
+# Residual / soft-qualifier detection (for reference-title anchoring)
+# ---------------------------------------------------------------------------
+
+# Connective and filler words that carry no qualifier signal once the reference
+# span and structured tokens have been stripped. Anything left over after removing
+# these is treated as a genuine soft qualifier ("funnier", "darker", "with a heist").
+_RESIDUAL_STOPWORDS: set[str] = {
+    "a", "an", "the", "of", "in", "for", "to", "that", "this", "and", "or", "but",
+    "only", "with", "without", "no", "not", "just", "some", "something", "any",
+    "like", "similar", "more", "movie", "movies", "film", "films", "flick", "flicks",
+    "pic", "pics", "picture", "pictures", "me", "i", "want", "wanna", "looking",
+    "look", "find", "show", "give", "please", "really", "very", "kind", "sort",
+    "thing", "things", "one", "ones", "it", "them", "about", "featuring", "starring",
+    "directed", "by", "something", "stuff", "vibe", "vibes", "style", "recommend",
+}
+
+
+def _compute_residual(raw_query: str, parsed: "ParsedQuery") -> str:
+    """Return the descriptive text left over after removing the reference span and
+    every recognized structured token — i.e. the soft qualifier, if any.
+
+    Used only for reference queries: distinguishes a bare pivot ("more movies like
+    Inception") from a qualified one ("something like Inception but funnier"). Empty
+    string means no soft qualifier (pure pivot).
+    """
+    text = raw_query
+    # Strip the whole reference-title span (connective + title, e.g. "more movies like X").
+    for pattern, _ in _TITLE_REF_PATTERNS:
+        text = pattern.sub(" ", text)
+    # Strip structured tokens — these are enforced by hard filters / prompt constraints,
+    # not by the residual, so they must not count as a soft qualifier.
+    for pattern in (
+        _DECADE_PATTERN, _YEAR_AFTER_PATTERN, _YEAR_BEFORE_PATTERN,
+        _YEAR_FROM_PATTERN, _YEAR_IN_PATTERN, _LAST_N_YEARS_PATTERN,
+        _GENRE_PATTERN, _CERT_PATTERN, _FAMILY_FRIENDLY_PATTERN, _LIVE_ACTION_PATTERN,
+    ):
+        text = pattern.sub(" ", text)
+    for pattern, _ in _RELATIVE_DATE_SOFT:
+        text = pattern.sub(" ", text)
+    # Strip extracted person names.
+    for name in parsed.person_names:
+        text = re.sub(re.escape(name), " ", text, flags=re.IGNORECASE)
+    # Whatever alphabetic words remain, minus stopwords, are the qualifier.
+    words = re.findall(r"[a-zA-Z]+", text.lower())
+    content = [w for w in words if w not in _RESIDUAL_STOPWORDS]
+    return " ".join(content)
 
 
 # ---------------------------------------------------------------------------
@@ -240,6 +304,18 @@ class ParsedQuery:
 
     # "Something like X" title references
     reference_titles: list[str] = field(default_factory=list)
+
+    # Populated after TMDB lookup in resolve_reference_titles(): [{title, id}, ...].
+    # Drives anchor (retrieval-by-example) retrieval for references already in the DB.
+    reference_movie_ids: list[dict] = field(default_factory=list)
+
+    # Soft qualifier riding along with a reference ("like Inception but funnier"):
+    # the query text left over after stripping the reference span and every recognized
+    # structured token (genre/year/cert/person). If non-empty, the reference query is
+    # NOT a bare pivot — Claude reranks within the anchor neighborhood toward this
+    # qualifier, and a wider candidate slice (ANCHOR_CANDIDATES_QUALIFIED) is used.
+    residual_query: str = ""
+    has_soft_qualifier: bool = False
 
     # Soft temporal signals: "older", "newer" — not hard filters, injected into
     # Claude's prompt as guidance. "last_N_years" is converted to year_min instead.
@@ -407,6 +483,13 @@ def parse_query(raw_query: str) -> ParsedQuery:
         if pattern.search(q) and hint not in parsed.relative_date_hints:
             parsed.relative_date_hints.append(hint)
 
+    # --- Soft qualifier detection (reference queries only) ---
+    # Only meaningful when there's a reference title to anchor on: tells the anchor
+    # retrieval whether this is a bare pivot or a qualified "like X but <qualifier>".
+    if parsed.reference_titles:
+        parsed.residual_query = _compute_residual(raw_query, parsed)
+        parsed.has_soft_qualifier = bool(parsed.residual_query)
+
     return parsed
 
 
@@ -531,3 +614,33 @@ def resolve_persons(parsed: ParsedQuery) -> None:
         except Exception as e:
             # Log and continue — caller falls back to Claude's tool-call path
             logger.warning("Person pre-fetch failed for %r: %s", name, e)
+
+
+# ---------------------------------------------------------------------------
+# Reference-title resolution (intended for background thread execution)
+# ---------------------------------------------------------------------------
+
+def resolve_reference_titles(parsed: ParsedQuery) -> None:
+    """Resolve extracted reference titles ("movies like X") to TMDB movie IDs.
+    Mutates parsed.reference_movie_ids in place.
+
+    Designed to run in a ThreadPoolExecutor concurrent with embedding+vector search,
+    so the TMDB round-trip latency is absorbed instead of added (mirrors resolve_persons).
+
+    Only the ID is resolved here — anchoring reads the movie's stored richtext document
+    from the vector DB, and cold references (not yet ingested) fall back to the query
+    token embedding while a background ingest seeds them for next time.
+    """
+    from tmdb import search_movie_by_title  # imported here to avoid circular deps
+
+    for title in parsed.reference_titles:
+        try:
+            movie_id = search_movie_by_title(title)
+            if movie_id is None:
+                logger.info("No TMDB match for reference title %r — skipping anchor", title)
+                continue
+            parsed.reference_movie_ids.append({"title": title, "id": movie_id})
+            logger.info("Resolved reference title %r → TMDB id %d", title, movie_id)
+        except Exception as e:
+            # Log and continue — a failed resolution simply means no anchor for that title.
+            logger.warning("Reference-title resolution failed for %r: %s", title, e)

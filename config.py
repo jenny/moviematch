@@ -77,10 +77,26 @@ CREW_JOBS = {"Director", "Executive Producer", "Producer"}
 SEARCH_CANDIDATES = 15
 SEARCH_DOC_TRUNCATE = 200
 
+# Reference-title anchoring — "movies like X" retrieval-by-example.
+# When a referenced title resolves to a movie already in the vector DB, we retrieve
+# by that movie's DOCUMENT embedding (its stored richtext) instead of the query token
+# embedding, because a symmetric encoder (all-mpnet-base-v2) can't dereference a bare
+# title into the film's content. See CLAUDE.md "Reference-title anchoring".
+ANCHOR_FETCH_DEPTH = 50          # neighbors fetched per anchor BEFORE hard filters. Deep enough
+                                 # to leave a usable pool after post-retrieval genre/year/cert
+                                 # filtering (genres aren't filterable vector metadata — see the
+                                 # "Deferred Ideas" note in CLAUDE.md for the precise fix).
+ANCHOR_CANDIDATES_QUALIFIED = 25 # candidates handed to Claude when a reference query carries a soft
+                                 # qualifier ("like X but funnier"): a wider slice gives the rerank
+                                 # room to reorder within the anchor neighborhood. Non-qualified
+                                 # (pivot) reference queries use SEARCH_CANDIDATES.
+
 # Query pre-parsing
 PERSON_LOOKUP_TIMEOUT_S = 1.5   # max seconds to wait for concurrent person TMDB pre-fetch;
                                  # tight on purpose — TMDB p50 ~500ms, p95 ~1s; limits worst-case streaming block
-PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent person lookups
+TITLE_LOOKUP_TIMEOUT_S = 1.5    # max seconds to wait for concurrent reference-title TMDB resolution;
+                                 # mirrors PERSON_LOOKUP_TIMEOUT_S — bounds worst-case streaming block
+PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent person/title lookups
 
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
