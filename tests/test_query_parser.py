@@ -14,7 +14,9 @@ import datetime
 import pytest
 from unittest.mock import patch, MagicMock
 
-from query_parser import parse_query, apply_hard_filters, resolve_persons, ParsedQuery
+from query_parser import (
+    parse_query, apply_hard_filters, resolve_persons, resolve_reference_titles, ParsedQuery,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -629,3 +631,146 @@ class TestResolvePersons:
 
         assert len(parsed.person_filmographies) == 2
         assert parsed.is_person_focused is True
+
+
+class TestParseQueryResidualQualifier:
+    """residual_query / has_soft_qualifier: distinguishes a bare pivot from a
+    reference query carrying a soft (tonal) qualifier that Claude should rerank toward."""
+
+    def test_bare_pivot_has_no_soft_qualifier(self):
+        p = parse_query("more movies like Inception (2010)")
+        assert p.reference_titles == ["Inception"]
+        assert p.residual_query == ""
+        assert p.has_soft_qualifier is False
+
+    def test_tonal_qualifier_is_soft(self):
+        p = parse_query("something like Inception but funnier")
+        assert p.reference_titles == ["Inception"]
+        assert p.residual_query == "funnier"
+        assert p.has_soft_qualifier is True
+
+    def test_multiword_tonal_qualifier(self):
+        p = parse_query("something like Inception but darker and more violent")
+        assert p.has_soft_qualifier is True
+        # Stopwords ("and", "more") are dropped; content words remain.
+        assert "darker" in p.residual_query and "violent" in p.residual_query
+
+    def test_structured_genre_qualifier_is_not_soft(self):
+        # "comedy" is a hard-filter genre token, enforced downstream — not a soft qualifier.
+        p = parse_query("something like Inception but a comedy")
+        assert p.required_genres == ["Comedy"]
+        assert p.has_soft_qualifier is False
+
+    def test_relative_date_qualifier_is_not_soft(self):
+        # "older" is a relative-date hint, injected separately — not a soft qualifier.
+        p = parse_query("more movies like Parasite but older")
+        assert p.relative_date_hints == ["older"]
+        assert p.has_soft_qualifier is False
+
+    def test_non_reference_query_leaves_residual_empty(self):
+        # Residual detection only runs when there's a reference title to anchor on.
+        p = parse_query("funny 90s comedies")
+        assert p.reference_titles == []
+        assert p.residual_query == ""
+        assert p.has_soft_qualifier is False
+
+
+class TestResolveReferenceTitles:
+    def _make_parsed(self, titles):
+        p = ParsedQuery()
+        p.reference_titles = list(titles)
+        return p
+
+    def test_successful_resolution_populates_ids(self):
+        parsed = self._make_parsed(["Inception"])
+        # resolve_reference_titles uses a deferred `from tmdb import ...`, so patch tmdb.
+        with patch("tmdb.search_movie_by_title", return_value=27205):
+            resolve_reference_titles(parsed)
+        assert parsed.reference_movie_ids == [{"title": "Inception", "id": 27205}]
+
+    def test_not_found_is_skipped(self):
+        parsed = self._make_parsed(["No Such Film"])
+        with patch("tmdb.search_movie_by_title", return_value=None):
+            resolve_reference_titles(parsed)
+        assert parsed.reference_movie_ids == []
+
+    def test_exception_degrades_gracefully(self):
+        parsed = self._make_parsed(["Inception"])
+        with patch("tmdb.search_movie_by_title", side_effect=RuntimeError("boom")):
+            resolve_reference_titles(parsed)
+        assert parsed.reference_movie_ids == []
+
+    def test_multiple_references_all_resolved(self):
+        parsed = self._make_parsed(["Inception", "Interstellar"])
+        with patch("tmdb.search_movie_by_title", side_effect=[27205, 157336]):
+            resolve_reference_titles(parsed)
+        assert parsed.reference_movie_ids == [
+            {"title": "Inception", "id": 27205},
+            {"title": "Interstellar", "id": 157336},
+        ]
+
+
+class TestParseQueryBareLikeReference:
+    """Bare 'movies/films like X' phrasing (no 'more'/'something'/'similar to')
+    should still be treated as a reference title — regression for 'Movies like Krull'."""
+
+    def test_bare_movies_like_is_reference(self):
+        assert parse_query("Movies like Krull").reference_titles == ["Krull"]
+
+    def test_bare_films_like_is_reference(self):
+        assert parse_query("films like The Matrix").reference_titles == ["The Matrix"]
+
+    def test_bare_like_with_soft_qualifier(self):
+        p = parse_query("movies like Krull but funnier")
+        assert p.reference_titles == ["Krull"]
+        assert p.has_soft_qualifier is True
+
+    def test_connective_is_case_insensitive(self):
+        assert parse_query("MOVIES LIKE Krull").reference_titles == ["Krull"]
+
+    def test_lowercase_title_allowed(self):
+        # Titles need not be capitalized — broad "like X" is the default.
+        assert parse_query("movies like krull").reference_titles == ["krull"]
+
+    def test_like_in_the_middle_of_query(self):
+        assert parse_query("sci-fi like Die Hard").reference_titles == ["Die Hard"]
+
+    def test_verb_sense_i_like_excluded(self):
+        assert parse_query("I like inception").reference_titles == []
+
+    def test_verb_sense_we_like_excluded(self):
+        assert parse_query("we like horror films").reference_titles == []
+
+    def test_movies_i_like_not_a_reference(self):
+        assert parse_query("movies I like").reference_titles == []
+
+    def test_ambiguous_filler_allowed_through(self):
+        # Intentionally NOT special-cased: a genuinely ambiguous phrase is allowed to
+        # pass to resolution and simply fails to resolve / gets filtered downstream,
+        # rather than being rejected at parse time.
+        assert parse_query("movies like the ones from the 80s").reference_titles == [
+            "the ones from the 80s"
+        ]
+
+
+class TestParseQueryLeadingLikeReference:
+    """A query that OPENS with a bare 'like X' is a reference (lowercase allowed);
+    mid-sentence 'like' filler is not — regression for 'like inception but funnier'."""
+
+    def test_leading_like_lowercase_title(self):
+        p = parse_query("like inception but funnier")
+        assert p.reference_titles == ["inception"]
+        assert p.has_soft_qualifier is True
+        assert p.residual_query == "funnier"
+
+    def test_leading_like_bare_title(self):
+        assert parse_query("like Parasite").reference_titles == ["Parasite"]
+
+    def test_leading_like_multiword_title(self):
+        assert parse_query("like the godfather").reference_titles == ["the godfather"]
+
+    def test_midsentence_like_filler_not_captured(self):
+        assert parse_query("movies I like").reference_titles == []
+
+    def test_id_like_filler_not_captured(self):
+        assert parse_query("I'd like something funny").reference_titles == []

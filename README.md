@@ -7,10 +7,20 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 1. Movie metadata (plot, keywords, cast, crew) is fetched from the [TMDB API](https://www.themoviedb.org/documentation/api) via the discover endpoint across three sort criteria (rating, popularity, revenue), ranked by a composite Bayesian score, and stored as local JSON files
 2. A richtext string is compiled for each movie and embedded using a local [Sentence Transformers](https://www.sbert.net/) model (`all-mpnet-base-v2`)
 3. Embeddings are stored in a vector database — [ChromaDB](https://www.trychroma.com/) locally or [Pinecone](https://www.pinecone.io/) in production
-4. At search time, the query first runs through a rule-based pre-parser that extracts structured constraints (year/decade, genre, certification, director/actor names, "similar to X" title references); the query is then embedded and matched against the database using cosine similarity, candidates violating hard constraints are dropped, and [Claude](https://www.anthropic.com/claude) reranks the survivors via an agentic loop that can optionally look up director or actor filmographies from TMDB before returning ranked results
+4. At search time, the query first runs through a rule-based pre-parser that extracts structured constraints (year/decade, genre, certification, director/actor names, and "like X" title references); the query is then embedded and matched against the database using cosine similarity (for "like X" references, retrieval instead **anchors on the referenced film's own embedding** — see [Reference-title anchoring](#reference-title-anchoring)), candidates violating hard constraints are dropped, and [Claude](https://www.anthropic.com/claude) reranks the survivors via an agentic loop that can optionally look up director or actor filmographies from TMDB before returning ranked results
 5. The frontend separately fetches region-aware streaming availability for each result via [Watchmode](https://api.watchmode.com/) (primary) or TMDB (fallback), with the viewer's country inferred from their IP
 
 > **Streaming data is fetched at request time, never stored in the vector database.** Because streaming catalogs change frequently, provider lookups are served live and held only in a process-local in-memory cache (24-hour TTL, keyed by title and country) to conserve the Watchmode free-tier budget. The cache is volatile — it is lost on process restart. The vector database stores movie metadata and MPAA certifications only, not streaming availability.
+
+## Reference-title anchoring
+
+When a query references a specific film — "movies like Krull", "like Inception but funnier", "something like Parasite" — retrieval works differently. The embedding model is symmetric and can't dereference a bare title token into the film's content (embedding the word "Inception" lands nearer the common noun than Christopher Nolan's film), so instead of matching on the query text, retrieval **anchors on the referenced film's own stored document** and returns its nearest neighbors (retrieval-by-example).
+
+- Any `like <title>` phrasing is treated as a reference by default (capitalization optional); the *verb* sense — "**I** like", "**we** like" — is the carved-out exception.
+- The title is resolved to a TMDB id concurrently with query embedding; the film's stored richtext is then re-embedded and used as the retrieval vector. Multiple references ("like X and Y") are round-robin merged.
+- A soft qualifier ("…but funnier") is **not** folded into retrieval — Claude's rerank reorders *within* the anchor's neighborhood toward the qualifier, and the candidate slice widens to give it room.
+- If the referenced film isn't indexed yet, retrieval falls back to the query text and the film is ingested in the background (quality gate bypassed), so it anchors on the next search.
+- A referenced film that is already indexed is **guaranteed** to appear in the results, appended after Claude's ranking if it wasn't already surfaced.
 
 ## The agentic rerank loop
 
@@ -156,7 +166,7 @@ You will be prompted for the number of movies to index (there is no default — 
 
 ### Incremental updates at runtime
 
-Beyond this one-time bulk initialization, the embeddings database grows **lazily at search time**. When a query names a director or actor, their filmography is looked up from TMDB (either by Claude calling the `get_filmography` tool, or by the concurrent person pre-fetch in the query parser). Any films in that filmography that aren't already indexed are ingested in a **background daemon thread**, so the current search returns without waiting — the newly added movies simply become searchable for subsequent queries.
+Beyond this one-time bulk initialization, the embeddings database grows **lazily at search time**. When a query names a director or actor, their filmography is looked up from TMDB (either by Claude calling the `get_filmography` tool, or by the concurrent person pre-fetch in the query parser). Any films in that filmography that aren't already indexed are ingested in a **background daemon thread**, so the current search returns without waiting — the newly added movies simply become searchable for subsequent queries. A referenced film ("movies like X") that isn't yet indexed is ingested the same way, except its quality gate is bypassed — the user named it explicitly — so it becomes anchorable on the next search.
 
 Each lazily discovered movie passes through the same steps as bulk ingestion (`ingest_single` in `pipeline.py`):
 

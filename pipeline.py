@@ -10,13 +10,17 @@ from richtext import compile_all_richtexts, build_richtext
 from embeddings import initialize_all_embeddings, upsert_movie
 
 
-def ingest_single(movie_id: int, vote_average: float, vote_count: int) -> bool:
+def ingest_single(movie_id: int, vote_average: float, vote_count: int, force: bool = False) -> bool:
     """Quality-gate, ingest, embed, and index a single movie. Returns True if added.
 
     Intended for lazy ingestion of tool-discovered movies. Safe to call concurrently —
     index.json writes are serialized via a lock in update_index().
+
+    force=True bypasses the vote_average/vote_count quality gate. Used for titles the
+    user referenced by name ("movies like X"): they asked for it explicitly, so an
+    obscure or low-vote film should still be ingested and anchorable next time.
     """
-    if vote_average < MIN_INGEST_VOTE_AVERAGE or vote_count < MIN_INGEST_VOTE_COUNT:
+    if not force and (vote_average < MIN_INGEST_VOTE_AVERAGE or vote_count < MIN_INGEST_VOTE_COUNT):
         logger.debug(f"Skipping movie {movie_id}: below quality threshold "
                      f"(rating={vote_average}, votes={vote_count})")
         return False
