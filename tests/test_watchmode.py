@@ -1,6 +1,9 @@
 import json
+import logging
 import time
 from unittest.mock import patch, MagicMock
+
+import requests
 
 import watchmode
 
@@ -302,3 +305,51 @@ class TestMonthlyCounter:
             watchmode._persist_counter()
         data = json.loads(counter_file.read_text())
         assert data == {"month": "2099-03", "count": 5}
+
+
+class TestApiKeyRedaction:
+    """Watchmode authenticates by query param, so a raw exception leaks the key.
+
+    requests puts the full request URL — query string included — into every
+    HTTPError message, so an unredacted `except ... {e}` would print apiKey=... to
+    the logs (stdout in production). Every Watchmode failure log must scrub it.
+    """
+
+    KEY = "wm_s3cret_key_value"
+
+    def _leaky_error(self, path):
+        return requests.exceptions.HTTPError(
+            f"401 Client Error: Unauthorized for url: "
+            f"https://api.watchmode.com/v1{path}?apiKey={self.KEY}"
+        )
+
+    def setup_method(self):
+        watchmode._cache.clear()
+        watchmode._source_logos.clear()
+        watchmode._source_logos_loaded = False
+        _reset_counters()
+
+    def test_search_failure_redacts_key(self, caplog):
+        with patch("config.WATCHMODE_API_KEY", self.KEY), \
+             patch("requests.get", side_effect=self._leaky_error("/search/")):
+            with caplog.at_level(logging.WARNING, logger="watchmode"):
+                assert watchmode.search_title("Inception", "2010") is None
+        assert self.KEY not in caplog.text
+        assert "***" in caplog.text
+
+    def test_sources_failure_redacts_key(self, caplog):
+        watchmode._source_logos_loaded = True  # skip the catalog call
+        with patch("config.WATCHMODE_API_KEY", self.KEY), \
+             patch("requests.get", side_effect=self._leaky_error("/title/123/sources/")):
+            with caplog.at_level(logging.WARNING, logger="watchmode"):
+                assert watchmode.fetch_providers(123, "US") == []
+        assert self.KEY not in caplog.text
+        assert "***" in caplog.text
+
+    def test_source_logo_catalog_failure_redacts_key(self, caplog):
+        with patch("config.WATCHMODE_API_KEY", self.KEY), \
+             patch("requests.get", side_effect=self._leaky_error("/sources/")):
+            with caplog.at_level(logging.WARNING, logger="watchmode"):
+                watchmode._load_source_logos()
+        assert self.KEY not in caplog.text
+        assert "***" in caplog.text

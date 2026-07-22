@@ -182,13 +182,19 @@ class TestFetchRatings:
         assert mock_error.call_count == 3
 
     def test_api_key_is_redacted_from_failure_logs(self, caplog):
-        """requests' HTTPError embeds the full URL — the key must never reach the log."""
-        with patch("omdb.OMDB_API_KEY", "s3cret"), \
+        """requests' HTTPError embeds the full URL — the key must never reach the log.
+
+        Patches config too: the shared logger.redact() reads secrets off the config
+        module, while fetch_ratings' own guard reads omdb's module-level binding.
+        """
+        with patch("omdb.OMDB_API_KEY", "s3cret_key_value"), \
+             patch("config.OMDB_API_KEY", "s3cret_key_value"), \
              patch("requests.get", side_effect=Exception(
-                 "401 Client Error for url: https://www.omdbapi.com/?apikey=s3cret&t=Inception")):
+                 "401 Client Error for url: "
+                 "https://www.omdbapi.com/?apikey=s3cret_key_value&t=Inception")):
             with caplog.at_level(logging.WARNING, logger="omdb"):
                 assert omdb.fetch_ratings("Inception", "2010") == {}
-        assert "s3cret" not in caplog.text
+        assert "s3cret_key_value" not in caplog.text
         assert "***" in caplog.text
 
     def test_refetches_after_ttl_expires(self):

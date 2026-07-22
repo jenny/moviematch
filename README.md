@@ -259,7 +259,7 @@ omdb.py                # OMDb API integration — critic/audience review scores 
 richtext.py            # Movie metadata → text for embedding
 db.py                  # ChromaDB/Pinecone and Sentence Transformer singletons
 config.py              # Configuration constants (dataset size, scoring weights, rate limits, quality thresholds, model selection)
-logger.py              # JSON request logging; rotating file locally, stdout on Railway
+logger.py              # JSON request logging + redact() credential scrubber for log text
 migrate_to_pinecone.py # One-off script: copies all vectors from Chroma to Pinecone
 backfill_certifications.py # One-off script: patches MPAA certifications into existing Pinecone metadata
 tools/
