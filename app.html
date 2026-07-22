@@ -252,7 +252,7 @@
       font-size: 0.95rem;
     }
 
-    .card-rating {
+    .card-certification {
       display: inline-block;
       font-size: 0.68rem;
       font-weight: 700;
@@ -265,13 +265,13 @@
       letter-spacing: 0.03em;
     }
 
-    .card-rating:empty {
+    .card-certification:empty {
       display: none;
     }
 
-    /* Distinct from the bordered .card-rating chip so an unknown rating never reads
-       as an actual rating badge — muted, italic, no border. */
-    .card-rating-none {
+    /* Distinct from the bordered .card-certification chip so an unknown certification
+       never reads as an actual rating badge — muted, italic, no border. */
+    .card-certification-none {
       display: inline-block;
       font-size: 0.68rem;
       font-style: italic;
@@ -459,7 +459,7 @@
       margin-left: 8px;
     }
 
-    .overlay-rating {
+    .overlay-certification {
       display: inline-block;
       font-size: 0.68rem;
       font-weight: 700;
@@ -472,12 +472,12 @@
       letter-spacing: 0.03em;
     }
 
-    .overlay-rating:empty {
+    .overlay-certification:empty {
       display: none;
     }
 
-    /* Muted, italic, borderless — an unknown rating must not look like a rating chip. */
-    .overlay-rating-none {
+    /* Muted, italic, borderless — an unknown certification must not look like a rating chip. */
+    .overlay-certification-none {
       display: inline-block;
       font-size: 0.72rem;
       font-style: italic;
@@ -1081,16 +1081,16 @@
 
       // Unknown certification renders as an explicit, visually-distinct note so it can't
       // be misread as an actual rating (e.g. "NR").
-      const ratingHtml = result.certification
-        ? `<span class="card-rating" id="card-rating-${idx}" title="${escapeHtml(ratingTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
-        : `<span class="card-rating-none">Rating not available</span>`;
+      const certificationHtml = result.certification
+        ? `<span class="card-certification" id="card-certification-${idx}" title="${escapeHtml(certificationTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
+        : `<span class="card-certification-none">Rating not available</span>`;
 
       card.innerHTML = `
         <div class="card-rank">${idx + 1}</div>
         ${posterHtml}
         <div class="card-body">
           <div class="card-title">
-            <span class="card-title-name"><a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml ? " " + yearHtml : ""}</span>${ratingHtml}
+            <span class="card-title-name"><a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml ? " " + yearHtml : ""}</span>${certificationHtml}
           </div>
           <div class="card-explanation">${escapeHtml(result.explanation)}</div>
         </div>
@@ -1201,15 +1201,15 @@
            </div>`
         : "";
 
-      // Chip for a known rating; muted italic note for an unknown one (never a blank/NR chip).
-      const overlayRatingHtml = result.certification
-        ? `<span class="overlay-rating" id="overlay-rating" title="${escapeHtml(ratingTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
-        : `<span class="overlay-rating-none">Rating not available</span>`;
+      // Chip for a known certification; muted italic note for an unknown one (never a blank/NR chip).
+      const overlayCertificationHtml = result.certification
+        ? `<span class="overlay-certification" id="overlay-certification" title="${escapeHtml(certificationTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
+        : `<span class="overlay-certification-none">Rating not available</span>`;
 
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}${overlayRatingHtml}<button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}${overlayCertificationHtml}<button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
           ${overviewHtml}
           ${genresHtml}
           ${directorHtml}
@@ -1430,7 +1430,7 @@
       }
     }
 
-    const RATING_LABELS = {
+    const CERTIFICATION_LABELS = {
       "G":     "Rated G: General Audiences",
       "PG":    "Rated PG: Parental Guidance Suggested",
       "PG-13": "Rated PG-13: Parents Strongly Cautioned",
@@ -1439,8 +1439,8 @@
       "NR":    "Not Rated",
     };
 
-    function ratingTitle(certification) {
-      return RATING_LABELS[certification] || "Not Rated";
+    function certificationTitle(certification) {
+      return CERTIFICATION_LABELS[certification] || "Not Rated";
     }
 
     // Swap a poster <img> that 404s at the origin for the film-reel glyph, keeping the
@@ -1455,11 +1455,11 @@
       frame.innerHTML = `<div class="${cls}">&#127909;</div>`;
     }
 
-    function updateCardRating(idx, certification) {
-      const el = document.getElementById(`card-rating-${idx}`);
+    function updateCardCertification(idx, certification) {
+      const el = document.getElementById(`card-certification-${idx}`);
       if (el && certification) {
         el.textContent = certification;
-        el.title = ratingTitle(certification);
+        el.title = certificationTitle(certification);
       }
     }
 
