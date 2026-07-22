@@ -8,3 +8,8 @@ __pycache__/
 local/
 logs/
 .claude/
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
