@@ -145,6 +145,8 @@ PINECONE_INDEX_NAME=your_index_name
 | `LOG_DIR` | Directory for request logs (default `logs`; point at a persistent volume in production). |
 | `FORCE_FAST_MODEL` | When `true` (default) Claude uses Haiku for all rounds; set `false` to re-enable Opus escalation on tool use. |
 
+> **Diagnosing OMDb score gaps.** OMDb returns HTTP 401 both when the 1,000/day free-tier quota is spent and when the key is rejected, so `omdb.py` distinguishes them by response body and tags each in the log. Grep `[omdb_quota_exhausted]` for the former and `[omdb_auth_failed]` for the latter — the latter usually means a newly issued key whose activation link (emailed separately by omdbapi.com) was never clicked. Either way the Reviews section degrades to the TMDB score alone rather than erroring.
+
 > Rate limits are compile-time constants in `config.py`, not environment variables: `RATE_LIMIT` (`10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (`30/minute` on the `/streaming` endpoints), `RATINGS_RATE_LIMIT` (`30/minute` on the `/ratings` endpoints), `REGION_RATE_LIMIT` (`10/minute` on `/region`), and `LOGIN_RATE_LIMIT` (`5/minute` on `/admin/login`). Edit `config.py` to change them.
 
 ### Admin panel auth

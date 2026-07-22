@@ -12,7 +12,14 @@ TMDB score alone (or nothing) rather than erroring. This mirrors watchmode.py's
 fail-soft posture when WATCHMODE_API_KEY is absent.
 
 Every non-cached OMDb HTTP call is logged with the tag [omdb_api_call] for grep-based
-monitoring of daily budget consumption.
+monitoring of daily budget consumption. Two failure modes get their own tags so they
+can be told apart from ordinary network noise:
+
+    [omdb_quota_exhausted]  the 1,000/day free-tier cap is spent
+    [omdb_auth_failed]      the key is invalid, revoked, or never activated
+
+Both are logged on every occurrence — deliberately not deduplicated, so the log line
+count doubles as a measure of how much demand the exhausted quota is turning away.
 """
 
 import logging
@@ -83,6 +90,27 @@ def _parse_int(value: str) -> int | None:
         return None
 
 
+def _redact(value: object) -> str:
+    """Stringify `value` with the API key scrubbed out, for safe logging.
+
+    requests' HTTPError message embeds the full request URL — query string included —
+    so logging a raw exception would print OMDB_API_KEY on every failure. On Railway
+    those lines go to stdout, where the key would be retained indefinitely.
+    """
+    text = str(value)
+    if OMDB_API_KEY:
+        text = text.replace(OMDB_API_KEY, "***")
+    return text
+
+
+def _error_message(response: requests.Response) -> str:
+    """Best-effort read of OMDb's {"Error": "..."} body. Returns '' if it isn't JSON."""
+    try:
+        return str(response.json().get("Error", "")).strip()
+    except Exception:
+        return ""
+
+
 def fetch_ratings(title: str, year: str = "") -> dict:
     """Fetch RT/IMDb/Metacritic scores for a movie from OMDb.
 
@@ -92,9 +120,10 @@ def fetch_ratings(title: str, year: str = "") -> dict:
         metacritic-> int   (Metascore out of 100, e.g. 74)
         imdb_id   -> str   (e.g. "tt1375666") — used to deep-link the IMDb page
 
-    Returns {} when OMDB_API_KEY is unset (fail-soft), the title isn't found, or the
-    request fails. Never raises. Results are cached for 24h to conserve the free-tier
-    budget; failures are NOT cached so a transient error can be retried.
+    Returns {} when OMDB_API_KEY is unset (fail-soft), the title isn't found, the daily
+    quota is spent, the key is rejected, or the request fails. Never raises. Results are
+    cached for 24h to conserve the free-tier budget; failures are NOT cached so a
+    transient error can be retried.
     """
     if not OMDB_API_KEY:
         logger.debug("OMDb: OMDB_API_KEY unset — skipping ratings lookup for '%s'", title)
@@ -112,6 +141,33 @@ def fetch_ratings(title: str, year: str = "") -> dict:
     logger.info(f"[omdb_api_call] ratings title='{title}' year='{year}'")
     try:
         response = requests.get(OMDB_API_URL, params=params, timeout=OMDB_TIMEOUT_S)
+
+        # OMDb answers 401 for BOTH a spent daily quota and a bad key, and only the JSON
+        # body tells them apart. So inspect the body before raise_for_status(), which
+        # would collapse both into one opaque "401 Client Error" and drop the reason.
+        if response.status_code == 401:
+            omdb_error = _error_message(response)
+            if "limit" in omdb_error.lower():
+                # Free tier is 1,000 req/day, reset by OMDb on their own schedule.
+                # Scores silently degrade to the TMDB value alone until then.
+                logger.error(
+                    "[omdb_quota_exhausted] daily free-tier cap reached — review scores "
+                    "degrade to TMDB-only until OMDb resets. title='%s' year='%s' omdb_error='%s'",
+                    title, year, omdb_error,
+                )
+            else:
+                # Almost always a newly-issued key whose activation link was never
+                # clicked; also covers a revoked or mistyped key.
+                logger.error(
+                    "[omdb_auth_failed] OMDb rejected OMDB_API_KEY — check the key is set "
+                    "correctly and that the activation link emailed by omdbapi.com was "
+                    "clicked. title='%s' year='%s' omdb_error='%s'",
+                    title, year, omdb_error,
+                )
+            # Not cached: both conditions are recoverable (quota resets, keys get
+            # activated), so a later lookup for the same title should retry.
+            return {}
+
         response.raise_for_status()
         data = response.json()
 
@@ -150,5 +206,5 @@ def fetch_ratings(title: str, year: str = "") -> dict:
         logger.debug("OMDb: '%s' (%s) → %s", title, year, result)
         return result
     except Exception as e:
-        logger.warning("OMDb: ratings lookup failed for '%s': %s", title, e)
+        logger.warning("OMDb: ratings lookup failed for '%s': %s", title, _redact(e))
         return {}  # don't cache failures — allow retry on the next request

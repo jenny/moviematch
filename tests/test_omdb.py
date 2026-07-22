@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import patch, MagicMock
 
 import omdb
@@ -19,11 +20,17 @@ OMDB_FULL = {
 }
 
 
-def _mock_response(payload):
+def _mock_response(payload, status_code=200):
     resp = MagicMock()
+    resp.status_code = status_code
     resp.json.return_value = payload
     resp.raise_for_status.return_value = None
     return resp
+
+
+# OMDb reports both a spent quota and a bad key as HTTP 401; only the body differs.
+OMDB_QUOTA = {"Response": "False", "Error": "Request limit reached!"}
+OMDB_BAD_KEY = {"Response": "False", "Error": "Invalid API key!"}
 
 
 class TestParsers:
@@ -121,6 +128,68 @@ class TestFetchRatings:
         assert r2010["imdb"] == 8.8
         assert rother["imdb"] == 6.0
         assert rother["imdb_id"] == "tt9999999"
+
+    def test_quota_exhausted_logs_tagged_error_and_returns_empty(self, caplog):
+        with patch("omdb.OMDB_API_KEY", "key"), \
+             patch("requests.get", return_value=_mock_response(OMDB_QUOTA, status_code=401)):
+            with caplog.at_level(logging.ERROR, logger="omdb"):
+                result = omdb.fetch_ratings("Inception", "2010")
+        assert result == {}
+        assert "[omdb_quota_exhausted]" in caplog.text
+        assert "Request limit reached!" in caplog.text
+        assert "[omdb_auth_failed]" not in caplog.text
+
+    def test_bad_key_logs_auth_tag_not_quota_tag(self, caplog):
+        """An invalid/unactivated key is a config problem, not a budget one."""
+        with patch("omdb.OMDB_API_KEY", "key"), \
+             patch("requests.get", return_value=_mock_response(OMDB_BAD_KEY, status_code=401)):
+            with caplog.at_level(logging.ERROR, logger="omdb"):
+                result = omdb.fetch_ratings("Inception", "2010")
+        assert result == {}
+        assert "[omdb_auth_failed]" in caplog.text
+        assert "[omdb_quota_exhausted]" not in caplog.text
+
+    def test_401_body_that_is_not_json_still_logs_auth_tag(self, caplog):
+        """A non-JSON 401 body must not raise out of _error_message."""
+        resp = _mock_response({}, status_code=401)
+        resp.json.side_effect = ValueError("not json")
+        with patch("omdb.OMDB_API_KEY", "key"), patch("requests.get", return_value=resp):
+            with caplog.at_level(logging.ERROR, logger="omdb"):
+                assert omdb.fetch_ratings("Inception", "2010") == {}
+        assert "[omdb_auth_failed]" in caplog.text
+
+    def test_401_is_not_cached_so_it_retries_after_reset(self):
+        """Quota resets and keys get activated — a 401 must not poison the cache."""
+        with patch("omdb.OMDB_API_KEY", "key"), \
+             patch("requests.get", side_effect=[
+                 _mock_response(OMDB_QUOTA, status_code=401),
+                 _mock_response(OMDB_FULL),
+             ]) as mock_get:
+            r1 = omdb.fetch_ratings("Inception", "2010")
+            r2 = omdb.fetch_ratings("Inception", "2010")
+        assert r1 == {}
+        assert r2["rt"] == 87
+        assert mock_get.call_count == 2
+
+    def test_every_occurrence_is_logged(self):
+        """Deliberately un-deduplicated: the line count measures turned-away demand."""
+        with patch("omdb.OMDB_API_KEY", "key"), \
+             patch("requests.get", return_value=_mock_response(OMDB_QUOTA, status_code=401)):
+            with patch.object(omdb.logger, "error") as mock_error:
+                omdb.fetch_ratings("Inception", "2010")
+                omdb.fetch_ratings("Parasite", "2019")
+                omdb.fetch_ratings("Arrival", "2016")
+        assert mock_error.call_count == 3
+
+    def test_api_key_is_redacted_from_failure_logs(self, caplog):
+        """requests' HTTPError embeds the full URL — the key must never reach the log."""
+        with patch("omdb.OMDB_API_KEY", "s3cret"), \
+             patch("requests.get", side_effect=Exception(
+                 "401 Client Error for url: https://www.omdbapi.com/?apikey=s3cret&t=Inception")):
+            with caplog.at_level(logging.WARNING, logger="omdb"):
+                assert omdb.fetch_ratings("Inception", "2010") == {}
+        assert "s3cret" not in caplog.text
+        assert "***" in caplog.text
 
     def test_refetches_after_ttl_expires(self):
         with patch("omdb.OMDB_API_KEY", "key"), \
