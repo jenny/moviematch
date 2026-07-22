@@ -37,7 +37,8 @@ class _Handler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        # Satisfy background /streaming/batch calls so they don't error.
+        # Safety net only: __mock__ no longer POSTs anything (see test_mock_search.py),
+        # but this keeps an unexpected background call from erroring the page under test.
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()

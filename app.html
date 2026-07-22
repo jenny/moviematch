@@ -933,11 +933,15 @@
     let allResults = [];
     let overlayIndex = 0;
 
-    // ── Mock data ────────────────────────────────────────────────────
+    // ── Mock search (dev only) ───────────────────────────────────────
     // Type "__mock__" as the query to bypass the backend entirely and
     // render fake results through the same code path as real searches.
     // Useful for front-end-only changes (styling, layout, icons, etc.)
     // without needing a running server.
+    //
+    // Everything the mock needs lives between here and "End mock" below, so
+    // it can be read (or ignored) as one unit. Fixtures carry inline
+    // `providers` and `scores` so NO network call is made — see runMockSearch.
     const MOCK_QUERY = "__mock__";
 
     const MOCK_RESULTS = [
@@ -951,6 +955,11 @@
         genres: ["Action", "Science Fiction", "Adventure"],
         director: "Christopher Nolan",
         cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page", "Tom Hardy", "Ken Watanabe"],
+        // Subscription-streamable — the primary provider-chip render path.
+        providers: [
+          { type: "sub", name: "Netflix", logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg" },
+          { type: "sub", name: "Max", logo: "https://image.tmdb.org/t/p/original/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg" },
+        ],
         scores: [
           { provider: "rt", score: "87%", url: "https://www.rottentomatoes.com/search?search=Inception" },
           { provider: "imdb", score: "8.8", url: "https://www.imdb.com/title/tt1375666/" },
@@ -968,6 +977,11 @@
         genres: ["Comedy", "Thriller", "Drama"],
         director: "Bong Joon-ho",
         cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik", "Park So-dam"],
+        // Mixed sub + rent — streamable wins, so the rent entries stay hidden.
+        providers: [
+          { type: "sub", name: "Hulu", logo: "https://image.tmdb.org/t/p/original/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg" },
+          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg" },
+        ],
         scores: [
           { provider: "rt", score: "99%", url: "https://www.rottentomatoes.com/search?search=Parasite" },
           { provider: "imdb", score: "8.5", url: "https://www.imdb.com/title/tt6751668/" },
@@ -985,6 +999,10 @@
         genres: ["Action", "Adventure", "Science Fiction"],
         director: "Daniel Kwan",
         cast: ["Michelle Yeoh", "Stephanie Hsu", "Ke Huy Quan", "Jamie Lee Curtis"],
+        // Free tier counts as streamable alongside "sub".
+        providers: [
+          { type: "free", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg" },
+        ],
         scores: [
           { provider: "rt", score: "93%", url: "https://www.rottentomatoes.com/search?search=Everything+Everywhere+All+at+Once" },
           { provider: "imdb", score: "7.8", url: "https://www.imdb.com/title/tt6710474/" },
@@ -1002,6 +1020,11 @@
         genres: ["Drama", "History", "Comedy"],
         director: "Yorgos Lanthimos",
         cast: ["Olivia Colman", "Emma Stone", "Rachel Weisz", "Nicholas Hoult"],
+        // Rent/buy only — exercises the "Available to rent on …" fallback line.
+        providers: [
+          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg" },
+          { type: "buy", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg" },
+        ],
         scores: [
           { provider: "rt", score: "92%", url: "https://www.rottentomatoes.com/search?search=The+Favourite" },
           { provider: "imdb", score: "7.5", url: "https://www.imdb.com/title/tt5083738/" },
@@ -1019,6 +1042,8 @@
         genres: ["Drama", "Science Fiction"],
         director: "Andrei Tarkovsky",
         cast: ["Aleksandr Kajdanovsky", "Anatoliy Solonitsyn", "Nikolay Grinko"],
+        // Empty — exercises the "Not available for streaming in <region>" path.
+        providers: [],
         // Partial set (no Metacritic) — exercises the "some providers absent" render path.
         scores: [
           { provider: "rt", score: "100%", url: "https://www.rottentomatoes.com/search?search=Stalker" },
@@ -1027,6 +1052,28 @@
         ],
       },
     ];
+
+    // Simulates a real search response using MOCK_RESULTS, emitting one
+    // result at a time through the same appendResult() path used by live
+    // searches so all rendering and interaction code is exercised identically.
+    async function runMockSearch() {
+      for (let i = 0; i < MOCK_RESULTS.length; i++) {
+        await new Promise(r => setTimeout(r, 180));
+        if (i === 0) setLoading(false);
+        appendResult(MOCK_RESULTS[i], i);
+      }
+      setStatus(`${MOCK_RESULTS.length} matches for "${MOCK_QUERY}" (mock)`);
+      history.replaceState(
+        { type: "search", query: MOCK_QUERY, results: allResults.slice(), scrollY: 0 },
+        "", location.href
+      );
+      // Deliberately NOT calling batchPrefetchStreamingProviders() — it POSTs to
+      // /streaming/batch and hits the Watchmode API, defeating the offline mock.
+      // The fixtures carry inline `providers`, which renderStreamingProviders()
+      // short-circuits on (same as renderScores() with `scores`), so overlays
+      // render streaming without any network call.
+    }
+    // ── End mock ─────────────────────────────────────────────────────
 
     // Keyed by "title|year" → Promise<data>. Storing promises means an in-flight
     // prefetch and a direct fetch triggered by opening the overlay share the same
@@ -1084,23 +1131,6 @@
         .catch(() => {
           console.debug("[region] source=fallback country=US");
         });
-    }
-
-    // Simulates a real search response using MOCK_RESULTS, emitting one
-    // result at a time through the same appendResult() path used by live
-    // searches so all rendering and interaction code is exercised identically.
-    async function runMockSearch() {
-      for (let i = 0; i < MOCK_RESULTS.length; i++) {
-        await new Promise(r => setTimeout(r, 180));
-        if (i === 0) setLoading(false);
-        appendResult(MOCK_RESULTS[i], i);
-      }
-      setStatus(`${MOCK_RESULTS.length} matches for "${MOCK_QUERY}" (mock)`);
-      history.replaceState(
-        { type: "search", query: MOCK_QUERY, results: allResults.slice(), scrollY: 0 },
-        "", location.href
-      );
-      batchPrefetchStreamingProviders(allResults);
     }
 
     // ── Search ──────────────────────────────────────────────────────
@@ -1386,8 +1416,8 @@
       overlayPrev.hidden = overlayIndex === 0;
       overlayNext.hidden = overlayIndex === allResults.length - 1;
 
-      // Fetch streaming providers asynchronously
-      fetchStreamingProviders(result.title, result.year || "");
+      // Render streaming providers (from inline mock data, else async fetch).
+      renderStreamingProviders(result);
 
       // Render critic/audience scores (from inline mock data, else async fetch).
       renderScores(result);
@@ -1427,17 +1457,48 @@
           }
         }
       } catch {
-        // Silently fail — fetchStreamingProviders will fall back to direct per-movie fetch
+        // Silently fail — renderStreamingProviders falls back to a direct per-movie fetch
       }
     }
 
-    // Renders streaming providers into the overlay. Uses the cache when available
-    // so the overlay shows icons instantly if the prefetch already resolved.
-    async function fetchStreamingProviders(title, year) {
+    // Paint a provider list into the Streaming container. Subscription/free providers
+    // render as logo chips; if there are none, a rent/buy list degrades to a text line;
+    // an empty list reports unavailability in the detected region.
+    function paintProviders(container, providers) {
+      if (!providers || providers.length === 0) {
+        const regionName = new Intl.DisplayNames(["en"], { type: "region" }).of(userCountry) || userCountry;
+        container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in ${escapeHtml(regionName)}</span>`;
+        return;
+      }
+      const streamable = providers.filter(p => p.type === "sub" || p.type === "free");
+      const rentable = providers.filter(p => p.type === "rent" || p.type === "buy");
+      if (streamable.length > 0) {
+        container.innerHTML = streamable.map(p => {
+          const logoHtml = p.logo
+            ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'" />`
+            : "";
+          return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
+        }).join("");
+      } else {
+        const names = [...new Set(rentable.map(p => p.name))].join(", ");
+        container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}.</span>`;
+      }
+    }
+
+    // Renders the Streaming section for a movie. Mock results carry an inline
+    // `providers` array (so __mock__ makes no network call); live results fetch by
+    // title/year, sharing the streamingCache Promise with any in-flight prefetch.
+    async function renderStreamingProviders(result) {
       const container = document.getElementById("streamingProviders");
       if (!container) return;
 
-      const key = `${title}|${year || ""}|${userCountry}`;
+      if (Array.isArray(result.providers)) {  // mock path — no network
+        paintProviders(container, result.providers);
+        return;
+      }
+
+      const title = result.title, year = result.year || "";
+      const key = `${title}|${year}|${userCountry}`;
       // Re-use an existing Promise (resolved or in-flight) or start a new fetch.
       if (!streamingCache.has(key)) {
         streamingCache.set(key, fetchStreamingData(title, year));
@@ -1446,25 +1507,7 @@
       try {
         const data = await streamingCache.get(key);
         if (!container.isConnected) return; // user navigated away
-
-        if (!data.providers || data.providers.length === 0) {
-          const regionName = new Intl.DisplayNames(["en"], { type: "region" }).of(userCountry) || userCountry;
-          container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in ${escapeHtml(regionName)}</span>`;
-          return;
-        }
-        const streamable = data.providers.filter(p => p.type === "sub" || p.type === "free");
-        const rentable = data.providers.filter(p => p.type === "rent" || p.type === "buy");
-        if (streamable.length > 0) {
-          container.innerHTML = streamable.map(p => {
-            const logoHtml = p.logo
-              ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'" />`
-              : "";
-            return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
-          }).join("");
-        } else {
-          const names = [...new Set(rentable.map(p => p.name))].join(", ");
-          container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}.</span>`;
-        }
+        paintProviders(container, data.providers);
       } catch {
         // Clear the failed entry so a later open can retry.
         streamingCache.delete(key);
