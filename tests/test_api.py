@@ -349,6 +349,99 @@ class TestStreamingBatchEndpoint:
         mock_fetch.assert_called_once_with(12345, "US")
 
 
+class TestRatingsEndpoint:
+    def test_returns_ordered_scores_with_urls(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={
+                 "rt": 87, "imdb": 8.8, "metacritic": 74, "imdb_id": "tt1375666"}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value={"id": 27205, "vote_average": 8.37}):
+            response = client.get("/ratings?title=Inception&year=2010")
+
+        assert response.status_code == 200
+        scores = response.json()["scores"]
+        # Fixed order: RT → IMDb → Metacritic → TMDB
+        assert [s["provider"] for s in scores] == ["rt", "imdb", "metacritic", "tmdb"]
+        by_provider = {s["provider"]: s for s in scores}
+        assert by_provider["rt"]["score"] == "87%"
+        assert "rottentomatoes.com/search" in by_provider["rt"]["url"]
+        assert by_provider["imdb"]["url"] == "https://www.imdb.com/title/tt1375666/"
+        assert by_provider["metacritic"]["score"] == "74"
+        assert "metacritic.com/search" in by_provider["metacritic"]["url"]
+        assert by_provider["tmdb"]["score"] == "8.4"  # rounded to 1 dp
+        assert by_provider["tmdb"]["url"] == "https://www.themoviedb.org/movie/27205"
+
+    def test_omits_absent_providers(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={"imdb": 7.1, "imdb_id": "tt1"}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value=None):
+            response = client.get("/ratings?title=Some+Movie")
+        scores = response.json()["scores"]
+        assert [s["provider"] for s in scores] == ["imdb"]
+
+    def test_imdb_falls_back_to_search_when_no_id(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={"imdb": 7.1}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value=None):
+            response = client.get("/ratings?title=Some+Movie")
+        imdb = response.json()["scores"][0]
+        assert "imdb.com/find" in imdb["url"]
+
+    def test_tmdb_zero_vote_average_omitted(self, client):
+        """vote_average of 0 means 'no votes' — must not render a misleading 0.0."""
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value={"id": 5, "vote_average": 0}):
+            response = client.get("/ratings?title=Obscure+Film")
+        assert response.json()["scores"] == []
+
+    def test_failsoft_all_sources_empty(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value=None):
+            response = client.get("/ratings?title=Nothing")
+        assert response.status_code == 200
+        assert response.json()["scores"] == []
+
+    def test_missing_title_returns_422(self, client):
+        response = client.get("/ratings")
+        assert response.status_code == 422
+
+
+class TestRatingsBatchEndpoint:
+    def test_returns_scores_for_multiple_titles_in_order(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", side_effect=[
+                 {"rt": 99, "imdb_id": "tt1"}, {"imdb": 8.5, "imdb_id": "tt2"}]), \
+             patch("api.routes.ratings.fetch_movie_rating", side_effect=[None, None]):
+            response = client.post("/ratings/batch", json={
+                "titles": [
+                    {"title": "Parasite", "year": "2019"},
+                    {"title": "The Matrix", "year": "1999"},
+                ]
+            })
+        assert response.status_code == 200
+        data = response.json()
+        assert [r["title"] for r in data["results"]] == ["Parasite", "The Matrix"]
+        assert data["results"][0]["scores"][0]["provider"] == "rt"
+        assert data["results"][1]["scores"][0]["provider"] == "imdb"
+
+    def test_exceeding_ten_titles_returns_422(self, client):
+        response = client.post("/ratings/batch", json={
+            "titles": [{"title": f"Movie {i}", "year": "2020"} for i in range(11)]
+        })
+        assert response.status_code == 422
+
+    def test_empty_titles_returns_empty_results(self, client):
+        response = client.post("/ratings/batch", json={"titles": []})
+        assert response.status_code == 200
+        assert response.json() == {"results": []}
+
+    def test_year_is_optional_in_batch(self, client):
+        with patch("api.routes.ratings.omdb.fetch_ratings", return_value={}), \
+             patch("api.routes.ratings.fetch_movie_rating", return_value=None):
+            response = client.post("/ratings/batch", json={"titles": [{"title": "Some Movie"}]})
+        assert response.status_code == 200
+        assert response.json()["results"][0]["year"] == ""
+
+    def test_missing_titles_field_returns_422(self, client):
+        response = client.post("/ratings/batch", json={})
+        assert response.status_code == 422
+
+
 class TestHints:
     def test_returns_list_of_strings(self, client):
         response = client.get("/hints.json")

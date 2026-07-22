@@ -13,7 +13,7 @@ from slowapi.errors import RateLimitExceeded
 
 from api.auth import SESSION_COOKIE, _cookie_kwargs, set_session_cookie, verify_session_cookie
 from api.limiter import limiter
-from api.routes import search, admin, streaming
+from api.routes import search, admin, streaming, ratings
 from config import ADMIN_PASSWORD, ADMIN_SECRET_KEY, ADMIN_USERNAME, CORS_ORIGINS, LOGIN_RATE_LIMIT, validate_config
 
 _app_html: str = ""
@@ -88,6 +88,7 @@ async def security_headers(request: Request, call_next):
 app.include_router(search.router)
 app.include_router(admin.router, prefix="/admin")
 app.include_router(streaming.router)
+app.include_router(ratings.router)
 
 
 @app.get("/")

@@ -558,6 +558,58 @@
       text-decoration: underline;
     }
 
+    /* ── Ratings & Scores ─────────────────────────────────────────────
+       Row of clickable provider chips, styled to match .overlay-streaming
+       so the two adjacent sections read as one visual family. */
+    .overlay-scores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Each score is an <a> to the provider's page: brand glyph + score value. */
+    .overlay-score {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #242424;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 11px;
+      font-size: 0.9rem;
+      color: #ddd;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .overlay-score:hover {
+      background: #2c2c2c;
+      border-color: #555;
+    }
+
+    /* Wordmark glyphs (IMDb/TMDB) are wider than the square ones (RT/MC); each
+       <use> sets its own width so aspect ratio is preserved — height is uniform. */
+    .overlay-score-icon {
+      height: 20px;
+      display: block;
+    }
+
+    .overlay-score-value {
+      line-height: 1;
+    }
+
+    .overlay-scores-loading {
+      font-size: 0.85rem;
+      color: #555;
+      font-style: italic;
+    }
+
+    .overlay-scores-none {
+      font-size: 0.85rem;
+      color: #b0b0b0;
+    }
+
     footer {
       margin-top: 48px;
       font-size: 0.85rem;
@@ -759,6 +811,41 @@
         <path d="M10,10 L2.5,10 L8.4,8.4 Z" style="color:#666"/>
       </g>
     </symbol>
+
+    <!--
+      Ratings & Scores provider glyphs. These are simplified, recognizable brand marks
+      (not pixel-exact logos) drawn inline so the overlay needs no image assets: IMDb and
+      TMDB are wordmarks (wide viewBox), Rotten Tomatoes and Metacritic are square icons.
+      Each is wrapped in an <a> to the provider's page and labelled via a title tooltip.
+    -->
+    <symbol id="icon-rt" viewBox="0 0 24 24">
+      <!-- tomato body + two leaves + stem -->
+      <circle cx="12" cy="14.5" r="7.5" fill="#FA320A"/>
+      <path d="M12 8 C11 5.5 8.5 4.5 6.5 5 C7.5 7 9.5 8 12 8 Z" fill="#3A9E1E"/>
+      <path d="M12 8 C13 5 15.5 4 17.5 4.7 C16.5 6.8 14.5 8 12 8 Z" fill="#4CAF23"/>
+      <rect x="11.4" y="3.4" width="1.2" height="3.3" rx="0.6" fill="#3A7D1E"/>
+    </symbol>
+
+    <symbol id="icon-imdb" viewBox="0 0 64 32">
+      <rect width="64" height="32" rx="5" fill="#F5C518"/>
+      <text x="32" y="22" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" text-anchor="middle" fill="#000">IMDb</text>
+    </symbol>
+
+    <symbol id="icon-mc" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="20" height="20" rx="5" fill="#FFCC33"/>
+      <text x="12" y="17.5" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" text-anchor="middle" fill="#000">M</text>
+    </symbol>
+
+    <symbol id="icon-tmdb" viewBox="0 0 64 32">
+      <defs>
+        <linearGradient id="tmdbGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#90CEA1"/>
+          <stop offset="1" stop-color="#01B4E4"/>
+        </linearGradient>
+      </defs>
+      <rect width="64" height="32" rx="6" fill="url(#tmdbGrad)"/>
+      <text x="32" y="21" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" text-anchor="middle" fill="#0D253F">TMDB</text>
+    </symbol>
   </svg>
 
   <header>
@@ -854,6 +941,12 @@
         genres: ["Action", "Science Fiction", "Adventure"],
         director: "Christopher Nolan",
         cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page", "Tom Hardy", "Ken Watanabe"],
+        scores: [
+          { provider: "rt", score: "87%", url: "https://www.rottentomatoes.com/search?search=Inception" },
+          { provider: "imdb", score: "8.8", url: "https://www.imdb.com/title/tt1375666/" },
+          { provider: "metacritic", score: "74", url: "https://www.metacritic.com/search/Inception/" },
+          { provider: "tmdb", score: "8.4", url: "https://www.themoviedb.org/movie/27205" },
+        ],
       },
       {
         title: "Parasite",
@@ -865,6 +958,12 @@
         genres: ["Comedy", "Thriller", "Drama"],
         director: "Bong Joon-ho",
         cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik", "Park So-dam"],
+        scores: [
+          { provider: "rt", score: "99%", url: "https://www.rottentomatoes.com/search?search=Parasite" },
+          { provider: "imdb", score: "8.5", url: "https://www.imdb.com/title/tt6751668/" },
+          { provider: "metacritic", score: "96", url: "https://www.metacritic.com/search/Parasite/" },
+          { provider: "tmdb", score: "8.5", url: "https://www.themoviedb.org/movie/496243" },
+        ],
       },
       {
         title: "Everything Everywhere All at Once",
@@ -876,6 +975,12 @@
         genres: ["Action", "Adventure", "Science Fiction"],
         director: "Daniel Kwan",
         cast: ["Michelle Yeoh", "Stephanie Hsu", "Ke Huy Quan", "Jamie Lee Curtis"],
+        scores: [
+          { provider: "rt", score: "93%", url: "https://www.rottentomatoes.com/search?search=Everything+Everywhere+All+at+Once" },
+          { provider: "imdb", score: "7.8", url: "https://www.imdb.com/title/tt6710474/" },
+          { provider: "metacritic", score: "81", url: "https://www.metacritic.com/search/Everything%20Everywhere%20All%20at%20Once/" },
+          { provider: "tmdb", score: "7.8", url: "https://www.themoviedb.org/movie/545611" },
+        ],
       },
       {
         title: "The Favourite",
@@ -887,6 +992,12 @@
         genres: ["Drama", "History", "Comedy"],
         director: "Yorgos Lanthimos",
         cast: ["Olivia Colman", "Emma Stone", "Rachel Weisz", "Nicholas Hoult"],
+        scores: [
+          { provider: "rt", score: "92%", url: "https://www.rottentomatoes.com/search?search=The+Favourite" },
+          { provider: "imdb", score: "7.5", url: "https://www.imdb.com/title/tt5083738/" },
+          { provider: "metacritic", score: "90", url: "https://www.metacritic.com/search/The%20Favourite/" },
+          { provider: "tmdb", score: "7.5", url: "https://www.themoviedb.org/movie/375262" },
+        ],
       },
       {
         title: "Stalker",
@@ -898,6 +1009,12 @@
         genres: ["Drama", "Science Fiction"],
         director: "Andrei Tarkovsky",
         cast: ["Aleksandr Kajdanovsky", "Anatoliy Solonitsyn", "Nikolay Grinko"],
+        // Partial set (no Metacritic) — exercises the "some providers absent" render path.
+        scores: [
+          { provider: "rt", score: "100%", url: "https://www.rottentomatoes.com/search?search=Stalker" },
+          { provider: "imdb", score: "8.1", url: "https://www.imdb.com/title/tt0079944/" },
+          { provider: "tmdb", score: "8.2", url: "https://www.themoviedb.org/movie/1398" },
+        ],
       },
     ];
 
@@ -905,6 +1022,10 @@
     // prefetch and a direct fetch triggered by opening the overlay share the same
     // request — no duplicate network calls.
     const streamingCache = new Map();
+
+    // Same promise-caching scheme for /ratings. Region-independent, so the key is
+    // just "title|year" (no country, unlike streamingCache).
+    const scoresCache = new Map();
 
     // ── Pivot search ────────────────────────────────────────────────
     // Pre-fills the search box with a generated query and auto-submits it.
@@ -1044,6 +1165,8 @@
                 );
                 // Batch-fetch all streaming providers now that we have the full result set.
                 batchPrefetchStreamingProviders(allResults);
+                // Same for review scores — warms scoresCache for instant overlay opens.
+                batchPrefetchScores(allResults);
               }
             } else if (event.type === "error") {
               throw new Error(event.message);
@@ -1215,6 +1338,12 @@
           ${directorHtml}
           ${castHtml}
           <div class="overlay-section">
+            <div class="overlay-label">Reviews</div>
+            <div class="overlay-scores" id="ratingsScores">
+              <span class="overlay-scores-loading">Loading…</span>
+            </div>
+          </div>
+          <div class="overlay-section">
             <div class="overlay-label">Streaming</div>
             <div class="overlay-streaming" id="streamingProviders">
               <span class="overlay-streaming-loading">Loading…</span>
@@ -1249,6 +1378,9 @@
 
       // Fetch streaming providers asynchronously
       fetchStreamingProviders(result.title, result.year || "");
+
+      // Render critic/audience scores (from inline mock data, else async fetch).
+      renderScores(result);
     }
 
     // Raw network fetch — returns parsed JSON. Callers store the returned Promise
@@ -1330,6 +1462,95 @@
           container.innerHTML = `<span class="overlay-streaming-none">Streaming info unavailable.</span>`;
         }
       }
+    }
+
+    // ── Reviews (critic/audience scores) ─────────────────────────────
+    // Per-provider display metadata: hover label, sprite symbol, and glyph width.
+    // Height is a uniform 20px (CSS); wordmarks (IMDb/TMDB) are wider than the
+    // square icons (RT/Metacritic), so each sets its own width to keep aspect ratio.
+    const SCORE_PROVIDERS = {
+      rt:         { label: "Rotten Tomatoes", symbol: "icon-rt",   width: 20 },
+      imdb:       { label: "IMDb",            symbol: "icon-imdb", width: 40 },
+      metacritic: { label: "Metacritic",      symbol: "icon-mc",   width: 20 },
+      tmdb:       { label: "TMDB",            symbol: "icon-tmdb", width: 40 },
+    };
+
+    // Paint an ordered [{provider, score, url}] list into the Reviews container as
+    // clickable brand-glyph chips. Empty list → muted "no scores" note.
+    function paintScores(container, scores) {
+      if (!scores || !scores.length) {
+        container.innerHTML = `<span class="overlay-scores-none">No review scores available.</span>`;
+        return;
+      }
+      container.innerHTML = scores.map(s => {
+        const meta = SCORE_PROVIDERS[s.provider];
+        if (!meta) return "";  // unknown provider — skip rather than render a broken chip
+        return `<a class="overlay-score" href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(meta.label)}">`
+          + `<svg class="overlay-score-icon" width="${meta.width}" height="20" aria-hidden="true"><use href="#${meta.symbol}"/></svg>`
+          + `<span class="overlay-score-value">${escapeHtml(s.score)}</span></a>`;
+      }).join("");
+    }
+
+    // Raw network fetch for one movie's scores — returns parsed JSON. Callers store
+    // the returned Promise in scoresCache so a prefetch and a direct open share it.
+    async function fetchScoresData(title, year) {
+      const params = new URLSearchParams({ title });
+      if (year) params.set("year", year);
+      const res = await fetch(`/ratings?${params}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    // Fired once after the SSE stream completes (same trigger as the streaming
+    // prefetch): one batch request warms scoresCache so overlay opens are instant.
+    async function batchPrefetchScores(results) {
+      if (!results.length) return;
+      try {
+        const titles = results.map(r => ({ title: r.title, year: r.year || "" }));
+        const res = await fetch("/ratings/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ titles }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        for (const item of data.results) {
+          const key = `${item.title}|${item.year || ""}`;
+          if (!scoresCache.has(key)) {
+            scoresCache.set(key, Promise.resolve({ scores: item.scores }));
+          }
+        }
+      } catch {
+        // Silently fail — renderScores falls back to a direct per-movie fetch.
+      }
+    }
+
+    // Renders the Reviews section for a movie. Mock results carry an inline `scores`
+    // array (so __mock__ renders fully without a backend); live results fetch by
+    // title/year, sharing the scoresCache Promise with any in-flight prefetch.
+    function renderScores(result) {
+      const container = document.getElementById("ratingsScores");
+      if (!container) return;
+
+      if (Array.isArray(result.scores)) {  // mock path — no network
+        paintScores(container, result.scores);
+        return;
+      }
+
+      const title = result.title, year = result.year || "";
+      const key = `${title}|${year}`;
+      if (!scoresCache.has(key)) {
+        scoresCache.set(key, fetchScoresData(title, year));
+      }
+      scoresCache.get(key).then(data => {
+        if (!container.isConnected) return;  // user navigated away
+        paintScores(container, data.scores || []);
+      }).catch(() => {
+        scoresCache.delete(key);  // clear failed entry so a later open can retry
+        if (container.isConnected) {
+          container.innerHTML = `<span class="overlay-scores-none">Review scores unavailable.</span>`;
+        }
+      });
     }
 
     // ── Overlay event handlers ───────────────────────────────────────

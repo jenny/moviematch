@@ -114,6 +114,37 @@ def search_movie_by_title(title: str, year: str = "") -> int | None:
         return None
 
 
+def fetch_movie_rating(title: str, year: str = "") -> dict | None:
+    """Return {'id', 'vote_average'} for the best TMDB search match, or None.
+
+    Used by the /ratings endpoint to supply the TMDB user score AND a deep link to the
+    film's TMDB page. vote_average and id both come straight from the /search/movie
+    result, so this is a single API call — no fetch_movie_detail round-trip needed.
+    Returns None when the title isn't found or the request fails (never raises).
+    """
+    _require_tmdb_key()
+    params: dict = {"query": title, "language": "en-US", "include_adult": "false"}
+    if year:
+        params["year"] = year
+    try:
+        response = requests.get(
+            TMDB_BASE_URL + "/search/movie",
+            params=params,
+            headers=TMDB_HEADERS,
+            timeout=10,
+        )
+        response.raise_for_status()
+        results = response.json().get("results", [])
+        if not results:
+            logger.debug(f"TMDB rating search '{title}' ({year}): not found")
+            return None
+        top = results[0]
+        return {"id": top["id"], "vote_average": top.get("vote_average", 0) or 0}
+    except Exception as e:
+        logger.warning(f"TMDB rating search failed for '{title}': {e}")
+        return None
+
+
 def fetch_watch_providers(movie_id: int, country: str = "US") -> list[dict]:
     """Fetch streaming/watch providers for a movie from TMDB.
 
