@@ -171,6 +171,33 @@ def _load_source_logos() -> None:
             logger.warning(f"Watchmode: failed to load source logos: {redact(e)}")
 
 
+def _clean_web_url(value: Any) -> str | None:
+    """Return value if it's a usable http(s) deep link, else None.
+
+    Watchmode puts prose where a URL should be on the free tier — ios_url/android_url
+    literally read "Deeplinks available for paid plans only." web_url is a real URL today,
+    but this guard keeps any such placeholder (or a javascript:/data: value) from ever
+    reaching an href in the overlay.
+    """
+    if isinstance(value, str) and value.startswith(("http://", "https://")):
+        return value
+    return None
+
+
+def _clean_price(value: Any) -> float | None:
+    """Return value as a float when Watchmode supplied a real price, else None.
+
+    Subscription and free sources carry price: null; rent/buy rows carry a number. A
+    provider with no price still renders — the chip just omits the amount.
+    """
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def search_title(title: str, year: str = "") -> int | None:
     """Search Watchmode for a movie by title, return Watchmode title ID or None.
 
@@ -222,11 +249,18 @@ def search_title(title: str, year: str = "") -> int | None:
 def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
     """Fetch streaming providers for a Watchmode title.
 
-    Returns a deduplicated list of providers with name, logo URL, and availability type.
+    Returns a deduplicated list of providers with name, logo URL, availability type,
+    a deep link to the title on that provider (``url``), and the rent/buy ``price``.
     Includes subscription, free (ad-supported), rent, and buy sources.
     Excludes TV Everywhere (tve) sources which require a cable subscription to activate.
-    When a provider appears under multiple types, the best type wins: sub > free > rent > buy.
+    When a provider appears under multiple types, the best type wins: sub > free > rent > buy;
+    within the same type the cheapest format wins (see the dedupe loop below).
     Results are cached for 24 hours to conserve the free-tier API budget.
+
+    NOTE: only ``web_url`` is usable — Watchmode's ``ios_url``/``android_url`` return the
+    literal string "Deeplinks available for paid plans only." on the free tier. That costs us
+    nothing in practice: the major services' web URLs are registered universal links, so on
+    iOS/Android they open the installed app at the title anyway.
     """
     cache_key = f"providers:{title_id}:{country}"
     hit, cached = _cache_get(cache_key)
@@ -247,19 +281,41 @@ def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
         logger.debug(f"Watchmode: raw sources for title {title_id}: {[(s.get('name'), s.get('type'), s.get('region')) for s in sources]}")
 
         type_priority = {"sub": 0, "free": 1, "rent": 2, "buy": 3}
-        # best entry per provider name: keeps highest-priority type
+        # Best entry per provider name. Watchmode emits one row per *format* (SD/HD/4K),
+        # each with its own price, so a provider legitimately appears several times at the
+        # same type — hence the two-stage merge: better type replaces outright, equal type
+        # keeps the cheaper row and backfills anything the incumbent was missing.
         best: dict[str, dict] = {}
         for s in sources:
             stype = s.get("type", "")
             if stype == "tve":
                 continue
             name = s["name"]
-            if name not in best or type_priority.get(stype, 99) < type_priority.get(best[name]["type"], 99):
-                best[name] = {
-                    "name": name,
-                    "type": stype,
-                    "logo": _source_logos.get(s["source_id"]),
-                }
+            entry = {
+                "name": name,
+                "type": stype,
+                "logo": _source_logos.get(s["source_id"]),
+                "url": _clean_web_url(s.get("web_url")),
+                "price": _clean_price(s.get("price")),
+            }
+            current = best.get(name)
+            if current is None:
+                best[name] = entry
+                continue
+
+            new_rank = type_priority.get(stype, 99)
+            cur_rank = type_priority.get(current["type"], 99)
+            if new_rank < cur_rank:
+                best[name] = entry
+            elif new_rank == cur_rank:
+                # Same availability type, different format — show the cheapest.
+                if entry["price"] is not None and (
+                    current["price"] is None or entry["price"] < current["price"]
+                ):
+                    current["price"] = entry["price"]
+                # A row missing a link/logo shouldn't erase one we already found.
+                current["url"] = current["url"] or entry["url"]
+                current["logo"] = current["logo"] or entry["logo"]
         providers = list(best.values())
         _cache_set(cache_key, providers)
         return providers

@@ -108,7 +108,7 @@ def test_opening_every_overlay_makes_no_backend_call(mock_page):
     [
         (0, "Netflix"),                                  # sub → logo chips
         (2, "Prime Video"),                              # free → logo chips
-        (3, "Available to rent on"),                     # rent/buy only → text line
+        (3, "Apple TV"),                                 # rent/buy only → promoted chips
         (4, "Not available for streaming in"),           # empty list → region notice
     ],
 )
@@ -118,6 +118,87 @@ def test_streaming_render_branches(mock_page, index, expected):
     page.query_selector_all(".card")[index].click()
     page.wait_for_timeout(250)
     assert expected in page.inner_text("#streamingProviders")
+
+
+@pytest.mark.parametrize(
+    "index, expected_label",
+    [
+        (0, "Streaming"),                    # subscription available
+        (2, "Streaming"),                    # free (ad-supported) counts as streaming
+        (3, "Available to rent or buy"),     # rent + buy, nothing streamable
+        (4, "Streaming"),                    # nothing at all — heading stays put
+    ],
+)
+def test_section_heading_reflects_availability(mock_page, index, expected_label):
+    """The heading itself carries the rent/buy caveat, so it must track the branch taken.
+
+    It's rewritten in place, so a stale label from a previously-opened overlay would
+    mislabel the next film — hence checking the streamable cases too, not just fixture 3.
+    Compared case-insensitively: .overlay-label is text-transform: uppercase, so inner_text
+    reports the rendered casing rather than the string we set.
+    """
+    page, _ = mock_page
+    page.query_selector_all(".card")[index].click()
+    page.wait_for_timeout(250)
+    assert page.inner_text("#streamingLabel").strip().casefold() == expected_label.casefold()
+
+
+def test_heading_resets_between_overlays(mock_page):
+    """Open the rent-only film, then a streamable one: the heading must not stick."""
+    page, _ = mock_page
+    page.query_selector_all(".card")[3].click()
+    page.wait_for_timeout(250)
+    assert "rent" in page.inner_text("#streamingLabel").casefold()
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(150)
+    page.query_selector_all(".card")[0].click()
+    page.wait_for_timeout(250)
+    assert page.inner_text("#streamingLabel").strip().casefold() == "streaming"
+
+
+def test_provider_chips_are_deep_links(mock_page):
+    """Subscription chips link out to the title on that provider, safely."""
+    page, _ = mock_page
+    page.query_selector_all(".card")[0].click()
+    page.wait_for_timeout(250)
+    links = page.query_selector_all("#streamingProviders a.overlay-provider")
+    assert len(links) == 2
+    for link in links:
+        assert link.get_attribute("href", ).startswith("https://")
+        assert link.get_attribute("target") == "_blank"
+        # noreferrer matters as much as noopener — these are third-party destinations.
+        assert link.get_attribute("rel") == "noopener noreferrer"
+
+
+def test_rent_chip_shows_price(mock_page):
+    """Fixture 3 has a priced rent entry and an unpriced buy entry — both must render."""
+    page, _ = mock_page
+    page.query_selector_all(".card")[3].click()
+    page.wait_for_timeout(250)
+    text = page.inner_text("#streamingProviders")
+    assert "$3.99" in text                       # Apple TV, priced
+    assert "Prime Video" in text                 # unpriced chip still renders
+    prices = page.query_selector_all("#streamingProviders .overlay-provider-price")
+    assert len(prices) == 1, "only the priced entry should show an amount"
+
+
+def test_chip_hover_title_distinguishes_rent_from_buy(mock_page):
+    """The chips look identical, so the hover title is the only rent/buy signal."""
+    page, _ = mock_page
+    page.query_selector_all(".card")[3].click()
+    page.wait_for_timeout(250)
+    titles = [a.get_attribute("title")
+              for a in page.query_selector_all("#streamingProviders a.overlay-provider")]
+    assert titles == ["Rent on Apple TV", "Buy on Prime Video"]
+
+
+def test_streamable_chip_hover_title_says_watch(mock_page):
+    page, _ = mock_page
+    page.query_selector_all(".card")[0].click()
+    page.wait_for_timeout(250)
+    titles = [a.get_attribute("title")
+              for a in page.query_selector_all("#streamingProviders a.overlay-provider")]
+    assert titles == ["Watch on Netflix", "Watch on Max"]
 
 
 def test_reviews_render_from_inline_scores(mock_page):
