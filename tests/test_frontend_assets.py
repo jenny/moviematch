@@ -1,10 +1,13 @@
-"""Static checks on the inline SVG sprite in app.html.
+"""Static checks on the inline SVG sprite and mock fixtures in app.html.
 
 The Reviews chips render each provider glyph as `<use href="#icon-x"/>` pointing at a
 `<symbol>` defined in the sprite near the top of app.html. If the two drift apart the
 glyph renders *invisibly* — no console error, no layout shift, just a missing logo —
 so it is easy to ship broken. These tests parse app.html directly (no browser needed)
 and assert the sprite and the SCORE_PROVIDERS config stay in sync.
+
+The mock-fixture tests guard the __mock__ offline contract. They are static so they run
+without Playwright; tests/test_mock_search.py covers the same contract behaviourally.
 """
 
 import re
@@ -69,6 +72,58 @@ def test_glyph_width_matches_viewbox_aspect(html):
         assert meta["width"] == expected, (
             f"{provider}: width={meta['width']} but viewBox {vb_w}x{vb_h} at 20px tall "
             f"needs width={expected}"
+        )
+
+
+def _mock_results_block(html: str) -> str:
+    """Return the source of the MOCK_RESULTS array literal."""
+    block = re.search(r"const MOCK_RESULTS = \[(.*?)\n\s*\];", html, re.S)
+    assert block, "MOCK_RESULTS array literal not found in app.html"
+    return block.group(1)
+
+
+def _strip_line_comments(src: str) -> str:
+    """Drop `//` comments so prose mentioning a function isn't mistaken for a call."""
+    return "\n".join(line.split("//")[0] for line in src.splitlines())
+
+
+def test_every_mock_fixture_has_inline_providers_and_scores(html):
+    """Both arrays must be present on every fixture or __mock__ hits the network.
+
+    renderStreamingProviders()/renderScores() only short-circuit when the field is an
+    array; a fixture missing one silently falls through to a live /streaming (Watchmode)
+    or /ratings (OMDb) fetch, which defeats the point of an offline mock.
+    """
+    block = _mock_results_block(html)
+    titles = re.findall(r"^\s{8}title:", block, re.M)
+    assert len(titles) == 5, f"expected 5 mock fixtures, found {len(titles)}"
+    for field in ("providers", "scores"):
+        found = re.findall(rf"^\s+{field}:\s*\[", block, re.M)
+        assert len(found) == len(titles), (
+            f"{len(found)} fixtures define `{field}` but there are {len(titles)} fixtures — "
+            f"one without it falls through to a live fetch"
+        )
+
+
+def test_mock_fixtures_cover_every_streaming_render_branch(html):
+    """The fixtures are the only way to exercise paintProviders' three branches locally."""
+    block = _mock_results_block(html)
+    types = set(re.findall(r'type:\s*"(\w+)"', block))
+    assert {"sub", "free", "rent", "buy"} <= types, f"missing provider types: {types}"
+    assert re.search(r"providers:\s*\[\]", block), (
+        "no fixture with an empty providers list — the "
+        '"Not available for streaming in <region>" branch is uncovered'
+    )
+
+
+def test_run_mock_search_makes_no_network_call(html):
+    """runMockSearch() must not call the batch prefetchers — they POST to the backend."""
+    fn = re.search(r"async function runMockSearch\(\) \{(.*?)\n    \}", html, re.S)
+    assert fn, "runMockSearch() not found in app.html"
+    body = _strip_line_comments(fn.group(1))
+    for forbidden in ("batchPrefetchStreamingProviders", "batchPrefetchScores", "fetch("):
+        assert forbidden not in body, (
+            f"runMockSearch() calls {forbidden} — __mock__ must not touch the network"
         )
 
 
