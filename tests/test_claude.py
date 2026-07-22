@@ -430,12 +430,23 @@ class TestRerankStreamValidLower:
 
             results = list(rerank_stream("Jason Reitman movies", candidates))
 
-        result_items = [r for r in results if "__usage" not in r]
+        # Skip control sentinels: __usage (final) and __filmography (mid-stream
+        # get_filmography discoveries surfaced to the caller for metadata seeding).
+        result_items = [r for r in results if "__usage" not in r and "__filmography" not in r]
         titles = [r["title"] for r in result_items]
 
         # The filmography title must appear in the output
         assert filmography_title in titles, (
             f"Expected '{filmography_title}' in results but got: {titles}"
+        )
+
+        # The mid-stream discovery is surfaced as a __filmography sentinel carrying the
+        # full movie payload, so search_stream can seed its poster/certification.
+        filmography_sentinels = [r for r in results if "__filmography" in r]
+        assert filmography_sentinels, "Expected a __filmography sentinel for the get_filmography discovery"
+        assert any(
+            m.get("title") == filmography_title
+            for s in filmography_sentinels for m in s["__filmography"]
         )
 
         # No spurious rejection warning — the streaming filter should NOT have flagged it
@@ -447,6 +458,78 @@ class TestRerankStreamValidLower:
             f"Streaming filter incorrectly rejected '{filmography_title}': "
             f"{[r.message for r in spurious]}"
         )
+
+
+class TestFinalRoundForcesReturnOnly:
+    """On the final permitted round, only return_results is offered so Claude cannot keep
+    looping on lookup tools (e.g. misreading a bare/reference title as a person) and fall
+    through to the empty exhaustion path returning zero results."""
+
+    def _search_person_block(self):
+        b = MagicMock()
+        b.type = "tool_use"
+        b.name = "search_person"
+        b.id = "tu"
+        b.input = {"name": "Perfect Date"}
+        return b
+
+    def _stream_ctx_calling_search_person(self):
+        """A round where Claude calls the non-terminal search_person tool and never
+        emits return_results — forcing the loop to advance to the next round."""
+        final = MagicMock()
+        final.content = [self._search_person_block()]
+        final.usage.input_tokens = 5
+        final.usage.output_tokens = 5
+        ctx = MagicMock()
+        ctx.__enter__ = MagicMock(return_value=ctx)
+        ctx.__exit__ = MagicMock(return_value=False)
+        ctx.__iter__ = MagicMock(return_value=iter([]))  # no return_results deltas
+        ctx.get_final_message = MagicMock(return_value=final)
+        return ctx
+
+    def test_stream_final_round_offers_only_return_results(self):
+        from claude import rerank_stream, _TOOL_RETURN_RESULTS
+        from config import AGENT_MAX_TOOL_ROUNDS
+
+        captured_tools = []
+
+        def stream_side_effect(*args, **kwargs):
+            captured_tools.append(kwargs["tools"])
+            return self._stream_ctx_calling_search_person()
+
+        with patch("claude.get_client") as mock_client, \
+             patch("claude.execute_tool", return_value={"results": []}):
+            mock_client.return_value.messages.stream.side_effect = stream_side_effect
+            list(rerank_stream("Movies like Perfect Date",
+                               [{"title": "Some Movie", "document": "x"}]))
+
+        assert len(captured_tools) == AGENT_MAX_TOOL_ROUNDS
+        # Earlier rounds offer the full toolset...
+        assert len(captured_tools[0]) > 1
+        # ...but the final round offers return_results ONLY.
+        assert [t["name"] for t in captured_tools[-1]] == [_TOOL_RETURN_RESULTS]
+
+    def test_nonstream_final_round_offers_only_return_results(self):
+        from claude import rerank, _TOOL_RETURN_RESULTS
+        from config import AGENT_MAX_TOOL_ROUNDS
+
+        captured_tools = []
+
+        def call_side_effect(model, messages, **kwargs):
+            captured_tools.append(kwargs["tools"])
+            resp = MagicMock()
+            resp.content = [self._search_person_block()]
+            resp.usage.input_tokens = 5
+            resp.usage.output_tokens = 5
+            return resp
+
+        with patch("claude._call_claude", side_effect=call_side_effect), \
+             patch("claude.execute_tool", return_value={"results": []}):
+            rerank("Movies like Perfect Date", [{"title": "Some Movie", "document": "x"}])
+
+        assert len(captured_tools) == AGENT_MAX_TOOL_ROUNDS
+        assert len(captured_tools[0]) > 1
+        assert [t["name"] for t in captured_tools[-1]] == [_TOOL_RETURN_RESULTS]
 
 
 class TestForceFastModel:

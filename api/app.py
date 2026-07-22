@@ -27,9 +27,16 @@ async def lifespan(app: FastAPI):
     global _app_html, _admin_html, _login_html, _hints
     from db import get_model
     from claude import get_client
+    from tmdb import warmup as tmdb_warmup
     validate_config()  # raises ValueError early if ANTHROPIC_API_KEY or TMDB_READ_ACCESS_TOKEN are unset
-    get_model()
+    # Warm every cold path the first user query would otherwise pay for:
+    #  - get_model() constructs the embedding model, but the FIRST encode() still incurs
+    #    one-time overhead (~1.8s observed), so run a throwaway encode to absorb it here.
+    #  - tmdb_warmup() primes DNS/TLS so concurrent reference-title resolution doesn't blow
+    #    past its 1.5s timeout on a cold start and silently drop to token retrieval.
+    get_model().encode("warmup")
     get_client()
+    tmdb_warmup()
     _root = os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(_root, "app.html")) as f:
         _app_html = f.read()

@@ -37,6 +37,7 @@ def make_meta(usage=None, error=None):
 @pytest.fixture(scope="module")
 def client():
     with patch("db.get_model", return_value=MagicMock()), \
+         patch("tmdb.warmup"), \
          patch("api.routes.search.log_request"):  # prevent test runs from writing to search.log
         with TestClient(app) as c:
             yield c
@@ -531,6 +532,7 @@ class TestSearchLogsUserAgent:
         log_calls = []
 
         with patch("db.get_model", return_value=MagicMock()), \
+             patch("tmdb.warmup"), \
              patch("api.routes.search.log_request", side_effect=lambda e: log_calls.append(e)), \
              patch("api.routes.search.search_stream", return_value=stream):
             with TestClient(app) as c:
@@ -549,6 +551,7 @@ class TestSearchLogsUserAgent:
         log_calls = []
 
         with patch("db.get_model", return_value=MagicMock()), \
+             patch("tmdb.warmup"), \
              patch("api.routes.search.log_request", side_effect=lambda e: log_calls.append(e)), \
              patch("api.routes.search.search_stream", return_value=stream):
             with TestClient(app) as c:

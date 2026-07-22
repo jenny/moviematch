@@ -332,11 +332,16 @@ def _execute_non_terminal_tools(
     assistant_content: list,
     valid_titles: set[str],
     tools_called: list[str],
+    discovered_movies: list[dict] | None = None,
 ) -> list[dict]:
     """Execute a round of non-terminal tool calls and build the next two conversation messages.
 
     Mutates valid_titles (adds filmography titles discovered via get_filmography) and
     tools_called (appends each tool name) in-place so callers don't need to handle these.
+    When `discovered_movies` is provided, the full get_filmography movie payloads (id,
+    title, poster_path, release_date) are appended to it — the streaming caller uses these
+    to seed poster/certification metadata for titles that never appeared in the vector
+    candidate pool (see search_stream's __filmography handling in main.py).
     Returns [assistant_message, tool_results_message] ready to extend messages with.
 
     Shared between rerank() and rerank_stream() to keep the tool-dispatch logic in one place.
@@ -351,6 +356,8 @@ def _execute_non_terminal_tools(
             for movie in result.get("movies", []):
                 if movie.get("title"):
                     valid_titles.add(movie["title"])
+                    if discovered_movies is not None:
+                        discovered_movies.append(movie)
         tool_results.append({
             "type": "tool_result",
             "tool_use_id": t.id,
@@ -399,7 +406,13 @@ def rerank(query: str, candidates: list[dict], parsed=None) -> tuple[list[dict],
 
     for round_num in range(1, AGENT_MAX_TOOL_ROUNDS + 1):
         models_used.append(current_model)
-        response = _call_claude(current_model, messages, max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048, tools=active_tools)
+        # On the final permitted round, force return-only tools so Claude must emit
+        # results from the candidates it already has instead of spending the round on
+        # yet another lookup and falling through to the empty exhaustion path. Prevents
+        # the "Claude loops on search_person → 0 results" failure (e.g. a bare/reference
+        # title misread as a person name).
+        round_tools = [RETURN_RESULTS_TOOL] if round_num == AGENT_MAX_TOOL_ROUNDS else active_tools
+        response = _call_claude(current_model, messages, max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048, tools=round_tools)
 
         in_toks = response.usage.input_tokens
         out_toks = response.usage.output_tokens
@@ -565,11 +578,18 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
         results_yielded = 0
         yielded_titles: set[str] = set()
 
+        # On the final permitted round, force return-only tools so Claude must emit
+        # results from the candidates it already has instead of spending the round on
+        # yet another lookup and falling through to the empty exhaustion path. Prevents
+        # the "Claude loops on search_person → 0 results" failure (e.g. a bare/reference
+        # title misread as a person name).
+        round_tools = [RETURN_RESULTS_TOOL] if round_num == AGENT_MAX_TOOL_ROUNDS else active_tools
+
         try:
             with get_client().messages.stream(
                 model=current_model,
                 max_tokens=1024 if current_model == CLAUDE_FAST_MODEL else 2048,
-                tools=active_tools,
+                tools=round_tools,
                 tool_choice={"type": "any"},
                 messages=messages,
             ) as stream:
@@ -658,9 +678,18 @@ def rerank_stream(query: str, candidates: list[dict], parsed=None):
         # _execute_non_terminal_tools mutates valid_titles and tools_called in-place.
         if not FORCE_FAST_MODEL:
             current_model = CLAUDE_MODEL
+        discovered_movies: list[dict] = []
         messages.extend(
-            _execute_non_terminal_tools(non_terminal, final.content, valid_titles, tools_called)
+            _execute_non_terminal_tools(
+                non_terminal, final.content, valid_titles, tools_called, discovered_movies
+            )
         )
+        # Surface any get_filmography discoveries to the caller BEFORE the next round's
+        # results stream, so search_stream can seed their poster/certification metadata.
+        # Without this, a title Claude discovers mid-stream passes validation but has no
+        # lookup entry, so its poster AND rating both render blank.
+        if discovered_movies:
+            yield {"__filmography": discovered_movies}
         # Rebuild valid_lower so the streaming filter in the next round reflects
         # any filmography titles added to valid_titles by get_filmography above.
         valid_lower = {t.lower() for t in valid_titles}
