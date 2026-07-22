@@ -813,9 +813,12 @@
     </symbol>
 
     <!--
-      Ratings & Scores provider glyphs. These are simplified, recognizable brand marks
-      (not pixel-exact logos) drawn inline so the overlay needs no image assets: IMDb and
-      TMDB are wordmarks (wide viewBox), Rotten Tomatoes and Metacritic are square icons.
+      Reviews-section provider glyphs, drawn inline so the overlay needs no image assets:
+      IMDb and TMDB are wordmarks (wide viewBox), Rotten Tomatoes and Metacritic are square
+      icons (square viewBox — see the width note on .overlay-score-icon below). IMDb/TMDB/RT
+      are simplified, recognizable approximations rather than pixel-exact logos; the
+      Metacritic "m" is the one exception, using the official vector paths because its
+      stepped letterform cannot be approximated with a font glyph.
       Each is wrapped in an <a> to the provider's page and labelled via a title tooltip.
     -->
     <symbol id="icon-rt" viewBox="0 0 24 24">
@@ -831,9 +834,16 @@
       <text x="32" y="22" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" text-anchor="middle" fill="#000">IMDb</text>
     </symbol>
 
-    <symbol id="icon-mc" viewBox="0 0 24 24">
-      <rect x="2" y="2" width="20" height="20" rx="5" fill="#FFCC33"/>
-      <text x="12" y="17.5" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="800" text-anchor="middle" fill="#000">M</text>
+    <symbol id="icon-mc" viewBox="0 0 40 40">
+      <!--
+        Metacritic "m" monogram — the icon half of their logo (the wordmark's
+        leading 40x40 block), not the "metacritic" text. Gold ring + dark field +
+        angular white "m". Paths lifted from the official mark so the stepped
+        letterform is exact; a text glyph can't reproduce it.
+      -->
+      <path d="M36.978 19.49a17.49 17.49 0 1 1 0-.021" fill="#000"/>
+      <path d="m17.209 32.937 3.41-3.41-6.567-6.567c-.276-.276-.576-.622-.737-1.014-.369-.783-.53-2.004.369-2.903 1.106-1.106 2.58-.645 4.009.784l6.313 6.313 3.41-3.41-6.59-6.59c-.276-.276-.599-.691-.76-1.037-.438-.898-.415-2.027.392-2.834 1.129-1.129 2.603-.714 4.24.922l6.128 6.129 3.41-3.41L27.6 9.274c-3.364-3.364-6.52-3.249-8.686-1.083-.83.83-1.337 1.705-1.59 2.696a6.71 6.71 0 0 0-.092 2.81l-.046.047c-1.66-.691-3.549-.277-5 1.175-1.936 1.935-1.866 3.986-1.636 5.184l-.07.07-1.681-1.36-2.95 2.949c1.037.945 2.282 2.097 3.687 3.502l7.673 7.673Z" fill="#F2F2F2"/>
+      <path d="M19.982 0A20 20 0 1 0 40 20v-.024A20 20 0 0 0 19.982 0Zm-.091 4.274A15.665 15.665 0 0 1 35.57 19.921v.018A15.665 15.665 0 1 1 19.89 4.274Z" fill="#FFBD3F"/>
     </symbol>
 
     <symbol id="icon-tmdb" viewBox="0 0 64 32">
