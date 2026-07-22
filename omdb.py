@@ -30,6 +30,7 @@ from typing import Any
 import requests
 
 from config import OMDB_API_KEY, OMDB_API_URL, OMDB_TIMEOUT_S
+from logger import redact
 
 logger = logging.getLogger(__name__)
 
@@ -88,19 +89,6 @@ def _parse_int(value: str) -> int | None:
         return int(value)
     except ValueError:
         return None
-
-
-def _redact(value: object) -> str:
-    """Stringify `value` with the API key scrubbed out, for safe logging.
-
-    requests' HTTPError message embeds the full request URL — query string included —
-    so logging a raw exception would print OMDB_API_KEY on every failure. On Railway
-    those lines go to stdout, where the key would be retained indefinitely.
-    """
-    text = str(value)
-    if OMDB_API_KEY:
-        text = text.replace(OMDB_API_KEY, "***")
-    return text
 
 
 def _error_message(response: requests.Response) -> str:
@@ -206,5 +194,5 @@ def fetch_ratings(title: str, year: str = "") -> dict:
         logger.debug("OMDb: '%s' (%s) → %s", title, year, result)
         return result
     except Exception as e:
-        logger.warning("OMDb: ratings lookup failed for '%s': %s", title, _redact(e))
+        logger.warning("OMDb: ratings lookup failed for '%s': %s", title, redact(e))
         return {}  # don't cache failures — allow retry on the next request

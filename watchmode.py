@@ -10,6 +10,10 @@ plus one shared request for the source logo catalog (cached in memory for the pr
 Every non-cached Watchmode API call is logged with the tag [watchmode_api_call] for grep-based
 monitoring of monthly budget consumption.
 
+Watchmode authenticates by query parameter (apiKey=...), so a raw requests exception would
+print the key — requests embeds the full request URL in HTTPError messages. Every failure
+log therefore passes the exception through logger.redact().
+
 The monthly API call count is persisted to LOG_DIR/watchmode_calls.json so it survives
 process restarts and Railway deploys. It resets automatically when the calendar month changes.
 """
@@ -25,6 +29,7 @@ from typing import Any
 import requests
 
 from config import LOG_DIR, WATCHMODE_API_KEY
+from logger import redact
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +168,7 @@ def _load_source_logos() -> None:
             _source_logos_loaded = True
             logger.info(f"Watchmode: cached {len(_source_logos)} source logos")
         except Exception as e:
-            logger.warning(f"Watchmode: failed to load source logos: {e}")
+            logger.warning(f"Watchmode: failed to load source logos: {redact(e)}")
 
 
 def search_title(title: str, year: str = "") -> int | None:
@@ -210,7 +215,7 @@ def search_title(title: str, year: str = "") -> int | None:
         _cache_set(cache_key, title_id)
         return title_id
     except Exception as e:
-        logger.warning(f"Watchmode: search failed for '{title}': {e}")
+        logger.warning(f"Watchmode: search failed for '{title}': {redact(e)}")
         return None  # don't cache failures — allow retry
 
 
@@ -268,8 +273,8 @@ def fetch_providers(title_id: int, country: str = "US") -> list[dict]:
                 title_id, country,
             )
         else:
-            logger.warning("Watchmode: sources failed for title %d: %s", title_id, e)
+            logger.warning("Watchmode: sources failed for title %d: %s", title_id, redact(e))
         return []  # don't cache failures — allow retry
     except Exception as e:
-        logger.warning("Watchmode: sources failed for title %d: %s", title_id, e)
+        logger.warning("Watchmode: sources failed for title %d: %s", title_id, redact(e))
         return []  # don't cache failures — allow retry
