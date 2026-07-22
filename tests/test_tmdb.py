@@ -372,3 +372,26 @@ class TestGetFilmography:
             movies = get_filmography(70002, department="cast")
         assert len(movies) == 30
         assert "One Vote Wonder" not in {m["title"] for m in movies}
+
+
+class TestWarmup:
+    """Startup TMDB connection primer — best-effort, must never raise or block startup."""
+
+    def test_primes_configuration_endpoint(self):
+        from tmdb import warmup
+        with patch("tmdb.TMDB_KEY", "fake"), patch("requests.get") as mock_get:
+            warmup()
+        assert mock_get.called
+        assert "/configuration" in mock_get.call_args[0][0]
+
+    def test_noop_without_key(self):
+        from tmdb import warmup
+        with patch("tmdb.TMDB_KEY", ""), patch("requests.get") as mock_get:
+            warmup()
+        mock_get.assert_not_called()
+
+    def test_swallows_errors(self):
+        """A cold-connection failure at startup must not propagate."""
+        from tmdb import warmup
+        with patch("tmdb.TMDB_KEY", "fake"), patch("requests.get", side_effect=Exception("cold")):
+            warmup()  # must not raise

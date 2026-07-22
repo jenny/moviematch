@@ -158,6 +158,13 @@ def _make_candidate(title, year="", genres=None, certification=""):
 class TestSearchStreamPreParse:
     """Integration tests for the pre-parse + filter block in search_stream."""
 
+    @pytest.fixture(autouse=True)
+    def _no_real_cert_fetch(self):
+        """Runtime cert backfill for not-yet-ingested filmography films must never hit
+        the real TMDB API in tests. Default to empty; individual tests override as needed."""
+        with patch("main.fetch_certification", return_value="") as m:
+            yield m
+
     def _mock_fetch_candidates(self, candidates):
         """Return a patch target that yields the given candidates."""
         return patch("main._fetch_candidates", return_value=(candidates, 10, 5))
@@ -446,6 +453,76 @@ class TestSearchStreamPreParse:
         # Vector DB metadata wins over filmography TMDB metadata
         assert results[0]["movie_poster"] == "/memento_vector.jpg"
         assert results[0]["overview"] == "A man with no short-term memory."
+
+    def test_not_ingested_filmography_film_gets_cert_via_runtime_fetch(self, _no_real_cert_fetch):
+        """A filmography film not yet in the vector DB has no cert in its sparse TMDB
+        payload — the runtime batched fetch_certification backfills it so the rating
+        still renders on first view."""
+        _no_real_cert_fetch.return_value = "PG-13"  # override the autouse default
+        candidates = [_make_candidate("Memento", year="2000")]
+        filmography_movies = [{
+            "id": 999, "title": "Following", "vote_average": 7.5, "vote_count": 500,
+            "release_date": "1998-09-11", "poster_path": "/following.jpg",
+        }]
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"), \
+             patch("main.vector_fetch_by_ids", return_value=[]):  # not ingested
+            from query_parser import ParsedQuery
+            mock_parsed = ParsedQuery()
+            mock_parsed.person_names = ["Christopher Nolan"]
+            mock_parsed.person_filmographies = [
+                {"name": "Christopher Nolan", "person_id": 525, "department": "directing",
+                 "titles": ["Memento", "Following"], "movies": filmography_movies}
+            ]
+            mock_parse.return_value = mock_parsed
+
+            with patch("main.rerank_stream") as mock_rerank:
+                mock_rerank.return_value = iter([
+                    {"title": "Following", "explanation": "Nolan's debut."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 1, "tools_called": []}},
+                ])
+                from main import search_stream
+                results = [r for r in search_stream("Nolan films") if "__meta" not in r]
+
+        assert results[0]["certification"] == "PG-13"
+        _no_real_cert_fetch.assert_called_once_with(999)
+
+    def test_mid_stream_filmography_sentinel_seeds_metadata(self, _no_real_cert_fetch):
+        """A title Claude discovers via a mid-stream get_filmography call arrives as a
+        __filmography sentinel; search_stream must seed its poster/cert so the subsequent
+        result item isn't blank on both fields."""
+        candidates = [_make_candidate("Memento", year="2000")]
+        discovered = [{
+            "id": 777, "title": "Insomnia", "release_date": "2002-05-24",
+            "poster_path": "/insomnia.jpg",
+        }]
+        _no_real_cert_fetch.return_value = "R"
+
+        with self._mock_fetch_candidates(candidates), \
+             patch("main.parse_query") as mock_parse, \
+             patch("main._person_fetch_executor"), \
+             patch("main.vector_fetch_by_ids", return_value=[]):  # discovered film not ingested
+            from query_parser import ParsedQuery
+            mock_parse.return_value = ParsedQuery()
+
+            with patch("main.rerank_stream") as mock_rerank:
+                # Sentinel precedes the result item that references the discovered title.
+                mock_rerank.return_value = iter([
+                    {"__filmography": discovered},
+                    {"title": "Insomnia", "explanation": "Discovered via get_filmography."},
+                    {"__usage": {"input_tokens": 5, "output_tokens": 3, "rounds": 2, "tools_called": ["get_filmography"]}},
+                ])
+                from main import search_stream
+                results = [r for r in search_stream("something") if "__meta" not in r]
+
+        assert len(results) == 1
+        assert results[0]["title"] == "Insomnia"
+        assert results[0]["movie_poster"] == "/insomnia.jpg"   # seeded — not blank
+        assert results[0]["year"] == "2002"
+        assert results[0]["certification"] == "R"              # seeded via runtime fetch
+        _no_real_cert_fetch.assert_called_once_with(777)
 
 
 # ---------------------------------------------------------------------------

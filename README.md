@@ -53,6 +53,8 @@ Round 2 ─ Haiku* ─┬─ return_results ────────────
 
 \* By default round 2+ also stays on Haiku — see model routing below.
 
+On the **final permitted round**, the tool schema is forced to `return_results` only, so Claude must commit to an answer from the candidates it already has rather than spending the last round on another lookup and exhausting the loop with nothing to show. This is what prevents a query whose title Claude misreads as a person name (e.g. a bare title like "John Wick", or a reference like "movies like Perfect Date") from looping on `search_person` across all four rounds and returning **zero results** — the correct films were in the candidate list the whole time.
+
 If all persons named in the query were already resolved by the concurrent pre-fetch in `query_parser.py`, the two person-lookup tools are **removed from the schema entirely** (only `return_results` remains). This is a hard guarantee — not a prompt instruction — that Claude won't burn a round on a redundant TMDB call.
 
 ### When Haiku vs Opus is used
@@ -228,7 +230,7 @@ data: {"type": "error", "message": "Could not connect to the AI service. Please 
 
 ```
 api/
-  app.py               # FastAPI app factory, CORS, security headers, lifespan; login/logout routes
+  app.py               # FastAPI app factory, CORS, security headers, lifespan (warms embedding model + TMDB connection); login/logout routes
   auth.py              # HMAC-SHA256 session cookie signing; require_admin dependency
   geo.py               # Client IP → ISO country code via ipinfo.io
   limiter.py           # Rate limiter (slowapi)
@@ -252,4 +254,6 @@ config.py              # Configuration constants (dataset size, scoring weights,
 logger.py              # JSON request logging; rotating file locally, stdout on Railway
 migrate_to_pinecone.py # One-off script: copies all vectors from Chroma to Pinecone
 backfill_certifications.py # One-off script: patches MPAA certifications into existing Pinecone metadata
+tools/
+  audit_posters.py     # Read-only audit: HEAD-checks stored poster paths against the TMDB CDN for the stale/missing rate
 ```

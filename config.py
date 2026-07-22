@@ -98,6 +98,12 @@ TITLE_LOOKUP_TIMEOUT_S = 1.5    # max seconds to wait for concurrent reference-t
                                  # mirrors PERSON_LOOKUP_TIMEOUT_S — bounds worst-case streaming block
 PREPARSE_EXECUTOR_WORKERS = 2   # ThreadPoolExecutor pool size for concurrent person/title lookups
 
+# Runtime certification backfill for filmography films not yet ingested (their sparse
+# TMDB filmography payload carries no cert). Fanned out concurrently so N films add
+# ~one TMDB round-trip, not N; bounded so a slow/hung TMDB can't stall the stream.
+CERT_FETCH_WORKERS = 8          # concurrent fetch_certification calls
+CERT_FETCH_TIMEOUT_S = 1.5      # max total wait; films that don't resolve stay unrated
+
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
 STREAMING_RATE_LIMIT = "30/minute" # /streaming endpoints — Watchmode/TMDB only

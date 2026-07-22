@@ -35,6 +35,21 @@ def _require_tmdb_key() -> None:
         raise ValueError("TMDB_READ_ACCESS_TOKEN is not set. Check your .env file.")
 
 
+def warmup() -> None:
+    """Prime the TMDB connection at app startup so the first *user* request doesn't pay
+    the cold DNS + TLS handshake. That cold cost can push concurrent reference-title
+    resolution past TITLE_LOOKUP_TIMEOUT_S (1.5s), which silently drops the query to the
+    low-quality token-retrieval path and can return zero results. Best-effort: any failure
+    is swallowed and logged — warm-up must never block or break startup."""
+    if not TMDB_KEY:
+        return
+    try:
+        requests.get(TMDB_BASE_URL + "/configuration", headers=TMDB_HEADERS, timeout=5)
+        logger.info("TMDB connection warmed up")
+    except Exception as e:
+        logger.warning("TMDB warm-up failed (non-fatal): %s", e)
+
+
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=2, min=1, max=30),

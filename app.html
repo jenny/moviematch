@@ -190,6 +190,17 @@
       display: block;
     }
 
+    /* Shown when a poster is missing (no path stored) or 404s at the TMDB origin. */
+    .card-poster-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 1.4rem;
+    }
+
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -253,6 +264,17 @@
 
     .card-rating:empty {
       display: none;
+    }
+
+    /* Distinct from the bordered .card-rating chip so an unknown rating never reads
+       as an actual rating badge — muted, italic, no border. */
+    .card-rating-none {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-style: italic;
+      color: #666;
+      margin-left: 7px;
+      vertical-align: middle;
     }
 
     .card-explanation {
@@ -449,6 +471,16 @@
 
     .overlay-rating:empty {
       display: none;
+    }
+
+    /* Muted, italic, borderless — an unknown rating must not look like a rating chip. */
+    .overlay-rating-none {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-style: italic;
+      color: #666;
+      margin-left: 8px;
+      vertical-align: middle;
     }
 
     .overlay-section {
@@ -1034,17 +1066,21 @@
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
 
+      // Missing path OR a 404 at the TMDB origin both fall back to the film-reel glyph
+      // (posterFallback swaps the broken <img> in place) rather than a blank/broken card.
       const posterHtml = result.movie_poster
-        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" onerror="this.closest('.card-poster').remove()" /></div>`
-        : "";
+        ? `<div class="card-poster"><img src="https://image.tmdb.org/t/p/w185${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" loading="lazy" onerror="posterFallback(this)" /></div>`
+        : `<div class="card-poster"><div class="card-poster-placeholder">&#127909;</div></div>`;
 
       const yearHtml = result.year
         ? `<span class="card-year">(${escapeHtml(result.year)})</span>`
         : "";
 
+      // Unknown certification renders as an explicit, visually-distinct note so it can't
+      // be misread as an actual rating (e.g. "NR").
       const ratingHtml = result.certification
         ? `<span class="card-rating" id="card-rating-${idx}" title="${escapeHtml(ratingTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
-        : `<span class="card-rating" id="card-rating-${idx}"></span>`;
+        : `<span class="card-rating-none">Rating not available</span>`;
 
       card.innerHTML = `
         <div class="card-rank">${idx + 1}</div>
@@ -1120,7 +1156,7 @@
       if (!result) return;
 
       const posterHtml = result.movie_poster
-        ? `<img src="https://image.tmdb.org/t/p/w300${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" />`
+        ? `<img src="https://image.tmdb.org/t/p/w300${escapeHtml(result.movie_poster)}" alt="${escapeHtml(result.title)}" onerror="posterFallback(this)" />`
         : `<div class="overlay-poster-placeholder">&#127909;</div>`;
 
       const yearDisplay = result.year ? `<span class="overlay-title-year">(${escapeHtml(result.year)})</span>` : "";
@@ -1162,13 +1198,15 @@
            </div>`
         : "";
 
-      const overlayRatingContent = result.certification ? escapeHtml(result.certification) : "";
-      const overlayRatingTitle = result.certification ? ` title="${escapeHtml(ratingTitle(result.certification))}"` : "";
+      // Chip for a known rating; muted italic note for an unknown one (never a blank/NR chip).
+      const overlayRatingHtml = result.certification
+        ? `<span class="overlay-rating" id="overlay-rating" title="${escapeHtml(ratingTitle(result.certification))}">${escapeHtml(result.certification)}</span>`
+        : `<span class="overlay-rating-none">Rating not available</span>`;
 
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}<span class="overlay-rating" id="overlay-rating"${overlayRatingTitle}>${overlayRatingContent}</span><button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}${overlayRatingHtml}<button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
           ${overviewHtml}
           ${genresHtml}
           ${directorHtml}
@@ -1400,6 +1438,18 @@
 
     function ratingTitle(certification) {
       return RATING_LABELS[certification] || "Not Rated";
+    }
+
+    // Swap a poster <img> that 404s at the origin for the film-reel glyph, keeping the
+    // poster frame so the layout stays consistent instead of collapsing. Handles both the
+    // result card and the detail overlay (each has its own placeholder class).
+    function posterFallback(img) {
+      const frame = img.closest(".card-poster, .overlay-poster");
+      if (!frame) return;
+      const cls = frame.classList.contains("overlay-poster")
+        ? "overlay-poster-placeholder"
+        : "card-poster-placeholder";
+      frame.innerHTML = `<div class="${cls}">&#127909;</div>`;
     }
 
     function updateCardRating(idx, certification) {

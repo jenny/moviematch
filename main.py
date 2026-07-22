@@ -3,17 +3,19 @@ import logging
 import re
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 
 from config import (
     SEARCH_CANDIDATES, SEARCH_DOC_TRUNCATE,
     RICHTEXT_PREFIX_CAST, RICHTEXT_PREFIX_DIRECTOR, RICHTEXT_PREFIX_GENRES, RICHTEXT_PREFIX_PLOT,
     PERSON_LOOKUP_TIMEOUT_S, TITLE_LOOKUP_TIMEOUT_S, PREPARSE_EXECUTOR_WORKERS,
     ANCHOR_FETCH_DEPTH, ANCHOR_CANDIDATES_QUALIFIED,
+    CERT_FETCH_WORKERS, CERT_FETCH_TIMEOUT_S,
 )
 from db import get_model, vector_count, vector_query, vector_fetch_by_ids
 from claude import rerank, rerank_stream, _ingest_filmography_background, _ingest_reference_background
 from query_parser import parse_query, apply_hard_filters, resolve_persons, resolve_reference_titles
+from tmdb import fetch_certification
 
 # Module-level executor for concurrent person TMDB pre-fetches.
 # Shared across requests; each request submits its own future.
@@ -227,70 +229,119 @@ def _build_metadata_lookups(candidates: list[dict], parsed=None) -> dict[str, di
     Shared by search() and search_stream() so both apply identical casing and
     filmography-seeding behaviour. Returns a dict of per-field lookup dicts.
     """
-    poster_by_title = {c["title"].lower(): c["movie_poster"] for c in candidates}
-    certification_by_title = {c["title"].lower(): c["certification"] for c in candidates}
-    year_by_title = {c["title"].lower(): c["year"] for c in candidates}
-    overview_by_title = {c["title"].lower(): c["overview"] for c in candidates}
-    genres_by_title = {c["title"].lower(): c["genres"] for c in candidates}
-    director_by_title = {c["title"].lower(): c["director"] for c in candidates}
-    cast_by_title = {c["title"].lower(): c["cast"] for c in candidates}
-
-    if parsed and parsed.person_filmographies:
-        candidate_titles_lower = {c["title"].lower() for c in candidates}
-        outside_candidates = [
-            movie
-            for pf in parsed.person_filmographies
-            for movie in pf.get("movies", [])
-            if (movie.get("title") or "").lower() not in candidate_titles_lower
-        ]
-
-        # Batch-fetch by TMDB ID — direct lookup, no embedding needed.
-        id_to_filmography_movie = {
-            str(movie["id"]): movie
-            for movie in outside_candidates
-            if movie.get("id")
-        }
-        fetched = vector_fetch_by_ids(list(id_to_filmography_movie.keys()))
-
-        # Seed full rich metadata for films found in the vector DB.
-        fetched_titles_lower: set[str] = set()
-        for fetched_movie in fetched:
-            t = (fetched_movie.get("title") or "").lower()
-            if not t:
-                continue
-            parsed_doc = _parse_document(fetched_movie["document"])
-            poster_by_title[t] = fetched_movie["movie_poster"]
-            certification_by_title[t] = fetched_movie["certification"]
-            year_by_title[t] = parsed_doc["year"]
-            overview_by_title[t] = parsed_doc["overview"]
-            genres_by_title[t] = parsed_doc["genres"]
-            director_by_title[t] = parsed_doc["director"]
-            cast_by_title[t] = parsed_doc["cast"]
-            fetched_titles_lower.add(t)
-
-        # Fall back to sparse poster+year for films not yet ingested in the vector DB.
-        for movie in outside_candidates:
-            title_lower = (movie.get("title") or "").lower()
-            if not title_lower or title_lower in fetched_titles_lower:
-                continue
-            raw_date = movie.get("release_date", "")
-            poster_by_title[title_lower] = movie.get("poster_path", "")
-            year_by_title[title_lower] = raw_date[:4] if raw_date else ""
-            certification_by_title[title_lower] = ""
-            overview_by_title[title_lower] = ""
-            genres_by_title[title_lower] = []
-            director_by_title[title_lower] = ""
-            cast_by_title[title_lower] = []
-
-    return {
-        "movie_poster": poster_by_title,
-        "certification": certification_by_title,
-        "year": year_by_title,
-        "overview": overview_by_title,
-        "genres": genres_by_title,
-        "director": director_by_title,
-        "cast": cast_by_title,
+    lookups = {
+        "movie_poster": {c["title"].lower(): c["movie_poster"] for c in candidates},
+        "certification": {c["title"].lower(): c["certification"] for c in candidates},
+        "year": {c["title"].lower(): c["year"] for c in candidates},
+        "overview": {c["title"].lower(): c["overview"] for c in candidates},
+        "genres": {c["title"].lower(): c["genres"] for c in candidates},
+        "director": {c["title"].lower(): c["director"] for c in candidates},
+        "cast": {c["title"].lower(): c["cast"] for c in candidates},
     }
+
+    # Seed metadata for pre-fetched filmography films that fell outside the vector
+    # candidate pool. Mid-stream get_filmography discoveries are seeded separately by
+    # search_stream via the __filmography sentinel (same helper).
+    if parsed and parsed.person_filmographies:
+        movies = [movie for pf in parsed.person_filmographies for movie in pf.get("movies", [])]
+        _seed_filmography_metadata(lookups, movies)
+
+    return lookups
+
+
+def _batch_fetch_certifications(movie_ids: list[int]) -> dict[int, str]:
+    """Runtime certification backfill for films that carry no cert in their sparse
+    filmography payload and aren't yet ingested in the vector DB. Fanned out across a
+    bounded thread pool so N films cost ~one TMDB round-trip; hard-capped by
+    CERT_FETCH_TIMEOUT_S so a slow/hung TMDB can't stall the stream — unresolved films
+    stay unrated (surfaced as "Rating not available" client-side) and get corrected once
+    background ingestion stores their real cert.
+
+    Returns {movie_id: certification}; only films that resolved to a non-empty cert.
+    """
+    if not movie_ids:
+        return {}
+    certs: dict[int, str] = {}
+    with ThreadPoolExecutor(max_workers=CERT_FETCH_WORKERS) as ex:
+        future_to_id = {ex.submit(fetch_certification, mid): mid for mid in movie_ids}
+        try:
+            for future in as_completed(future_to_id, timeout=CERT_FETCH_TIMEOUT_S):
+                mid = future_to_id[future]
+                try:
+                    cert = future.result()
+                    if cert:
+                        certs[mid] = cert
+                except Exception as e:
+                    logger.warning("Runtime certification fetch failed for movie %s: %s", mid, e)
+        except TimeoutError:
+            # Partial results are fine — whatever resolved in time is used; the rest
+            # stay blank. Cancel stragglers so the pool tears down promptly.
+            unresolved = [mid for f, mid in future_to_id.items() if not f.done()]
+            logger.warning("Runtime certification fetch timed out for %d film(s): %s", len(unresolved), unresolved)
+            for f in future_to_id:
+                f.cancel()
+    return certs
+
+
+def _seed_filmography_metadata(lookups: dict, movies: list[dict]) -> None:
+    """Seed poster/certification/year/etc into `lookups` for filmography films not
+    already present. Mutates `lookups` in place.
+
+    Films already ingested in the vector DB get full rich metadata (incl. certification)
+    via a batch vector_fetch_by_ids. Films not yet ingested fall back to the sparse
+    poster+year from the TMDB filmography payload; their certification — absent from that
+    payload — is backfilled at runtime via a bounded concurrent TMDB fetch so the rating
+    still renders on first view.
+
+    Shared by _build_metadata_lookups (pre-fetched filmographies) and search_stream
+    (mid-stream get_filmography discoveries) so both apply identical seeding.
+    """
+    # Only seed titles we don't already have — candidates and prior seeds win.
+    existing_lower = set(lookups["movie_poster"].keys())
+    outside = [
+        movie for movie in movies
+        if (movie.get("title") or "").lower() and (movie.get("title") or "").lower() not in existing_lower
+    ]
+    if not outside:
+        return
+
+    # Batch-fetch by TMDB ID — direct lookup, no embedding needed.
+    id_to_movie = {str(movie["id"]): movie for movie in outside if movie.get("id")}
+    fetched = vector_fetch_by_ids(list(id_to_movie.keys()))
+
+    # Seed full rich metadata for films found in the vector DB.
+    fetched_titles_lower: set[str] = set()
+    for fetched_movie in fetched:
+        t = (fetched_movie.get("title") or "").lower()
+        if not t:
+            continue
+        parsed_doc = _parse_document(fetched_movie["document"])
+        lookups["movie_poster"][t] = fetched_movie["movie_poster"]
+        lookups["certification"][t] = fetched_movie["certification"]
+        lookups["year"][t] = parsed_doc["year"]
+        lookups["overview"][t] = parsed_doc["overview"]
+        lookups["genres"][t] = parsed_doc["genres"]
+        lookups["director"][t] = parsed_doc["director"]
+        lookups["cast"][t] = parsed_doc["cast"]
+        fetched_titles_lower.add(t)
+
+    # Films not yet ingested: sparse poster+year from the filmography payload. Their
+    # cert isn't in that payload, so backfill it concurrently from TMDB (#2).
+    not_ingested = [
+        movie for movie in outside
+        if (movie.get("title") or "").lower() not in fetched_titles_lower
+    ]
+    certs_by_id = _batch_fetch_certifications([movie["id"] for movie in not_ingested if movie.get("id")])
+    for movie in not_ingested:
+        title_lower = movie["title"].lower()
+        raw_date = movie.get("release_date", "")
+        lookups["movie_poster"][title_lower] = movie.get("poster_path", "")
+        lookups["year"][title_lower] = raw_date[:4] if raw_date else ""
+        lookups["certification"][title_lower] = certs_by_id.get(movie.get("id"), "")
+        lookups["overview"][title_lower] = ""
+        lookups["genres"][title_lower] = []
+        lookups["director"][title_lower] = ""
+        lookups["cast"][title_lower] = []
 
 
 def _trigger_reference_ingestion(parsed) -> None:
@@ -445,6 +496,12 @@ def search_stream(query: str):
             if "__usage" in item:
                 usage = item["__usage"]
                 error = usage.pop("error", None)
+            elif "__filmography" in item:
+                # Claude discovered these films via a mid-stream get_filmography call —
+                # they're absent from the candidate pool, so seed their poster/cert now,
+                # before the result items that reference them stream through. Without this
+                # both fields render blank for tool-discovered titles.
+                _seed_filmography_metadata(lookups, item["__filmography"])
             else:
                 t = (item.get("title") or "").lower()
                 item["movie_poster"] = lookups["movie_poster"].get(t, "")
