@@ -140,3 +140,19 @@ def test_metacritic_uses_official_monogram(html):
     assert "#FFBD3F" in markup, "Metacritic gold ring colour missing"
     assert "<text" not in markup, "Metacritic mark regressed to a font glyph"
     assert markup.count("<path") >= 3, "expected the 3-path official monogram"
+
+
+def test_header_title_links_home(html):
+    """The MovieMatch title is a link back to "/" (a clean, resultless search page)."""
+    assert re.search(r'<h1><a href="/">MovieMatch</a></h1>', html), (
+        "header title is no longer an anchor to / — the home link regressed"
+    )
+
+
+def test_header_title_link_inherits_heading_style(html):
+    """Without this rule the anchor renders as a blue underlined link, not the wordmark."""
+    rule = re.search(r"header h1 a \{(.*?)\}", html, re.S)
+    assert rule, "header h1 a style rule missing — the title link would be blue/underlined"
+    body = rule.group(1)
+    assert "color: inherit" in body
+    assert "text-decoration: none" in body
