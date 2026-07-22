@@ -237,7 +237,11 @@
       text-decoration: none;
     }
 
-    .card-title-link:hover {
+    /* Title and year live in one wrapper with a real space between them (not a
+       margin gap), so a single hover underline runs continuously across both —
+       no un-underlined gap in the middle. The whole card is clickable, so
+       hovering anywhere in the title row triggers it. */
+    .card-title:hover .card-title-name {
       text-decoration: underline;
       text-underline-offset: 3px;
     }
@@ -245,7 +249,6 @@
     .card-year {
       font-weight: 600;
       color: #fff;
-      margin-left: 6px;
       font-size: 0.95rem;
     }
 
@@ -1087,7 +1090,7 @@
         ${posterHtml}
         <div class="card-body">
           <div class="card-title">
-            <a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml}${ratingHtml}
+            <span class="card-title-name"><a class="card-title-link" href="#" tabindex="-1">${escapeHtml(result.title)}</a>${yearHtml ? " " + yearHtml : ""}</span>${ratingHtml}
           </div>
           <div class="card-explanation">${escapeHtml(result.explanation)}</div>
         </div>
