@@ -9,8 +9,9 @@ A semantic movie recommendation engine. Describe what you're in the mood for and
 3. Embeddings are stored in a vector database — [ChromaDB](https://www.trychroma.com/) locally or [Pinecone](https://www.pinecone.io/) in production
 4. At search time, the query first runs through a rule-based pre-parser that extracts structured constraints (year/decade, genre, certification, director/actor names, and "like X" title references); the query is then embedded and matched against the database using cosine similarity (for "like X" references, retrieval instead **anchors on the referenced film's own embedding** — see [Reference-title anchoring](#reference-title-anchoring)), candidates violating hard constraints are dropped, and [Claude](https://www.anthropic.com/claude) reranks the survivors via an agentic loop that can optionally look up director or actor filmographies from TMDB before returning ranked results
 5. The frontend separately fetches region-aware streaming availability for each result via [Watchmode](https://api.watchmode.com/) (primary) or TMDB (fallback), with the viewer's country inferred from their IP
+6. The detail overlay also shows critic/audience review scores — Rotten Tomatoes, IMDb, and Metacritic via [OMDb](https://www.omdbapi.com/), plus the TMDB user score — fetched the same way (live, not stored)
 
-> **Streaming data is fetched at request time, never stored in the vector database.** Because streaming catalogs change frequently, provider lookups are served live and held only in a process-local in-memory cache (24-hour TTL, keyed by title and country) to conserve the Watchmode free-tier budget. The cache is volatile — it is lost on process restart. The vector database stores movie metadata and MPAA certifications only, not streaming availability.
+> **Streaming availability and review scores are fetched at request time, never stored in the vector database.** Because streaming catalogs and scores change over time, these lookups are served live and held only in a process-local in-memory cache (24-hour TTL) to conserve the Watchmode and OMDb free-tier budgets. The cache is volatile — it is lost on process restart. The vector database stores movie metadata and MPAA certifications only.
 
 ## Reference-title anchoring
 
@@ -139,11 +140,12 @@ PINECONE_INDEX_NAME=your_index_name
 | Variable | Purpose |
 |----------|---------|
 | `WATCHMODE_API_KEY` | Enables [Watchmode](https://api.watchmode.com/) as the primary streaming-availability source (free tier). Falls back to TMDB when unset. |
+| `OMDB_API_KEY` | Enables [OMDb](https://www.omdbapi.com/) review scores (Rotten Tomatoes, IMDb, Metacritic) in the detail overlay's Reviews section (free tier, 1,000 req/day). Without it, the section shows the TMDB score alone. |
 | `CORS_ORIGINS` | Comma-separated allowed origins (default `http://localhost:8000,http://127.0.0.1:8000`). |
 | `LOG_DIR` | Directory for request logs (default `logs`; point at a persistent volume in production). |
 | `FORCE_FAST_MODEL` | When `true` (default) Claude uses Haiku for all rounds; set `false` to re-enable Opus escalation on tool use. |
 
-> Rate limits are compile-time constants in `config.py`, not environment variables: `RATE_LIMIT` (`10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (`30/minute` on the `/streaming` endpoints), `REGION_RATE_LIMIT` (`10/minute` on `/region`), and `LOGIN_RATE_LIMIT` (`5/minute` on `/admin/login`). Edit `config.py` to change them.
+> Rate limits are compile-time constants in `config.py`, not environment variables: `RATE_LIMIT` (`10/minute` on `/recommend`), `STREAMING_RATE_LIMIT` (`30/minute` on the `/streaming` endpoints), `RATINGS_RATE_LIMIT` (`30/minute` on the `/ratings` endpoints), `REGION_RATE_LIMIT` (`10/minute` on `/region`), and `LOGIN_RATE_LIMIT` (`5/minute` on `/admin/login`). Edit `config.py` to change them.
 
 ### Admin panel auth
 
@@ -195,6 +197,8 @@ Then open <http://localhost:8000/> in a browser. The frontend (`app.html`) is se
 | `GET` | `/region` | — | Infer the client's ISO country code from their IP |
 | `GET` | `/streaming` | — | Streaming providers for one title in a region |
 | `POST` | `/streaming/batch` | — | Streaming providers for up to 10 titles at once |
+| `GET` | `/ratings` | — | Review scores (RT/IMDb/Metacritic/TMDB) for one title |
+| `POST` | `/ratings/batch` | — | Review scores for up to 10 titles at once |
 | `GET` | `/health` | — | Health check |
 | `GET`/`POST` | `/admin/login` | — | Admin login page / credential submission |
 | `GET` | `/admin/logout` | — | Clear the session cookie |
@@ -238,6 +242,7 @@ api/
     search.py          # POST /recommend — SSE streaming endpoint
     admin.py           # /admin/initialize, /status, /logs, /watchmode (all admin-only)
     streaming.py       # GET /region, GET /streaming, POST /streaming/batch — region-aware providers
+    ratings.py         # GET /ratings, POST /ratings/batch — critic/audience review scores
 app.html               # Frontend UI
 admin.html             # Admin panel UI
 login.html             # Admin login page
@@ -248,6 +253,7 @@ claude.py              # Claude agentic loop: tool use (person search, filmograp
 embeddings.py          # Embedding generation and batch upsert
 tmdb.py                # TMDB API integration
 watchmode.py           # Watchmode API integration — primary streaming-provider source
+omdb.py                # OMDb API integration — critic/audience review scores (fail-soft)
 richtext.py            # Movie metadata → text for embedding
 db.py                  # ChromaDB/Pinecone and Sentence Transformer singletons
 config.py              # Configuration constants (dataset size, scoring weights, rate limits, quality thresholds, model selection)

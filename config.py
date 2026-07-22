@@ -8,6 +8,13 @@ TMDB_KEY = os.getenv("TMDB_READ_ACCESS_TOKEN")
 
 # Watchmode — primary source for streaming availability (watchmode.com, free tier: 1,000 req/month)
 WATCHMODE_API_KEY = os.getenv("WATCHMODE_API_KEY")
+
+# OMDb — critic/audience score aggregator (omdbapi.com, free tier: 1,000 req/day).
+# OPTIONAL: the "Ratings & Scores" overlay section falls back to the TMDB score alone
+# (or renders nothing) when OMDB_API_KEY is unset — the app never hard-depends on it.
+OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+OMDB_API_URL = "https://www.omdbapi.com/"
+OMDB_TIMEOUT_S = 10  # per-request timeout for OMDb HTTP calls
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
 TMDB_HEADERS = {
     "accept": "application/json",
@@ -107,6 +114,7 @@ CERT_FETCH_TIMEOUT_S = 1.5      # max total wait; films that don't resolve stay 
 # Rate limiting (slowapi format, e.g. "10/minute")
 RATE_LIMIT = "10/minute"           # /recommend — hits Anthropic API, keep tight
 STREAMING_RATE_LIMIT = "30/minute" # /streaming endpoints — Watchmode/TMDB only
+RATINGS_RATE_LIMIT = "30/minute"   # /ratings endpoints — OMDb/TMDB only
 REGION_RATE_LIMIT = "10/minute"    # /region — triggers an external ipinfo lookup
 LOGIN_RATE_LIMIT = "5/minute"      # /admin/login — throttles password brute-force
 
