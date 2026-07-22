@@ -116,6 +116,27 @@ def test_mock_fixtures_cover_every_streaming_render_branch(html):
     )
 
 
+def test_mock_providers_carry_deep_links(html):
+    """Every mock provider needs a `url` or the chips render unlinked.
+
+    The linked chip is the whole feature; a fixture without a url silently degrades to the
+    plain-div fallback meant for the TMDB path, so __mock__ would stop exercising it.
+    """
+    block = _mock_results_block(html)
+    # Provider entries are the ones carrying a `type:` key — score entries carry `provider:`.
+    entries = re.findall(r"\{[^{}]*type:\s*\"(?:sub|free|rent|buy)\"[^{}]*\}", block)
+    assert entries, "no provider entries found in MOCK_RESULTS"
+    unlinked = [e for e in entries if "url:" not in e]
+    assert not unlinked, f"provider entries without a deep link: {unlinked}"
+
+
+def test_mock_rent_fixture_carries_a_price(html):
+    """At least one rent/buy entry must have a price, or the price branch is uncovered."""
+    block = _mock_results_block(html)
+    priced = re.findall(r"\{[^{}]*type:\s*\"(?:rent|buy)\"[^{}]*price:\s*[\d.]+[^{}]*\}", block)
+    assert priced, "no rent/buy fixture carries a numeric price"
+
+
 def test_run_mock_search_makes_no_network_call(html):
     """runMockSearch() must not call the batch prefetchers — they POST to the backend."""
     fn = re.search(r"async function runMockSearch\(\) \{(.*?)\n    \}", html, re.S)

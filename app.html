@@ -518,6 +518,10 @@
       align-items: center;
     }
 
+    /* Rendered as an <a> when we have a deep link to the title on that provider,
+       and as a plain <div> when we don't (e.g. the TMDB fallback, which only offers
+       one shared JustWatch link per film rather than a per-provider one). Both share
+       this rule so the two cases are visually identical apart from the hover. */
     .overlay-provider {
       display: flex;
       align-items: center;
@@ -528,6 +532,14 @@
       padding: 6px 10px;
       font-size: 0.82rem;
       color: #ccc;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    /* Hover only on the linked variant — matches the Reviews score chips. */
+    a.overlay-provider:hover {
+      background: #2c2c2c;
+      border-color: #555;
     }
 
     .overlay-provider img {
@@ -535,6 +547,12 @@
       height: 20px;
       border-radius: 4px;
       object-fit: cover;
+    }
+
+    /* Rent/buy amount, trailing the provider name inside the chip. */
+    .overlay-provider-price {
+      color: #888;
+      font-size: 0.78rem;
     }
 
     .overlay-streaming-loading {
@@ -961,10 +979,10 @@
         genres: ["Action", "Science Fiction", "Adventure"],
         director: "Christopher Nolan",
         cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page", "Tom Hardy", "Ken Watanabe"],
-        // Subscription-streamable — the primary provider-chip render path.
+        // Subscription-streamable — the primary provider-chip render path (linked chips).
         providers: [
-          { type: "sub", name: "Netflix", logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg" },
-          { type: "sub", name: "Max", logo: "https://image.tmdb.org/t/p/original/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg" },
+          { type: "sub", name: "Netflix", logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg", url: "https://www.netflix.com/title/70131314" },
+          { type: "sub", name: "Max", logo: "https://image.tmdb.org/t/p/original/6Q3ZYUNA9Hsgj6iWnVsw2gR5V6z.jpg", url: "https://www.max.com/movies/inception" },
         ],
         scores: [
           { provider: "rt", score: "87%", url: "https://www.rottentomatoes.com/search?search=Inception" },
@@ -985,8 +1003,8 @@
         cast: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong", "Choi Woo-shik", "Park So-dam"],
         // Mixed sub + rent — streamable wins, so the rent entries stay hidden.
         providers: [
-          { type: "sub", name: "Hulu", logo: "https://image.tmdb.org/t/p/original/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg" },
-          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg" },
+          { type: "sub", name: "Hulu", logo: "https://image.tmdb.org/t/p/original/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg", url: "https://www.hulu.com/movie/parasite" },
+          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg", url: "https://tv.apple.com/movie/parasite", price: 3.99 },
         ],
         scores: [
           { provider: "rt", score: "99%", url: "https://www.rottentomatoes.com/search?search=Parasite" },
@@ -1007,7 +1025,7 @@
         cast: ["Michelle Yeoh", "Stephanie Hsu", "Ke Huy Quan", "Jamie Lee Curtis"],
         // Free tier counts as streamable alongside "sub".
         providers: [
-          { type: "free", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg" },
+          { type: "free", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg", url: "https://www.primevideo.com/detail/everything-everywhere-all-at-once" },
         ],
         scores: [
           { provider: "rt", score: "93%", url: "https://www.rottentomatoes.com/search?search=Everything+Everywhere+All+at+Once" },
@@ -1026,10 +1044,13 @@
         genres: ["Drama", "History", "Comedy"],
         director: "Yorgos Lanthimos",
         cast: ["Olivia Colman", "Emma Stone", "Rachel Weisz", "Nicholas Hoult"],
-        // Rent/buy only — exercises the "Available to rent on …" fallback line.
+        // Rent/buy only — exercises the promoted-chip branch and the relabelled heading.
         providers: [
-          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg" },
-          { type: "buy", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg" },
+          // Rent + buy with no subscription option: drives the promoted-chip branch and the
+          // "Available to rent or buy" heading. Prime Video carries no price on purpose —
+          // Watchmode sometimes omits it, and the chip must still render.
+          { type: "rent", name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/peURlLlr8jggOwK53fJ5wdQl05y.jpg", url: "https://tv.apple.com/movie/the-favourite", price: 3.99 },
+          { type: "buy", name: "Prime Video", logo: "https://image.tmdb.org/t/p/original/emthp39XA2YScoYL1p0sdbAH2WA.jpg", url: "https://www.primevideo.com/detail/the-favourite" },
         ],
         scores: [
           { provider: "rt", score: "92%", url: "https://www.rottentomatoes.com/search?search=The+Favourite" },
@@ -1390,7 +1411,10 @@
             </div>
           </div>
           <div class="overlay-section">
-            <div class="overlay-label">Streaming</div>
+            <!-- Label is rewritten by paintProviders() to "Available to rent or buy" when
+                 the film isn't streamable anywhere. The overlay template is re-rendered on
+                 every open, so it resets to "Streaming" with no explicit cleanup. -->
+            <div class="overlay-label" id="streamingLabel">Streaming</div>
             <div class="overlay-streaming" id="streamingProviders">
               <span class="overlay-streaming-loading">Loading…</span>
             </div>
@@ -1467,11 +1491,59 @@
       }
     }
 
-    // Paint a provider list into the Streaming container. Subscription/free providers
-    // render as logo chips; if there are none, a rent/buy list degrades to a text line;
-    // an empty list reports unavailability in the detected region.
+    // Watchmode returns a bare number with no currency code, so we infer one from the
+    // region we asked about. An approximation: we assume the price is quoted in the
+    // requested region's own currency, which is true for the regions Watchmode serves.
+    const CURRENCY_BY_COUNTRY = {
+      US: "USD", GB: "GBP", CA: "CAD", AU: "AUD", NZ: "NZD",
+      DE: "EUR", FR: "EUR", ES: "EUR", IT: "EUR", IE: "EUR", NL: "EUR",
+      IN: "INR", BR: "BRL", MX: "MXN", JP: "JPY",
+    };
+
+    function formatPrice(price) {
+      if (typeof price !== "number" || !isFinite(price)) return "";
+      const currency = CURRENCY_BY_COUNTRY[userCountry] || "USD";
+      try {
+        return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(price);
+      } catch {
+        return `$${price.toFixed(2)}`; // unknown currency code — degrade rather than throw
+      }
+    }
+
+    // One provider chip. Renders as a deep link to the title on that provider when we have
+    // a url, else as a plain div — a chip should never claim to be clickable and then not go
+    // anywhere meaningful. Opens in a new tab so the user keeps their results; on mobile the
+    // major services' URLs are universal links, so this opens their app at the film.
+    function providerChip(p) {
+      const logoHtml = p.logo
+        ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'" />`
+        : "";
+      const priceText = formatPrice(p.price);
+      const priceHtml = priceText
+        ? `<span class="overlay-provider-price">${escapeHtml(priceText)}</span>`
+        : "";
+      const inner = `${logoHtml}${escapeHtml(p.name)}${priceHtml}`;
+      if (!p.url) return `<div class="overlay-provider">${inner}</div>`;
+      // The chips themselves don't spell out rent vs buy — the price implies it and the
+      // heading covers the section — so the hover title carries the distinction.
+      const verb = p.type === "rent" ? "Rent" : p.type === "buy" ? "Buy" : "Watch";
+      return `<a class="overlay-provider" href="${escapeHtml(p.url)}" target="_blank" `
+           + `rel="noopener noreferrer" title="${verb} on ${escapeHtml(p.name)}">${inner}</a>`;
+    }
+
+    // Paint a provider list into the Streaming container. Subscription/free providers render
+    // as chips under the "Streaming" heading; when there are none, the rent/buy options are
+    // promoted to chips (with price) and the section *heading* changes to say so; an empty
+    // list reports unavailability in the detected region.
     function paintProviders(container, providers) {
+      const label = document.getElementById("streamingLabel");
+      // Every branch sets the heading explicitly rather than relying on the overlay
+      // template's default, so a re-render into an already-open overlay can't leave a
+      // previous film's "Available to rent" label stranded above streamable chips.
+      const setLabel = (text) => { if (label) label.textContent = text; };
+
       if (!providers || providers.length === 0) {
+        setLabel("Streaming");
         const regionName = new Intl.DisplayNames(["en"], { type: "region" }).of(userCountry) || userCountry;
         container.innerHTML = `<span class="overlay-streaming-none">Not available for streaming in ${escapeHtml(regionName)}</span>`;
         return;
@@ -1479,15 +1551,18 @@
       const streamable = providers.filter(p => p.type === "sub" || p.type === "free");
       const rentable = providers.filter(p => p.type === "rent" || p.type === "buy");
       if (streamable.length > 0) {
-        container.innerHTML = streamable.map(p => {
-          const logoHtml = p.logo
-            ? `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'" />`
-            : "";
-          return `<div class="overlay-provider">${logoHtml}${escapeHtml(p.name)}</div>`;
-        }).join("");
+        setLabel("Streaming");
+        container.innerHTML = streamable.map(providerChip).join("");
       } else {
-        const names = [...new Set(rentable.map(p => p.name))].join(", ");
-        container.innerHTML = `<span class="overlay-streaming-none">Available to rent on ${escapeHtml(names)}.</span>`;
+        // Nothing streamable — the heading carries the caveat so the chips need no preamble.
+        const hasRent = rentable.some(p => p.type === "rent");
+        const hasBuy = rentable.some(p => p.type === "buy");
+        setLabel(
+          hasRent && hasBuy ? "Available to rent or buy"
+          : hasBuy ? "Available to buy"
+          : "Available to rent"
+        );
+        container.innerHTML = rentable.map(providerChip).join("");
       }
     }
 

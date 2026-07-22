@@ -154,7 +154,9 @@ class TestFetchProviders:
              patch("watchmode._source_logos", {}), \
              patch("watchmode._source_logos_loaded", True):
             result = watchmode.fetch_providers(12345)
-        assert result == [{"name": "Obscure+", "type": "sub", "logo": None}]
+        assert result == [
+            {"name": "Obscure+", "type": "sub", "logo": None, "url": None, "price": None}
+        ]
 
     def test_returns_empty_list_on_request_exception(self):
         with patch("watchmode.WATCHMODE_API_KEY", "key"), \
@@ -353,3 +355,95 @@ class TestApiKeyRedaction:
                 watchmode._load_source_logos()
         assert self.KEY not in caplog.text
         assert "***" in caplog.text
+
+
+class TestProviderDeepLinks:
+    """web_url / price pass-through, and the format-level dedupe that comes with it.
+
+    Watchmode emits one row per format (SD/HD/4K) for the same provider, each with its own
+    price, so these rows are not duplicates to be discarded — they have to be merged.
+    """
+
+    def setup_method(self):
+        watchmode._cache.clear()
+        _reset_counters()
+
+    def _fetch(self, sources, logo_map=None):
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = sources
+        with patch("watchmode.WATCHMODE_API_KEY", "key"), \
+             patch("watchmode._persist_counter"), \
+             patch("requests.get", return_value=mock_resp), \
+             patch("watchmode._source_logos", logo_map or {}), \
+             patch("watchmode._source_logos_loaded", True):
+            return watchmode.fetch_providers(12345)
+
+    def test_surfaces_web_url_and_price(self):
+        result = self._fetch([
+            {"source_id": 203, "name": "Netflix", "type": "sub",
+             "web_url": "https://www.netflix.com/title/70131314", "price": None},
+            {"source_id": 307, "name": "Fandango", "type": "rent",
+             "web_url": "https://athome.fandango.com/x/1", "price": 4.99},
+        ])
+        by_name = {p["name"]: p for p in result}
+        assert by_name["Netflix"]["url"] == "https://www.netflix.com/title/70131314"
+        assert by_name["Netflix"]["price"] is None
+        assert by_name["Fandango"]["url"] == "https://athome.fandango.com/x/1"
+        assert by_name["Fandango"]["price"] == 4.99
+
+    def test_same_type_multiple_formats_keeps_cheapest_price(self):
+        # Real shape: one row per format, same provider, same type, different prices.
+        result = self._fetch([
+            {"source_id": 307, "name": "Fandango", "type": "rent",
+             "web_url": "https://athome.fandango.com/x/1", "price": 5.99, "format": "4K"},
+            {"source_id": 307, "name": "Fandango", "type": "rent",
+             "web_url": "https://athome.fandango.com/x/1", "price": 3.99, "format": "SD"},
+            {"source_id": 307, "name": "Fandango", "type": "rent",
+             "web_url": "https://athome.fandango.com/x/1", "price": 4.99, "format": "HD"},
+        ])
+        assert len(result) == 1
+        assert result[0]["price"] == 3.99
+
+    def test_better_type_wins_over_cheaper_price(self):
+        # A $0 rent row must not displace the subscription entry.
+        result = self._fetch([
+            {"source_id": 203, "name": "Netflix", "type": "rent", "price": 0.99},
+            {"source_id": 203, "name": "Netflix", "type": "sub", "price": None},
+        ])
+        assert len(result) == 1
+        assert result[0]["type"] == "sub"
+        assert result[0]["price"] is None
+
+    def test_missing_url_backfilled_from_sibling_row(self):
+        result = self._fetch([
+            {"source_id": 307, "name": "Fandango", "type": "rent", "price": 5.99},
+            {"source_id": 307, "name": "Fandango", "type": "rent",
+             "web_url": "https://athome.fandango.com/x/1", "price": 6.99},
+        ])
+        assert result[0]["url"] == "https://athome.fandango.com/x/1"
+        assert result[0]["price"] == 5.99  # cheaper row still wins on price
+
+    def test_paid_plan_placeholder_is_not_a_url(self):
+        """Free-tier ios_url/android_url read as prose; the same must never reach an href."""
+        result = self._fetch([
+            {"source_id": 203, "name": "Netflix", "type": "sub",
+             "web_url": "Deeplinks available for paid plans only."},
+        ])
+        assert result[0]["url"] is None
+
+    def test_non_http_scheme_rejected(self):
+        result = self._fetch([
+            {"source_id": 203, "name": "Evil", "type": "sub", "web_url": "javascript:alert(1)"},
+        ])
+        assert result[0]["url"] is None
+
+    def test_absent_fields_default_to_none(self):
+        result = self._fetch([{"source_id": 203, "name": "Netflix", "type": "sub"}])
+        assert result[0]["url"] is None
+        assert result[0]["price"] is None
+
+    def test_non_numeric_price_ignored(self):
+        result = self._fetch([
+            {"source_id": 307, "name": "Fandango", "type": "rent", "price": "N/A"},
+        ])
+        assert result[0]["price"] is None

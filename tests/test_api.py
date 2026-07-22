@@ -176,21 +176,30 @@ class TestStreamingEndpoint:
         with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
              patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
              patch("api.routes.streaming.watchmode.fetch_providers", return_value=[
-                 {"name": "Paramount+", "type": "sub", "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg"}
+                 {"name": "Paramount+", "type": "sub",
+                  "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg",
+                  "url": "https://www.paramountplus.com/movies/million-dollar-baby",
+                  "price": None}
              ]):
             response = client.get("/streaming?title=Million+Dollar+Baby&year=2004")
 
         assert response.status_code == 200
+        # The deep link and price must survive the route untouched — the overlay's
+        # provider chips have no other source for them.
         assert response.json()["providers"] == [
-            {"name": "Paramount+", "type": "sub", "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg"}
+            {"name": "Paramount+", "type": "sub",
+             "logo": "https://cdn.watchmode.com/provider_logos/paramountplus_100px.jpg",
+             "url": "https://www.paramountplus.com/movies/million-dollar-baby",
+             "price": None}
         ]
 
     def test_returns_rent_providers_when_no_subscription(self, client):
         with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
              patch("api.routes.streaming.watchmode.search_title", return_value=12345), \
              patch("api.routes.streaming.watchmode.fetch_providers", return_value=[
-                 {"name": "Amazon", "type": "rent", "logo": None},
-                 {"name": "VUDU", "type": "buy", "logo": None},
+                 {"name": "Amazon", "type": "rent", "logo": None,
+                  "url": "https://www.amazon.com/dp/B001", "price": 3.99},
+                 {"name": "VUDU", "type": "buy", "logo": None, "url": None, "price": 9.99},
              ]):
             response = client.get("/streaming?title=The+Royal+Tenenbaums&year=2001")
 
@@ -198,6 +207,8 @@ class TestStreamingEndpoint:
         providers = response.json()["providers"]
         assert len(providers) == 2
         assert all(p["type"] in ("rent", "buy") for p in providers)
+        assert [p["price"] for p in providers] == [3.99, 9.99]
+        assert providers[0]["url"] == "https://www.amazon.com/dp/B001"
 
     def test_returns_empty_when_watchmode_finds_no_title(self, client):
         with patch("api.routes.streaming.WATCHMODE_API_KEY", "fake-key"), \
