@@ -177,3 +177,19 @@ def test_header_title_link_inherits_heading_style(html):
     body = rule.group(1)
     assert "color: inherit" in body
     assert "text-decoration: none" in body
+
+
+def test_favicon_is_inline_svg_pivot_star(html):
+    """The favicon is an inline SVG data URI (no binary asset, no route), and keeps the
+    dark-disc/light-star palette — not the muted in-app currentColor mark. The %23 colours
+    also guard the '#'→%23 encoding, without which the data URI truncates on the first '#'.
+    """
+    # The href holds an inline SVG whose own '>' chars would truncate a [^>]* match, so
+    # match through to the single-quoted attribute's close ('>).
+    link = re.search(r"<link\s+rel=\"icon\"[\s\S]*?'>", html)
+    assert link, "no <link rel=\"icon\"> favicon in <head>"
+    tag = link.group(0)
+    assert 'type="image/svg+xml"' in tag, "favicon should declare type=image/svg+xml"
+    assert "data:image/svg+xml," in tag, "favicon should be an inline SVG data URI"
+    assert "%230f0f0f" in tag, "dark disc colour (%230f0f0f) missing or mis-encoded"
+    assert "%23e8e8e8" in tag, "light star colour (%23e8e8e8) missing or mis-encoded"
