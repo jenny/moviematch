@@ -16,7 +16,7 @@
     URI fragment and truncate the markup.
   -->
   <link rel="icon" type="image/svg+xml"
-        href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="%230f0f0f"/><g transform="rotate(-10 16 16)" fill="%23e8e8e8"><path d="M16 4 L18.6 13.4 L28 16 L18.6 18.6 L16 28 L13.4 18.6 L4 16 L13.4 13.4 Z"/><path d="M16 16 L16 4 L18.6 13.4 Z" fill="%238a8a8a"/><path d="M16 16 L28 16 L18.6 18.6 Z" fill="%238a8a8a"/><path d="M16 16 L16 28 L13.4 18.6 Z" fill="%238a8a8a"/><path d="M16 16 L4 16 L13.4 13.4 Z" fill="%238a8a8a"/></g></svg>'>
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="%230f0f0f"/><g transform="rotate(-10 16 16)" fill="%23e8e8e8"><path d="M16 4 L18.6 13.4 L28 16 L18.6 18.6 L16 28 L13.4 18.6 L4 16 L13.4 13.4 Z"/><path d="M16 16 L16 4 L18.6 13.4 Z" fill="%238a8a8a"/><path d="M16 16 L28 16 L18.6 18.6 Z" fill="%238a8a8a"/><path d="M16 16 L16 28 L13.4 18.6 Z" fill="%238a8a8a"/><path d="M16 16 L4 16 L13.4 13.4 Z" fill="%238a8a8a"/></g></svg>'>
   <style>
     *,
     *::before,
@@ -462,6 +462,40 @@
       color: #fff;
     }
 
+    /* Share button — sits just right of the pivot star. Same grey-at-rest /
+       white-on-hover treatment, but sized in rem to match the MPAA cert chip's
+       fixed scale, so it reads as a lighter, secondary affordance. position:relative anchors the
+       transient "Copied!" bubble shown on the desktop copy-link fallback. */
+    .overlay-title-share {
+      margin-left: 4px;
+      vertical-align: middle;
+      color: #888;
+      position: relative;
+    }
+
+    .overlay-title-share:hover {
+      color: #fff;
+    }
+
+    /* Desktop "Copied!" confirmation bubble (toggled by the .copied class for ~1.4s
+       after a clipboard write). Mobile uses the native share sheet and never shows this. */
+    .overlay-title-share.copied::after {
+      content: "Copied!";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 6px;
+      background: #333;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
     .overlay-title {
       font-size: 1.4rem;
       font-weight: 700;
@@ -840,12 +874,25 @@
     -->
     <symbol id="icon-pivot" viewBox="0 0 20 20" fill="currentColor">
       <g transform="rotate(-10 10 10)">
-        <path d="M10,2.5 L11.6,8.4 L17.5,10 L11.6,11.6 L10,17.5 L8.4,11.6 L2.5,10 L8.4,8.4 Z"/>
-        <path d="M10,10 L10,2.5 L11.6,8.4 Z" style="color:#666"/>
-        <path d="M10,10 L17.5,10 L11.6,11.6 Z" style="color:#666"/>
-        <path d="M10,10 L10,17.5 L8.4,11.6 Z" style="color:#666"/>
-        <path d="M10,10 L2.5,10 L8.4,8.4 Z" style="color:#666"/>
+        <path d="M10,2.5 L11.6,8.4 L17.5,10 L11.6,11.6 L10,17.5 L8.4,11.6 L2.5,10 L8.4,8.4 Z" />
+        <path d="M10,10 L10,2.5 L11.6,8.4 Z" style="color:#666" />
+        <path d="M10,10 L17.5,10 L11.6,11.6 Z" style="color:#666" />
+        <path d="M10,10 L10,17.5 L8.4,11.6 Z" style="color:#666" />
+        <path d="M10,10 L2.5,10 L8.4,8.4 Z" style="color:#666" />
       </g>
+    </symbol>
+
+    <!--
+      Share icon: a two-link chain — the "copy / share link" metaphor for the overlay
+      share button. Stroke-based (unlike the filled pivot star) so it reads as a lighter,
+      secondary affordance next to it; inherits currentColor for the same #888 -> #fff hover.
+      Authored in a 0 0 24 24 box (viewBox differs per symbol, like the provider glyphs below).
+    -->
+    <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M15 7h2a5 5 0 0 1 0 10h-2" />
+      <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+      <line x1="8" y1="12" x2="16" y2="12" />
     </symbol>
 
     <!--
@@ -859,15 +906,16 @@
     -->
     <symbol id="icon-rt" viewBox="0 0 24 24">
       <!-- tomato body + two leaves + stem -->
-      <circle cx="12" cy="14.5" r="7.5" fill="#FA320A"/>
-      <path d="M12 8 C11 5.5 8.5 4.5 6.5 5 C7.5 7 9.5 8 12 8 Z" fill="#3A9E1E"/>
-      <path d="M12 8 C13 5 15.5 4 17.5 4.7 C16.5 6.8 14.5 8 12 8 Z" fill="#4CAF23"/>
-      <rect x="11.4" y="3.4" width="1.2" height="3.3" rx="0.6" fill="#3A7D1E"/>
+      <circle cx="12" cy="14.5" r="7.5" fill="#FA320A" />
+      <path d="M12 8 C11 5.5 8.5 4.5 6.5 5 C7.5 7 9.5 8 12 8 Z" fill="#3A9E1E" />
+      <path d="M12 8 C13 5 15.5 4 17.5 4.7 C16.5 6.8 14.5 8 12 8 Z" fill="#4CAF23" />
+      <rect x="11.4" y="3.4" width="1.2" height="3.3" rx="0.6" fill="#3A7D1E" />
     </symbol>
 
     <symbol id="icon-imdb" viewBox="0 0 64 32">
-      <rect width="64" height="32" rx="5" fill="#F5C518"/>
-      <text x="32" y="22" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800" text-anchor="middle" fill="#000">IMDb</text>
+      <rect width="64" height="32" rx="5" fill="#F5C518" />
+      <text x="32" y="22" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800"
+        text-anchor="middle" fill="#000">IMDb</text>
     </symbol>
 
     <symbol id="icon-mc" viewBox="0 0 40 40">
@@ -877,20 +925,25 @@
         angular white "m". Paths lifted from the official mark so the stepped
         letterform is exact; a text glyph can't reproduce it.
       -->
-      <path d="M36.978 19.49a17.49 17.49 0 1 1 0-.021" fill="#000"/>
-      <path d="m17.209 32.937 3.41-3.41-6.567-6.567c-.276-.276-.576-.622-.737-1.014-.369-.783-.53-2.004.369-2.903 1.106-1.106 2.58-.645 4.009.784l6.313 6.313 3.41-3.41-6.59-6.59c-.276-.276-.599-.691-.76-1.037-.438-.898-.415-2.027.392-2.834 1.129-1.129 2.603-.714 4.24.922l6.128 6.129 3.41-3.41L27.6 9.274c-3.364-3.364-6.52-3.249-8.686-1.083-.83.83-1.337 1.705-1.59 2.696a6.71 6.71 0 0 0-.092 2.81l-.046.047c-1.66-.691-3.549-.277-5 1.175-1.936 1.935-1.866 3.986-1.636 5.184l-.07.07-1.681-1.36-2.95 2.949c1.037.945 2.282 2.097 3.687 3.502l7.673 7.673Z" fill="#F2F2F2"/>
-      <path d="M19.982 0A20 20 0 1 0 40 20v-.024A20 20 0 0 0 19.982 0Zm-.091 4.274A15.665 15.665 0 0 1 35.57 19.921v.018A15.665 15.665 0 1 1 19.89 4.274Z" fill="#FFBD3F"/>
+      <path d="M36.978 19.49a17.49 17.49 0 1 1 0-.021" fill="#000" />
+      <path
+        d="m17.209 32.937 3.41-3.41-6.567-6.567c-.276-.276-.576-.622-.737-1.014-.369-.783-.53-2.004.369-2.903 1.106-1.106 2.58-.645 4.009.784l6.313 6.313 3.41-3.41-6.59-6.59c-.276-.276-.599-.691-.76-1.037-.438-.898-.415-2.027.392-2.834 1.129-1.129 2.603-.714 4.24.922l6.128 6.129 3.41-3.41L27.6 9.274c-3.364-3.364-6.52-3.249-8.686-1.083-.83.83-1.337 1.705-1.59 2.696a6.71 6.71 0 0 0-.092 2.81l-.046.047c-1.66-.691-3.549-.277-5 1.175-1.936 1.935-1.866 3.986-1.636 5.184l-.07.07-1.681-1.36-2.95 2.949c1.037.945 2.282 2.097 3.687 3.502l7.673 7.673Z"
+        fill="#F2F2F2" />
+      <path
+        d="M19.982 0A20 20 0 1 0 40 20v-.024A20 20 0 0 0 19.982 0Zm-.091 4.274A15.665 15.665 0 0 1 35.57 19.921v.018A15.665 15.665 0 1 1 19.89 4.274Z"
+        fill="#FFBD3F" />
     </symbol>
 
     <symbol id="icon-tmdb" viewBox="0 0 64 32">
       <defs>
         <linearGradient id="tmdbGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="#90CEA1"/>
-          <stop offset="1" stop-color="#01B4E4"/>
+          <stop offset="0" stop-color="#90CEA1" />
+          <stop offset="1" stop-color="#01B4E4" />
         </linearGradient>
       </defs>
-      <rect width="64" height="32" rx="6" fill="url(#tmdbGrad)"/>
-      <text x="32" y="21" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800" text-anchor="middle" fill="#0D253F">TMDB</text>
+      <rect width="64" height="32" rx="6" fill="url(#tmdbGrad)" />
+      <text x="32" y="21" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="800"
+        text-anchor="middle" fill="#0D253F">TMDB</text>
     </symbol>
   </svg>
 
@@ -968,6 +1021,9 @@
 
     let allResults = [];
     let overlayIndex = 0;
+    // Set by the ?detail= deep-link runner (bottom of file), consumed once after the
+    // deep-linked search's results render so we can auto-open that movie's overlay.
+    let pendingDetailOpen = null;
 
     // ── Mock search (dev only) ───────────────────────────────────────
     // Type "__mock__" as the query to bypass the backend entirely and
@@ -1179,6 +1235,11 @@
       const query = input.value.trim();
       if (!query) return;
 
+      // Capture-and-clear the deep-link auto-open request (set by the ?detail= runner) up
+      // front, so it fires only for this one search and can't leak into a later manual one.
+      const detailToOpen = pendingDetailOpen;
+      pendingDetailOpen = null;
+
       // Close overlay DOM without touching history — handles pivot-from-overlay.
       closeOverlayUI();
 
@@ -1197,6 +1258,7 @@
       try {
         if (query === MOCK_QUERY) {
           await runMockSearch();
+          maybeAutoOpenDetail(detailToOpen);  // support shared ?detail= links in mock mode too
           return;
         }
 
@@ -1246,6 +1308,9 @@
                 batchPrefetchStreamingProviders(allResults);
                 // Same for review scores — warms scoresCache for instant overlay opens.
                 batchPrefetchScores(allResults);
+                // Deep-link auto-open: arrived via a shared ?detail= link — now that the
+                // results exist, open the matching card.
+                maybeAutoOpenDetail(detailToOpen);
               }
             } else if (event.type === "error") {
               throw new Error(event.message);
@@ -1315,6 +1380,102 @@
 
     // ── Overlay ─────────────────────────────────────────────────────
 
+    // Canonical "Title (Year)" key for a result. Single source of truth for the
+    // ?detail= URL param, the share link, and deep-link matching, so the value the
+    // share button emits and the value the load runner matches on always agree.
+    function movieDetailKey(result) {
+      const yearPart = result.year ? ` (${result.year})` : "";
+      return `${result.title}${yearPart}`;
+    }
+
+    // Deep-link auto-open: open the result matching a "Title (Year)" key (from a shared
+    // ?detail= link). Matched by key, not index, so non-deterministic result ordering can't
+    // open the wrong film. No-op if key is empty or no result matches (e.g. cold reference).
+    function maybeAutoOpenDetail(key) {
+      if (!key) return;
+      const idx = allResults.findIndex(
+        r => movieDetailKey(r).toLowerCase() === key.toLowerCase()
+      );
+      if (idx !== -1) openOverlay(idx);
+    }
+
+    // Shareable URL for a movie: a search for "More movies like X" (hits the reference
+    // guarantee so X is always in the results) plus ?detail= so the recipient lands with
+    // X's card auto-opened. encodeURIComponent — not escapeHtml, which is for HTML attrs.
+    function shareUrlFor(result) {
+      const key = movieDetailKey(result);
+      return location.origin + "/?q=" + encodeURIComponent("More movies like " + key) +
+        "&detail=" + encodeURIComponent(key);
+    }
+
+    // Copy to clipboard with a legacy fallback for non-secure contexts (navigator.clipboard
+    // is undefined off https/localhost). Returns whether the copy succeeded.
+    async function copyLink(url) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+        return true;
+      }
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch { /* copy unsupported */ }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    // Share this movie. Mobile: the native share sheet (navigator.share — a user-gesture,
+    // secure-context API). Desktop (no share sheet): copy the link + a transient "Copied!"
+    // confirmation on the button.
+    async function shareMovie(result, btn) {
+      const url = shareUrlFor(result);
+      if (navigator.share) {
+        // navigator.share rejects if the user dismisses the sheet — that's not an error.
+        try {
+          await navigator.share({
+            title: movieDetailKey(result),
+            text: `Check out ${result.title} on MovieMatch`,
+            url,
+          });
+        } catch { /* dismissed */ }
+        return;
+      }
+      const ok = await copyLink(url);
+      if (ok && btn) {
+        btn.classList.add("copied");
+        setTimeout(() => btn.classList.remove("copied"), 1400);
+      }
+    }
+
+    // Update the address bar to name the currently-open card as the user pages through the
+    // carousel. Uses replaceState (NOT pushState) so no history entry is added — the "carousel
+    // does not modify history / back closes the overlay in one step" invariant holds — while
+    // the URL stays copy-shareable at any card. Also refreshes the stored overlayIndex so a
+    // later back→forward restores the card the user actually stopped on.
+    function syncOverlayUrl() {
+      const cur = history.state;
+      if (!cur || cur.type !== "overlay") return;
+      const result = allResults[overlayIndex];
+      if (!result) return;
+      history.replaceState(
+        { ...cur, overlayIndex },
+        "",
+        "?q=" + encodeURIComponent(cur.query || "") + "&detail=" + encodeURIComponent(movieDetailKey(result))
+      );
+    }
+
+    // Carousel navigation (arrows, swipe, dots) funnels through here so the URL sync can't be
+    // forgotten on one path. openOverlay() and popstate restore deliberately do NOT use this —
+    // they manage history themselves (pushState / browser-driven), so they set overlayIndex directly.
+    function navigateOverlay(index) {
+      overlayIndex = index;
+      renderOverlay();
+      syncOverlayUrl();
+    }
+
     function openOverlay(index) {
       overlayIndex = index;
       renderOverlay();
@@ -1333,9 +1494,12 @@
       if (cur.type === "search") {
         history.replaceState({ ...cur, scrollY: window.scrollY }, "", location.href);
       }
+      // ?detail= carries the "Title (Year)" key (not the numeric index) so the URL is a
+      // stable, shareable pointer to the film — robust to non-deterministic result ordering.
+      // The numeric index still lives in the history state object for internal restore.
       history.pushState(
         { type: "overlay", query: cur.query || "", results: allResults.slice(), overlayIndex: index, scrollY: window.scrollY },
-        "", "?q=" + encodeURIComponent(cur.query || "") + "&detail=" + index
+        "", "?q=" + encodeURIComponent(cur.query || "") + "&detail=" + encodeURIComponent(movieDetailKey(allResults[index]))
       );
     }
 
@@ -1366,7 +1530,17 @@
 
       const yearDisplay = result.year ? `<span class="overlay-title-year">(${escapeHtml(result.year)})</span>` : "";
 
+      // Director/cast pivots: em-sized so they scale down to sit inline with the smaller
+      // .overlay-text (0.9rem) name text. Do NOT convert these to rem — the context-scaling
+      // is intentional.
       const pivotIcon = `<svg class="pivot-icon" width="1.6em" height="1.6em" style="position:relative;top:-0.15em" aria-hidden="true"><use href="#icon-pivot"/></svg>`;
+      // Title pivot + share glyph: rem-sized (fixed scale) so the title-row icons track the
+      // MPAA cert chip rather than the title, staying matched across the mobile breakpoint.
+      // Fixed 1.6rem (tuned by eye) — was 1.6em, i.e. it scaled with the 1.4rem title before.
+      const titlePivotIcon = `<svg class="pivot-icon" width="1.6rem" height="1.6rem" aria-hidden="true"><use href="#icon-pivot"/></svg>`;
+      // No vertical nudge — the button's vertical-align:middle sits the link level with the
+      // MPAA cert chip on its own, which reads best.
+      const shareIcon = `<svg class="pivot-icon" width="1.1rem" height="1.1rem" aria-hidden="true"><use href="#icon-link"/></svg>`;
 
       const yearPart = result.year ? ` (${result.year})` : "";
       const titlePivotQuery = `More movies like ${escapeHtml(result.title)}${escapeHtml(yearPart)}`;
@@ -1411,7 +1585,7 @@
       overlayContent.innerHTML = `
         <div class="overlay-poster">${posterHtml}</div>
         <div class="overlay-info">
-          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}${overlayCertificationHtml}<button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${pivotIcon}</button></div>
+          <div class="overlay-title">${escapeHtml(result.title)}${yearDisplay}${overlayCertificationHtml}<button class="more-link overlay-title-pivot" title="More like this" data-query="${titlePivotQuery}">${titlePivotIcon}</button><button class="more-link overlay-title-share" title="Share" aria-label="Share">${shareIcon}</button></div>
           ${overviewHtml}
           ${genresHtml}
           ${directorHtml}
@@ -1441,17 +1615,23 @@
       // another long-metadata movie stays pinned to the previous scroll position.
       overlayContent.parentElement.scrollTop = 0;
 
-      // Wire title, director, and cast pivot links
-      overlayContent.querySelectorAll(".more-link").forEach(btn => {
+      // Wire title, director, and cast pivot links. Scoped to [data-query] so the
+      // share button (a .more-link with no data-query) isn't caught here.
+      overlayContent.querySelectorAll(".more-link[data-query]").forEach(btn => {
         btn.addEventListener("click", () => triggerSearch(btn.dataset.query));
       });
+
+      // Wire the share button separately — it opens the native share sheet (mobile) or
+      // copies the link (desktop) rather than triggering a search.
+      const shareBtn = overlayContent.querySelector(".overlay-title-share");
+      if (shareBtn) shareBtn.addEventListener("click", () => shareMovie(result, shareBtn));
 
       // Update dots
       overlayDots.innerHTML = allResults.map((_, i) =>
         `<button class="overlay-dot${i === overlayIndex ? " active" : ""}" data-i="${i}" aria-label="Result ${i + 1}"></button>`
       ).join("");
       overlayDots.querySelectorAll(".overlay-dot").forEach(dot => {
-        dot.addEventListener("click", () => { overlayIndex = +dot.dataset.i; renderOverlay(); });
+        dot.addEventListener("click", () => navigateOverlay(+dot.dataset.i));
       });
 
       // Update arrows (desktop)
@@ -1540,7 +1720,7 @@
       // heading covers the section — so the hover title carries the distinction.
       const verb = p.type === "rent" ? "Rent" : p.type === "buy" ? "Buy" : "Watch";
       return `<a class="overlay-provider" href="${escapeHtml(p.url)}" target="_blank" `
-           + `rel="noopener noreferrer" title="${verb} on ${escapeHtml(p.name)}">${inner}</a>`;
+        + `rel="noopener noreferrer" title="${verb} on ${escapeHtml(p.name)}">${inner}</a>`;
     }
 
     // Paint a provider list into the Streaming container. Subscription/free providers render
@@ -1571,8 +1751,8 @@
         const hasBuy = rentable.some(p => p.type === "buy");
         setLabel(
           hasRent && hasBuy ? "Available to rent or buy"
-          : hasBuy ? "Available to buy"
-          : "Available to rent"
+            : hasBuy ? "Available to buy"
+              : "Available to rent"
         );
         container.innerHTML = rentable.map(providerChip).join("");
       }
@@ -1615,10 +1795,10 @@
     // Height is a uniform 20px (CSS); wordmarks (IMDb/TMDB) are wider than the
     // square icons (RT/Metacritic), so each sets its own width to keep aspect ratio.
     const SCORE_PROVIDERS = {
-      rt:         { label: "Rotten Tomatoes", symbol: "icon-rt",   width: 20 },
-      imdb:       { label: "IMDb",            symbol: "icon-imdb", width: 40 },
-      metacritic: { label: "Metacritic",      symbol: "icon-mc",   width: 20 },
-      tmdb:       { label: "TMDB",            symbol: "icon-tmdb", width: 40 },
+      rt: { label: "Rotten Tomatoes", symbol: "icon-rt", width: 20 },
+      imdb: { label: "IMDb", symbol: "icon-imdb", width: 40 },
+      metacritic: { label: "Metacritic", symbol: "icon-mc", width: 20 },
+      tmdb: { label: "TMDB", symbol: "icon-tmdb", width: 40 },
     };
 
     // Paint an ordered [{provider, score, url}] list into the Reviews container as
@@ -1707,14 +1887,14 @@
       if (e.target === backdrop) closeOverlay();
     });
 
-    overlayPrev.addEventListener("click", () => { overlayIndex--; renderOverlay(); });
-    overlayNext.addEventListener("click", () => { overlayIndex++; renderOverlay(); });
+    overlayPrev.addEventListener("click", () => navigateOverlay(overlayIndex - 1));
+    overlayNext.addEventListener("click", () => navigateOverlay(overlayIndex + 1));
 
     document.addEventListener("keydown", (e) => {
       if (!backdrop.classList.contains("open")) return;
       if (e.key === "Escape") closeOverlay();
-      if (e.key === "ArrowLeft" && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
-      if (e.key === "ArrowRight" && overlayIndex < allResults.length - 1) { overlayIndex++; renderOverlay(); }
+      if (e.key === "ArrowLeft" && overlayIndex > 0) navigateOverlay(overlayIndex - 1);
+      if (e.key === "ArrowRight" && overlayIndex < allResults.length - 1) navigateOverlay(overlayIndex + 1);
     });
 
     // Touch swipe for carousel
@@ -1728,8 +1908,8 @@
     overlayPanel.addEventListener("touchend", (e) => {
       const dx = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(dx) < 50) return;
-      if (dx < 0 && overlayIndex < allResults.length - 1) { overlayIndex++; renderOverlay(); }
-      if (dx > 0 && overlayIndex > 0) { overlayIndex--; renderOverlay(); }
+      if (dx < 0 && overlayIndex < allResults.length - 1) navigateOverlay(overlayIndex + 1);
+      if (dx > 0 && overlayIndex > 0) navigateOverlay(overlayIndex - 1);
     }, { passive: true });
 
     // ── Back/forward navigation (History API) ────────────────────────
@@ -1798,12 +1978,12 @@
     }
 
     const CERTIFICATION_LABELS = {
-      "G":     "Rated G: General Audiences",
-      "PG":    "Rated PG: Parental Guidance Suggested",
+      "G": "Rated G: General Audiences",
+      "PG": "Rated PG: Parental Guidance Suggested",
       "PG-13": "Rated PG-13: Parents Strongly Cautioned",
-      "R":     "Rated R: Restricted",
+      "R": "Rated R: Restricted",
       "NC-17": "Rated NC-17: Adults Only",
-      "NR":    "Not Rated",
+      "NR": "Not Rated",
     };
 
     function certificationTitle(certification) {
@@ -1844,12 +2024,15 @@
     history.scrollRestoration = "manual";
     // Stamp the initial entry so back from the first search lands on a clean blank page.
     history.replaceState({ type: "empty" }, "", location.href);
-    // Auto-run a search for ?q= deep links and page refreshes.
+    // Auto-run a search for ?q= deep links and page refreshes. A ?detail= (Title (Year))
+    // marks a shared link: stash it so the search's "done" handler auto-opens that card.
     (function () {
-      const q = new URLSearchParams(location.search).get("q");
+      const params = new URLSearchParams(location.search);
+      const q = params.get("q");
       if (q) {
         input.value = q;
         toggleClearBtn();
+        pendingDetailOpen = params.get("detail");
         form.requestSubmit();
       }
     })();
