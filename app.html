@@ -257,9 +257,11 @@
 
     /* Title and year live in one wrapper with a real space between them (not a
        margin gap), so a single hover underline runs continuously across both —
-       no un-underlined gap in the middle. The whole card is clickable, so
-       hovering anywhere in the title row triggers it. */
-    .card-title:hover .card-title-name {
+       no un-underlined gap in the middle. Scoped to the name wrapper's own hover
+       (not the whole .card-title row) so hovering the sibling cert chip doesn't
+       underline the title — the chip stays clickable via the card, but reads as a
+       passive label rather than part of the title link. */
+    .card-title-name:hover {
       text-decoration: underline;
       text-underline-offset: 3px;
     }
