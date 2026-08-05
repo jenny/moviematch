@@ -106,11 +106,15 @@ def test_back_between_searches_restores_results(page: Page, base_url: str):
 
 
 def test_overlay_opens_with_detail_url(page: Page, base_url: str):
-    """Opening the first result card appends &detail=0 to the URL."""
+    """Opening the first result card appends &detail=<Title (Year)> to the URL.
+
+    The param is the "Title (Year)" key (encodeURIComponent leaves parens literal, space→%20),
+    not the numeric index — so the URL is a stable, shareable pointer to the film.
+    """
     _run_mock(page, base_url)
     page.locator(".card").first.click()
     page.wait_for_selector("#overlayBackdrop.open")
-    expect(page).to_have_url(re.compile(r"\?q=__mock__&detail=0"))
+    expect(page).to_have_url(re.compile(r"\?q=__mock__&detail=Inception%20\(2010\)"))
 
 
 def test_esc_closes_overlay(page: Page, base_url: str):
@@ -155,17 +159,25 @@ def test_pivot_from_overlay_back_reopens_overlay(page: Page, base_url: str):
 # ── Carousel navigation ───────────────────────────────────────────────────────
 
 
-def test_carousel_does_not_add_history_entries(page: Page, base_url: str):
-    """Carousel navigation inside the overlay does not change the URL or add history entries."""
+def test_carousel_updates_url_without_adding_history(page: Page, base_url: str):
+    """Carousel navigation updates the URL to name the open card, but adds NO history entry.
+
+    The URL sync uses replaceState, so the address bar stays copy-shareable at every card
+    while back still closes the overlay in a single step (not stepping back through cards).
+    """
     _run_mock(page, base_url)
     page.locator(".card").first.click()
     page.wait_for_selector("#overlayBackdrop.open")
-    initial_url = page.url
+    expect(page).to_have_url(re.compile(r"detail=Inception%20\(2010\)"))
+    # Carousel forward: URL now names card 1 (Parasite) — the replaceState sync.
     page.keyboard.press("ArrowRight")
-    assert page.url == initial_url  # URL must not change
-    # Back should go directly to the search state, not a second overlay entry
+    expect(page).to_have_url(re.compile(r"detail=Parasite%20\(2019\)"))
+    # But no new history entry was pushed: one back closes the overlay to the search state,
+    # rather than stepping back to the previous card.
     page.go_back()
     expect(page.locator("#overlayBackdrop")).not_to_have_class(re.compile(r"open"))
+    expect(page).to_have_url(re.compile(r"\?q=__mock__$"))
+    expect(page.locator(".card")).to_have_count(5)
 
 
 # ── Overlay scroll reset ──────────────────────────────────────────────────────
@@ -221,6 +233,45 @@ def test_deep_link_auto_runs_search(page: Page, base_url: str):
     """Loading the app with ?q=__mock__ auto-runs the mock search."""
     page.goto(f"{base_url}/?q=__mock__")
     page.locator(".card").nth(4).wait_for()
+    assert page.locator(".card").count() == 5
+
+
+def test_shared_detail_link_auto_opens_card(page: Page, base_url: str):
+    """A shared ?q=…&detail=<Title (Year)> link auto-opens that movie's overlay.
+
+    This is the payoff of the share button: the recipient lands with the film's card open.
+    Matched by "Title (Year)" key, so it opens the right film regardless of result order.
+    """
+    page.goto(f"{base_url}/?q=__mock__&detail=Parasite%20(2019)")
+    page.wait_for_selector("#overlayBackdrop.open")
+    expect(page.locator(".overlay-title")).to_contain_text("Parasite")
+    # Back closes the overlay and leaves the full result feed behind it.
+    page.go_back()
+    expect(page.locator("#overlayBackdrop")).not_to_have_class(re.compile(r"open"))
+    expect(page.locator(".card")).to_have_count(5)
+
+
+def test_carousel_works_from_deep_linked_card(page: Page, base_url: str):
+    """Opening via a shared link is indistinguishable from a click — the carousel still steps.
+
+    Guards the design: the deep link only computes the *starting* index; overlayIndex stays
+    the source of truth, so arrow navigation moves to the neighbouring films as normal.
+    """
+    page.goto(f"{base_url}/?q=__mock__&detail=Parasite%20(2019)")  # card index 1
+    page.wait_for_selector("#overlayBackdrop.open")
+    expect(page.locator(".overlay-title")).to_contain_text("Parasite")
+    page.keyboard.press("ArrowRight")  # → index 2
+    expect(page.locator(".overlay-title")).to_contain_text("Everything Everywhere All at Once")
+    expect(page).to_have_url(re.compile(r"detail=Everything"))
+    page.keyboard.press("ArrowLeft")  # ← back to index 1
+    expect(page.locator(".overlay-title")).to_contain_text("Parasite")
+
+
+def test_unknown_detail_link_lands_on_results(page: Page, base_url: str):
+    """A ?detail= that matches no result degrades gracefully: results show, no overlay opens."""
+    page.goto(f"{base_url}/?q=__mock__&detail=Nonexistent%20(1999)")
+    page.locator(".card").nth(4).wait_for()
+    expect(page.locator("#overlayBackdrop")).not_to_have_class(re.compile(r"open"))
     assert page.locator(".card").count() == 5
 
 

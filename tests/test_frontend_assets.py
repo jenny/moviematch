@@ -179,6 +179,32 @@ def test_header_title_link_inherits_heading_style(html):
     assert "text-decoration: none" in body
 
 
+def test_share_icon_link_symbol_exists(html):
+    """The overlay share button renders `<use href="#icon-link"/>`; the symbol must exist.
+
+    Same failure mode as the score glyphs — a missing/renamed symbol renders an *invisible*
+    button with no console error. Pin the chain-link symbol so a rename can't silently blank it.
+    """
+    symbols = _symbol_viewboxes(html)
+    assert "icon-link" in symbols, "share button references #icon-link but no <symbol> exists"
+    assert re.search(r'<use href="#icon-link"', html), (
+        "no `<use href=\"#icon-link\">` — the share button glyph is not wired to the symbol"
+    )
+
+
+def test_share_button_in_overlay_title(html):
+    """The share button sits in the overlay title row and is not caught by the pivot wiring.
+
+    It is a `.more-link` (for the button reset) with class `overlay-title-share` and no
+    `data-query` — the pivot-link click handler is scoped to `.more-link[data-query]`, so a
+    regression that drops that scope would turn the share button into a broken search trigger.
+    """
+    assert 'class="more-link overlay-title-share"' in html, "share button markup missing"
+    assert re.search(r'querySelectorAll\("\.more-link\[data-query\]"\)', html), (
+        "pivot wiring is not scoped to [data-query] — the share button would trigger a search"
+    )
+
+
 def test_favicon_is_inline_svg_pivot_star(html):
     """The favicon is an inline SVG data URI (no binary asset, no route), and keeps the
     dark-disc/light-star palette — not the muted in-app currentColor mark. The %23 colours
