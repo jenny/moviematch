@@ -3,15 +3,28 @@ import logging
 import time
 from unittest.mock import patch, MagicMock
 
+import pytest
 import requests
 
 import watchmode
 
 
+@pytest.fixture(autouse=True)
+def _isolate_counter_file(tmp_path, monkeypatch):
+    """Point the persistent counter at a tmp file for every test in this module.
+
+    _increment_api_calls() writes to disk on each simulated API call, and not every
+    test stubs _persist_counter (the redaction tests deliberately let the call path
+    run until requests raises). Without this, a plain `pytest` run rewrote the
+    developer's real logs/watchmode_calls.json and inflated the live counter.
+    """
+    monkeypatch.setattr(watchmode, "_COUNTER_FILE", str(tmp_path / "watchmode_calls.json"))
+
+
 def _reset_counters():
     """Reset in-memory counters between tests so they don't accumulate across the suite."""
     watchmode._api_calls = 0
-    watchmode._api_calls_month = 0
+    watchmode._counts.clear()
     watchmode._cache_hits = 0
 
 
@@ -264,49 +277,108 @@ class TestMonthlyCounter:
         watchmode._cache.clear()
         _reset_counters()
 
-    def test_load_reads_count_when_month_matches(self, tmp_path):
+    def test_load_reads_keyed_counts(self, tmp_path):
         counter_file = tmp_path / "watchmode_calls.json"
-        counter_file.write_text(json.dumps({"month": "2099-01", "count": 42}))
-        with patch("watchmode._COUNTER_FILE", str(counter_file)), \
-             patch("watchmode._get_current_month", return_value="2099-01"):
+        counter_file.write_text(json.dumps({"2099-01": 42, "2099-02": 7}))
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
             watchmode._load_persistent_counter()
-        assert watchmode._api_calls_month == 42
+        assert watchmode._counts == {"2099-01": 42, "2099-02": 7}
 
-    def test_load_resets_count_when_month_changed(self, tmp_path):
-        counter_file = tmp_path / "watchmode_calls.json"
-        counter_file.write_text(json.dumps({"month": "2020-01", "count": 99}))
-        with patch("watchmode._COUNTER_FILE", str(counter_file)), \
-             patch("watchmode._get_current_month", return_value="2020-02"):
-            watchmode._load_persistent_counter()
-        assert watchmode._api_calls_month == 0
-
-    def test_load_starts_at_zero_when_no_file(self, tmp_path):
+    def test_load_starts_empty_when_no_file(self, tmp_path):
         with patch("watchmode._COUNTER_FILE", str(tmp_path / "missing.json")):
             watchmode._load_persistent_counter()
-        assert watchmode._api_calls_month == 0
+        assert watchmode._counts == {}
 
-    def test_increment_updates_both_counters(self):
-        with patch("watchmode._persist_counter"):
+    def test_load_migrates_legacy_single_count_format(self, tmp_path):
+        """The old {"month", "count"} file must not be silently discarded on deploy."""
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps({"month": "2099-01", "count": 42}))
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {"2099-01": 42}
+
+    def test_load_survives_corrupt_file(self, tmp_path):
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text("{not json")
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {}
+
+    def test_load_skips_malformed_entries(self, tmp_path):
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps({"2099-01": 42, "2099-02": "bogus"}))
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {"2099-01": 42}
+
+    def test_increment_updates_session_and_current_month(self):
+        with patch("watchmode._persist_counter"), \
+             patch("watchmode._get_current_month", return_value="2099-05"):
             watchmode._increment_api_calls()
             watchmode._increment_api_calls()
         assert watchmode._api_calls == 2
-        assert watchmode._api_calls_month == 2
+        assert watchmode._counts == {"2099-05": 2}
+
+    def test_rollover_while_process_stays_alive(self):
+        """The regression this whole change exists for.
+
+        A long-lived container (Railway runs for weeks) is never re-imported, so the
+        old design carried the previous month's total forward and then re-stamped it
+        with the new month. Here the process stays up across the boundary: the new
+        month must start at 1, and the old month's total must survive intact.
+        """
+        with patch("watchmode._persist_counter"):
+            with patch("watchmode._get_current_month", return_value="2099-07"):
+                for _ in range(847):
+                    watchmode._increment_api_calls()
+            # ---- calendar month changes; same process, no restart ----
+            with patch("watchmode._get_current_month", return_value="2099-08"):
+                watchmode._increment_api_calls()
+                stats = watchmode.get_stats()
+
+        assert watchmode._counts["2099-08"] == 1, "new month must not inherit the old total"
+        assert watchmode._counts["2099-07"] == 847, "previous month must be preserved"
+        assert stats["api_calls_month"] == 1
+
+    def test_get_stats_reports_zero_for_new_month_before_any_call(self):
+        """After a rollover the panel should read 0 immediately, not the old month's total."""
+        watchmode._counts.update({"2099-07": 847})
+        with patch("watchmode._get_current_month", return_value="2099-08"):
+            stats = watchmode.get_stats()
+        assert stats["api_calls_month"] == 0
 
     def test_get_stats_returns_monthly_count(self):
-        watchmode._api_calls_month = 7
-        stats = watchmode.get_stats()
+        watchmode._counts.update({"2099-09": 7})
+        with patch("watchmode._get_current_month", return_value="2099-09"):
+            stats = watchmode.get_stats()
         assert stats["api_calls_month"] == 7
         assert "api_calls_session" in stats
         assert stats["monthly_limit"] == 1000
 
-    def test_persist_writes_month_and_count(self, tmp_path):
+    def test_persist_writes_keyed_counts(self, tmp_path):
         counter_file = tmp_path / "watchmode_calls.json"
-        watchmode._api_calls_month = 5
-        with patch("watchmode._COUNTER_FILE", str(counter_file)), \
-             patch("watchmode._get_current_month", return_value="2099-03"):
+        watchmode._counts.update({"2099-03": 5, "2099-04": 2})
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
             watchmode._persist_counter()
         data = json.loads(counter_file.read_text())
-        assert data == {"month": "2099-03", "count": 5}
+        assert data == {"2099-03": 5, "2099-04": 2}
+
+    def test_persist_failure_does_not_raise(self, tmp_path):
+        """A read-only filesystem (no volume mounted) must not break user requests."""
+        watchmode._counts.update({"2099-03": 5})
+        with patch("watchmode._COUNTER_FILE", str(tmp_path / "sub" / "counts.json")), \
+             patch("watchmode.open", side_effect=OSError("read-only filesystem")):
+            watchmode._persist_counter()  # must not raise
+
+    def test_history_is_pruned_to_retention_limit(self):
+        """The file is unbounded otherwise — one key per month, forever."""
+        with patch("watchmode._persist_counter"):
+            for month in range(1, 15):  # 14 distinct months
+                with patch("watchmode._get_current_month", return_value=f"2099-{month:02d}"):
+                    watchmode._increment_api_calls()
+        assert len(watchmode._counts) == watchmode._COUNTER_HISTORY_MONTHS
+        assert "2099-01" not in watchmode._counts, "oldest months should be dropped"
+        assert "2099-14" in watchmode._counts, "newest month must be kept"
 
 
 class TestApiKeyRedaction:

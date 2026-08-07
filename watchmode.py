@@ -14,8 +14,13 @@ Watchmode authenticates by query parameter (apiKey=...), so a raw requests excep
 print the key — requests embeds the full request URL in HTTPError messages. Every failure
 log therefore passes the exception through logger.redact().
 
-The monthly API call count is persisted to LOG_DIR/watchmode_calls.json so it survives
-process restarts and Railway deploys. It resets automatically when the calendar month changes.
+API call counts are persisted to LOG_DIR/watchmode_calls.json so they survive process
+restarts and Railway deploys. Counts are stored keyed by calendar month ("YYYY-MM"), so a
+month rollover requires no detection and no reset — the new month is simply a new key.
+This is deliberate: an earlier design kept a single count plus a "which month is this?"
+label and only re-checked that label at process start, so a long-lived container (Railway
+runs for weeks) carried the previous month's total forward and then re-stamped it with the
+new month on the next write, corrupting the file permanently.
 """
 
 import datetime
@@ -52,50 +57,114 @@ _CACHE_TTL = 86400  # seconds
 _api_calls = 0    # real Watchmode HTTP requests made this session
 _cache_hits = 0   # lookups served from cache (API calls saved)
 
-# Persistent monthly counter — survives process restarts and Railway deploys.
+# Persistent per-month counters — survive process restarts and Railway deploys.
 # Backed by LOG_DIR/watchmode_calls.json (same volume as search.log in production).
 _COUNTER_FILE = os.path.join(LOG_DIR, "watchmode_calls.json")
 _counter_lock = threading.Lock()
-_api_calls_month = 0  # loaded from file on startup; resets when calendar month changes
+
+# {"YYYY-MM": count} — the month is the key, never a mutable label on a shared count.
+# A rollover is a non-event: the first call in a new month creates a new key and the
+# previous month's total is left untouched (and kept, for month-over-month history).
+_counts: dict[str, int] = {}
+
+# How many months of history to retain on disk. Bounds the file at a trivial size while
+# leaving enough for a year-over-year glance in the admin panel.
+_COUNTER_HISTORY_MONTHS = 12
 
 
 def _get_current_month() -> str:
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m")
 
 
+def _prune_history() -> None:
+    """Drop all but the most recent _COUNTER_HISTORY_MONTHS entries.
+
+    Month keys are "YYYY-MM", so lexicographic sort is chronological. Caller must
+    hold _counter_lock (or be running single-threaded at import).
+    """
+    if len(_counts) <= _COUNTER_HISTORY_MONTHS:
+        return
+    for month in sorted(_counts)[:-_COUNTER_HISTORY_MONTHS]:
+        del _counts[month]
+
+
 def _load_persistent_counter() -> None:
-    """Load the monthly API call count from disk, ignoring it if the month has changed."""
-    global _api_calls_month
+    """Load per-month API call counts from disk.
+
+    Accepts the legacy single-count format ({"month": ..., "count": ...}) and migrates
+    it into the keyed form, so an existing deployment's file isn't silently discarded.
+    Note the legacy file may itself hold a corrupted total (see module docstring) —
+    migration preserves whatever is there rather than guessing; delete the file to zero it.
+    """
+    global _counts
     try:
         with open(_COUNTER_FILE) as f:
             data = json.load(f)
-        if data.get("month") == _get_current_month():
-            _api_calls_month = int(data.get("count", 0))
-        # Different month — leave at 0; file will be overwritten on next API call
-    except (FileNotFoundError, ValueError, KeyError):
-        pass  # no file yet or corrupt data — start from 0
+    except FileNotFoundError:
+        return  # no file yet — start empty
+    except (ValueError, OSError) as e:
+        logger.warning(f"Watchmode: could not read call counter file, starting empty: {e}")
+        return
+
+    if not isinstance(data, dict):
+        logger.warning("Watchmode: call counter file has unexpected shape, starting empty")
+        return
+
+    if "month" in data and "count" in data:
+        # Legacy format — one count plus a month label. Migrate to the keyed form.
+        try:
+            _counts = {str(data["month"]): int(data["count"])}
+            logger.info(
+                f"Watchmode: migrated legacy call counter "
+                f"({data['month']}={data['count']}) to per-month format"
+            )
+        except (TypeError, ValueError):
+            logger.warning("Watchmode: legacy call counter unparseable, starting empty")
+        return
+
+    # Keyed format — keep only well-formed "YYYY-MM": int entries.
+    loaded = {}
+    for month, count in data.items():
+        try:
+            loaded[str(month)] = int(count)
+        except (TypeError, ValueError):
+            logger.warning(f"Watchmode: skipping malformed counter entry {month!r}")
+    _counts = loaded
+    _prune_history()
 
 
 def _persist_counter() -> None:
-    """Write the current monthly API call count to disk.
+    """Write per-month API call counts to disk.
 
-    Called under _counter_lock after each real API request. Fails silently so a
-    read-only filesystem (e.g. no volume mounted) doesn't break the app.
+    Called under _counter_lock after each real API request. Fails soft so a read-only
+    filesystem (e.g. no volume mounted) doesn't break the app — the counter is a
+    monitoring aid, not something worth failing a user request over.
     """
     try:
         os.makedirs(os.path.dirname(_COUNTER_FILE) or ".", exist_ok=True)
         with open(_COUNTER_FILE, "w") as f:
-            json.dump({"month": _get_current_month(), "count": _api_calls_month}, f)
+            json.dump(_counts, f)
     except Exception as e:
-        logger.warning(f"Watchmode: failed to persist monthly counter: {e}")
+        logger.warning(f"Watchmode: failed to persist call counters: {e}")
 
 
 def _increment_api_calls() -> None:
-    """Increment session and monthly counters, then persist the monthly count to disk."""
-    global _api_calls, _api_calls_month
+    """Increment the session counter and the current month's counter, then persist.
+
+    The current month is resolved at write time, so a process alive across a month
+    boundary starts a fresh key on its very next call — no rollover check needed.
+    """
+    global _api_calls
     with _counter_lock:
         _api_calls += 1
-        _api_calls_month += 1
+        month = _get_current_month()
+        if month not in _counts:
+            # First call of a new month (or first ever). Log it: this is the moment the
+            # budget window resets, which is worth being able to find in the logs.
+            logger.info(f"Watchmode: starting new monthly counter window {month}")
+            _counts[month] = 0
+            _prune_history()
+        _counts[month] += 1
         _persist_counter()
 
 
@@ -128,7 +197,9 @@ def get_stats() -> dict:
     with _cache_lock:
         cache_size = len(_cache)
     with _counter_lock:
-        calls_month = _api_calls_month
+        # Resolved at read time, so the admin panel shows the new month as 0 immediately
+        # after a rollover even if no API call has been made yet.
+        calls_month = _counts.get(_get_current_month(), 0)
         calls_session = _api_calls
     return {
         "api_calls_month": calls_month,    # persists across deploys (primary budget metric)
