@@ -285,6 +285,10 @@ class TestMonthlyCounter:
         assert watchmode._counts == {"2099-01": 42, "2099-02": 7}
 
     def test_load_starts_empty_when_no_file(self, tmp_path):
+        # Seeded here, not left to setup_method: these "starts empty" tests used to pass
+        # only because the fixture pre-cleared _counts, so they would have passed against
+        # a _load_persistent_counter() that did nothing at all.
+        watchmode._counts.update({"2099-01": 99})
         with patch("watchmode._COUNTER_FILE", str(tmp_path / "missing.json")):
             watchmode._load_persistent_counter()
         assert watchmode._counts == {}
@@ -297,9 +301,29 @@ class TestMonthlyCounter:
             watchmode._load_persistent_counter()
         assert watchmode._counts == {"2099-01": 42}
 
+    def test_load_rejects_legacy_entry_with_a_non_month_label(self, tmp_path):
+        """The legacy branch writes straight into _counts, so it needs the same key
+        check as the keyed branch — otherwise a malformed label seeds exactly the junk
+        key the keyed branch refuses, and the panel paints it as the current month."""
+        watchmode._counts.update({"2099-01": 99})
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps({"month": "not-a-month", "count": 9}))
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {}
+
     def test_load_survives_corrupt_file(self, tmp_path):
+        watchmode._counts.update({"2099-01": 99})
         counter_file = tmp_path / "watchmode_calls.json"
         counter_file.write_text("{not json")
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {}
+
+    def test_load_survives_unexpected_shape(self, tmp_path):
+        watchmode._counts.update({"2099-01": 99})
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps(["not", "a", "dict"]))
         with patch("watchmode._COUNTER_FILE", str(counter_file)):
             watchmode._load_persistent_counter()
         assert watchmode._counts == {}
@@ -307,6 +331,16 @@ class TestMonthlyCounter:
     def test_load_skips_malformed_entries(self, tmp_path):
         counter_file = tmp_path / "watchmode_calls.json"
         counter_file.write_text(json.dumps({"2099-01": 42, "2099-02": "bogus"}))
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._load_persistent_counter()
+        assert watchmode._counts == {"2099-01": 42}
+
+    def test_load_rejects_non_month_keys(self, tmp_path):
+        """A stray key sorts after every real month (letters beat digits), so it would
+        land last in get_stats()'s ordering — and the panel treats the last entry as the
+        current month, painting severity and "so far" onto a junk row."""
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps({"2099-01": 42, "count": 9, "2099-1": 3, "": 1}))
         with patch("watchmode._COUNTER_FILE", str(counter_file)):
             watchmode._load_persistent_counter()
         assert watchmode._counts == {"2099-01": 42}
@@ -362,6 +396,39 @@ class TestMonthlyCounter:
             watchmode._persist_counter()
         data = json.loads(counter_file.read_text())
         assert data == {"2099-03": 5, "2099-04": 2}
+
+    def test_increment_does_not_prune_the_key_it_is_incrementing(self):
+        """_prune_history() used to run between creating the month's key and using it.
+        With retention full and the current month sorting oldest — a clock rollback, or
+        a file seeded with future-dated keys — prune deleted the key the next line
+        touched, raising KeyError inside the request path."""
+        for i in range(1, watchmode._COUNTER_HISTORY_MONTHS + 1):
+            watchmode._counts[f"2200-{i:02d}"] = 10
+        with patch("watchmode._persist_counter"), \
+             patch("watchmode._get_current_month", return_value="2100-01"):
+            watchmode._increment_api_calls()  # must not raise
+        assert watchmode._counts["2100-01"] == 1
+        assert len(watchmode._counts) == watchmode._COUNTER_HISTORY_MONTHS
+
+    def test_persist_is_atomic_and_leaves_no_temp_file(self, tmp_path):
+        counter_file = tmp_path / "watchmode_calls.json"
+        watchmode._counts.update({"2099-03": 5})
+        with patch("watchmode._COUNTER_FILE", str(counter_file)):
+            watchmode._persist_counter()
+        assert json.loads(counter_file.read_text()) == {"2099-03": 5}
+        assert list(tmp_path.glob("*.tmp")) == [], "temp file left behind after a good write"
+
+    def test_persist_failure_leaves_the_previous_file_intact(self, tmp_path):
+        """The whole point of the temp-file dance: a crash mid-write must not destroy
+        the retained history, which cannot be reconstructed."""
+        counter_file = tmp_path / "watchmode_calls.json"
+        counter_file.write_text(json.dumps({"2099-01": 847}))
+        watchmode._counts.update({"2099-02": 5})
+        with patch("watchmode._COUNTER_FILE", str(counter_file)), \
+             patch("watchmode.os.replace", side_effect=OSError("boom")):
+            watchmode._persist_counter()  # must not raise
+        assert json.loads(counter_file.read_text()) == {"2099-01": 847}
+        assert list(tmp_path.glob("*.tmp")) == [], "partial temp file left behind"
 
     def test_persist_failure_does_not_raise(self, tmp_path):
         """A read-only filesystem (no volume mounted) must not break user requests."""

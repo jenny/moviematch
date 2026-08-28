@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import os
+import re
 import threading
 import time
 from typing import Any
@@ -71,20 +72,30 @@ _counts: dict[str, int] = {}
 # leaving enough for a year-over-year glance in the admin panel.
 _COUNTER_HISTORY_MONTHS = 12
 
+# The only key shape _counts may hold. Enforced on load — see _load_persistent_counter.
+_MONTH_KEY_RE = re.compile(r"\d{4}-\d{2}")
+
 
 def _get_current_month() -> str:
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m")
 
 
-def _prune_history() -> None:
+def _prune_history(protect: str | None = None) -> None:
     """Drop all but the most recent _COUNTER_HISTORY_MONTHS entries.
 
     Month keys are "YYYY-MM", so lexicographic sort is chronological. Caller must
     hold _counter_lock (or be running single-threaded at import).
+
+    `protect` is never evicted. The month being counted has to survive even when it
+    sorts oldest of the set — a clock rollback, or a file seeded with future-dated
+    keys — or the call just recorded would be discarded the instant it was written,
+    and the panel would show zero while real quota was being spent.
     """
-    if len(_counts) <= _COUNTER_HISTORY_MONTHS:
+    excess = len(_counts) - _COUNTER_HISTORY_MONTHS
+    if excess <= 0:
         return
-    for month in sorted(_counts)[:-_COUNTER_HISTORY_MONTHS]:
+    evictable = [month for month in sorted(_counts) if month != protect]
+    for month in evictable[:excess]:
         del _counts[month]
 
 
@@ -101,30 +112,54 @@ def _load_persistent_counter() -> None:
         with open(_COUNTER_FILE) as f:
             data = json.load(f)
     except FileNotFoundError:
-        return  # no file yet — start empty
+        _counts = {}  # no file yet — start empty
+        return
     except (ValueError, OSError) as e:
         logger.warning(f"Watchmode: could not read call counter file, starting empty: {e}")
+        _counts = {}
         return
 
     if not isinstance(data, dict):
         logger.warning("Watchmode: call counter file has unexpected shape, starting empty")
+        _counts = {}
         return
 
     if "month" in data and "count" in data:
         # Legacy format — one count plus a month label. Migrate to the keyed form.
+        # The month is validated exactly as the keyed branch validates its keys: this
+        # path writes straight into _counts, so without the check a malformed label
+        # would seed the same junk key the keyed branch refuses (and, sorting last,
+        # would be painted as the current month by the panel).
+        legacy_month = str(data["month"])
+        if not _MONTH_KEY_RE.fullmatch(legacy_month):
+            logger.warning(
+                f"Watchmode: legacy call counter has a non-month label "
+                f"{data['month']!r}, starting empty"
+            )
+            _counts = {}
+            return
         try:
-            _counts = {str(data["month"]): int(data["count"])}
+            _counts = {legacy_month: int(data["count"])}
             logger.info(
                 f"Watchmode: migrated legacy call counter "
-                f"({data['month']}={data['count']}) to per-month format"
+                f"({legacy_month}={data['count']}) to per-month format"
             )
         except (TypeError, ValueError):
             logger.warning("Watchmode: legacy call counter unparseable, starting empty")
+            _counts = {}
         return
 
-    # Keyed format — keep only well-formed "YYYY-MM": int entries.
+    # Keyed format — keep only well-formed "YYYY-MM": int entries. The *key* is checked
+    # as strictly as the value: letters sort after digits, so a stray non-date key would
+    # sort last in get_stats()'s ordering, and the panel treats the last entry as the
+    # current month — putting the severity colour and "so far" marker on a junk row while
+    # the real current month rendered as history. _prune_history would also retain it
+    # forever, evicting real months to keep it.
     loaded = {}
     for month, count in data.items():
+        if not _MONTH_KEY_RE.fullmatch(str(month)):
+            logger.warning(f"Watchmode: skipping counter entry with non-month key {month!r}")
+            continue
         try:
             loaded[str(month)] = int(count)
         except (TypeError, ValueError):
@@ -134,18 +169,31 @@ def _load_persistent_counter() -> None:
 
 
 def _persist_counter() -> None:
-    """Write per-month API call counts to disk.
+    """Write per-month API call counts to disk, atomically.
 
     Called under _counter_lock after each real API request. Fails soft so a read-only
     filesystem (e.g. no volume mounted) doesn't break the app — the counter is a
     monitoring aid, not something worth failing a user request over.
+
+    Written to a temp file and moved into place with os.replace(), which is atomic on
+    POSIX. Writing in place would truncate first, so a SIGTERM or crash inside that
+    window (Railway redeploys mid-traffic, and this runs on every real API call) would
+    leave a half-written file that fails to parse on next load. That used to cost one
+    number; now it would discard the whole retained history, which cannot be rebuilt.
     """
+    tmp_path = _COUNTER_FILE + ".tmp"
     try:
         os.makedirs(os.path.dirname(_COUNTER_FILE) or ".", exist_ok=True)
-        with open(_COUNTER_FILE, "w") as f:
+        with open(tmp_path, "w") as f:
             json.dump(_counts, f)
+        os.replace(tmp_path, _COUNTER_FILE)
     except Exception as e:
         logger.warning(f"Watchmode: failed to persist call counters: {e}")
+        # Don't leave a partial temp file behind to be retried or mistaken for data.
+        try:
+            os.remove(tmp_path)
+        except OSError:
+            pass
 
 
 def _increment_api_calls() -> None:
@@ -163,8 +211,14 @@ def _increment_api_calls() -> None:
             # budget window resets, which is worth being able to find in the logs.
             logger.info(f"Watchmode: starting new monthly counter window {month}")
             _counts[month] = 0
-            _prune_history()
         _counts[month] += 1
+        # Prune *after* the increment, never between creating the key and using it:
+        # if `month` sorted oldest of the resulting set (a clock rollback, or a file
+        # seeded with future-dated keys) an earlier prune would delete the key the
+        # next line touches, raising KeyError inside the request path. Passing
+        # `protect` covers the other half — otherwise prune would simply discard the
+        # count we just recorded instead of crashing on it.
+        _prune_history(protect=month)
         _persist_counter()
 
 
