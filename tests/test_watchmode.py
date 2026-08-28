@@ -448,6 +448,57 @@ class TestMonthlyCounter:
         assert "2099-14" in watchmode._counts, "newest month must be kept"
 
 
+class TestUsageHistory:
+    """get_stats()["history"] — the series behind the admin panel's monthly chart."""
+
+    def setup_method(self):
+        watchmode._cache.clear()
+        _reset_counters()
+
+    def test_history_is_oldest_first(self):
+        watchmode._counts.update({"2099-03": 300, "2099-01": 100, "2099-02": 200})
+        with patch("watchmode._get_current_month", return_value="2099-03"):
+            history = watchmode.get_stats()["history"]
+        assert history == [
+            {"month": "2099-01", "calls": 100},
+            {"month": "2099-02", "calls": 200},
+            {"month": "2099-03", "calls": 300},
+        ]
+
+    def test_current_month_included_at_zero_before_any_call(self):
+        """It has no _counts key until its first call; omitting it would drop the
+        newest bar off the chart for the first hours of every month."""
+        watchmode._counts.update({"2099-07": 847})
+        with patch("watchmode._get_current_month", return_value="2099-08"):
+            history = watchmode.get_stats()["history"]
+        assert history[-1] == {"month": "2099-08", "calls": 0}
+        assert history[0] == {"month": "2099-07", "calls": 847}
+
+    def test_history_has_current_month_only_when_no_data(self):
+        with patch("watchmode._get_current_month", return_value="2099-08"):
+            assert watchmode.get_stats()["history"] == [{"month": "2099-08", "calls": 0}]
+
+    def test_history_never_exceeds_retention(self):
+        """_counts can already hold a full 12 months of *past* data, and get_stats
+        zero-fills the current month on top — which made a 13th entry after every
+        rollover, until the new month's first call."""
+        for i in range(1, watchmode._COUNTER_HISTORY_MONTHS + 1):
+            watchmode._counts[f"2099-{i:02d}"] = 10
+        with patch("watchmode._get_current_month", return_value="2100-01"):
+            history = watchmode.get_stats()["history"]
+        assert len(history) == watchmode._COUNTER_HISTORY_MONTHS
+        assert history[-1] == {"month": "2100-01", "calls": 0}, "newest must be the current month"
+        assert history[0]["month"] == "2099-02", "the oldest month is the one dropped"
+
+    def test_history_does_not_mutate_stored_counts(self):
+        """The zero-fill is for display only — it must not create a real counter key,
+        or _prune_history would start evicting real months to make room for empties."""
+        watchmode._counts.update({"2099-07": 847})
+        with patch("watchmode._get_current_month", return_value="2099-08"):
+            watchmode.get_stats()
+        assert watchmode._counts == {"2099-07": 847}
+
+
 class TestApiKeyRedaction:
     """Watchmode authenticates by query param, so a raw exception leaks the key.
 

@@ -58,6 +58,20 @@
       text-decoration: underline;
     }
 
+    /* Quiet header links — "Sign out" and the mock toggle. Both wear this one
+       class so their hover states cannot drift apart; Sign out previously carried
+       an inline style, which kept it out of every header link rule. */
+    .header-link {
+      font-size: 0.82rem;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .header-link:hover {
+      color: #9a9a92;
+      text-decoration: underline;
+    }
+
     #last-updated {
       font-size: 0.8rem;
       color: #555;
@@ -416,47 +430,203 @@
       border-color: #333;
     }
 
-    .budget-bar-wrap {
-      margin-top: 4px;
+    /* ── Monthly usage history ──
+       A table + chart: one row per month, every bar sharing a fixed 0 → limit
+       domain, so bar length reads directly as "share of the monthly budget"
+       rather than as a relative-to-peak length that changes meaning each month.
+       Color is an emphasis pair, not a status ramp: the accent marks the current
+       (still incomplete) month, past months recede to a neutral. Both were
+       validated against this panel's #1a1a1a surface rather than picked by eye —
+       accent 4.78:1, neutral 3.25:1, and 19.3 apart in OKLab ΔE under normal
+       vision / 19.0 under deuteranopia. Don't re-tint these without re-checking. */
+    .usage-history {
+      /* Severity ramp for the current month, deliberately blue/yellow/red rather
+         than green/yellow/red: green->yellow measured only 6.6 OKLab ΔE under
+         deuteranopia, i.e. the "safe" and "getting close" states were effectively
+         the same colour for a red-green colourblind reader. Blue/yellow/red puts
+         the worst pair at 24.4. The red is #f4695f, not a deeper one: every
+         darker red tested collapsed toward the neutral history bar under
+         protanopia (#e05c5c measured 5.0), which would have hidden the current
+         month exactly when it matters most. Whole set on this #1a1a1a surface:
+         all >= 3:1 contrast, worst all-pairs 9.4 CVD / 19.0 normal.
+         Re-run tools/validate_palette.py before touching any of these. */
+      --usage-past: #6b6b66;
+      --usage-safe: #3987e5;
+      --usage-warning: #fab219;
+      --usage-critical: #f4695f;
     }
 
-    .budget-bar-track {
-      height: 6px;
+    .usage-history-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .usage-history-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+    }
+
+    /* Names the domain every bar is drawn against. Load-bearing: with the meter
+       gone this is the only thing on screen that says what a full track means. */
+    .usage-history-scale {
+      font-size: 0.72rem;
+      color: #444;
+    }
+
+    .usage-row {
+      display: grid;
+      /* Each row is its own grid, so the value column must be a FIXED width, not
+         `auto`: the current month's cell is wider ("143 so far"), and auto-sizing
+         would shrink that row's track alone — making its bar no longer comparable
+         to the others against the shared 0 → limit domain. Sized for the widest
+         possible cell, "1,000 so far". */
+      grid-template-columns: 4.5rem 1fr 6.75rem 3.25rem;
+      align-items: center;
+      gap: 10px;
+      /* Comfortably above the 2px surface gap that keeps adjacent bars reading
+         as separate marks instead of one block. */
+      margin-bottom: 6px;
+    }
+
+    .usage-month {
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    .usage-track {
+      display: block;
+      height: 8px;
       background: #2a2a2a;
       border-radius: 3px;
+      /* Clips the fill's square left corner to the track's rounded one. The meter
+         this replaced had it; without it the fill paints over the corner. */
       overflow: hidden;
     }
 
-    .budget-bar-fill {
+    .usage-fill {
+      display: block;
       height: 100%;
-      border-radius: 3px;
-      transition: width 0.4s ease;
+      background: var(--usage-past);
+      /* Square at the baseline it grows from, 4px rounded at the data end. */
+      border-radius: 0 4px 4px 0;
+      /* A single call against a 1,000 ceiling is 0.1% — without a floor the bar
+         renders as nothing at all. The exact count sits in the value column, so
+         this affects visibility only, never the number being read. */
+      min-width: 3px;
     }
 
-    .budget-bar-fill.green {
-      background: #4adf86;
+    /* Only the current month is ever coloured, so exactly one of these applies at
+       a time. "Current" is carried by not-grey PLUS the "so far" label — never by
+       colour alone, since critical-red sits in the CVD warn band against the neutral. */
+    .usage-row.current.safe .usage-fill {
+      background: var(--usage-safe);
     }
 
-    .budget-bar-fill.yellow {
-      background: #ff9f4a;
+    .usage-row.current.warning .usage-fill {
+      background: var(--usage-warning);
     }
 
-    .budget-bar-fill.red {
-      background: #e05c5c;
+    .usage-row.current.critical .usage-fill {
+      background: var(--usage-critical);
     }
 
-    .budget-bar-label {
-      display: flex;
-      justify-content: space-between;
+    /* A column of numbers, so tabular figures to keep the digits aligned. Text
+       never wears the series color — the bar beside it carries identity. */
+    .usage-value {
       font-size: 0.75rem;
-      color: #555;
-      margin-top: 6px;
+      color: #888;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      /* Never clip the value — if it ever outgrew the column the number itself
+         would be cropped, which is worse than no label at all. */
+      overflow: visible;
+      white-space: nowrap;
     }
 
-    .watchmode-note {
-      margin-top: 14px;
+    .usage-partial {
+      color: #555;
+      font-size: 0.7rem;
+    }
+
+    /* The bar already encodes share-of-limit; this states it, and replaces the
+       per-bar scale caption that used to sit under the chart. Recessive so the
+       call count stays the primary number. */
+    .usage-percent {
+      font-size: 0.72rem;
+      color: #555;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ── Mock admin styles (dev only) ──────────────────────────────────────
+       Paired with the "Mock admin (dev only)" script block near the bottom of
+       this file; removing the mock means cutting both fences. Kept here rather
+       than injected from JS so the rules sit where a person looks for styles and
+       their order against the rest of the sheet is explicit — see the .leaving
+       note below for why that order matters. */
+
+    .mock-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: -48px -32px 32px;
+      padding: 10px 32px;
+      background: #241c07;
+      border-bottom: 1px solid #3d2f0b;
       font-size: 0.78rem;
-      color: #444;
+    }
+
+    .mock-bar strong {
+      color: #fab219;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
+
+    .mock-bar a {
+      color: #9a9a92;
+      text-decoration: none;
+      padding: 3px 9px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+
+    .mock-bar a:hover {
+      color: #e8e8e8;
+      border-color: #3d2f0b;
+    }
+
+    .mock-bar a.active {
+      color: #0f0f0f;
+      background: #fab219;
+      font-weight: 600;
+    }
+
+    /* The toggle's base look comes from .header-link, which it also wears — that
+       is what keeps it identical to "Sign out". Only the amber exit state lives
+       here. It must stay *below* .header-link:hover: both selectors are two
+       classes, so equal specificity means the later one wins, and .leaving has to
+       win to stay amber while hovered. That in turn is why it needs its own
+       :hover — otherwise the amber would be the one header link that never
+       reacts to the cursor. */
+    .mock-toggle.leaving {
+      color: #fab219;
+    }
+
+    .mock-toggle.leaving:hover {
+      color: #ffc94a;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -466,9 +636,11 @@
   <header>
     <h1><a href="/">MovieMatch</a> <span>/ Admin</span></h1>
     <div class="header-right">
-      <span id="last-updated"></span>
       <button class="refresh-btn" id="refreshBtn" onclick="load()">Refresh</button>
-      <a href="/admin/logout" style="font-size:0.82rem;color:#555;">Sign out</a>
+      <span id="last-updated"></span>
+      <!-- The mock toggle is injected here at runtime, between the status text and
+           Sign out — see _renderMockToggle() in the mock block. -->
+      <a href="/admin/logout" class="header-link">Sign out</a>
     </div>
   </header>
 
@@ -535,6 +707,17 @@
     const QUERY_TRUNCATE = 60;
 
     async function load() {
+      // Mock mode renders the whole page from fixtures. This must stay the first
+      // statement in load(): the point of ?mock is that it works with no server
+      // and no auth, so it has to return before any fetch() is issued.
+      //
+      // Deferred to DOMContentLoaded rather than called inline, because
+      // _renderTableRows() reads US_STATE_ABBREV, which is declared in a later
+      // <script> block. The live path only reaches it after awaiting a fetch, by
+      // which time every block has parsed; rendering synchronously here would hit
+      // that const's temporal dead zone and throw.
+      if (MOCK_ACTIVE) { document.addEventListener("DOMContentLoaded", runMockAdmin); return; }
+
       const btn = document.getElementById("refreshBtn");
       btn.disabled = true;
 
@@ -591,8 +774,6 @@
       const limit = wm.monthly_limit ?? 1000;
       const total = callsMonth + hits;
       const hitRate = total > 0 ? Math.round(hits / total * 100) : null;
-      const pct = Math.min(callsMonth / limit * 100, 100);
-      const barClass = pct >= 80 ? "red" : pct >= 50 ? "yellow" : "green";
 
       container.innerHTML = `
         <div class="watchmode-grid">
@@ -612,17 +793,86 @@
             <div class="card-sub">24 h TTL</div>
           </div>
         </div>
-        <div class="budget-bar-wrap">
-          <div class="budget-bar-track">
-            <div class="budget-bar-fill ${barClass}" style="width: ${pct.toFixed(1)}%"></div>
-          </div>
-          <div class="budget-bar-label">
-            <span>${callsMonth.toLocaleString()} calls this month</span>
-            <span>${limit.toLocaleString()} / month limit</span>
-          </div>
-        </div>
-        <div class="watchmode-note">Monthly counter resets on the 1st of each month.</div>
+        ${usageHistoryMarkup(Array.isArray(wm.history) ? wm.history : [], limit)}
       `;
+    }
+
+    // "2026-08" -> "Aug 2026". Built in UTC to match the backend's month key:
+    // parsing "2026-08-01" as a local date would render the previous month for
+    // anyone west of UTC, so the chart would silently disagree with the counter
+    // above it. The year is carried because 12 retained months span two calendar
+    // years — without it the oldest and newest bars can share a month name.
+    function monthLabel(key) {
+      const [y, m] = String(key).split("-").map(Number);
+      if (!y || !m) return key;
+      return new Date(Date.UTC(y, m - 1, 1))
+        .toLocaleDateString(undefined, { month: "short", year: "numeric", timeZone: "UTC" });
+    }
+
+    // Budget severity for the *current* month only. Thresholds match the meter this
+    // replaced (50% / 80%). Past months stay neutral on purpose: severity is only
+    // actionable for the month you can still influence, and colouring all twelve
+    // would make every row shout a status and bury the one you can act on.
+    function severityClass(pct) {
+      return pct >= 80 ? "critical" : pct >= 50 ? "warning" : "safe";
+    }
+
+    // Percent of the monthly limit. Rounds to whole numbers, but never rounds a
+    // real value down to a bare "0%" — a month with calls in it never reads as unused.
+    function percentLabel(n, limit) {
+      const pct = n / limit * 100;
+      if (n > 0 && pct < 1) return "<1%";
+      return `${Math.round(pct)}%`;
+    }
+
+    // Month-over-month usage. The backend sends history oldest-first and always
+    // includes the current month (at 0 if it has had no calls yet), so the last
+    // entry is "now": it carries the severity colour plus a "so far" marker, since
+    // a partial month would otherwise read as a real drop against full ones.
+    function usageHistoryMarkup(history, limit) {
+      // One guard owns the whole block, heading included. The head used to be emitted
+      // by renderWatchmode() instead, so an empty history left the "Monthly history"
+      // title and the scale label stranded over blank space — visible at ?mock=empty,
+      // and reachable from any payload with no `history` array.
+      if (!history.length) return "";
+
+      // Read from the *chronological* array, before the display reversal below:
+      // taking the last entry after reversing would mark the oldest month as current.
+      const currentMonth = history[history.length - 1].month;
+
+      // Rendered newest-first so the month you're actively spending sits at the top,
+      // against the heading, rather than below eleven months of history. The backend
+      // contract stays oldest-first; this is display order only. Reverse a copy —
+      // reverse() mutates, and the caller's array is reused (the mock hands the same
+      // fixture object back on every state switch, which would flip order each time).
+      const rows = [...history].reverse().map(({ month, calls }) => {
+        const n = calls ?? 0;
+        const pct = Math.min(n / limit * 100, 100);
+        const isCurrent = month === currentMonth;
+        const rowClass = isCurrent ? ` current ${severityClass(pct)}` : "";
+        // escapeHtml because monthLabel() returns the key verbatim when it can't parse
+        // it, and the key originates in a JSON file on disk. watchmode.py validates
+        // those keys on load; this is the second layer, and matches how every other
+        // untrusted value in this file is interpolated.
+        const label = escapeHtml(monthLabel(month));
+        return `
+          <div class="usage-row${rowClass}"
+               title="${label} · ${n.toLocaleString()} calls · ${percentLabel(n, limit)} of the ${limit.toLocaleString()} limit">
+            <span class="usage-month">${label}</span>
+            <span class="usage-track">${n > 0 ? `<span class="usage-fill" style="width: ${pct.toFixed(1)}%"></span>` : ""}</span>
+            <span class="usage-value">${n.toLocaleString()}${isCurrent ? ` <span class="usage-partial">so far</span>` : ""}</span>
+            <span class="usage-percent">${percentLabel(n, limit)}</span>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="usage-history-head">
+          <span class="usage-history-title">Monthly history</span>
+          <span class="usage-history-scale">${limit.toLocaleString()} / month limit</span>
+        </div>
+        <div class="usage-history">
+          ${rows}
+        </div>`;
     }
 
     function fmt(val, suffix = "") {
@@ -870,6 +1120,232 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
+
+    // ── Mock admin (dev only) ─────────────────────────────────────────────
+    // `?mock` (or `?mock=<state>`) renders the whole page from fixtures: no
+    // server, no auth, no network. The panel sits behind HMAC auth, so without
+    // this there is no way to review these states without a running, logged-in
+    // instance — and the sparse ones (fresh deploy, a single month of history)
+    // are precisely the ones you cannot conjure on demand against real data.
+    //
+    // All mock *behaviour* lives between here and "End mock" below; its styles
+    // live in the "Mock admin styles (dev only)" fence in the <style> block
+    // above. Removing the mock means cutting both. It is inert unless the ?mock
+    // param is present.
+
+    const MOCK_PARAM = new URLSearchParams(location.search).get("mock");
+    const MOCK_ACTIVE = MOCK_PARAM !== null;
+
+    // Relative so the queries table renders "5m ago" rather than a stale date.
+    const _mockAgo = (min) => new Date(Date.now() - min * 60000).toISOString();
+
+    // Month keys ending at the *current* month, so the fixtures stay correct as
+    // time passes and the last row really is "now" — the rule the chart's
+    // current-month styling depends on.
+    function _mockMonths(n) {
+      const now = new Date();
+      return Array.from({ length: n }, (_, i) => {
+        const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (n - 1 - i), 1));
+        return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+      });
+    }
+
+    // Deliberately includes a maxed month (1,000), a zero month, and two
+    // sub-1% months, so the clamp, the empty track and the "<1%" label all
+    // appear inside the dense fixtures rather than needing their own states.
+    const _MOCK_PAST = [612, 874, 1000, 233, 4, 481, 725, 0, 96, 1, 847];
+
+    function _mockHistory(currentCalls) {
+      const months = _mockMonths(_MOCK_PAST.length + 1);
+      return months.map((month, i) => ({
+        month,
+        calls: i < _MOCK_PAST.length ? _MOCK_PAST[i] : currentCalls,
+      }));
+    }
+
+    // `session` defaults to a warm process; the empty state passes zeros so the
+    // cache cards agree with "nothing has happened yet" rather than showing a
+    // 100% hit rate on a fresh deploy.
+    function _mockWatchmode(currentCalls, history, session) {
+      const { calls = 12, hits = 388, size = 96 } = session ?? {};
+      return {
+        api_calls_month: currentCalls, api_calls_session: calls,
+        cache_hits_session: hits, cache_size: size, monthly_limit: 1000,
+        history: history ?? _mockHistory(currentCalls),
+      };
+    }
+
+    const MOCK_STATS_DENSE = {
+      total_requests: 1284, error_count: 17,
+      avg_total_ms: 2140, p50_total_ms: 1980, p90_total_ms: 3120, p99_total_ms: 5400,
+      avg_claude_ms: 1520, p50_claude_ms: 1400, p90_claude_ms: 2350, p99_claude_ms: 4100,
+      avg_embedding_ms: 180, p50_embedding_ms: 172, p90_embedding_ms: 240, p99_embedding_ms: 390,
+      avg_chroma_ms: 44, p50_chroma_ms: 38, p90_chroma_ms: 71, p99_chroma_ms: 130,
+      avg_input_tokens: 3820, avg_output_tokens: 410, tool_use_rate: 23,
+      avg_cost_usd: 0.0041, total_cost_usd: 5.27,
+      recent_avg_cost_usd: 0.0038, recent_query_count: 50,
+    };
+
+    // Fresh deploy: exercises every "no data" branch at once — muted stat cards,
+    // the latency and projector empty states, and the table's empty row.
+    const MOCK_STATS_EMPTY = {
+      total_requests: 0, error_count: 0,
+      avg_total_ms: null, p50_total_ms: null, p90_total_ms: null, p99_total_ms: null,
+      avg_claude_ms: null, p50_claude_ms: null, p90_claude_ms: null, p99_claude_ms: null,
+      avg_embedding_ms: null, p50_embedding_ms: null, p90_embedding_ms: null, p99_embedding_ms: null,
+      avg_chroma_ms: null, p50_chroma_ms: null, p90_chroma_ms: null, p99_chroma_ms: null,
+      avg_input_tokens: null, avg_output_tokens: null, tool_use_rate: null,
+      avg_cost_usd: null, total_cost_usd: null,
+      recent_avg_cost_usd: null, recent_query_count: 0,
+    };
+
+    // A single logged request — every figure consistent with the one table row the
+    // sparse state renders, so the numbers on screen agree with each other.
+    const MOCK_STATS_SPARSE = {
+      ...MOCK_STATS_DENSE,
+      total_requests: 1, error_count: 0,
+      avg_total_ms: 1980, p50_total_ms: 1980, p90_total_ms: 1980, p99_total_ms: 1980,
+      avg_claude_ms: 1400, p50_claude_ms: 1400, p90_claude_ms: 1400, p99_claude_ms: 1400,
+      avg_embedding_ms: 172, p50_embedding_ms: 172, p90_embedding_ms: 172, p99_embedding_ms: 172,
+      avg_chroma_ms: 38, p50_chroma_ms: 38, p90_chroma_ms: 38, p99_chroma_ms: 38,
+      avg_input_tokens: 3610, avg_output_tokens: 388, tool_use_rate: 0,
+      avg_cost_usd: 0.0037, total_cost_usd: 0.0037,
+      recent_avg_cost_usd: 0.0037, recent_query_count: 1,
+    };
+
+    const MOCK_ENTRIES = [
+      {
+        timestamp: _mockAgo(2), query: "cozy sci-fi like Arrival but funnier", status: "ok",
+        location: "US", location_detail: "Brooklyn, New York", result_count: 8,
+        total_ms: 1980, input_tokens: 3610, output_tokens: 388,
+        estimated_cost_usd: 0.0037, tools_called: [],
+      },
+      {
+        timestamp: _mockAgo(9), query: "movies directed by Bong Joon-ho", status: "ok",
+        location: "KR", location_detail: "Seoul", result_count: 10,
+        total_ms: 3240, input_tokens: 5120, output_tokens: 602,
+        estimated_cost_usd: 0.0061, tools_called: ["search_person", "get_filmography"],
+      },
+      {
+        timestamp: _mockAgo(37), query: "family friendly animated films from the 90s",
+        status: "ok", location: "GB", location_detail: "Manchester, England",
+        result_count: 9, total_ms: 1740, input_tokens: 3280, output_tokens: 351,
+        estimated_cost_usd: 0.0033, tools_called: [],
+      },
+      {
+        timestamp: _mockAgo(95), query: "a very long query that should be truncated in the table "
+          + "because it rambles on well past any reasonable length for a single cell",
+        status: "ok", location: "US", location_detail: "Austin, Texas",
+        result_count: 6, total_ms: 2610, input_tokens: 4410, output_tokens: 470,
+        estimated_cost_usd: 0.0046, tools_called: ["get_filmography"],
+      },
+      {
+        timestamp: _mockAgo(180), query: "something like Krull", status: "error",
+        location: null, location_detail: null, result_count: null,
+        total_ms: 5400, input_tokens: null, output_tokens: null,
+        estimated_cost_usd: null, tools_called: [],
+      },
+    ];
+
+    // Ordered from emptiest to densest — the switcher renders them in this order.
+    const MOCK_STATES = {
+      empty: {
+        label: "Fresh deploy — nothing logged, no history",
+        stats: MOCK_STATS_EMPTY, movieCount: null, entries: [],
+        wm: _mockWatchmode(0, [], { calls: 0, hits: 0, size: 0 }),
+      },
+      sparse: {
+        label: "First month — a single call, no comparison yet",
+        // Its own stats rather than MOCK_STATS_EMPTY: pairing "total_requests: 0" with
+        // a populated queries table showed contradictory numbers to whoever is
+        // reviewing this state, which is the one thing a fixture must never do.
+        stats: MOCK_STATS_SPARSE, movieCount: 8412, entries: MOCK_ENTRIES.slice(0, 1),
+        wm: _mockWatchmode(1, [{ month: _mockMonths(1)[0], calls: 1 }], { calls: 1, hits: 4, size: 2 }),
+      },
+      two: {
+        label: "Two months — the minimum real comparison",
+        stats: MOCK_STATS_DENSE, movieCount: 8412, entries: MOCK_ENTRIES.slice(0, 2),
+        wm: _mockWatchmode(143, _mockMonths(2).map((month, i) => ({ month, calls: i ? 143 : 847 }))),
+      },
+      safe: {
+        label: "Full history — current month at 14%",
+        stats: MOCK_STATS_DENSE, movieCount: 8412, entries: MOCK_ENTRIES,
+        wm: _mockWatchmode(143),
+      },
+      warning: {
+        label: "Full history — current month at 64%",
+        stats: MOCK_STATS_DENSE, movieCount: 8412, entries: MOCK_ENTRIES,
+        wm: _mockWatchmode(640),
+      },
+      critical: {
+        label: "Full history — current month at 91%",
+        stats: MOCK_STATS_DENSE, movieCount: 8412, entries: MOCK_ENTRIES,
+        wm: _mockWatchmode(910),
+      },
+      capped: {
+        label: "Quota spent — 100%, widest label the columns must hold",
+        stats: MOCK_STATS_DENSE, movieCount: 8412, entries: MOCK_ENTRIES,
+        wm: _mockWatchmode(1000),
+      },
+    };
+
+    function runMockAdmin() {
+      // Object.hasOwn, not a truthiness check: MOCK_STATES is an object literal, so
+      // `?mock=constructor` (or toString, valueOf, hasOwnProperty) would otherwise
+      // resolve an inherited function, and state.stats would be undefined.
+      const name = Object.hasOwn(MOCK_STATES, MOCK_PARAM ?? "") ? MOCK_PARAM : "safe";
+      const state = MOCK_STATES[name];
+      renderStats(state.stats, state.movieCount);
+      renderLatencyBar(state.stats);
+      renderProjector(state.stats);
+      renderTable(state.entries);
+      renderWatchmode(state.wm);
+      document.getElementById("last-updated").textContent = state.label;
+      // Refresh would only re-render the same fixture; disable it so the button
+      // can't imply the page is live.
+      document.getElementById("refreshBtn").disabled = true;
+      _renderMockSwitcher(name);
+    }
+
+    // The one link that crosses the boundary in both directions: it opens the mock
+    // from the live page, and returns to the live page from the mock. Rendered
+    // unconditionally (not only in mock mode) so it is reachable from a real admin
+    // session — but it still lives inside this block, so deleting the block removes
+    // the entrance along with everything it leads to.
+    function _renderMockToggle() {
+      const link = document.createElement("a");
+      // header-link carries the shared quiet-link look, so the toggle and "Sign out"
+      // stay visually identical; mock-toggle only adds the amber exit state.
+      link.className = "header-link mock-toggle" + (MOCK_ACTIVE ? " leaving" : "");
+      // Leaving drops the query string entirely rather than pointing at a hardcoded
+      // path, so this works identically at /admin.html and over file://.
+      link.href = MOCK_ACTIVE ? location.pathname : "?mock";
+      link.textContent = MOCK_ACTIVE ? "Exit mock" : "Mock";
+      link.title = MOCK_ACTIVE
+        ? "Return to the live admin page"
+        : "Render this page from fixtures — no server or auth required";
+
+      // Sits between the status text and Sign out. Anchored to the logout link
+      // rather than an index, so adding anything to the header can't silently
+      // shuffle it; appended only if that anchor ever disappears.
+      const right = document.querySelector(".header-right");
+      const signOut = right.querySelector('a[href="/admin/logout"]');
+      right.insertBefore(link, signOut);
+    }
+
+    function _renderMockSwitcher(active) {
+      const bar = document.createElement("div");
+      bar.className = "mock-bar";
+      bar.innerHTML = "<strong>Mock</strong>" + Object.entries(MOCK_STATES)
+        .map(([key, s]) =>
+          `<a href="?mock=${key}" class="${key === active ? "active" : ""}"`
+          + ` title="${escapeHtml(s.label)}">${key}</a>`)
+        .join("");
+      document.body.prepend(bar);
+    }
+
+    _renderMockToggle();
+    // ── End mock ──────────────────────────────────────────────────────────
 
     load();
   </script>
