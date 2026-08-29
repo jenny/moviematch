@@ -156,7 +156,9 @@ def status():
 def watchmode_stats():
     """Return Watchmode API usage stats for the admin panel.
 
-    Counters are session-lifetime (reset on process restart / Railway deploy).
+    api_calls_month is persistent — it is read from LOG_DIR/watchmode_calls.json and
+    survives process restarts and Railway deploys. Only the *_session counters reset
+    when the process does.
     """
     return watchmode_module.get_stats()
 
