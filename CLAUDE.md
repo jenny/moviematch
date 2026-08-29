@@ -72,7 +72,7 @@ Key config values:
 - `FORCE_FAST_MODEL = true` — keeps Haiku for all rounds; set `FORCE_FAST_MODEL=false` in `.env` to re-enable Opus escalation
 
 ## Tests
-Run in venv with: `pytest` from project root.
+Run with `source venv/bin/activate && pytest` from the project root.
 
 | Test file | What it covers |
 |-----------|---------------|
@@ -136,18 +136,6 @@ Admin auth (all three required to enable the admin panel; fails closed if any is
 
 ## Deferred Ideas
 - **Genre-metadata backfill for filtered anchor retrieval**: Hard filters (genre/year/cert) run *post-retrieval* in Python (`apply_hard_filters`) because genres live only in each vector's `document` text, not as filterable vector metadata. For reference-anchor queries with a *structured* qualifier (e.g. "like Inception but animated"), this forces us to over-fetch (`ANCHOR_FETCH_DEPTH`) and filter down — which trades precision for recall as depth grows, and can never manufacture similarity that isn't there. **If such queries prove common in the logs**, the precise fix is to add `genres` to vector metadata and use a metadata-filtered `vector_query` (`where={genre: ...}`) to retrieve the top-N genre-matching neighbors *directly*, full precision, no depth gamble. Follow the `backfill_certifications.py` pattern — it patched certification into existing Pinecone vectors without re-embedding; a genre backfill would be idempotent and identical in shape. Not worth doing until demand is demonstrated; tonal qualifiers ("funnier", "darker") are handled by Claude's rerank and need no metadata.
-
-## Model Use During Development
-- Use Sonnet for planning and orchestration, but launch parallel sub-agents with Haiku for execution and research.
-
-## Coding Hygiene
-- Discuss and get approval for the technical approach first. Do not proceed with code changes until the technical approach is agreed upon.
-- Make sure all changes are captured in a short lived branch before any coding begins
-- Code changes should be implemented in a short-lived feature branch.
-- Code changes should include clear inline comments for future collaborators and robust logging to help with debugging.
-- Do not invoke /commit or create any git commits without explicit user sign-off that they have tested locally and are ready to commit.
-- The feature branch should be deleted only after all code changes are committed and merged to main.
-
 
 ## Forbidden Directories
 Do not read or modify files in these directories:
