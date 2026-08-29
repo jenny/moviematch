@@ -253,14 +253,29 @@ def get_stats() -> dict:
     with _counter_lock:
         # Resolved at read time, so the admin panel shows the new month as 0 immediately
         # after a rollover even if no API call has been made yet.
-        calls_month = _counts.get(_get_current_month(), 0)
+        current = _get_current_month()
+        calls_month = _counts.get(current, 0)
         calls_session = _api_calls
+        # Oldest -> newest, so the panel can render it as a timeline ending at "now".
+        # The current month is always included, even at zero: it has no _counts key
+        # until its first API call, and omitting it would make the newest bar vanish
+        # from the chart for the first hours of every month.
+        months = dict(_counts)
+        months.setdefault(current, 0)
+        # Capped to the same window _prune_history enforces: _counts can already hold a
+        # full 12 months of *past* data, and the zero-filled current month would make a
+        # 13th every rollover until the first call of the new month.
+        history = [
+            {"month": m, "calls": months[m]}
+            for m in sorted(months)[-_COUNTER_HISTORY_MONTHS:]
+        ]
     return {
         "api_calls_month": calls_month,    # persists across deploys (primary budget metric)
         "api_calls_session": calls_session, # resets on process restart (useful for debugging)
         "cache_hits_session": _cache_hits,
         "cache_size": cache_size,
         "monthly_limit": 1000,
+        "history": history,               # [{month: "YYYY-MM", calls: int}], oldest first
     }
 
 

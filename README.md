@@ -246,7 +246,7 @@ api/
     streaming.py       # GET /region, GET /streaming, POST /streaming/batch — region-aware providers
     ratings.py         # GET /ratings, POST /ratings/batch — critic/audience review scores
 app.html               # Frontend UI
-admin.html             # Admin panel UI
+admin.html             # Admin panel UI (`?mock` renders it from fixtures — no server or auth)
 login.html             # Admin login page
 pipeline.py            # Initialization pipeline (ingest → embed → store); lazy single-movie ingestion
 main.py                # Core search logic (pre-parse → embed query → retrieve → hard filter → rerank)
@@ -264,4 +264,5 @@ migrate_to_pinecone.py # One-off script: copies all vectors from Chroma to Pinec
 backfill_certifications.py # One-off script: patches MPAA certifications into existing Pinecone metadata
 tools/
   audit_posters.py     # Read-only audit: HEAD-checks stored poster paths against the TMDB CDN for the stale/missing rate
+  validate_palette.py  # Chart-palette validator (OKLab ΔE, colourblind simulation, WCAG contrast); run before re-tinting any chart
 ```
