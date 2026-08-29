@@ -191,6 +191,14 @@ uvicorn api.app:app --reload
 
 Then open <http://localhost:8000/> in a browser. The frontend (`app.html`) is served by the app's root route and uses relative API paths, so it must be loaded from the server — opening the `app.html` file directly (`file://`) will break all API calls.
 
+`--reload` restarts the server once per saved file, and each restart re-warms the
+embedding model. For one restart per *burst* of edits instead, use the debounced
+runner — it waits for two seconds of quiet, then restarts once:
+
+```bash
+python tools/dev.py            # same address; --port, --step, --debounce to tune
+```
+
 ## API
 
 | Method | Endpoint | Auth | Description |
