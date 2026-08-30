@@ -24,11 +24,31 @@ Two regimes, both measured:
 That matters here because every restart re-runs the FastAPI lifespan, which warms
 the embedding model and the TMDB connection (see api/app.py).
 
+Settings
+--------
+    flag        default    controls
+    --step      2000 ms    Quiet gap. Restart this long after your last save.
+                           Lower = snappier and more restarts.
+    --debounce  15000 ms   Ceiling while new edits keep arriving. Together with
+                           step, a restart lands about every 17s of non-stop
+                           editing. Only bites when you never pause.
+    --grace     3.0 s      Ignore changes for this long after a start, so a save
+                           during the model warm-up can't kill a booting server.
+    --host      127.0.0.1  Address passed to uvicorn.
+    --port      8000       Port passed to uvicorn.
+    --target    uvicorn    Command to run instead of the uvicorn line. For
+                           testing the reloader itself.
+
+Watched suffixes: .py, .html, .json. Ignored directories: venv, data, embeddings,
+logs, tests, local, plus watchfiles' own defaults (.git, __pycache__, .venv,
+node_modules and friends). Both lists are pinned by tests/test_dev_tool.py.
+
 Usage
 -----
     python tools/dev.py                    # http://127.0.0.1:8000
     python tools/dev.py --port 8001
     python tools/dev.py --step 500         # snappier, more restarts
+    python tools/dev.py --help             # defaults, straight from the constants
 
 Run it instead of `uvicorn --reload`, not alongside it: this process *is* the
 reloader, so the uvicorn it spawns is deliberately started without `--reload`.
@@ -57,6 +77,10 @@ DEFAULT_DEBOUNCE_MS = 15_000
 # Ignore changes for this many seconds after a start, so a stray save during the
 # model warm-up doesn't kill a server that hasn't finished booting.
 DEFAULT_GRACE_S = 3.0
+
+# Passed straight through to uvicorn.
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = "8000"
 
 # Only files whose contents the running server actually reads at startup.
 # .html and .json are here because api/app.py reads app.html, admin.html,
@@ -120,29 +144,34 @@ def on_changes(changes) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", default="8000")
+    # ArgumentDefaultsHelpFormatter appends the real default to every help string,
+    # so `--help` can never drift from the constants above.
+    parser = argparse.ArgumentParser(
+        description=__doc__.split("\n")[0],
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--host", default=DEFAULT_HOST, help="address for uvicorn")
+    parser.add_argument("--port", default=DEFAULT_PORT, help="port for uvicorn")
     parser.add_argument(
         "--step",
         type=int,
         default=DEFAULT_STEP_MS,
         metavar="MS",
-        help=f"ms of quiet before restarting (default: {DEFAULT_STEP_MS})",
+        help="ms of quiet before restarting",
     )
     parser.add_argument(
         "--debounce",
         type=int,
         default=DEFAULT_DEBOUNCE_MS,
         metavar="MS",
-        help=f"max ms to hold a pending change (default: {DEFAULT_DEBOUNCE_MS})",
+        help="max ms to hold a pending change while edits keep arriving",
     )
     parser.add_argument(
         "--grace",
         type=float,
         default=DEFAULT_GRACE_S,
         metavar="S",
-        help=f"seconds to ignore changes after a start (default: {DEFAULT_GRACE_S})",
+        help="seconds to ignore changes after a start",
     )
     parser.add_argument(
         "--target",

@@ -193,11 +193,28 @@ Then open <http://localhost:8000/> in a browser. The frontend (`app.html`) is se
 
 `--reload` restarts the server once per saved file, and each restart re-warms the
 embedding model. For one restart per *burst* of edits instead, use the debounced
-runner — it waits for two seconds of quiet, then restarts once:
+runner:
 
 ```bash
-python tools/dev.py            # same address; --port, --step, --debounce to tune
+python tools/dev.py            # same address, http://localhost:8000/
 ```
+
+It restarts 2 seconds after your last save. If you never pause — an agent writing
+file after file — the ceiling takes over and a restart lands about every 17 seconds.
+
+| Flag | Default | Controls |
+|------|---------|----------|
+| `--step` | `2000` ms | Quiet gap before restarting. Lower is snappier, with more restarts. |
+| `--debounce` | `15000` ms | Ceiling while new edits keep arriving. With `step`, that is the ~17s figure above. |
+| `--grace` | `3.0` s | Changes are ignored for this long after a start, so a save during the model warm-up can't kill a booting server. |
+| `--host` | `127.0.0.1` | Passed to uvicorn. |
+| `--port` | `8000` | Passed to uvicorn. |
+| `--target` | uvicorn line | Command to run instead. For testing the reloader itself. |
+
+It watches `.py`, `.html` and `.json` files, and skips `venv`, `data`, `embeddings`,
+`logs`, `tests` and `local`. `.html` and `.json` are watched because `api/app.py`
+reads `app.html`, `admin.html`, `login.html` and `hints.json` once at startup, so
+editing them needs a restart. Run `python tools/dev.py --help` for the live defaults.
 
 ## API
 
